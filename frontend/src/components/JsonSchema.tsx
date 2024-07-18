@@ -2,83 +2,32 @@ import React, { useState } from "react";
 import "./JsonSchema.css";
 import { json as generateJsonSchema } from "generate-schema";
 
-const Json = () => {
-  // const jsonExample = {
-  //   $schema: "http://json-schema.org/draft-04/schemaPersona",
-  //   type: "object",
-  //   properties: {
-  //     id: {
-  //       type: "int",
-  //     },
-  //     amenities: {
-  //       type: "array",
-  //       items: {
-  //         type: "object",
-  //         properties: {
-  //           name: {
-  //             type: "string",
-  //           },
-  //           age: {
-  //             type: "integer",
-  //           },
-  //           hobbies: {
-  //             type: "array",
-  //             items: {
-  //               type: "object",
-  //               properties: {
-  //                 hobbyName: {
-  //                   type: "string",
-  //                 },
-  //                 skillLevel: {
-  //                   type: "string",
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //         required: ["name", "age"],
-  //       },
-  //     },
-  //     son: {
-  //       type: "object",
-  //       properties: {
-  //         name: {
-  //           type: "string",
-  //         },
-  //         age: {
-  //           type: "integer",
-  //         },
-  //         hobbies: {
-  //           type: "array",
-  //           items: {
-  //             type: "object",
-  //             properties: {
-  //               hobbyName: {
-  //                 type: "string",
-  //               },
-  //               skillLevel: {
-  //                 type: "string",
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //       required: ["name", "age"],
-  //     },
-  //   },
-  // };
+// Define types for JSON Schema properties
+interface JsonSchemaProperty {
+  type: string;
+  properties?: Record<string, JsonSchemaProperty>;
+  items?: JsonSchemaProperty;
+}
 
-  const [jsonInput, setJsonInput] = useState("");
-  const [jsonSchema, setJsonSchema] = useState(null);
+// Define types for JSON Schema
+interface JsonSchema {
+  type: string;
+  properties: Record<string, JsonSchemaProperty>;
+}
 
-  const handleInputChange = (e) => {
+const Json: React.FC = () => {
+  const [jsonInput, setJsonInput] = useState<string>("");
+  const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
   };
 
   const handleGenerateSchema = () => {
     try {
       const jsonData = JSON.parse(jsonInput);
-      const schema = generateJsonSchema(jsonData);
+      //ver tipo de la siguiente linea
+      const schema = generateJsonSchema(jsonData) as unknown as JsonSchema;
       setJsonSchema(schema);
     } catch (error) {
       console.error("Invalid JSON input");
@@ -86,7 +35,7 @@ const Json = () => {
     }
   };
 
-  const renderProperties = (properties) => {
+  const renderProperties = (properties: Record<string, JsonSchemaProperty>) => {
     return Object.entries(properties).map(([key, value]) => {
       if (value.type === "object" && value.properties) {
         return (
@@ -94,7 +43,6 @@ const Json = () => {
             <div className="json-elem">
               <strong>{key}:</strong> object
             </div>
-
             <div className="object-properties">
               {renderProperties(value.properties)}
             </div>
@@ -107,7 +55,6 @@ const Json = () => {
             <div className="json-elem">
               <strong>{key}:</strong> array
             </div>
-
             <div className="object-properties">
               {renderArrayItems(value.items)}
             </div>
@@ -124,7 +71,7 @@ const Json = () => {
     });
   };
 
-  const renderArrayItems = (items) => {
+  const renderArrayItems = (items: JsonSchemaProperty) => {
     if (items.type === "object" && items.properties) {
       return (
         <>
