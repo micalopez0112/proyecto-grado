@@ -151,8 +151,8 @@ const Json = () => {
       <div className="json-input">
         <h1>JSON to JSON Schema Converter</h1>
         <textarea
-          rows={10}
-          cols={100}
+          rows={50}
+          cols={50}
           value={jsonInput}
           onChange={handleInputChange}
           placeholder="Enter JSON here"
@@ -162,6 +162,13 @@ const Json = () => {
       </div>
       {jsonSchema && (
         <div className="json-schema-container">
+          <div className="json-schema">
+            <h2>Generated JSON Schema</h2>
+            <pre className="json-schema">
+              {JSON.stringify(jsonSchema, null, 2)}
+            </pre>
+          </div>
+
           {renderProperties(jsonSchema.properties)}
         </div>
       )}
