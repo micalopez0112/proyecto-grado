@@ -1,0 +1,27 @@
+.json-schema-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.property-box {
+  width: fit-content;
+}
+
+.object-properties {
+  margin-left: 50px;
+  border: 1px solid #b0b0b0;
+}
+
+.json-elem {
+  background-color: #cbd5ef;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
