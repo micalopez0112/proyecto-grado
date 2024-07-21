@@ -1,0 +1,27 @@
+"mapping" : {
+		"destination-value"  : [
+			{
+				"name" : "Destintation"
+				"iri" : "htttp ..."
+			}
+		],
+		"destination-accomodation_key" : [
+			{
+				"name" : "hasAccomodation"
+				"iri" : "htttp ..."
+			}
+		],
+		"city-accomodation":
+		"destination-accomodation_value" : [
+			{
+				"name" : "Accomodation"
+				"iri" : "htttp ..."
+			}
+		],
+		"destination-accomodation-ratings_key" : [
+			{
+				"name" : "hasRatings"
+				"iri" : "htttp ..."
+			},
+		]
+}
