@@ -40,7 +40,7 @@ const Json: React.FC = () => {
       if (value.type === "object" && value.properties) {
         return (
           <div className="property-box" key={key}>
-            <div className="json-elem">
+            <div className="json-elem" onClick={()=>{}}>
               <strong>{key}:</strong> object
             </div>
             <div className="object-properties">
@@ -52,7 +52,7 @@ const Json: React.FC = () => {
       if (value.type === "array" && value.items) {
         return (
           <div className="property-box" key={key}>
-            <div className="json-elem">
+            <div className="json-elem" onClick={()=>{}}>
               <strong>{key}:</strong> array
             </div>
             <div className="object-properties">
@@ -115,8 +115,9 @@ const Json: React.FC = () => {
               {JSON.stringify(jsonSchema, null, 2)}
             </pre>
           </div>
-
+          <div className="json-schema">
           {renderProperties(jsonSchema.properties)}
+          </div>
         </div>
       )}
     </div>
