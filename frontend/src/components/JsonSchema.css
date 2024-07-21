@@ -25,9 +25,18 @@
   ;
 }
 
-.json-elem:hover {
-  background-color: #a5b8e1;
+.json-key-value{
+  background-color: greenyellow;
+  margin-bottom:5px;
 }
+
+.json-key-value:hover{
+  background-color:red;
+}
+
+/* .json-elem:hover {
+  background-color: #a5b8e1;
+} */
 
 .container {
   display: flex;

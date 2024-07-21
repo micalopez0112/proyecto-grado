@@ -9,6 +9,11 @@ interface JsonSchemaContextProps {
   setOntoElementSelected: (value: any) => void;
 }
 
+/*
+Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.tsx
+
+*/
+
  const Context = createContext<JsonSchemaContextProps>({
   jsonSchemaContext: {},
   setJsonSchemaContext: () => {},
@@ -19,9 +24,9 @@ interface JsonSchemaContextProps {
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [JsonElementSelected, setJsonElementSelected] = useState<any>({});
-  const [OntoElementSelected, setOntoElementSelected] = useState<any>({});
-  const [jsonSchemaContext, setJsonSchemaContext] = useState<any>({});
+  const [JsonElementSelected, setJsonElementSelected] = useState<string>('');
+  const [OntoElementSelected, setOntoElementSelected] = useState<string>('');
+  const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
 
   return (
     <Context.Provider

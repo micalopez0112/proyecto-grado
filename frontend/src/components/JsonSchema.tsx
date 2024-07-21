@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./JsonSchema.css";
 import { json as generateJsonSchema } from "generate-schema";
+import { useDataContext } from "../context/context.tsx";
+import { useNavigate } from "react-router-dom";
 
 // Define types for JSON Schema properties
 interface JsonSchemaProperty {
@@ -18,10 +20,18 @@ interface JsonSchema {
 const Json: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
+  const {setJsonSchemaContext,jsonSchemaContext, setJsonElementSelected, JsonElementSelected} = useDataContext();
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
   };
+
+  const handleClickElement = (e: React.MouseEvent<HTMLDivElement>, element:string) => {
+    console.log(element);
+    setJsonElementSelected(element);
+    navigate('/testroute');
+  }
 
   const handleGenerateSchema = () => {
     try {
@@ -29,6 +39,7 @@ const Json: React.FC = () => {
       //ver tipo de la siguiente linea
       const schema = generateJsonSchema(jsonData) as unknown as JsonSchema;
       setJsonSchema(schema);
+      setJsonSchemaContext(schema);
     } catch (error) {
       console.error("Invalid JSON input");
       setJsonSchema(null);
@@ -40,12 +51,13 @@ const Json: React.FC = () => {
       if (value.type === "object" && value.properties) {
         return (
           <div className="property-box" key={key}>
-            <div className="json-elem" onClick={()=>{}}>
-              <strong>{key}:</strong> object
+            <div className="json-elem">
+             <div className="json-key-value" onClick={(e)=>handleClickElement(e,key)}><strong>{key}:</strong></div> <div className="json-key-value" onClick={(e)=>handleClickElement(e,`${key}-object`)}> object </div>
             </div>
             <div className="object-properties">
               {renderProperties(value.properties)}
             </div>
+            <button onClick={()=>{setJsonElementSelected('')}}>Seleccionar </button>
           </div>
         );
       }
@@ -116,6 +128,7 @@ const Json: React.FC = () => {
             </pre>
           </div>
           <div className="json-schema">
+          {JsonElementSelected !='' ? <p>existe{Object.keys(JsonElementSelected)}</p>:null}
           {renderProperties(jsonSchema.properties)}
           </div>
         </div>
