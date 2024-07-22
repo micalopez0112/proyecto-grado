@@ -5,37 +5,47 @@ KEY = "key"
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
 def process_mapping(mappingProcess):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
-    print("Starting mapping process:", mappingProcess.ontology)
+    print("## Starting mapping process:", mappingProcess.ontology, "##")
     ontology = mappingProcess.ontology
     ontoClasses = ontology.classes()
     ontoObjectProperties = ontology.object_properties()
     ontoDataProperties = ontology.data_properties()
 
     mappedClasses = {}
-    print("this is the json to be mapped:", mappingProcess.mapping)
     mappingItems = mappingProcess.mapping.items()
     for key, value in mappingProcess.mapping.items():
         print("processing key:", key)
         print("processing value:", value)
         # key: "destination_value", value: {"name" : "Destination", "iri"m "http://www.example.com/destination"}
         # en principio tomo como el mapeo es uno solo pero si es una lista seria recorer los elementos e ir aplicando la regla
-        if isJSONValue(key):
-            # Rule 1: an object is mapped to an ontology class
-            if validateRule1(key, value, ontoClasses):
+        try :
+            if isJSONValue(key):
+                # Rule 1: an object is mapped to an ontology class
+                mappedIris = validateRule1(key, value, ontoClasses)
                 mappedClassKey = key.split("_")[0]
-                mappedClasses[mappedClassKey] = value.iri
-        if isJSONKey(key):
-            # Rule 2: a property is mapped to an ontology property   
-            validateRule3(key, value, mappedClasses, ontoObjectProperties)
+                mappedClasses[mappedClassKey] = mappedIris
+                print("## Mapped OK ##", mappedClasses)             
+            if isJSONKey(key):
+                # Rule 2: a property is mapped to an ontology property   
+                validateRule3(key, value, mappedClasses, ontoObjectProperties)
+        except Exception as e:
+            print("Error processing key:", key, "value:", value, "error:", e)
+            raise e
+    return None
 
-# ver estructura de las ontologías en owl ready
+# validateRule1 checks if the mappedTo iri is in the ontology classes
 def validateRule1(key, mappedTo, ontoClasses):
+    mappedIris = []
     for elem in mappedTo:
-        ontologyClassIri = elem.iri
+        print("Elem: ##", elem, "##")
+        ontologyClassIri = elem['iri']
         if not isIriInOntologyElem(ontologyClassIri, ontoClasses):
-            return False
+            raise ValueError(f"Element {ontologyClassIri} not found in ontology classes")
+        else :
+            print("## Found ontology class:", elem['name'], "with iri:",ontologyClassIri, "##")
+            mappedIris.append(ontologyClassIri)
 
-    return True
+    return mappedIris
 
 
 # "destination-accomodation_key" : { name: "hasAccomodation", "iri": "http..."}

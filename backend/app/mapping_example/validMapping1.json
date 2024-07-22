@@ -6,8 +6,8 @@
                 "iri": "http://www.owl-ontologies.com/travel.owl#Destination"
             },
             {
-                "name": "City",
-                "iri": "http://www.owl-ontologies.com/travel.owl#City"
+                "name": "Adventure",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Adventure"
             }
         ],
         "destination-accomodation_key": [

@@ -15,6 +15,10 @@ class MappingProcess(BaseModel):
 
 class MappingRequest(BaseModel):
     mapping: Dict[str, Any]
+
+class MappingResponse(BaseModel):
+    status : str
+    message : str
 ## esto se reemplaza luego con persistencia
 def set_mapping_process(key, value):
     global mappingProcessInMemory
