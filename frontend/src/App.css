@@ -1,6 +1,3 @@
-.App {
-  text-align: center;
-}
 
 .App-logo {
   height: 40vmin;
@@ -12,6 +9,39 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+button {
+  margin-bottom: 20px;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.content-box {
+  flex: 2;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Asegúrate de que los componentes internos ocupen el 100% del espacio disponible en su contenedor */
+.content-box > * {
+  width: 100%;
+}
+
 
 .App-header {
   background-color: #282c34;

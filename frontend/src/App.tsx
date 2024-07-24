@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Json from "./components/JsonSchema.tsx";
+import OntologyData from "./components/OntologyData.tsx";
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Mapping />} />
         <Route path="/testroute" element={<Test />}/>
+        <Route path="/Ontology" element={< OntologyData/>} />
       </Routes>
     </Router>
   );
