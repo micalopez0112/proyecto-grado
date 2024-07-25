@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: row;
 }
-.schema-select{
-  display:flex;
-  flex-direction:column;
+.schema-select {
+  display: flex;
+  flex-direction: column;
 }
 
 .property-box {
@@ -21,17 +21,30 @@
   width: fit-content;
   padding: 10px;
   border-radius: 5px;
-  margin: 10px;
-  ;
+  margin: 10px 5px 10px 10px;
+}
+.json-elem:hover,
+.json-object-elem:hover {
+  background-color: #9eafdb;
+  cursor: pointer;
 }
 
-.json-key-value{
+.json-object-elem {
+  background-color: #cbd5ef;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 10px 10px 0px;
+}
+
+.json-key-value {
   background-color: greenyellow;
-  margin-bottom:5px;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
-.json-key-value:hover{
-  background-color:red;
+.json-key-value:hover {
+  background-color: red;
 }
 
 /* .json-elem:hover {
@@ -42,4 +55,14 @@
   display: flex;
   flex-direction: row;
   gap: 50px;
+}
+
+.object-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.json-elem.active,
+.json-object-elem.active {
+  background-color: #f39c12;
 }

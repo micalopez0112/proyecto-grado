@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./JsonSchema.css";
 import { json as generateJsonSchema } from "generate-schema";
 import { useDataContext } from "../context/context.tsx";
@@ -20,24 +20,36 @@ interface JsonSchema {
 const Json: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
-  const {setJsonSchemaContext,jsonSchemaContext, setJsonElementSelected, JsonElementSelected} = useDataContext();
+  const [lastClickedElement, setLastClickedElement] = useState<string | null>(
+    null
+  ); // New state
+  const { setJsonSchemaContext, setJsonElementSelected, JsonElementSelected } =
+    useDataContext();
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   console.log("jsonSchemaContext:", jsonSchemaContext);
+  //   console.log("JsonElementSelected:", JsonElementSelected);
+  // }, [jsonSchemaContext, JsonElementSelected]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
   };
 
-  const handleClickElement = (e: React.MouseEvent<HTMLDivElement>, element:string) => {
-    console.log(element);
+  const handleClickElement = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string
+  ) => {
     setJsonElementSelected(element);
-    navigate('/testroute');
-  }
+    setLastClickedElement(element); // Update last clicked element
+    console.log(element);
+    // navigate("/testroute");
+  };
 
   const handleGenerateSchema = () => {
     try {
       const jsonData = JSON.parse(jsonInput);
-      //ver tipo de la siguiente linea
-      const schema = generateJsonSchema(jsonData) as unknown as JsonSchema;
+      const schema = generateJsonSchema(jsonData);
       setJsonSchema(schema);
       setJsonSchemaContext(schema);
     } catch (error) {
@@ -46,36 +58,66 @@ const Json: React.FC = () => {
     }
   };
 
-  const renderProperties = (properties: Record<string, JsonSchemaProperty>) => {
+  const renderProperties = (
+    properties: Record<string, JsonSchemaProperty>,
+    parent: string
+  ) => {
     return Object.entries(properties).map(([key, value]) => {
       if (value.type === "object" && value.properties) {
         return (
           <div className="property-box" key={key}>
-            <div className="json-elem">
-             <div className="json-key-value" onClick={(e)=>handleClickElement(e,key)}><strong>{key}:</strong></div> <div className="json-key-value" onClick={(e)=>handleClickElement(e,`${key}-object`)}> object </div>
+            <div className="object-wrapper">
+              <div
+                className={`json-elem ${
+                  lastClickedElement === parent + key ? "active" : ""
+                }`}
+                onClick={(e) => handleClickElement(e, parent + key)}
+              >
+                <strong>{key}:</strong>
+              </div>
+
+              <div
+                className={`json-object-elem ${
+                  lastClickedElement === parent + `${key}-object`
+                    ? "active"
+                    : ""
+                }`}
+                onClick={(e) => handleClickElement(e, parent + `${key}-object`)}
+              >
+                object
+              </div>
             </div>
             <div className="object-properties">
-              {renderProperties(value.properties)}
+              {renderProperties(value.properties, parent + key)}
             </div>
-            <button onClick={()=>{setJsonElementSelected('')}}>Seleccionar </button>
           </div>
         );
       }
       if (value.type === "array" && value.items) {
         return (
           <div className="property-box" key={key}>
-            <div className="json-elem" onClick={()=>{}}>
+            <div
+              className={`json-elem ${
+                lastClickedElement === parent + key ? "active" : ""
+              }`}
+              onClick={(e) => handleClickElement(e, parent + key)}
+            >
               <strong>{key}:</strong> array
             </div>
             <div className="object-properties">
-              {renderArrayItems(value.items)}
+              {renderArrayItems(value.items, parent + key)}
             </div>
           </div>
         );
       }
       return (
         <div className="property-box" key={key}>
-          <div className="json-elem">
+          <div
+            className={`json-elem ${
+              lastClickedElement === parent + key ? "active" : ""
+            }`}
+            onClick={(e) => handleClickElement(e, parent + key)}
+          >
             <strong>{key}:</strong> {value.type}
           </div>
         </div>
@@ -83,22 +125,32 @@ const Json: React.FC = () => {
     });
   };
 
-  const renderArrayItems = (items: JsonSchemaProperty) => {
+  const renderArrayItems = (items: JsonSchemaProperty, parent: string) => {
     if (items.type === "object" && items.properties) {
       return (
         <>
-          <div className="json-elem">
+          <div
+            className={`json-elem ${
+              lastClickedElement === parent + `items` ? "active" : ""
+            }`}
+            onClick={(e) => handleClickElement(e, parent + `items`)}
+          >
             <strong>items:</strong> object
           </div>
           <div className="object-properties">
-            {renderProperties(items.properties)}
+            {renderProperties(items.properties, parent + `items`)}
           </div>
         </>
       );
     }
     return (
       <>
-        <div className="json-elem">
+        <div
+          className={`json-elem ${
+            lastClickedElement === parent + `items` ? "active" : ""
+          }`}
+          onClick={(e) => handleClickElement(e, parent + `items`)}
+        >
           <strong>items:</strong> {items.type}
         </div>
       </>
@@ -110,7 +162,7 @@ const Json: React.FC = () => {
       <div className="json-input">
         <h1>JSON to JSON Schema Converter</h1>
         <textarea
-          rows={50}
+          rows={30}
           cols={50}
           value={jsonInput}
           onChange={handleInputChange}
@@ -121,15 +173,15 @@ const Json: React.FC = () => {
       </div>
       {jsonSchema && (
         <div className="json-schema-container">
-          <div className="json-schema">
+          {/* <div className="json-schema">
             <h2>Generated JSON Schema</h2>
             <pre className="json-schema">
               {JSON.stringify(jsonSchema, null, 2)}
             </pre>
-          </div>
+          </div> */}
           <div className="json-schema">
-          {JsonElementSelected !='' ? <p>existe{Object.keys(JsonElementSelected)}</p>:null}
-          {renderProperties(jsonSchema.properties)}
+            {JsonElementSelected !== "" ? <p>{JsonElementSelected}</p> : null}
+            {renderProperties(jsonSchema.properties, "")}
           </div>
         </div>
       )}
