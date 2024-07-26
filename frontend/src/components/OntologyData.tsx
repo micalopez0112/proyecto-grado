@@ -16,6 +16,19 @@ const OntologyData = () => {
     }
   };
 
+  /*
+  const handleClickOntoElem = (key: string, element: OntoElement) => {
+    console.log(element);
+    if (isMapping) {
+      setOntoElementSelected(element);
+      setMappings({
+        ...mappings,
+        [key]: [...(mappings[key] || []), element],
+      });
+    }
+  };
+  */
+
   const data = [
     {
       name: "Ontology 1",

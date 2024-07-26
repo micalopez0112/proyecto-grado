@@ -4,6 +4,9 @@ interface OntoElement{
   name?: string;
   iri?: string;
 }
+interface Mapping{
+  [jsonKey:string]: OntoElement[];
+}
 interface JsonSchemaContextProps {
   jsonSchemaContext: any;
   ontologyDataContext: Object;
@@ -12,6 +15,10 @@ interface JsonSchemaContextProps {
   setJsonElementSelected: (value: any) => void;
   OntoElementSelected: OntoElement;
   setOntoElementSelected: (value: any) => void;
+  mappings: Mapping;
+  setMappings: (mappings: Mapping) => void;
+  addNewMapping : () => void;
+  clearMappings: () => void;
 }
 
 /*
@@ -21,20 +28,39 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
 
  const Context = createContext<JsonSchemaContextProps>({
   jsonSchemaContext: {},
-  setJsonSchemaContext: () => {},
   JsonElementSelected: {},
   ontologyDataContext: {},
   OntoElementSelected: {},
+  mappings: {},
+  setJsonSchemaContext: () => {},
   setJsonElementSelected: () => {},
   setOntoElementSelected: () => {},
+  setMappings:  () => {},
+  addNewMapping: () =>{},
+  clearMappings: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [JsonElementSelected, setJsonElementSelected] = useState<string>('');
   const [OntoElementSelected, setOntoElementSelected] = useState<Object>({});
   const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
-  const [mappings, setMappings] = useState<Object []>([]);
+  const [mappings, setMappings] = useState<Mapping>({});
   const [ontologyDataContext, setOntologyDataContext] = useState<Object>({});
+
+
+  const addNewMapping = () =>{
+    console.log("Adding new mapping");
+    setMappings({
+      ...mappings,
+      [JsonElementSelected]: [...(mappings[JsonElementSelected] || []), OntoElementSelected]
+    });
+    setOntoElementSelected({});
+    setJsonElementSelected('');
+  }
+
+  const clearMappings = () => {
+    setMappings({});
+  };
 
   return (
     <Context.Provider
@@ -46,6 +72,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         ontologyDataContext,
         OntoElementSelected,
         setOntoElementSelected,
+        mappings,
+        setMappings,
+        addNewMapping,
+        clearMappings
       }}
     >
       {children}

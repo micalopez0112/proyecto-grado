@@ -178,7 +178,7 @@ const Json: React.FC = () => {
             <pre className="json-schema">
               {JSON.stringify(jsonSchema, null, 2)}
             </pre>
-          </div> */}
+      </div>*/ }
           <div className="json-schema">
             {JsonElementSelected !== "" ? <p>{JsonElementSelected}</p> : null}
             {renderProperties(jsonSchema.properties, "")}
