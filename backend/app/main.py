@@ -3,13 +3,13 @@ from fastapi import FastAPI
 from app.routers.mapping import router as mapping_router
 from app.routers.ontology import router as ontology_router
 
-
+origins = ['http://localhost:3000']
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

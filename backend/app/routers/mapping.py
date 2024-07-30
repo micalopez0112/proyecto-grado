@@ -19,6 +19,7 @@ def save_mapping(process_id: int, mapRequestBody: MappingRequest):
         return response
     except Exception as e:
         msg = str(e)
-        return HTTPException(status_code=500, detail="Internal Server Error")
+        response = MappingResponse(message=msg, status="error")
+        return response
 
     return MappingResponse(message="Mapped successfully", status="success")
