@@ -1,0 +1,48 @@
+for earch elem (<key, value>) in mapping:
+    if isValue(key):
+        validateRule1()
+    if isKey(key):
+        validateRule2() || validateRule3()
+
+
+func isValue(key string) bool {
+    secondPart = key.split("_")[1]
+    return secondPart == "value"
+}
+
+func isKey(key string) bool {
+    secondPart = key.split("_")[1]
+    return secondPart == "key"
+}
+// en eleme tendria por ejemplo "destination-value" : { name: "destination", "iri": "http..."}
+func validateRule1(elem) {
+    ontologyClass = elem.value // no se si es así pero la idea es agarrar el value jeje
+    // ontology es la ontologia a la cual se esta mapeando
+    destinationClass = getOntoClass(ontology, ontologyClass.iri) // esto buscaria si destination es una clase en la ontologia
+    if destinationClass == nil {
+        return false
+    }
+    addToMappedClases(elem.key, destinationClass) // se agregaria a la lista de clases mapeadas
+}
+
+// validacion de object properties
+func validateRule2(elem) {
+    ontologyClass = elem.value 
+    /* en elem tendria:
+        "destination-accomodation_key" : { name: "hasAccomodation", "iri": "http..."}
+    */
+    domain = elem.key.split("-")[0] // destination
+    rangeC = elem.value.split("-")[1] // accomodation
+    objectProperty = getObjectProperty(ontology, ontologyClass.iri) //busca si destination tiene una propiedad hasAccomodation
+    if objectProperty == nil {
+        return false
+    }
+
+    domainClass = getMappedClass(domain) // busca si previamente se mapeo a una clase de la ontología 
+    rangeC = getMappedClass(rangeC) // busca si previamente se mapeo a una clase de la ontología 
+    if domainClass == nil || rangeC == nil {
+        return false
+    }
+
+    return objectProperty.domain == domainClass && objectProperty.range == rangeC
+}
