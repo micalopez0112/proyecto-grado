@@ -5,9 +5,90 @@ import { useNavigate } from "react-router-dom";
 import { useDataContext } from '../context/context.tsx';
 import {saveMappings,uploadOntology} from '../services/testApi.ts'
 import './Mapping.css'
+import { OntologyDataType } from '../types/OntologyData.ts';
 
-export const Mapping = () => {
+export const Mapping = () => {    
+    const navigate = useNavigate();
+    const { mappings,addNewMapping,clearMappings } = useDataContext();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [ontologySelected, setOntologySelected] = useState<OntologyDataType['ontoData']>([]);
 
+    const data = [
+        {
+          name: "Ontology 1",
+          data: [
+            {
+              classes: [
+                {
+                  name: "Class 1",
+                  iri: "http://example.com/class1",
+                },
+                {
+                  name: "Class 2",
+                  iri: "http://example.com/class2",
+                },
+              ],
+              object_properties: [
+                {
+                  name: "Object Property 1",
+                  iri: "http://example.com/objectproperty1",
+                },
+                {
+                  name: "Object Property 2",
+                  iri: "http://example.com/objectproperty2",
+                },
+              ],
+              data_properties: [
+                {
+                  name: "Data Property 1",
+                  iri: "http://example.com/dataproperty1",
+                },
+                {
+                  name: "Data Property 2",
+                  iri: "http://example.com/dataproperty2",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Ontology 2",
+          data: [
+            {
+              classes: [
+                {
+                  name: "Class 3",
+                  iri: "http://example.com/class3",
+                },
+                {
+                  name: "Class 4",
+                  iri: "http://example.com/class4",
+                },
+              ],
+              object_properties: [
+                {
+                  name: "Object Property 3",
+                  iri: "http://example.com/objectproperty3",
+                },
+                {
+                  name: "Object Property 4",
+                  iri: "http://example.com/objectproperty4",
+                },
+              ],
+              data_properties: [
+                {
+                  name: "Data Property 3",
+                  iri: "http://example.com/dataproperty3",
+                },
+                {
+                  name: "Data Property 4",
+                  iri: "http://example.com/dataproperty4",
+                },
+              ],
+            },
+          ],
+        },
+      ];
     const mappingExample = {
         mapping : {
             key1:"value1",
@@ -25,14 +106,7 @@ export const Mapping = () => {
             console.error("error en apiCall");
         }
     }
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate('./Ontology');
-    }
-
-    const { mappings,addNewMapping,clearMappings } = useDataContext();
+    
 
     const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -41,15 +115,19 @@ export const Mapping = () => {
         }
     }
     const handleFileSubmit = () => {
+        /*
         if(selectedFile){
             try{
-                uploadOntology(55,selectedFile);
+                const responseOntology = uploadOntology(55,selectedFile);
             }
             catch(error){
                 console.error("error en handleFileSubmit");
             }   
-        }
+        }*/
+        setOntologySelected(data);
     }
+
+    
 
     return(
     <div className="App">
@@ -58,7 +136,7 @@ export const Mapping = () => {
                 <Json></Json>    
             </div>
             <div className='content-box'>
-                <OntologyData></OntologyData>
+                <OntologyData ontoData = {ontologySelected}></OntologyData>
             </div>  
         </div>
         <div>
