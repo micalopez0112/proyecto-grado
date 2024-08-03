@@ -4,7 +4,6 @@ import { useDataContext } from '../context/context.tsx';
 import { OntologyDataType } from '../types';
 
 const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
-  const currentOntoSelected = [];
   const isMapping = true;
 
   const { OntoElementSelected, setOntoElementSelected } = useDataContext();
@@ -17,6 +16,7 @@ const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
   };
 
 
+  console.log("Ontology Data: ", ontoData);
 
   useEffect(() => {
     //

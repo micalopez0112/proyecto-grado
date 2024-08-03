@@ -111,20 +111,40 @@ export const Mapping = () => {
     const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if(files){
+          const fileExtension = files[0].name.split('.').pop()?.toLowerCase();
+          if(fileExtension === 'owl' || fileExtension === 'rdf'){
             setSelectedFile(files[0]);
+          }
+          else{
+            alert('El archivo debe ser de tipo .owl o .rdf');
+            //capaz se puede hacer un toast o un div que muestre error dependiendo de un
+            //useState que se setea en true si el archivo no es valido
+            return;
+          }
         }
     }
-    const handleFileSubmit = () => {
-        /*
+    const handleFileSubmit = async () => {
         if(selectedFile){
             try{
-                const responseOntology = uploadOntology(55,selectedFile);
+              const response = await uploadOntology(55, selectedFile);
+              console.log("Ontologia desde el back", response);
+              const ontologyData: OntologyDataType['ontoData'] = response?.data.ontologyData.ontoData;
+  
+              console.log("Ontology Data desde el back", ontologyData);
+  
+              if (Array.isArray(ontologyData)) {//borrar este ifelse
+                setOntologySelected(ontologyData);//era para confirmar que se tomaba bien la data
+              } else {
+                console.error("La data de ontología no es un arreglo.");
+              }
+
+              setOntologySelected(ontologyData);
             }
             catch(error){
                 console.error("error en handleFileSubmit");
             }   
-        }*/
-        setOntologySelected(data);
+        }
+        //setOntologySelected(data);
     }
 
     
