@@ -1,16 +1,19 @@
 import { apiClient } from "../networking/apiClient.ts";
+import { useDataContext } from "../context/context.tsx";
 
 export const saveMappings = async (processId: number, data: any) => {
   try {
-    const response = await apiClient.post(`/mapping/${processId}`, data, {
+    const body = { mapping: data };
+    console.log("Data to send in saveMappings: ", body);
+    const response = await apiClient.post(`/mapping/${processId}`, body, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+    console.log("#Se enviaron los mappings al back#: ", response);
     return response;
   } catch (error) {
-    console.error("Error in Saving mappings");
+    console.error("Error in Saving mappings: ", error);
   }
 };
 

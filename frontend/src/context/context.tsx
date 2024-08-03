@@ -60,6 +60,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearMappings = () => {
     setMappings({});
+    setOntoElementSelected({});
+    setJsonElementSelected('');
   };
 
   return (
