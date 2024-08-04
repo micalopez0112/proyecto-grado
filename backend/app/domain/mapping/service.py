@@ -43,8 +43,6 @@ def process_mapping(mappingProcess):
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
     
-    print("New mapped classes: ", newMappedClasses)
-    # Agrego los nuevos mapeos al diccionario de mapeos
     originalMappingJson = mappingProcess.mapping
     for key, value in newMappedClasses.items():
         if key in originalMappingJson:
@@ -56,9 +54,9 @@ def process_mapping(mappingProcess):
 
 # Aparentemente esta validación estaría funcionando ok
 # validateRule1 checks if the mappedTo iri is in the ontology classes and append the mapped class Iri to the mappedClasses dict
-def validateRule1(key, mappedTo, ontoClasses):
+def validateRule1(key, ontoValuesMappedTo, ontoClasses):
     mappedIris = []
-    for ontoElem in mappedTo:
+    for ontoElem in ontoValuesMappedTo:
         print("Elem: ##", ontoElem, "##")
         ontologyClassIri = ontoElem['iri']
         if not isIriInOntologyElem(ontologyClassIri, ontoClasses):
@@ -70,12 +68,15 @@ def validateRule1(key, mappedTo, ontoClasses):
     return mappedIris
 
 
-# "destination-accomodation_key" : { name: "hasAccomodation", "iri": "http..."}
-def validateRule3(key, mappedTo, mappedClasses, ontoObjectProperties, newMappedClasses):
-    # mappedClasses es un diccionario que tiene como clave el nombre de la propiedad y como valor una lista de las iris mapeadas
+# validateRule3 recieves the json-schema key, the ontology values mapped to and all valid ontolgy object properties. Then it does the next validations: 
+# 1. checks if the ontology value is an existent objet property 
+# 2. checks if the domain of the object property is already correctly mapped (by checking if it is in the mappedClasses dict)
+# 3. checks if the range of the object property is already correctly mapped. If it isn't it maps it to the correct class and adds it to the newMappedClasses
+# then at the end of all mapping iteration it adds the new mapped elements to the mapping json.
+def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, newMappedClasses):
     possibleErrors = []
-    print("### Validating rule 3: ", key, "##", mappedTo, "###")
-    for ontoElem in mappedTo:
+    print("### Validating rule 3: ", key, "##", ontoValuesMappedTo, "###")
+    for ontoElem in ontoValuesMappedTo:
         isDomainOk = False
         isRangeOk = False
         ontologyProperty = ontoElem["iri"]
@@ -84,7 +85,7 @@ def validateRule3(key, mappedTo, mappedClasses, ontoObjectProperties, newMappedC
 
         print("## DomainName:", domainName, "##")
         print("## RangeName:", rangeName, "##")
-        # ojo porque esto es una lista!
+        # ojo porque esto es una lista! (ya que una property del json puede haber sido mapeado a varias clases)
         domainIrisList = mappedClasses.get(domainName, None)
         rangeIrisList = mappedClasses.get(rangeName, None)
         if domainIrisList is None:
@@ -128,6 +129,9 @@ def validateRule3(key, mappedTo, mappedClasses, ontoObjectProperties, newMappedC
 
     return isDomainOk and isRangeOk, possibleErrors
 
+# validateRule2 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
+# 1. checks if the ontology value is an existent data property
+# 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
 def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties):
     print("### Validating rule 2: ", key, "##", mappedTo, "###")
     possibleErrors = []
@@ -150,27 +154,24 @@ def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties):
             isDomainOk = isIriInOntologyElem(domainIri, dataProperty.domain)
             if isDomainOk:
                 break
+    
         if not isDomainOk:
             possibleErrors.append(f"Element {domainIri} not found in data property domain")
             return False, possibleErrors
         # Tengo que de alguna forma validar que el tipo del rango es el mismo que el de la property del json
     return True, possibleErrors
         
-
+# isIriInOntologyElem checks if an iri exists in an ontology elements list (class, property, etc)
 def isIriInOntologyElem(iri, ontoElems):
     for elem in ontoElems:
-        print("## ELEM.iri: ",elem.iri, "##")
         if elem.iri == iri:
-            print("## Found iri: ",iri, "##")
             return True
 
     return False
 
 def getOntoPropertyByIri(iri, ontoProperties):
     for obj_prop in ontoProperties:
-        print("## obj_prop.iri: ",obj_prop.iri, "##")
         if obj_prop.iri == iri:
-            print("## Found iri: ",iri, "##")
             return obj_prop
 
     return None
