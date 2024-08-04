@@ -7,7 +7,7 @@ def process_mapping(mappingProcess):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
     print("## Starting mapping process:", mappingProcess.ontology, "##")
     ontology = mappingProcess.ontology
-    ontoClasses = ontology.classes()
+    ontoClasses = list(ontology.classes())
     ontoObjectProperties = ontology.object_properties()
     ontoDataProperties = ontology.data_properties()
 
@@ -17,18 +17,28 @@ def process_mapping(mappingProcess):
     for jsonMappedKey, ontoValue in mappingProcess.mapping.items():
         print("processing key:", jsonMappedKey)
         print("processing value:", ontoValue)
+        okRule3 = False
+        okRule2 = False
         # key: "destination_value", value: {"name" : "Destination", "iri"m "http://www.example.com/destination"}
         # en principio tomo como el mapeo es uno solo pero si es una lista seria recorer los elementos e ir aplicando la regla
         try :
             if isJSONValue(jsonMappedKey):
                 # Rule 1: an object is mapped to an ontology class
+                print("Sending onto clases with len: ",len(ontoClasses))
                 mappedIris = validateRule1(jsonMappedKey, ontoValue, ontoClasses)
                 mappedClassKey = jsonMappedKey.split("_")[0]
                 mappedClasses[mappedClassKey] = mappedIris
                 print("## Mapped OK ##", mappedClasses)             
             if isJSONKey(jsonMappedKey):
                 # Rule 2: a property is mapped to an ontology property   
-                validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
+                okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
+                if okRule3:
+                    continue
+           
+                okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties)
+                if not okRule2:
+                    possibleErrors.extend(possibleRule2Errors)
+                    raise ValueError(f"Errors found: {possibleErrors}")
         except Exception as e:
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
@@ -62,30 +72,40 @@ def validateRule1(key, mappedTo, ontoClasses):
 
 # "destination-accomodation_key" : { name: "hasAccomodation", "iri": "http..."}
 def validateRule3(key, mappedTo, mappedClasses, ontoObjectProperties, newMappedClasses):
+    # mappedClasses es un diccionario que tiene como clave el nombre de la propiedad y como valor una lista de las iris mapeadas
+    possibleErrors = []
     print("### Validating rule 3: ", key, "##", mappedTo, "###")
     for ontoElem in mappedTo:
+        isDomainOk = False
+        isRangeOk = False
         ontologyProperty = ontoElem["iri"]
         domainName = getParentProperty(key)
         rangeName =  getSonProperty(key)
 
-        print("## domainName:", domainName, "##")
-        domainIri = mappedClasses.get(domainName, None)
-        print("## llegeu aca? domainIri:", domainIri, "##")
-        # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
-        rangeIri = mappedClasses.get(rangeName, None)
-        # se asumen mapeadas las clases de dominio y rango, creo que nuestra precondición iba hasta el dominio no mas
-        # quizas se puede asumir que si el usuario hizo este mapeo a object properties, nosotros asignamos el mapeo
-        # al rango (no recuerdo si lo definimos así o no lo pensamos)
-        if domainIri is None:
-            return False
+        print("## DomainName:", domainName, "##")
+        print("## RangeName:", rangeName, "##")
+        # ojo porque esto es una lista!
+        domainIrisList = mappedClasses.get(domainName, None)
+        rangeIrisList = mappedClasses.get(rangeName, None)
+        if domainIrisList is None:
+            raise ValueError(f"Element name:{domainName} Iiri:{domainIrisList} not mapped to a class")
         
-        objectProperty = getObjectPropertyByIri(ontologyProperty, ontoObjectProperties)
+        objectProperty = getOntoPropertyByIri(ontologyProperty, ontoObjectProperties)
         if objectProperty is None:
-            return False
+            possibleErrors.append(f"Element {ontologyProperty} not found in ontology object properties")
+            return False, possibleErrors
         
-        isDomainOk = isIriInOntologyElem(domainIri, objectProperty.domain)
-        if rangeIri is None:
-            print("## rangeIri is None, mapeamos al primer elemento del rango ##")
+        for domainIri in domainIrisList:
+            isDomainOk = isIriInOntologyElem(domainIri, objectProperty.domain)
+            if isDomainOk:
+                break
+
+        if not isDomainOk:
+            possibleErrors.append(f"Element {domainIri} not found in object property domain")
+            return False, possibleErrors
+        
+        if rangeIrisList is None:
+            print("## RangeIri is None, mapeamos al primer elemento del rango ##")
             # TODO: Hay un tema acá el rango puede ser varios elementos, en ese caso que hacemos? 
             # de momento mapeo al primer
             # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
@@ -95,22 +115,62 @@ def validateRule3(key, mappedTo, mappedClasses, ontoObjectProperties, newMappedC
                 newMappedClasses[classKey].append({"name": rangeClass.name, "iri": rangeClass.iri})
             else:
                 newMappedClasses[classKey] = [{"name": rangeClass.name, "iri": rangeClass.iri}]
+            isRangeOk = True
         else: 
-            isRangeOk = isIriInOntologyElem(rangeIri, objectProperty.range)
+            for rangeIri in rangeIrisList:
+                isRangeOk = isIriInOntologyElem(rangeIri, objectProperty.range)
+                if isRangeOk:
+                    break
+    
+            if not isRangeOk:
+                possibleErrors.append(f"Element {rangeIri} not found in object property range")
+                return False, possibleErrors
 
-    return isDomainOk and isRangeOk
+    return isDomainOk and isRangeOk, possibleErrors
+
+def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties):
+    print("### Validating rule 2: ", key, "##", mappedTo, "###")
+    possibleErrors = []
+    for ontoElem in mappedTo:
+        ontologyPropertyIri = ontoElem["iri"]
+        print("## Ontology property iri: ", ontologyPropertyIri, "##")
+        domainName = getParentProperty(key)
+        rangeName =  getSonProperty(key)
+
+        domainIrisList = mappedClasses.get(domainName, None)
+        if domainIrisList is None:
+            raise ValueError(f"Element {domainIrisList} not mapped to a class")
+        
+        dataProperty = getOntoPropertyByIri(ontologyPropertyIri, ontoDataProperties)
+        if dataProperty is None:
+            possibleErrors.append(f"Element {ontologyPropertyIri} not found in ontology data properties")
+            return False, possibleErrors
+
+        for domainIri in domainIrisList:
+            isDomainOk = isIriInOntologyElem(domainIri, dataProperty.domain)
+            if isDomainOk:
+                break
+        if not isDomainOk:
+            possibleErrors.append(f"Element {domainIri} not found in data property domain")
+            return False, possibleErrors
+        # Tengo que de alguna forma validar que el tipo del rango es el mismo que el de la property del json
+    return True, possibleErrors
+        
 
 def isIriInOntologyElem(iri, ontoElems):
-    for elem in ontoElems    :
+    for elem in ontoElems:
+        print("## ELEM.iri: ",elem.iri, "##")
         if elem.iri == iri:
             print("## Found iri: ",iri, "##")
             return True
 
     return False
 
-def getObjectPropertyByIri(iri, ontoObjectProperties):
-    for obj_prop in ontoObjectProperties:
+def getOntoPropertyByIri(iri, ontoProperties):
+    for obj_prop in ontoProperties:
+        print("## obj_prop.iri: ",obj_prop.iri, "##")
         if obj_prop.iri == iri:
+            print("## Found iri: ",iri, "##")
             return obj_prop
 
     return None
@@ -121,14 +181,17 @@ def getParentProperty(jsonKey):
     # en principio se deja como padre toda la cadena que esta antes del ultimo elemento
     # es decir el padre de "destination-accomodation-ratings_key" es "destination-accomodation"
     # ya que puede haber otro elemento del json con un campo accomodation pero esta anidado en otra parte 
+    # rsplit me splitea el último - y me deja el resto de la cadena
     jsonKeys = jsonKey.rsplit("-",1)
     parent = jsonKeys[0]
+    print("## Parent property: ", parent, "##")
     return parent
 
 def getSonProperty(jsonKey):
     son = jsonKey.split("_")[0]
     # se deja como hijo toda la cadena, por si hay elementos repetidos
     # es decir de "destination-accomodation-ratings_key" el hijo es "destination-accomodation-ratings"
+    print("## Son property: ", son, "##")
     return son
 
 def isJSONValue(str):
