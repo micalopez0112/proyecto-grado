@@ -19,22 +19,21 @@ def process_mapping(mappingProcess):
         print("processing value:", ontoValue)
         okRule3 = False
         okRule2 = False
-        # key: "destination_value", value: {"name" : "Destination", "iri"m "http://www.example.com/destination"}
         # en principio tomo como el mapeo es uno solo pero si es una lista seria recorer los elementos e ir aplicando la regla
         try :
             if isJSONValue(jsonMappedKey):
                 # Rule 1: an object is mapped to an ontology class
-                print("Sending onto clases with len: ",len(ontoClasses))
                 mappedIris = validateRule1(jsonMappedKey, ontoValue, ontoClasses)
                 mappedClassKey = jsonMappedKey.split("_")[0]
                 mappedClasses[mappedClassKey] = mappedIris
                 print("## Mapped OK ##", mappedClasses)             
             if isJSONKey(jsonMappedKey):
-                # Rule 2: a property is mapped to an ontology property   
+                # Rule 3: an object property is mapped to an ontology property   
                 okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
                 if okRule3:
                     continue
-           
+                
+                # Rule 2: a simple property is mapped to an ontology data property
                 okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties)
                 if not okRule2:
                     possibleErrors.extend(possibleRule2Errors)
