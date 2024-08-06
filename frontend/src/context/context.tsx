@@ -4,6 +4,11 @@ interface OntoElement{
   name?: string;
   iri?: string;
 }
+interface OntoSelect{
+  type?:"class"| "object_property" | "data_property";
+  ontoElement: OntoElement;
+}
+
 interface Mapping{
   [jsonKey:string]: OntoElement[];
 }
@@ -13,7 +18,7 @@ interface JsonSchemaContextProps {
   setJsonSchemaContext: (value: any) => void;
   JsonElementSelected: any;
   setJsonElementSelected: (value: any) => void;
-  OntoElementSelected: OntoElement;
+  OntoElementSelected: OntoSelect;
   setOntoElementSelected: (value: any) => void;
   mappings: Mapping;
   setMappings: (mappings: Mapping) => void;
@@ -30,7 +35,7 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
   jsonSchemaContext: {},
   JsonElementSelected: {},
   ontologyDataContext: {},
-  OntoElementSelected: {},
+  OntoElementSelected: {type:undefined, ontoElement:{}},
   mappings: {},
   setJsonSchemaContext: () => {},
   setJsonElementSelected: () => {},
@@ -42,7 +47,10 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [JsonElementSelected, setJsonElementSelected] = useState<string>('');
-  const [OntoElementSelected, setOntoElementSelected] = useState<Object>({});
+  const [OntoElementSelected, setOntoElementSelected] = useState<OntoSelect>({
+    type: undefined,
+    ontoElement: {}
+  });
   const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
   const [mappings, setMappings] = useState<Mapping>({});
   const [ontologyDataContext, setOntologyDataContext] = useState<Object>({});
@@ -50,17 +58,34 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addNewMapping = () =>{
     console.log("Adding new mapping");
-    setMappings({
-      ...mappings,
-      [JsonElementSelected]: [...(mappings[JsonElementSelected] || []), OntoElementSelected]
-    });
-    setOntoElementSelected({});
+    if(OntoElementSelected.type === "class"){
+      setMappings({
+        ...mappings,
+        [JsonElementSelected+'_value']: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
+      });
+    }
+    else if (OntoElementSelected.type === "object_property"){
+      setMappings({
+        ...mappings,
+        [JsonElementSelected+'_key']: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
+      });
+
+    }
+    else{
+      console.log("JsonElementSelected en context",JsonElementSelected);
+      setMappings({
+        ...mappings,
+        [JsonElementSelected]: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
+      });
+    }
+    setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
+    //diferenciar según casos?
   }
 
   const clearMappings = () => {
     setMappings({});
-    setOntoElementSelected({});
+    setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
   };
 

@@ -74,7 +74,6 @@ export const Mapping = () => {
                 console.error("error en handleFileSubmit");
             }   
         }
-        //setOntologySelected(data);
     }
 
     
