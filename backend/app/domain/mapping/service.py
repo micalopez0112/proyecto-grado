@@ -2,6 +2,8 @@
 VALUE = "value"
 KEY = "key"
 
+# TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
+# se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
 def process_mapping(mappingProcess):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
@@ -34,10 +36,14 @@ def process_mapping(mappingProcess):
                     continue
                 
                 # Rule 2: a simple property is mapped to an ontology data property
-                okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties)
-                if not okRule2:
-                    possibleErrors.extend(possibleRule2Errors)
-                    raise ValueError(f"Errors found: {possibleErrors}")
+                if isDataPropertyMapping(jsonMappedKey):
+                    print("is data property mapping")
+                    JSONDataPropertyType = getJSONPropertyValue(jsonMappedKey)
+                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSONDataPropertyType)
+                    if not okRule2:
+                        possibleErrors.extend(possibleRule2Errors)
+                        raise ValueError(f"Errors found: {possibleErrors}")
+                    
         except Exception as e:
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
@@ -131,14 +137,14 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
 # validateRule2 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
 # 1. checks if the ontology value is an existent data property
 # 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
-def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties):
+def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
     print("### Validating rule 2: ", key, "##", mappedTo, "###")
     possibleErrors = []
     for ontoElem in mappedTo:
         ontologyPropertyIri = ontoElem["iri"]
         print("## Ontology property iri: ", ontologyPropertyIri, "##")
         domainName = getParentProperty(key)
-        rangeName =  getSonProperty(key)
+        isRangeOk = False
 
         domainIrisList = mappedClasses.get(domainName, None)
         if domainIrisList is None:
@@ -157,8 +163,17 @@ def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties):
         if not isDomainOk:
             possibleErrors.append(f"Element {domainIri} not found in data property domain")
             return False, possibleErrors
-        # Tengo que de alguna forma validar que el tipo del rango es el mismo que el de la property del json
-    return True, possibleErrors
+        
+        dataPropertyRange = dataProperty.range
+        for dpRange in dataPropertyRange:
+            if checkRangeAndJSONDataProperty(JSONPropertyType, dpRange):
+                isRangeOk = True
+                break
+        if not isRangeOk:
+            possibleErrors.append(f"Element json property type does not match with data property range")
+            return False, possibleErrors
+        
+    return isRangeOk, possibleErrors
         
 # isIriInOntologyElem checks if an iri exists in an ontology elements list (class, property, etc)
 def isIriInOntologyElem(iri, ontoElems):
@@ -195,9 +210,35 @@ def getSonProperty(jsonKey):
     return son
 
 def isJSONValue(str):
-    defPart = str.split("_")
-    return defPart[1] == VALUE
+    splittedMappingKey = str.split("_")
+    return splittedMappingKey[1] == VALUE
 
 def isJSONKey(str):
-    defPart = str.split("_")
-    return defPart[1] == KEY
+    splittedMappingKey = str.split("_")
+    # if the mapping was done to a data property concatenated with a "-" next to the key comes the property type: 
+    # example: "accomodation-ratings_key-string"
+    keyPart = splittedMappingKey[1].split("#")
+    return keyPart[0] == KEY
+
+def isDataPropertyMapping(str):
+    splittedMappingKey = str.split("_")
+    keyPart = splittedMappingKey[1]
+    if "#" in keyPart :
+        return True
+    return False
+
+def getJSONPropertyValue(str):
+    splittedMappingKey = str.split("_")
+    stringSplittedList = splittedMappingKey[1].split("#")
+
+    if len(stringSplittedList) > 1 :
+        return stringSplittedList[1]
+    
+def checkRangeAndJSONDataProperty(JSONProperty, ontoRange):
+    if str(JSONProperty) == "string" and ontoRange == str:
+        return True
+    if str(JSONProperty) == "int" and ontoRange == int:
+        return True
+    if str(JSONProperty) == "bool" and ontoRange == bool:
+        return True
+    return False
