@@ -22,7 +22,7 @@
                 "iri": "http://www.owl-ontologies.com/travel.owl#Accommodation"
             }
         ],
-        "destination-name_value": [
+        "destination-name_key#string": [
             {
                 "name": "hasStreet",
                 "iri": "http://www.w3.org/2001/XMLSchema#string"
