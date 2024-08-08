@@ -41,7 +41,7 @@ const Json: React.FC = () => {
     element: string
   ) => {
     setJsonElementSelected(element);
-    setLastClickedElement(element); // Update last clicked element
+    setLastClickedElement(element); // Fix this
     console.log(element);
     // navigate("/testroute");
   };
@@ -50,7 +50,7 @@ const Json: React.FC = () => {
     element: string,
     type:string) => {
       setJsonElementSelected(element+'_key#'+type);
-      setLastClickedElement(element); // Update last clicked element
+      setLastClickedElement(element); // Fix this
       console.log(element+'_key#'+type);
     }
 
@@ -74,7 +74,6 @@ const Json: React.FC = () => {
       if (value.type === "object" && value.properties) {
         return (
           <div className="property-box" key={key}>
-            <div className="object-wrapper">
               <div
                 className={`json-elem ${
                   lastClickedElement === parent + key ? "active" : ""
@@ -83,20 +82,8 @@ const Json: React.FC = () => {
                   handleClickElement(e, parent ? parent +'-'+key : key)
                 }
               >
-                <strong>{key}:</strong>
+                <strong>{key}:</strong> object
               </div>
-
-              <div
-                className={`json-object-elem ${
-                  lastClickedElement === parent + `${key}-object`
-                    ? "active"
-                    : ""
-                }`}
-                onClick={(e) => handleClickElement(e, parent + `- ${key}-object`)}
-              >
-                object
-              </div>
-            </div>
             <div className="object-properties">
               {renderProperties(value.properties, parent ? parent +'-'+key : key)}
             </div>
@@ -174,15 +161,21 @@ const Json: React.FC = () => {
       <div className="json-input">
         <h1>JSON to JSON Schema Converter</h1>
         <textarea
-          rows={30}
-          cols={50}
+          rows={20}
+          cols={35}
           value={jsonInput}
           onChange={handleInputChange}
           placeholder="Enter JSON here"
         />
         <br />
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
+        }}>
         <button onClick={handleGenerateSchema}>Generate Schema</button>
-      </div>
+        </div>
+         </div>
       {jsonSchema && (
         <div className="json-schema-container">
           {/* <div className="json-schema">

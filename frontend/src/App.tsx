@@ -19,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Mapping />} />
         <Route path="/testroute" element={<Test />}/>
-        <Route path="/Ontology" element={< OntologyData/>} />
+        <Route path="/Ontology" element={<OntologyData />} />
       </Routes>
     </Router>
   );

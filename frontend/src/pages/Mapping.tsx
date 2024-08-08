@@ -13,19 +13,17 @@ export const Mapping = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [ontologySelected, setOntologySelected] = useState<OntologyDataType['ontoData']>([]);
 
-    const mappingExample = {
-        mapping : {
-            key1:"value1",
-            key2:"value2",
-            key3:["list","of","values"]
-        }
-    };
-
-    const apiCall = async () => {
+    const saveMappingsApiCall = async () => {
         try{
           if(Object.keys(mappings).length > 0){
             const response = await saveMappings(55,mappings);
             console.log(response);
+            if(response && response.status===200 ){
+                console.log(response.data);
+                alert('Mappings enviados con exito');
+                const {status,message} = response.data;
+                //navigate('/result',{state:{status,message}});
+            }
             //setMappings({});
           }
           else{
@@ -33,7 +31,7 @@ export const Mapping = () => {
           }
         }
         catch(error){
-            console.error("error en apiCall");
+            console.error("error en apiCall", error);
         }
     }
     
@@ -76,24 +74,22 @@ export const Mapping = () => {
         }
     }
 
-    
-
     return(
     <div className="App">
         <div className='content-container'>
-            <div className='content-box'>
-                <Json></Json>    
-            </div>
-            <div className='content-box'>
-                <OntologyData ontoData = {ontologySelected}></OntologyData>
-            </div>  
+                <div className='content-box'>
+                    <Json></Json>    
+                </div>
+                <div className='content-box'>
+                    <OntologyData ontoData = {ontologySelected}></OntologyData>
+                </div>
         </div>
         <div>
             <h1>Mappings</h1>
             <div style ={{display:'flex',gap:'10px', backgroundColor:'#f9f9f9',padding: '20px'}}>
                 <button onClick={addNewMapping}>Agregar mapping</button>
                 <button onClick={clearMappings}>Limpiar mappings</button>
-                <button onClick={apiCall}>Enviar mappings al back</button>
+                <button onClick={saveMappingsApiCall}>Enviar mappings al back</button>
                 <input className='file-upload-label' type='file' onChange={handleFileChange}></input>
                 <button onClick={handleFileSubmit}>Submit archivo</button>
             </div>
