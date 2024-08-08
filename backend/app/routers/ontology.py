@@ -8,6 +8,7 @@ router = APIRouter()
 
 @router.post("/{process_id}")
 def upload_ontology(process_id: int, file: UploadFile = File(...)):
+    print("HOLA")
     temp_file_path = f"uploaded_{file.filename}"
     print("temp_file_path:", temp_file_path)
     with open(temp_file_path, "wb") as buffer:

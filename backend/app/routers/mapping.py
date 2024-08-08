@@ -32,6 +32,7 @@ async def  save_mapping(
     request: MappingRequest = Body(...)
 ):
     print("HOLA")
+    print("12333")
     try:
           # Log the received data
         logger.info(f"Received mapping: {request.mapping}")
