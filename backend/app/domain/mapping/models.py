@@ -1,4 +1,4 @@
-from pydantic import BaseModel,Field
+from pydantic import BaseModel,Field,HttpUrl
 from typing import Dict, Any, Optional, List
 from pymongo import MongoClient
 from bson import ObjectId
@@ -29,14 +29,44 @@ class JsonSchema(BaseModel):
 
 #Requests bodys
 class MappingRequest(BaseModel):
-    mapping: Dict[str, Any]
+    mapping: Dict[str, Any] = Field()
     jsonSchema: JsonSchema = Field(..., description="Esquema JSON")
+
 # Responses
 class MappingResponse(BaseModel):
     status : str
     message : str
 
 
+class OntologyDocument(BaseModel):
+    id: Optional[str] = None
+    type: str = Field(..., pattern='^(FILE|URI)$', description="Type of the document, either 'FILE' or 'URI'")
+    file: Optional[str] = Field(None, description="Path to the file")
+    uri: Optional[HttpUrl] = Field(None, description="URI of the ontology")
+
+class MappingProcessDocument(BaseModel):
+    id : Optional[str] = None
+    mapping :Optional[Dict[str, Any]]= None
+    ontologyId: Optional[str]= None
+    jsonSchemaId: Optional[str]= None
+    
+
+# Helper function to parse ObjectId
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid ObjectId")
+        return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type="string")
+    
 ## esto se reemplaza luego con persistencia
 def set_mapping_process(key, value):
     global mappingProcessInMemory

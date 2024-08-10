@@ -14,7 +14,7 @@
 		"city-accomodation":
 		"destination-accomodation_value" : [
 			{
-				"name" : "Accomodation"
+				"name" : "Accomodation" 
 				"iri" : "htttp ..."
 			}
 		],
