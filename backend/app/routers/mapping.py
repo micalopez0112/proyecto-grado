@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.domain.mapping.models import MappingProcess, get_mapping_process, MappingRequest, MappingResponse
 from app.domain.mapping.service import process_mapping
+from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from typing import Dict, Any
 
 router = APIRouter()
@@ -23,3 +24,13 @@ def save_mapping(process_id: int, mapRequestBody: MappingRequest):
         return response
 
     return MappingResponse(message="Mapped successfully", status="success")
+
+@router.post("/graph/{process_id}", response_model = list)
+def get_graph(process_id: int):
+    try:
+        onto_for_graph = get_ontology_info_from_pid(process_id)
+        graph_with_mappings = graph_generator(onto_for_graph, get_mapping_process(process_id))
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    return onto_for_graph

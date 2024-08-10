@@ -22,10 +22,12 @@ const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
     //
   }, []);
 
+  console.log("OntoElementSelected", OntoElementSelected);
+
   return (
     <div className='onto-data-display-container'>
-      <span className='text'>Your Ontologies Elements: </span>
-      {OntoElementSelected != null ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
+      <span className='text'>Elementos de la ontología: </span>
+      {OntoElementSelected.type != undefined ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
       {ontoData?.map((ontology, i) => (
         <div className='onto-container' key={`ontology-${i}`}>
           <span className='ontology-title'>
