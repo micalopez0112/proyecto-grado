@@ -20,4 +20,3 @@ app.add_middleware(
 
 app.include_router(mapping_router, prefix="/mapping", tags=["mappings"])
 app.include_router(ontology_router, prefix="/ontologies", tags=["ontologies"])
-app.include_router(jsonschema_router, prefix="/jsonschema", tags=["jsonschema"])
