@@ -41,10 +41,18 @@ const Json: React.FC = () => {
     element: string
   ) => {
     setJsonElementSelected(element);
-    setLastClickedElement(element); // Update last clicked element
+    setLastClickedElement(element); // Fix this
     console.log(element);
     // navigate("/testroute");
   };
+
+  const handleClickSimpleProperty = (e: React.MouseEvent<HTMLDivElement>,
+    element: string,
+    type:string) => {
+      setJsonElementSelected(element+'_key#'+type);
+      setLastClickedElement(element); // Fix this
+      console.log(element+'_key#'+type);
+    }
 
   const handleGenerateSchema = () => {
     try {
@@ -66,29 +74,18 @@ const Json: React.FC = () => {
       if (value.type === "object" && value.properties) {
         return (
           <div className="property-box" key={key}>
-            <div className="object-wrapper">
               <div
                 className={`json-elem ${
                   lastClickedElement === parent + key ? "active" : ""
                 }`}
-                onClick={(e) => handleClickElement(e, parent + key)}
+                onClick={(e) => 
+                  handleClickElement(e, parent ? parent +'-'+key : key)
+                }
               >
-                <strong>{key}:</strong>
+                <strong>{key}:</strong> object
               </div>
-
-              <div
-                className={`json-object-elem ${
-                  lastClickedElement === parent + `${key}-object`
-                    ? "active"
-                    : ""
-                }`}
-                onClick={(e) => handleClickElement(e, parent + `${key}-object`)}
-              >
-                object
-              </div>
-            </div>
             <div className="object-properties">
-              {renderProperties(value.properties, parent + key)}
+              {renderProperties(value.properties, parent ? parent +'-'+key : key)}
             </div>
           </div>
         );
@@ -100,23 +97,24 @@ const Json: React.FC = () => {
               className={`json-elem ${
                 lastClickedElement === parent + key ? "active" : ""
               }`}
-              onClick={(e) => handleClickElement(e, parent + key)}
+              onClick={(e) => handleClickElement(e, parent +'-'+ key)}
             >
               <strong>{key}:</strong> array
             </div>
             <div className="object-properties">
-              {renderArrayItems(value.items, parent + key)}
+              {renderArrayItems(value.items, parent+'-'+ key)}
             </div>
           </div>
         );
       }
       return (
+        //simple property
         <div className="property-box" key={key}>
           <div
             className={`json-elem ${
               lastClickedElement === parent + key ? "active" : ""
             }`}
-            onClick={(e) => handleClickElement(e, parent + key)}
+            onClick={(e) => handleClickSimpleProperty(e, parent +'-'+ key,value.type)}
           >
             <strong>{key}:</strong> {value.type}
           </div>
@@ -126,6 +124,7 @@ const Json: React.FC = () => {
   };
 
   const renderArrayItems = (items: JsonSchemaProperty, parent: string) => {
+    //checkear invocaciones de handleClickElement y el valor de parent
     if (items.type === "object" && items.properties) {
       return (
         <>
@@ -160,17 +159,23 @@ const Json: React.FC = () => {
   return (
     <div className="container">
       <div className="json-input">
-        <h1>JSON to JSON Schema Converter</h1>
+      <span style={{fontFamily:'Roboto',fontSize:'25px', marginBottom:'10px'}}>JSON to JSON Schema Converter</span>
         <textarea
-          rows={30}
-          cols={50}
+          rows={20}
+          cols={35}
           value={jsonInput}
           onChange={handleInputChange}
           placeholder="Enter JSON here"
         />
         <br />
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
+        }}>
         <button onClick={handleGenerateSchema}>Generate Schema</button>
-      </div>
+        </div>
+         </div>
       {jsonSchema && (
         <div className="json-schema-container">
           {/* <div className="json-schema">

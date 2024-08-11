@@ -16,6 +16,12 @@
   border: 1px solid #b0b0b0;
 }
 
+.json-input{
+  display:flex;
+  flex-direction:column;
+  
+}
+
 .json-elem {
   background-color: #cbd5ef;
   width: fit-content;

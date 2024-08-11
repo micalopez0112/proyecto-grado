@@ -1,5 +1,4 @@
 import { apiClient } from "../networking/apiClient.ts";
-import { useDataContext } from "../context/context.tsx";
 
 export const saveMappings = async (processId: number, data: any) => {
   try {
@@ -34,5 +33,15 @@ export const uploadOntology = async (processId: number, file: File) => {
     return response;
   } catch (error) {
     console.error("Error in uploading ontology");
+  }
+};
+
+export const getMappingGraph = async (processId: number) => {
+  try {
+    const response = await apiClient.get(`/mapping/graph/${processId}`);
+    console.log("Mapping Graph: ", response);
+    return response;
+  } catch (error) {
+    console.error("Error in getting Mapping Graph");
   }
 };

@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Body
-import motor.motor_asyncio
 from bson import ObjectId
 from owlready2 import get_ontology
+import motor.motor_asyncio
 from typing import Dict, Any
+from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
@@ -71,3 +72,14 @@ def get_mapping(process_id: int, mapRequestBody: MappingRequest):
         return response
 
     return MappingResponse(message="Mapped successfully", status="success")
+
+@router.get("/graph/{process_id}", response_model = Any)
+def get_graph(process_id: int):
+    try:
+        onto_for_graph = get_ontology_info_from_pid(process_id)
+        graph_with_mappings = graph_generator(onto_for_graph, get_mapping_process(process_id))
+        
+    except Exception as e:
+        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    
+    return graph_with_mappings
