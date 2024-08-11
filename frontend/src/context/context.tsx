@@ -13,6 +13,8 @@ interface Mapping{
   [jsonKey:string]: OntoElement[];
 }
 interface JsonSchemaContextProps {
+  currentMappingProcessId?:number;
+  setCurrentMappingProcessId: (value: number | undefined) => void;
   jsonSchemaContext: any;
   ontologyDataContext: Object;
   setJsonSchemaContext: (value: any) => void;
@@ -32,6 +34,8 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
 */
 
  const Context = createContext<JsonSchemaContextProps>({
+  currentMappingProcessId: undefined,
+  setCurrentMappingProcessId: () => {},
   jsonSchemaContext: {},
   JsonElementSelected: {},
   ontologyDataContext: {},
@@ -54,6 +58,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
   const [mappings, setMappings] = useState<Mapping>({});
   const [ontologyDataContext, setOntologyDataContext] = useState<Object>({});
+  const [currentMappingProcessId, setCurrentMappingProcessId] = useState<number | undefined>(undefined);
 
 
   const addNewMapping = () =>{
@@ -92,6 +97,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Context.Provider
       value={{
+        currentMappingProcessId,
+        setCurrentMappingProcessId,
         jsonSchemaContext,
         setJsonSchemaContext,
         JsonElementSelected,

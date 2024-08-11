@@ -1,10 +1,12 @@
 import React, {useState,useEffect} from 'react';
 import Graph from 'react-graph-vis';
 import { v4 as uuidv4 } from "uuid";
-import { getMappingGraph } from '../services/callApi.ts';
+import { getMappingGraph } from '../services/mapsApi.ts';
+import { useDataContext } from '../context/context.tsx';
 
 const MappingResult = () =>{
     const [graphData, setGraphData] = useState<any>(null);
+    const {currentMappingProcessId} = useDataContext();
 
   /*  const graph = {
         nodes: [
@@ -52,10 +54,12 @@ const MappingResult = () =>{
       useEffect(() => {
         const getGraphData = async () => {
             try{
-                const response = await getMappingGraph(11);
-                console.log("Mapping Graph: ", response);
-                if(response)
-                    setGraphData(response.data);
+                if(currentMappingProcessId){
+                    const response = await getMappingGraph(currentMappingProcessId);
+                    console.log("Mapping Graph: ", response);
+                    if(response)
+                        setGraphData(response.data);
+                }
             }
             catch(error){
                 console.error("Error en getGraphData (MappingResult)", error);

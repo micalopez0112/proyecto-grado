@@ -1,17 +1,23 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Json from '../components/JsonSchema.tsx'
 import OntologyData from '../components/OntologyData.tsx';
 import { useNavigate } from "react-router-dom";
 import { useDataContext } from '../context/context.tsx';
-import {saveMappings,uploadOntology} from '../services/callApi.ts'
+import {saveMappings,uploadOntology} from '../services/mapsApi.ts'
 import './Mapping.css'
 import { OntologyDataType } from '../types/OntologyData.ts';
 
 export const Mapping = () => {    
     const navigate = useNavigate();
-    const { mappings,clearMappings,addNewMapping} = useDataContext();
+    const { mappings,clearMappings,addNewMapping,currentMappingProcessId ,setCurrentMappingProcessId} = useDataContext();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [ontologySelected, setOntologySelected] = useState<OntologyDataType['ontoData']>([]);
+
+    useEffect(() => { //cambiar logica cuando se obtenga el id desde el back
+        if(currentMappingProcessId === undefined){
+            setCurrentMappingProcessId(11);
+        }
+    },[]);
 
     const saveMappingsApiCall = async () => {
         try{
@@ -22,7 +28,7 @@ export const Mapping = () => {
                 console.log(response.data);
                 alert('Mappings enviados con exito');
                 const {status,message} = response.data;
-                //navigate('/Result',{state:{status,message}});
+                navigate('/Result');
             }
             //setMappings({});
           }
