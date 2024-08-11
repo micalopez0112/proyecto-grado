@@ -36,6 +36,7 @@ class MappingRequest(BaseModel):
 class MappingResponse(BaseModel):
     status : str
     message : str
+    mapping_id : Optional[str] = None
 
 
 class OntologyDocument(BaseModel):

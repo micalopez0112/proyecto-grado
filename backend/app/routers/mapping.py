@@ -43,6 +43,11 @@ async def  save_mapping(id: str, request: MappingRequest = Body(...)):
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
         return MappingResponse(message="Mapped successfully", status="success")
+    except ValueError as e:
+        msg = str(e)
+        status = "error"
+        response = MappingResponse(message=msg, status="error")
+        return response
     except Exception as e:
         print("Error saving mapping process:", e)
         raise HTTPException(status_code=500, detail=str(e))

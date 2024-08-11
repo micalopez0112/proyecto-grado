@@ -2,7 +2,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from app.routers.mapping import router as mapping_router
 from app.routers.ontology import router as ontology_router
-from app.routers.json_schema import router as jsonschema_router
 
 
 origins = ['http://localhost:3000']

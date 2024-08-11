@@ -93,7 +93,7 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
         domainIrisList = mappedClasses.get(domainName, None)
         rangeIrisList = mappedClasses.get(rangeName, None)
         if domainIrisList is None:
-            raise ValueError(f"Element name:{domainName} Iiri:{domainIrisList} not mapped to a class")
+            raise ValueError(f"Element name:{domainName} I iri:{domainIrisList} not mapped to a class")
         
         objectProperty = getOntoPropertyByIri(ontologyProperty, ontoObjectProperties)
         if objectProperty is None:
@@ -112,7 +112,7 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
         if rangeIrisList is None:
             print("## RangeIri is None, mapeamos al primer elemento del rango ##")
             # TODO: Hay un tema acá el rango puede ser varios elementos, en ese caso que hacemos? 
-            # de momento mapeo al primer
+            # de momento mapeo al primero. Cambiar a que se mapee a todas las clases del rango.
             # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
             rangeClass = objectProperty.range[0]
             classKey = rangeName + "_value"
