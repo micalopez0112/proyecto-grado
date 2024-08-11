@@ -25,12 +25,13 @@ def save_mapping(process_id: int, mapRequestBody: MappingRequest):
 
     return MappingResponse(message="Mapped successfully", status="success")
 
-@router.post("/graph/{process_id}", response_model = list)
+@router.get("/graph/{process_id}", response_model = Any)
 def get_graph(process_id: int):
     try:
         onto_for_graph = get_ontology_info_from_pid(process_id)
         graph_with_mappings = graph_generator(onto_for_graph, get_mapping_process(process_id))
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal error while generating the graph ")
-    return onto_for_graph
+        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    
+    return graph_with_mappings

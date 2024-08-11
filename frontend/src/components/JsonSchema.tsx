@@ -159,7 +159,7 @@ const Json: React.FC = () => {
   return (
     <div className="container">
       <div className="json-input">
-        <h1>JSON to JSON Schema Converter</h1>
+      <span style={{fontFamily:'Roboto',fontSize:'25px', marginBottom:'10px'}}>JSON to JSON Schema Converter</span>
         <textarea
           rows={20}
           cols={35}

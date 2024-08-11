@@ -3,7 +3,7 @@ import Json from '../components/JsonSchema.tsx'
 import OntologyData from '../components/OntologyData.tsx';
 import { useNavigate } from "react-router-dom";
 import { useDataContext } from '../context/context.tsx';
-import {saveMappings,uploadOntology} from '../services/testApi.ts'
+import {saveMappings,uploadOntology} from '../services/callApi.ts'
 import './Mapping.css'
 import { OntologyDataType } from '../types/OntologyData.ts';
 
@@ -22,7 +22,7 @@ export const Mapping = () => {
                 console.log(response.data);
                 alert('Mappings enviados con exito');
                 const {status,message} = response.data;
-                //navigate('/result',{state:{status,message}});
+                //navigate('/Result',{state:{status,message}});
             }
             //setMappings({});
           }

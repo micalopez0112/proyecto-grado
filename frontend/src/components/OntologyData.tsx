@@ -26,13 +26,10 @@ const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
 
   return (
     <div className='onto-data-display-container'>
-      <span className='text'>Elementos de la ontología: </span>
+      <span className='ontology-title'>Elementos de la ontología: </span>
       {OntoElementSelected.type != undefined ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
       {ontoData?.map((ontology, i) => (
         <div className='onto-container' key={`ontology-${i}`}>
-          <span className='ontology-title'>
-            Ontology Elements: {ontology?.name}
-          </span>
           {ontology?.data?.map((x, i) => (
             <div className='styled-input' key={`data-${i}`}>
               {x?.classes?.length > 0 && (
