@@ -5,18 +5,17 @@ KEY = "key"
 # TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
 # se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
-def process_mapping(mappingProcess):
+def process_mapping(mapping, ontology):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
-    print("## Starting mapping process:", mappingProcess.ontology, "##")
-    ontology = mappingProcess.ontology
+    print("## Starting mapping process:", ontology, "##")
     ontoClasses = list(ontology.classes())
     ontoObjectProperties = ontology.object_properties()
     ontoDataProperties = ontology.data_properties()
 
     mappedClasses = {}
     newMappedClasses = {}
-    mappingItems = mappingProcess.mapping.items()
-    for jsonMappedKey, ontoValue in mappingProcess.mapping.items():
+    mappingItems = mapping.items()
+    for jsonMappedKey, ontoValue in mappingItems:
         print("processing key:", jsonMappedKey)
         print("processing value:", ontoValue)
         okRule3 = False
@@ -48,7 +47,7 @@ def process_mapping(mappingProcess):
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
     
-    originalMappingJson = mappingProcess.mapping
+    originalMappingJson = mapping
     for key, value in newMappedClasses.items():
         if key in originalMappingJson:
             originalMappingJson[key].extend(value)
@@ -94,7 +93,7 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
         domainIrisList = mappedClasses.get(domainName, None)
         rangeIrisList = mappedClasses.get(rangeName, None)
         if domainIrisList is None:
-            raise ValueError(f"Element name:{domainName} Iiri:{domainIrisList} not mapped to a class")
+            raise ValueError(f"Element name:{domainName} I iri:{domainIrisList} not mapped to a class")
         
         objectProperty = getOntoPropertyByIri(ontologyProperty, ontoObjectProperties)
         if objectProperty is None:
@@ -113,7 +112,7 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
         if rangeIrisList is None:
             print("## RangeIri is None, mapeamos al primer elemento del rango ##")
             # TODO: Hay un tema acá el rango puede ser varios elementos, en ese caso que hacemos? 
-            # de momento mapeo al primer
+            # de momento mapeo al primero. Cambiar a que se mapee a todas las clases del rango.
             # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
             rangeClass = objectProperty.range[0]
             classKey = rangeName + "_value"
