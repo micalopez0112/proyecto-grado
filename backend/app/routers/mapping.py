@@ -91,11 +91,9 @@ async def get_mappings():
         mapping_process_docs = await mapping_docus.to_list(length=None)  
         mappingpr_names = []
         for mapping_process_doc in mapping_process_docs:
-            mapping_process_doc['id'] = str(mapping_process_doc['_id'])
-            mappingProcessDocument = MappingProcessDocument(**mapping_process_doc)
             mappingpr = {
                 "id": str(mapping_process_doc['_id']),
-                "name": mappingProcessDocument.name,
+                "name": mapping_process_doc['name'],
             }
             mappingpr_names.append(mappingpr)
         return mappingpr_names
