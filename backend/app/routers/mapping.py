@@ -83,3 +83,25 @@ def get_graph(process_id: int):
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")
     
     return graph_with_mappings
+
+@router.get("/" )
+async def get_mappings():
+    try :
+        mapping_docus =  mapping_process_collection.find({})
+        mapping_process_docs = await mapping_docus.to_list(length=None)  
+        mappingpr_names = []
+        for mapping_process_doc in mapping_process_docs:
+            mapping_process_doc['id'] = str(mapping_process_doc['_id'])
+            mappingProcessDocument = MappingProcessDocument(**mapping_process_doc)
+            mappingpr = {
+                "id": str(mapping_process_doc['_id']),
+                "name": mappingProcessDocument.name,
+            }
+            mappingpr_names.append(mappingpr)
+        return mappingpr_names
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+    
+    
