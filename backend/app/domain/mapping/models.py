@@ -29,6 +29,7 @@ class JsonSchema(BaseModel):
 
 #Requests bodys
 class MappingRequest(BaseModel):
+    mapping_name: str = Field()
     mapping: Dict[str, Any] = Field()
     jsonSchema: JsonSchema = Field(..., description="Esquema JSON")
 
@@ -46,7 +47,8 @@ class OntologyDocument(BaseModel):
     uri: Optional[HttpUrl] = Field(None, description="URI of the ontology")
 
 class MappingProcessDocument(BaseModel):
-    id : Optional[str] = None
+    _id : Optional[str] = None
+    name : str = None
     mapping :Optional[Dict[str, Any]]= None
     ontologyId: Optional[str]= None
     jsonSchemaId: Optional[str]= None

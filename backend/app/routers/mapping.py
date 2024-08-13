@@ -11,7 +11,7 @@ from ..database import onto_collection, mapping_process_collection, jsonschemas_
 router = APIRouter()
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
-async def  save_mapping(id: str, request: MappingRequest = Body(...)):
+async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
     try:
         ontology_id = ObjectId(id)
         ontology_docu = await onto_collection.find_one({'_id': ontology_id})
@@ -40,7 +40,7 @@ async def  save_mapping(id: str, request: MappingRequest = Body(...)):
 
         # saving mapping process
         mapping = request.mapping
-        mapping_process_docu = MappingProcessDocument(mapping=mapping, ontologyId=id,jsonSchemaId=str(schema_id))
+        mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=id,jsonSchemaId=str(schema_id))
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
         return MappingResponse(message="Mapped successfully", status="success")
@@ -54,9 +54,12 @@ async def  save_mapping(id: str, request: MappingRequest = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/{process_id}", response_model=MappingResponse)
-def get_mapping(process_id: int, mapRequestBody: MappingRequest):
+@router.get("/{mapping_process_id}", response_model=MappingResponse)
+async def get_mapping(process_id: int):
+    mapping_pr_id = ObjectId(id)
+    mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
     mappingProcess = get_mapping_process(process_id)
+    # TERMINAR ##
     mappingProcess.mapping = mapRequestBody.mapping
     print("Starting mapping process:", mappingProcess)
     try :
@@ -83,3 +86,22 @@ def get_graph(process_id: int):
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")
     
     return graph_with_mappings
+
+@router.get("/" )
+async def get_mappings():
+    try :
+        mapping_docus =  mapping_process_collection.find({})
+        mapping_process_docs = await mapping_docus.to_list(length=None)  
+        mappingpr_names = []
+        for mapping_process_doc in mapping_process_docs:
+            mappingpr = {
+                "id": str(mapping_process_doc['_id']),
+                "name": mapping_process_doc['name'],
+            }
+            mappingpr_names.append(mappingpr)
+        return mappingpr_names
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+
