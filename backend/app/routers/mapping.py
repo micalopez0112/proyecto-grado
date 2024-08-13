@@ -11,10 +11,10 @@ from ..database import onto_collection, mapping_process_collection, jsonschemas_
 router = APIRouter()
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
-async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
+async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
     try:
-        ontology_id = ObjectId(id)
-        ontology_docu = await onto_collection.find_one({'_id': ontology_id})
+        onto_id = ObjectId(ontology_id)
+        ontology_docu = await onto_collection.find_one({'_id': onto_id})
         
         if ontology_docu is None:
             raise HTTPException(status_code=404, detail="Ontology not found")
@@ -54,27 +54,27 @@ async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{mapping_process_id}", response_model=MappingResponse)
-async def get_mapping(process_id: int):
-    mapping_pr_id = ObjectId(id)
-    mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
-    mappingProcess = get_mapping_process(process_id)
-    # TERMINAR ##
-    mappingProcess.mapping = mapRequestBody.mapping
-    print("Starting mapping process:", mappingProcess)
-    try :
-        status = process_mapping(mappingProcess)
-    except ValueError as e:
-        msg = str(e)
-        status = "error"
-        response = MappingResponse(message=msg, status="error")
-        return response
-    except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
+# @router.get("/{mapping_process_id}", response_model=MappingResponse)
+# async def get_mapping(process_id: int):
+#     mapping_pr_id = ObjectId(id)
+#     mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+#     mappingProcess = get_mapping_process(process_id)
+#     # TERMINAR ##
+#     mappingProcess.mapping = mapRequestBody.mapping
+#     print("Starting mapping process:", mappingProcess)
+#     try :
+#         status = process_mapping(mappingProcess)
+#     except ValueError as e:
+#         msg = str(e)
+#         status = "error"
+#         response = MappingResponse(message=msg, status="error")
+#         return response
+#     except Exception as e:
+#         msg = str(e)
+#         response = MappingResponse(message=msg, status="error")
+#         return response
 
-    return MappingResponse(message="Mapped successfully", status="success")
+#     return MappingResponse(message="Mapped successfully", status="success")
 
 @router.get("/graph/{process_id}", response_model = Any)
 def get_graph(process_id: int):
