@@ -15,6 +15,7 @@ def process_mapping(mapping, ontology):
     mappedClasses = {}
     newMappedClasses = {}
     mappingItems = mapping.items()
+    possibleErrors = []
     for jsonMappedKey, ontoValue in mappingItems:
         print("processing key:", jsonMappedKey)
         print("processing value:", ontoValue)
@@ -28,12 +29,7 @@ def process_mapping(mapping, ontology):
                 mappedClassKey = jsonMappedKey.split("_")[0]
                 mappedClasses[mappedClassKey] = mappedIris
                 print("## Mapped OK ##", mappedClasses)             
-            if isJSONKey(jsonMappedKey):
-                # Rule 3: an object property is mapped to an ontology property   
-                okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
-                if okRule3:
-                    continue
-                
+            if isJSONKey(jsonMappedKey):              
                 # Rule 2: a simple property is mapped to an ontology data property
                 if isDataPropertyMapping(jsonMappedKey):
                     print("is data property mapping")
@@ -42,7 +38,13 @@ def process_mapping(mapping, ontology):
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Errors found: {possibleErrors}")
-                    
+                else:
+                    # Rule 3: an object property is mapped to an ontology property   
+                    okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
+                    if okRule3:
+                        continue
+                    else:
+                        raise ValueError(f"Errors found: {possibleErrors}")
         except Exception as e:
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e

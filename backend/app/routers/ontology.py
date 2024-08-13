@@ -22,6 +22,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: UploadFile = Fil
             ontology_content = await ontology_file.read()
             f.write(ontology_content)
         
+        print("onto path", completePath)
         ontoDocu = OntologyDocument(type=type, file=completePath)
         result = await onto_collection.insert_one(ontoDocu.dict())
         ontology_id = result.inserted_id
