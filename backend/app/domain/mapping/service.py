@@ -15,6 +15,7 @@ def process_mapping(mapping, ontology):
     mappedClasses = {}
     newMappedClasses = {}
     mappingItems = mapping.items()
+    possibleErrors = []
     for jsonMappedKey, ontoValue in mappingItems:
         print("processing key:", jsonMappedKey)
         print("processing value:", ontoValue)
@@ -42,8 +43,8 @@ def process_mapping(mapping, ontology):
                     okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, newMappedClasses)
                     if okRule3:
                         continue
-                    
-                    raise ValueError(f"Errors found: {possibleErrors}")
+                    else:
+                        raise ValueError(f"Errors found: {possibleErrors}")
         except Exception as e:
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
