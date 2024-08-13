@@ -1,6 +1,9 @@
 from owlready2 import *
-from app.domain.mapping.models import MappingProcess, get_mapping_process, MappingRequest, MappingResponse
+from bson import ObjectId
+from app.domain.mapping.models import MappingProcess, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument
 from app.domain.mapping.service import process_mapping
+
+from app.database import onto_collection, mapping_process_collection, jsonschemas_collection
 import random
 
 
@@ -12,13 +15,24 @@ def data_prop_range_to_str(name): ##used to take the data property range as a st
 
 
 ##def get_ontology_info_from_uri(/*uri, is_file, incomplete = True):
-def get_ontology_info_from_pid(process_id):
-    mappingProcess = get_mapping_process(process_id)
-    onto = mappingProcess.ontology
+async def get_ontology_info_from_pid(ontology_id):
+    # mappingProcess = get_mapping_process(process_id)
+    # onto = mappingProcess.ontology
+    onto_id = ObjectId(ontology_id)
+    ontology_docu = await onto_collection.find_one({'_id': onto_id})
+    if ontology_docu is None:
+        ##handle error
+        return None
+    
+    ontology_docu['id'] = str(ontology_docu['_id'])
+    ontology_document = OntologyDocument(**ontology_docu)
+    if ontology_document.type == "FILE":
+        ontology_path = ontology_document.file
+        ontology = get_ontology(ontology_path).load()
 
-    onto_classes = list(onto.classes())
-    onto_object_properties = list(onto.object_properties())
-    onto_data_properties = list(onto.data_properties())
+    onto_classes = list(ontology.classes())
+    onto_object_properties = list(ontology.object_properties())
+    onto_data_properties = list(ontology.data_properties())
     
     ## Transform ontology elements to string names to be serializable
     classes = [
@@ -49,7 +63,7 @@ def get_ontology_info_from_pid(process_id):
         { "object_properties": obj_properties}, 
         { "data_properties": data_properties}
     ]
-    close_world(onto)## The ontology must be closed to avoid inconsistencies
+    close_world(ontology)## The ontology must be closed to avoid inconsistencies
     return res
 
 def graph_generator(ontology_elements, map_proccess):
@@ -58,7 +72,7 @@ def graph_generator(ontology_elements, map_proccess):
     edges = []
     try:
         onto_mapping_elems = [
-           onto_elem['iri'] for _, map_elem in map_proccess.mapping.items() for onto_elem in map_elem 
+           onto_elem['iri'] for _, map_elem in map_proccess.items() for onto_elem in map_elem 
         ]
         # print(onto_mapping_elems)
         current_edges_per_node = {}

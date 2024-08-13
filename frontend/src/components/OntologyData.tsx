@@ -3,7 +3,11 @@ import "./OntologyData.css";
 import { useDataContext} from '../context/context.tsx';
 import { OntologyDataType } from '../types';
 
-const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
+interface OntologyDataProps {
+  ontoData: OntologyDataType;
+}
+
+const OntologyData: React.FC<OntologyDataProps> = ({ ontoData }) => {
   const isMapping = true;
 
   const { OntoElementSelected, setOntoElementSelected } = useDataContext();
@@ -16,7 +20,7 @@ const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
   };
 
 
-  console.log("Ontology Data: ", ontoData);
+  console.log("Ontology Data in component: ", ontoData);
 
   useEffect(() => {
     //
@@ -28,7 +32,7 @@ const OntologyData: React.FC<OntologyDataType> = ({ ontoData }) => {
     <div className='onto-data-display-container'>
       <span className='ontology-title'>Elementos de la ontología: </span>
       {OntoElementSelected.type != undefined ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
-      {ontoData?.map((ontology, i) => (
+      {ontoData?.ontoData.map((ontology, i) => (
         <div className='onto-container' key={`ontology-${i}`}>
           {ontology?.data?.map((x, i) => (
             <div className='styled-input' key={`data-${i}`}>

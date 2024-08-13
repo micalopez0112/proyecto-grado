@@ -9,28 +9,29 @@ import { OntologyDataType } from '../types/OntologyData.ts';
 
 export const Mapping = () => {    
     const navigate = useNavigate();
-    const { mappings,clearMappings,addNewMapping,currentMappingProcessId ,setCurrentMappingProcessId} = useDataContext();
+    const { mappings,clearMappings,addNewMapping,currentOntologyId ,setcurrentOntologyId,jsonSchemaContext} = useDataContext();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [ontologySelected, setOntologySelected] = useState<OntologyDataType['ontoData']>([]);
+    const [ontologySelected, setOntologySelected] = useState<OntologyDataType>({ontoData:[],ontologyId:''});
 
     useEffect(() => { //cambiar logica cuando se obtenga el id desde el back
-        if(currentMappingProcessId === undefined){
-            setCurrentMappingProcessId(11);
-        }
     },[]);
 
     const saveMappingsApiCall = async () => {
         try{
           if(Object.keys(mappings).length > 0){
-            const response = await saveMappings(55,mappings);
-            console.log(response);
-            if(response && response.status===200 ){
-                console.log(response.data);
-                alert('Mappings enviados con exito');
-                const {status,message} = response.data;
-                navigate('/Result');
+            if(currentOntologyId){
+                console.log("JSON SCHEMAAA: ", jsonSchemaContext);
+                const jsonschema = jsonSchemaContext;
+                const body = { mapping_name:'Nombre tomado de input',mapping: mappings, jsonSchema: jsonschema };
+                const response = await saveMappings(currentOntologyId,body);
+                console.log("Response al guardar mappings: ", response);
+                if(response && response.status===200 ){
+                    console.log(response.data);
+                    alert('Mappings enviados con exito');
+                    const {status,message,mapping_id} = response.data;
+                    navigate('/Result', {state:{mapping_process:mapping_id}});
+                }
             }
-            //setMappings({});
           }
           else{
             alert('No hay mappings para enviar');
@@ -60,19 +61,14 @@ export const Mapping = () => {
     const handleFileSubmit = async () => {
         if(selectedFile){
             try{
-              const response = await uploadOntology(55, selectedFile);
+              const response = await uploadOntology('FILE', selectedFile,'');
               console.log("Ontologia desde el back", response);
-              const ontologyData: OntologyDataType['ontoData'] = response?.data.ontologyData.ontoData;
-  
+              const ontologyData: OntologyDataType = response?.data.ontologyData;
+              const ontologyId = response?.data.ontologyData.ontology_id;
+              console.log("Ontology ID desde el back", ontologyId);
               console.log("Ontology Data desde el back", ontologyData);
-  
-              if (Array.isArray(ontologyData)) {//borrar este ifelse
-                setOntologySelected(ontologyData);//era para confirmar que se tomaba bien la data
-              } else {
-                console.error("La data de ontología no es un arreglo.");
-              }
-
               setOntologySelected(ontologyData);
+              setcurrentOntologyId(ontologyId);
             }
             catch(error){
                 console.error("error en handleFileSubmit");

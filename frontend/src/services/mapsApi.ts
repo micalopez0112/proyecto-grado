@@ -1,14 +1,18 @@
 import { apiClient } from "../networking/apiClient.ts";
 
-export const saveMappings = async (processId: number, data: any) => {
+export const saveMappings = async (ontologyId: string, data: any) => {
   try {
-    const body = { mapping: data };
+    const body = data;
     console.log("Data to send in saveMappings: ", body);
-    const response = await apiClient.post(`/mapping/${processId}`, body, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await apiClient.post(
+      `/mapping/ontology_id/${ontologyId}`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log("#Se enviaron los mappings al back#: ", response);
     return response;
   } catch (error) {
@@ -16,27 +20,24 @@ export const saveMappings = async (processId: number, data: any) => {
   }
 };
 
-export const uploadOntology = async (processId: number, file: File) => {
+export const uploadOntology = async (type: string, file: File, uri: string) => {
   try {
     const formData = new FormData();
-    formData.append("file", file);
-    const response = await apiClient.post(
-      `/ontologies/${processId}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    console.log(response);
+    formData.append("type", type);
+    formData.append("ontology_file", file);
+    if (uri) formData.append("uri", uri);
+    const response = await apiClient.post(`/ontologies/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response;
   } catch (error) {
     console.error("Error in uploading ontology");
   }
 };
 
-export const getMappingGraph = async (processId: number) => {
+export const getMappingGraph = async (processId: string) => {
   try {
     const response = await apiClient.get(`/mapping/graph/${processId}`);
     console.log("Mapping Graph: ", response);

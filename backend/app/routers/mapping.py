@@ -10,8 +10,8 @@ from ..database import onto_collection, mapping_process_collection, jsonschemas_
 
 router = APIRouter()
 
-@router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
-async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
+@router.post("/ontology_id/{id}", response_model=MappingResponse)
+async def save_mapping(id: str, request: MappingRequest = Body(...)):
     try:
         ontology_id = ObjectId(id)
         ontology_docu = await onto_collection.find_one({'_id': ontology_id})
@@ -43,7 +43,7 @@ async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
         mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=id,jsonSchemaId=str(schema_id))
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
-        return MappingResponse(message="Mapped successfully", status="success")
+        return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
     except ValueError as e:
         msg = str(e)
         status = "error"
@@ -77,10 +77,12 @@ async def get_mapping(process_id: int):
     return MappingResponse(message="Mapped successfully", status="success")
 
 @router.get("/graph/{process_id}", response_model = Any)
-def get_graph(process_id: int):
+async def get_graph(process_id: str):
     try:
-        onto_for_graph = get_ontology_info_from_pid(process_id)
-        graph_with_mappings = graph_generator(onto_for_graph, get_mapping_process(process_id))
+        pid = ObjectId(process_id)
+        mapping_process_docu = await mapping_process_collection.find_one({'_id': pid})
+        onto_for_graph = await get_ontology_info_from_pid(mapping_process_docu['ontologyId'])
+        graph_with_mappings = graph_generator(onto_for_graph, mapping_process_docu['mapping'])
         
     except Exception as e:
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")

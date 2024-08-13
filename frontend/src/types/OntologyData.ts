@@ -1,4 +1,5 @@
 export interface OntologyDataType {
+  ontologyId: string;
   ontoData: Array<{
     name: string;
     data: Array<{
