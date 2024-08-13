@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import {Mapping} from './pages/Mapping.tsx';
 import MappingResult from "./pages/MappingResult.tsx";
+import Graph from "./components/Graph.tsx";
 
 function App() {
   return (

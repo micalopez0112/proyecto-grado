@@ -3,14 +3,12 @@ import "./OntologyData.css";
 import { useDataContext} from '../context/context.tsx';
 import { OntologyDataType } from '../types';
 
-interface OntologyDataProps {
-  ontoData: OntologyDataType;
-}
 
-const OntologyData: React.FC<OntologyDataProps> = ({ ontoData }) => {
+
+const OntologyData: React.FC<{}> = () => {
   const isMapping = true;
 
-  const { OntoElementSelected, setOntoElementSelected } = useDataContext();
+  const { OntoElementSelected, setOntoElementSelected, ontologyDataContext } = useDataContext();
 
   const handleClickOntoElem = (element: any, type:string) => {
     console.log("Onto element selected",element);
@@ -19,20 +17,17 @@ const OntologyData: React.FC<OntologyDataProps> = ({ ontoData }) => {
     }
   };
 
-
-  console.log("Ontology Data in component: ", ontoData);
-
   useEffect(() => {
-    //
+    console.log("Ontology Data Context: ", ontologyDataContext);
   }, []);
 
-  console.log("OntoElementSelected", OntoElementSelected);
+
 
   return (
     <div className='onto-data-display-container'>
       <span className='ontology-title'>Elementos de la ontología: </span>
       {OntoElementSelected.type != undefined ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
-      {ontoData?.ontoData.map((ontology, i) => (
+      {ontologyDataContext?.ontoData.map((ontology, i) => (
         <div className='onto-container' key={`ontology-${i}`}>
           {ontology?.data?.map((x, i) => (
             <div className='styled-input' key={`data-${i}`}>

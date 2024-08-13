@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { OntologyDataType } from '../types/OntologyData';
 
 interface OntoElement{
   name?: string;
@@ -16,7 +17,8 @@ interface JsonSchemaContextProps {
   currentOntologyId?:string;
   setcurrentOntologyId: (value: string | undefined) => void;
   jsonSchemaContext: any;
-  ontologyDataContext: Object;
+  ontologyDataContext: any;
+  setontologyDataContext: (value: any) => void;
   setJsonSchemaContext: (value: any) => void;
   JsonElementSelected: any;
   setJsonElementSelected: (value: any) => void;
@@ -38,6 +40,7 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
   setcurrentOntologyId: () => {},
   jsonSchemaContext: {},
   JsonElementSelected: {},
+  setontologyDataContext: () => {},
   ontologyDataContext: {},
   OntoElementSelected: {type:undefined, ontoElement:{}},
   mappings: {},
@@ -57,7 +60,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
   const [mappings, setMappings] = useState<Mapping>({});
-  const [ontologyDataContext, setOntologyDataContext] = useState<Object>({});
+  const [ontologyDataContext, setontologyDataContext] = useState<Object>({ontoData:[],ontologyId:''});
   const [currentOntologyId, setcurrentOntologyId] = useState<string | undefined>(undefined);
 
 
@@ -92,6 +95,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappings({});
     setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
+    setontologyDataContext({ontoData:[],ontologyId:''});
   };
 
   return (
@@ -103,6 +107,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setJsonSchemaContext,
         JsonElementSelected,
         setJsonElementSelected,
+        setontologyDataContext,
         ontologyDataContext,
         OntoElementSelected,
         setOntoElementSelected,

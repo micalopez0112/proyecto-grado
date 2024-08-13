@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 
 const MappingResult = () =>{
     const [graphData, setGraphData] = useState<any>(null);
-    const {currentOntologyId} = useDataContext();
+    const {mappings} = useDataContext();
     const location = useLocation();
     const mapping_process = location.state?.mapping_process; //prop parameter via navigation
 
@@ -86,12 +86,26 @@ const MappingResult = () =>{
                           }
                           
                           }>
-                            <h4>Mostrar mapeos o referencias?</h4>
-                            <ul>
-                                <li>jsonSchema1 - Onto1</li>
-                                <li>jsonSchema2 - Onto2</li>
-                                <li>jsonSchema3 - Onto3</li>
-                            </ul>
+                            <h4>Correspondencias JSON Schema - Ontologia</h4>
+                            <div> {/*table div ?? */}
+                              {
+                                 Object.keys(mappings).map((key) => {
+                                  return (
+                                      <div> {/*Row div ?? */}
+                                          <h2>{key}</h2>
+                                          <ul>
+                                              {
+                                                  mappings[key].map((element) => {
+                                                      return <li>{element.name}</li>
+                                                  })
+                                              }
+                                          </ul>
+                                      </div>
+                                  )
+                              })
+                          
+                              }
+                            </div>
                         </div>
                         <div>
                           {graphData ?
@@ -110,3 +124,22 @@ const MappingResult = () =>{
 }
 
 export default MappingResult;
+/*
+{
+                Object.keys(mappings).map((key) => {
+                    return (
+                        <div>
+                            <h2>{key}</h2>
+                            <ul>
+                                {
+                                    mappings[key].map((element) => {
+                                        return <li>{element.name}</li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    )
+                })
+            }
+
+*/

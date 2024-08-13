@@ -40,7 +40,7 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
 
         # saving mapping process
         mapping = request.mapping
-        mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=id,jsonSchemaId=str(schema_id))
+        mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
