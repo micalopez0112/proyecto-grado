@@ -11,7 +11,7 @@ from ..database import onto_collection, mapping_process_collection, jsonschemas_
 router = APIRouter()
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
-async def  save_mapping(id: str, request: MappingRequest = Body(...)):
+async def save_mapping(ontology_id: int, request: MappingRequest = Body(...)):
     try:
         ontology_id = ObjectId(id)
         ontology_docu = await onto_collection.find_one({'_id': ontology_id})
@@ -54,9 +54,12 @@ async def  save_mapping(id: str, request: MappingRequest = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/{process_id}", response_model=MappingResponse)
-def get_mapping(process_id: int, mapRequestBody: MappingRequest):
+@router.get("/{mapping_process_id}", response_model=MappingResponse)
+async def get_mapping(process_id: int):
+    mapping_pr_id = ObjectId(id)
+    mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
     mappingProcess = get_mapping_process(process_id)
+    # TERMINAR ##
     mappingProcess.mapping = mapRequestBody.mapping
     print("Starting mapping process:", mappingProcess)
     try :
@@ -101,5 +104,4 @@ async def get_mappings():
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
         return response
-    
-    
+
