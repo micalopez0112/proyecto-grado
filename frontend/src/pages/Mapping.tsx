@@ -9,28 +9,41 @@ import { OntologyDataType } from '../types/OntologyData.ts';
 
 export const Mapping = () => {    
     const navigate = useNavigate();
-    const { mappings,clearMappings,addNewMapping,currentMappingProcessId ,setCurrentMappingProcessId} = useDataContext();
+    const { mappings,clearMappings,addNewMapping,
+        currentOntologyId ,setcurrentOntologyId,jsonSchemaContext,
+        ontologyDataContext,setontologyDataContext
+    } = useDataContext();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [ontologySelected, setOntologySelected] = useState<OntologyDataType['ontoData']>([]);
-
+    const [mappingName, setMappingName] = useState<string>('');
     useEffect(() => { //cambiar logica cuando se obtenga el id desde el back
-        if(currentMappingProcessId === undefined){
-            setCurrentMappingProcessId(11);
-        }
+        
     },[]);
+
+    useEffect(() => {
+        console.log('ontologyDataContext has changed:', ontologyDataContext);
+      }, [ontologyDataContext]);
+
+
+    const prueba = async () => {
+        navigate('/Ontology');
+    }
 
     const saveMappingsApiCall = async () => {
         try{
           if(Object.keys(mappings).length > 0){
-            const response = await saveMappings(55,mappings);
-            console.log(response);
-            if(response && response.status===200 ){
-                console.log(response.data);
-                alert('Mappings enviados con exito');
-                const {status,message} = response.data;
-                navigate('/Result');
+            if(currentOntologyId){
+                console.log("JSON SCHEMAAA: ", jsonSchemaContext);
+                const jsonschema = jsonSchemaContext;
+                const body = { mapping_name:mappingName,mapping: mappings, jsonSchema: jsonschema };
+                const response = await saveMappings(currentOntologyId,body);
+                console.log("Response al guardar mappings: ", response);
+                if(response && response.status===200 ){
+                    console.log(response.data);
+                    alert('Mappings enviados con exito');
+                    const {status,message,mapping_id} = response.data;
+                    navigate('/Result', {state:{mapping_process:mapping_id}});
+                }
             }
-            //setMappings({});
           }
           else{
             alert('No hay mappings para enviar');
@@ -60,19 +73,14 @@ export const Mapping = () => {
     const handleFileSubmit = async () => {
         if(selectedFile){
             try{
-              const response = await uploadOntology(55, selectedFile);
+              const response = await uploadOntology('FILE', selectedFile,'');
               console.log("Ontologia desde el back", response);
-              const ontologyData: OntologyDataType['ontoData'] = response?.data.ontologyData.ontoData;
-  
+              const ontologyData: OntologyDataType = response?.data.ontologyData;
+              const ontologyId = response?.data.ontologyData.ontology_id;
+              console.log("Ontology ID desde el back", ontologyId);
               console.log("Ontology Data desde el back", ontologyData);
-  
-              if (Array.isArray(ontologyData)) {//borrar este ifelse
-                setOntologySelected(ontologyData);//era para confirmar que se tomaba bien la data
-              } else {
-                console.error("La data de ontología no es un arreglo.");
-              }
-
-              setOntologySelected(ontologyData);
+              setcurrentOntologyId(ontologyId);
+              setontologyDataContext(ontologyData);
             }
             catch(error){
                 console.error("error en handleFileSubmit");
@@ -87,19 +95,29 @@ export const Mapping = () => {
                     <Json></Json>    
                 </div>
                 <div className='content-box'>
-                    <OntologyData ontoData = {ontologySelected}></OntologyData>
+                    <OntologyData />
                 </div>
         </div>
+        <div 
+                style={{display:'flex',gap:'4px'}}>
+                    <label>Nombre del mapeo</label>
+                    <input type='text' value={mappingName} onChange={(e) => setMappingName(e.target.value)}></input>
+                    <button style={{marginBottom:'0px'}} onClick={saveMappingsApiCall}>Validar mappings</button>
+                </div>
         <div>
             <h1>Mappings</h1>
             <div style ={{display:'flex',gap:'10px', backgroundColor:'#f9f9f9',padding: '20px'}}>
                 <button onClick={addNewMapping}>Agregar mapping</button>
                 <button onClick={clearMappings}>Limpiar mappings</button>
-                <button onClick={saveMappingsApiCall}>Enviar mappings al back</button>
                 <input className='file-upload-label' type='file' onChange={handleFileChange}></input>
                 <button onClick={handleFileSubmit}>Submit archivo</button>
             </div>
-            {
+           
+        </div>
+    </div>
+    )
+    /*
+     {
                 Object.keys(mappings).map((key) => {
                     return (
                         <div>
@@ -115,7 +133,5 @@ export const Mapping = () => {
                     )
                 })
             }
-        </div>
-    </div>
-    )
+    */
 }

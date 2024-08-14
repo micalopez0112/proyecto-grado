@@ -1,0 +1,37 @@
+{
+    "mapping": {
+        "destination_value": [
+            {
+                "name": "Destintation",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Destination"
+            },
+            {
+                "name": "Adventure",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Adventure"
+            }
+        ],
+        "destination-accomodation_key": [
+            {
+                "name": "hasAccomodation",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasAccommodation"
+            }
+        ]
+    },
+    "jsonSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "hola": {
+            "type": "string"
+            },
+            "edad": {
+            "type": "integer"
+            }
+        },
+        "required": [
+            "hola",
+            "edad"
+        ]
+          
+    }
+  }

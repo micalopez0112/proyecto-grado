@@ -2,3 +2,5 @@ owlready2
 fastapi
 uvicorn
 pydantic
+motor
+bson
