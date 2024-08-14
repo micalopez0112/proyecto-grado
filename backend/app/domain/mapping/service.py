@@ -2,6 +2,7 @@
 VALUE = "value"
 KEY = "key"
 
+simpleTypes = ["string", "int", "bool", "float"]
 # TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
 # se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
@@ -36,6 +37,7 @@ def process_mapping(mappingProcess):
                     continue
                 
                 # Rule 2: a simple property is mapped to an ontology data property
+                JSPropertieType = getJsonSchemaPropertieType(jsonMappedKey)
                 if isDataPropertyMapping(jsonMappedKey):
                     print("is data property mapping")
                     JSONDataPropertyType = getJSONPropertyValue(jsonMappedKey)
@@ -43,6 +45,8 @@ def process_mapping(mappingProcess):
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Errors found: {possibleErrors}")
+                if JSPropertieType == "array":
+
                     
         except Exception as e:
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
@@ -87,9 +91,6 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
         ontologyProperty = ontoElem["iri"]
         domainName = getParentProperty(key)
         rangeName =  getSonProperty(key)
-
-        print("## DomainName:", domainName, "##")
-        print("## RangeName:", rangeName, "##")
         # ojo porque esto es una lista! (ya que una property del json puede haber sido mapeado a varias clases)
         domainIrisList = mappedClasses.get(domainName, None)
         rangeIrisList = mappedClasses.get(rangeName, None)
@@ -110,8 +111,8 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
             possibleErrors.append(f"Element {domainIri} not found in object property domain")
             return False, possibleErrors
         
+        # se iría esto
         if rangeIrisList is None:
-            print("## RangeIri is None, mapeamos al primer elemento del rango ##")
             # TODO: Hay un tema acá el rango puede ser varios elementos, en ese caso que hacemos? 
             # de momento mapeo al primer
             # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
@@ -123,6 +124,7 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
                 newMappedClasses[classKey] = [{"name": rangeClass.name, "iri": rangeClass.iri}]
             isRangeOk = True
         else: 
+            # quedaríamos solo con esto, que el rango ya viene mapeado
             for rangeIri in rangeIrisList:
                 isRangeOk = isIriInOntologyElem(rangeIri, objectProperty.range)
                 if isRangeOk:
@@ -137,12 +139,11 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
 # validateRule2 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
 # 1. checks if the ontology value is an existent data property
 # 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
-def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
-    print("### Validating rule 2: ", key, "##", mappedTo, "###")
+def validateRule2(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
+    print("### Validating rule 2: ", key, "##", ontoValuesMappedTo, "###")
     possibleErrors = []
-    for ontoElem in mappedTo:
+    for ontoElem in ontoValuesMappedTo:
         ontologyPropertyIri = ontoElem["iri"]
-        print("## Ontology property iri: ", ontologyPropertyIri, "##")
         domainName = getParentProperty(key)
         isRangeOk = False
 
@@ -164,17 +165,23 @@ def validateRule2(key, mappedTo, mappedClasses, ontoDataProperties, JSONProperty
             possibleErrors.append(f"Element {domainIri} not found in data property domain")
             return False, possibleErrors
         
-        dataPropertyRange = dataProperty.range
-        for dpRange in dataPropertyRange:
-            if checkRangeAndJSONDataProperty(JSONPropertyType, dpRange):
-                isRangeOk = True
-                break
-        if not isRangeOk:
-            possibleErrors.append(f"Element json property type does not match with data property range")
-            return False, possibleErrors
+        isRangeOk = False
+        # si estoy validando un mapeo de array a dp tiene que cumplir que todos sus tipos son simples
+        #if JSONPropertyType == "array":
+            # obteno las properties del schema
+
+            # valido que todas son tipos simpels
+        # se iría esto
+        #if not isRangeOk:
+        #    possibleErrors.append(f"Element json property type does not match with data property range")
+        #    return False, possibleErrors
         
     return isRangeOk, possibleErrors
-        
+
+# array
+def validateRule4(key, mappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
+    print(key)
+
 # isIriInOntologyElem checks if an iri exists in an ontology elements list (class, property, etc)
 def isIriInOntologyElem(iri, ontoElems):
     for elem in ontoElems:
@@ -220,10 +227,21 @@ def isJSONKey(str):
     keyPart = splittedMappingKey[1].split("#")
     return keyPart[0] == KEY
 
+# valores posibles que retorna = string, int, bool, float, array
+def getJsonSchemaPropertieType(str):
+    splittedMappingKey = str.split("_")
+    keyPart = splittedMappingKey[1]
+    hashTag = keyPart.split("#")
+    if len(hashTag) > 1:
+        return hashTag[1]
+    return ""
+
+
 def isDataPropertyMapping(str):
     splittedMappingKey = str.split("_")
     keyPart = splittedMappingKey[1]
-    if "#" in keyPart :
+    hashTag = keyPart.split("#")
+    if hashTag[1] in simpleTypes:
         return True
     return False
 
@@ -235,10 +253,7 @@ def getJSONPropertyValue(str):
         return stringSplittedList[1]
     
 def checkRangeAndJSONDataProperty(JSONProperty, ontoRange):
-    if str(JSONProperty) == "string" and ontoRange == str:
+    if (str(JSONProperty) == "string" and ontoRange == str) or (str(JSONProperty) == "int" and ontoRange == int) or (str(JSONProperty) == "bool" and ontoRange == bool) :
         return True
-    if str(JSONProperty) == "int" and ontoRange == int:
-        return True
-    if str(JSONProperty) == "bool" and ontoRange == bool:
-        return True
+    
     return False
