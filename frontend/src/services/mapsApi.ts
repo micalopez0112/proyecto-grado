@@ -46,3 +46,12 @@ export const getMappingGraph = async (processId: string) => {
     console.error("Error in getting Mapping Graph");
   }
 };
+
+export const fetchMappings = async () => {
+  try {
+    const response = await apiClient.get("/mapping/");
+    return response;
+  } catch (error) {
+    console.error("Error fetching mappings", error);
+  }
+};

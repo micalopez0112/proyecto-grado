@@ -96,11 +96,13 @@ async def get_mappings():
         mapping_process_docs = await mapping_docus.to_list(length=None)  
         mappingpr_names = []
         for mapping_process_doc in mapping_process_docs:
+            print("Mapping process doc", mapping_process_doc)
             mappingpr = {
                 "id": str(mapping_process_doc['_id']),
                 "name": mapping_process_doc['name'],
             }
             mappingpr_names.append(mappingpr)
+        print("Mappings", mappingpr_names)
         return mappingpr_names
     except Exception as e:
         msg = str(e)

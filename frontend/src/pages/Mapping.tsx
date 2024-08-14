@@ -34,7 +34,7 @@ export const Mapping = () => {
             if(currentOntologyId){
                 console.log("JSON SCHEMAAA: ", jsonSchemaContext);
                 const jsonschema = jsonSchemaContext;
-                const body = { mapping_name:'Nombre nombree',mapping: mappings, jsonSchema: jsonschema };
+                const body = { mapping_name:mappingName,mapping: mappings, jsonSchema: jsonschema };
                 const response = await saveMappings(currentOntologyId,body);
                 console.log("Response al guardar mappings: ", response);
                 if(response && response.status===200 ){
