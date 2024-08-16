@@ -1,0 +1,44 @@
+{
+    "mapping": {
+        "destination_value": [
+            {
+                "name": "Destintation",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Destination"
+            },
+            {
+                "name": "Adventure",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Adventure"
+            }
+        ],
+        "destination-activity-Contact_value": [
+            {
+                "name": "Contact",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Contact"
+            }
+        ],
+        "destination-activity_key": [
+            {
+                "name": "hasActivity",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasActivity"
+            }
+        ],
+        "destination-activity_value": [
+            {
+                "name": "Activity",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Activity"
+            }
+        ],
+        "destination-activity-contact_key": [
+            {
+                "name": "hasContact",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasContact"
+            }
+        ],
+        "destination-activity-contact-email_key#array": [
+            {
+                "name": "hasEmail",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasEMail"
+            }
+        ]
+    }
+}

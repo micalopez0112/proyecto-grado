@@ -1,3 +1,4 @@
+from app.domain.mapping.models import JsonSchema
 
 VALUE = "value"
 KEY = "key"
@@ -6,7 +7,8 @@ simpleTypes = ["string", "int", "bool", "float"]
 # TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
 # se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
-def process_mapping(mapping, ontology):
+# ojo ver si este tipado funciona
+def process_mapping(mapping, ontology, jsonschema: JsonSchema):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
     print("## Starting mapping process:", ontology, "##")
     ontoClasses = list(ontology.classes())
@@ -32,11 +34,17 @@ def process_mapping(mapping, ontology):
                 print("## Mapped OK ##", mappedClasses)             
             if isJSONKey(jsonMappedKey):              
                 # Rule 2: a simple property is mapped to an ontology data property
-                JSPropertieType = getJsonSchemaPropertieType(jsonMappedKey)
-                if isDataPropertyMapping(jsonMappedKey):
+                JSPropertyType = getJsonSchemaPropertieType(jsonMappedKey)
+                #isDataPropertyMapping(jsonMappedKey)
+                if JSPropertyType != "" and (JSPropertyType in simpleTypes):
                     print("is data property mapping")
-                    JSONDataPropertyType = getJSONPropertyValue(jsonMappedKey)
-                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSONDataPropertyType)
+                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, None)
+                    if not okRule2:
+                        possibleErrors.extend(possibleRule2Errors)
+                        raise ValueError(f"Errors found: {possibleErrors}")
+                elif JSPropertyType != "" and (JSPropertyType == "array"):
+                    print("## is array property mapping ##")
+                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, jsonschema)
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Errors found: {possibleErrors}")
@@ -138,15 +146,17 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
 # validateRule2 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
 # 1. checks if the ontology value is an existent data property
 # 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
-def validateRule2(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
+def validateRule2(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType, jsonschema: JsonSchema):
     print("### Validating rule 2: ", key, "##", ontoValuesMappedTo, "###")
     possibleErrors = []
+    isRangeOk = True
     for ontoElem in ontoValuesMappedTo:
         ontologyPropertyIri = ontoElem["iri"]
         domainName = getParentProperty(key)
-        isRangeOk = False
+        print("DOMAIN NAME: ", domainName)
 
         domainIrisList = mappedClasses.get(domainName, None)
+        print("DOMAIN IRIS LIST: ", domainIrisList)
         if domainIrisList is None:
             raise ValueError(f"Element {domainIrisList} not mapped to a class")
         
@@ -164,22 +174,39 @@ def validateRule2(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JS
             possibleErrors.append(f"Element {domainIri} not found in data property domain")
             return False, possibleErrors
         
-        isRangeOk = False
         # si estoy validando un mapeo de array a dp tiene que cumplir que todos sus tipos son simples
-        #if JSONPropertyType == "array":
+        if JSONPropertyType == "array":
+            print("validating array")
             # obteno las properties del schema
-
+            propType = "simple"
             # valido que todas son tipos simpels
-        # se iría esto
-        #if not isRangeOk:
-        #    possibleErrors.append(f"Element json property type does not match with data property range")
-        #    return False, possibleErrors
+            isOk = checkAllJsonaSchemaTypes(jsonschema, key, propType)
+            if not isOk:
+                possibleErrors.append(f"If you're mapping {key} to a dataproperty, all the types of the array must be simple")
+                return False, possibleErrors
         
     return isRangeOk, possibleErrors
 
-# array
-def validateRule4(key, mappedTo, mappedClasses, ontoDataProperties, JSONPropertyType):
-    print(key)
+# mover esta función
+
+
+
+def checkAllJsonaSchemaTypes( jsonSchema: JsonSchema, key, propType):
+    print("JSONSCHEMA: ", jsonSchema)
+    #jsonSchema = JsonSchema(**jsonschema)
+    propertyBeingLooked = jsonSchema.findPropertyInJsonSchema(key)
+    if propertyBeingLooked["type"] != "array":
+        return False
+    items = propertyBeingLooked["items"]
+    for item in items:
+        if propType == "simple" and item["type"] not in simpleTypes:
+            return False
+        if propType == "object" and item["type"] != "object":
+            return False
+        
+    print("## All properties are##", propType)    
+    return True
+
 
 # isIriInOntologyElem checks if an iri exists in an ontology elements list (class, property, etc)
 def isIriInOntologyElem(iri, ontoElems):
@@ -226,14 +253,6 @@ def isJSONKey(str):
     keyPart = splittedMappingKey[1].split("#")
     return keyPart[0] == KEY
 
-# valores posibles que retorna = string, int, bool, float, array
-def getJsonSchemaPropertieType(str):
-    splittedMappingKey = str.split("_")
-    keyPart = splittedMappingKey[1]
-    hashTag = keyPart.split("#")
-    if len(hashTag) > 1:
-        return hashTag[1]
-    return ""
 
 
 def isDataPropertyMapping(str):
@@ -244,12 +263,14 @@ def isDataPropertyMapping(str):
         return True
     return False
 
-def getJSONPropertyValue(str):
+# valores posibles que retorna = string, int, bool, float, array
+def getJsonSchemaPropertieType(str):
     splittedMappingKey = str.split("_")
-    stringSplittedList = splittedMappingKey[1].split("#")
-
-    if len(stringSplittedList) > 1 :
-        return stringSplittedList[1]
+    keyPart = splittedMappingKey[1]
+    hashTag = keyPart.split("#")
+    if len(hashTag) > 1:
+        return hashTag[1]
+    return ""
     
 def checkRangeAndJSONDataProperty(JSONProperty, ontoRange):
     if (str(JSONProperty) == "string" and ontoRange == str) or (str(JSONProperty) == "int" and ontoRange == int) or (str(JSONProperty) == "bool" and ontoRange == bool) :

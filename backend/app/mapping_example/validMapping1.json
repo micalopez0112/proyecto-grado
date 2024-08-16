@@ -28,10 +28,10 @@
                 "iri": "http://www.w3.org/2001/XMLSchema#string"
             }
         ],
-        "destination-accomodation-emails_key#array": [
+        "destination-accomodation-amenities_key#array": [
             {
-                "name": "hasEmail",
-                "iri": "http://www.owl-ontologies.com/travel.owl#hasEMail"
+                "name": "hasRating",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasRating"
             }
         ]
     }
