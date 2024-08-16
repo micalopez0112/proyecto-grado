@@ -37,12 +37,11 @@ class JsonSchema(BaseModel):
                 return current_level[property_name]
             else:
                 return None
-        # parts = [destino, person, nombre
+   
         print("looking for property!")
         current_level = self.properties[properties_names[0]]
         properties_names = properties_names[1:]
         for prop_name in properties_names:
-            print("Current property name:", prop_name)
             if 'properties' in current_level and prop_name in current_level['properties']:
                 print("### PROPERTY NAME: ##", prop_name)
                 current_level = current_level['properties'][prop_name]
@@ -51,9 +50,7 @@ class JsonSchema(BaseModel):
                 items = current_level['items']
                 print("## ITEMS: ##", items)
                 for item in items:
-                    print("## ITEM: ##", item)
                     print("## ITEM PROPERTIES: ##", item['properties'])
-                    print("Looking for property:", prop_name)
                     if 'properties' in item and prop_name in item['properties']:
                         current_level = item['properties'][prop_name]
                     else:

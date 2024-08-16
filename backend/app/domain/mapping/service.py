@@ -118,28 +118,16 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
             possibleErrors.append(f"Element {domainIri} not found in object property domain")
             return False, possibleErrors
         
-        # se iría esto
-        if rangeIrisList is None:
-            # TODO: Hay un tema acá el rango puede ser varios elementos, en ese caso que hacemos? 
-            # de momento mapeo al primero. Cambiar a que se mapee a todas las clases del rango.
-            # si no se mapeo, lo mapeamos nosotros a la clase que corresponda
-            rangeClass = objectProperty.range[0]
-            classKey = rangeName + "_value"
-            if classKey in newMappedClasses:
-                newMappedClasses[classKey].append({"name": rangeClass.name, "iri": rangeClass.iri})
-            else:
-                newMappedClasses[classKey] = [{"name": rangeClass.name, "iri": rangeClass.iri}]
-            isRangeOk = True
-        else: 
-            # quedaríamos solo con esto, que el rango ya viene mapeado
-            for rangeIri in rangeIrisList:
-                isRangeOk = isIriInOntologyElem(rangeIri, objectProperty.range)
-                if isRangeOk:
-                    break
-    
-            if not isRangeOk:
-                possibleErrors.append(f"Element {rangeIri} not found in object property range")
-                return False, possibleErrors
+        # quedaríamos solo con esto, que el rango ya viene mapeado
+        for rangeIri in rangeIrisList:
+            isRangeOk = isIriInOntologyElem(rangeIri, objectProperty.range)
+            if isRangeOk:
+                # si alguna de las clases del rango esta mapeada ya estoy OK
+                break
+
+        if not isRangeOk:
+            possibleErrors.append(f"Element {rangeIri} not found in object property range")
+            return False, possibleErrors
 
     return isDomainOk and isRangeOk, possibleErrors
 
