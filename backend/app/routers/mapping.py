@@ -4,9 +4,10 @@ from owlready2 import get_ontology
 import motor.motor_asyncio
 from typing import Dict, Any
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
-from app.domain.mapping.models import MappingProcessDocument, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument
+from app.domain.mapping.models import MappingProcessDocument, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
+import json
 
 router = APIRouter()
 
@@ -54,27 +55,53 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# @router.get("/{mapping_process_id}", response_model=MappingResponse)
-# async def get_mapping(process_id: int):
-#     mapping_pr_id = ObjectId(id)
-#     mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
-#     mappingProcess = get_mapping_process(process_id)
-#     # TERMINAR ##
-#     mappingProcess.mapping = mapRequestBody.mapping
-#     print("Starting mapping process:", mappingProcess)
-#     try :
-#         status = process_mapping(mappingProcess)
-#     except ValueError as e:
-#         msg = str(e)
-#         status = "error"
-#         response = MappingResponse(message=msg, status="error")
-#         return response
-#     except Exception as e:
-#         msg = str(e)
-#         response = MappingResponse(message=msg, status="error")
-#         return response
+@router.get("/{mapping_process_id}")
+async def get_mapping(mapping_process_id: str):
+    try:
+        mapping_pr_id = ObjectId(mapping_process_id)
+        mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+        mappingProcessDocu = MappingProcessDocument(**mapping_process_docu)
+        print("mappingProcessDocu", mappingProcessDocu)
+        # TERMINAR ##
+        onto_id = mappingProcessDocu.ontologyId
+        ontology_id = ObjectId(onto_id)
+        ontology = await onto_collection.find_one({'_id': ontology_id})
+        ontology_path = ontology.get('file')
+        print("ontology_path", ontology_path)
+        # Mover esto para un lugar más adecuado
+        ontology = get_ontology(ontology_path).load()
+        classes = list(ontology.classes())
+        object_properties = list(ontology.object_properties())
+        data_properties = list(ontology.data_properties())
+        ontology_data = {
+            "ontoData": [{
+                "data": [{
+                    "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
+                    "object_properties": [{"name": prop.name, "iri": prop.iri} for prop in object_properties],
+                    "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
+                }]
+            }]
+        }
+        # Recuperar la información del schema asociado
+        sh_id = mappingProcessDocu.jsonSchemaId
+        schema_id = ObjectId(sh_id)
+        schemaDocum = await jsonschemas_collection.find_one({'_id': schema_id})
+        JSONSchema = JsonSchema(**schemaDocum)
 
-#     return MappingResponse(message="Mapped successfully", status="success")
+        # AJUSTAR
+        complete_mapping = {
+            'ontology': ontology_data,
+            'schema': JSONSchema,
+            'mapping': mappingProcessDocu.mapping
+        }
+
+        print("complete_mapping", complete_mapping)
+        return complete_mapping
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+
 
 @router.get("/graph/{process_id}", response_model = Any)
 def get_graph(process_id: int):

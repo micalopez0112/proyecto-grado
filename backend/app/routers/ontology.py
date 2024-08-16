@@ -28,6 +28,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: UploadFile = Fil
         ontology_id = result.inserted_id
 
         # en esta parte se obtiene la ontología y se devuelven sus partes para mostrarlas en el front
+        # Mover esto para un lugar más adecuado
         ontology = get_ontology(completePath).load()
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
