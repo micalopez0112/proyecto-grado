@@ -35,10 +35,16 @@
                 "iri": "http://www.owl-ontologies.com/travel.owl#hasContact"
             }
         ],
-        "destination-activity-contact-email_key#array": [
+        "destination-activity-contact-emails_key#array": [
             {
                 "name": "hasEmail",
                 "iri": "http://www.owl-ontologies.com/travel.owl#hasEMail"
+            }
+        ],
+        "destination-accomodation-adddress_value": [
+            {
+                "name": "Beach",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Beach"
             }
         ]
     },
@@ -88,33 +94,40 @@
                     },
                     "activity": {
                         "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string"
-                                },
-                                "contact": {
-                                    "type": "object",
-                                    "properties": {
-                                        "street": {
-                                            "type": "string"
-                                        },
-                                        "emails": {
-                                            "type": "array",
-                                            "items": [
-                                                {
+                        "items": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "contact": {
+                                        "type": "object",
+                                        "properties": {
+                                            "street": {
                                                 "type": "string"
-                                                },
-                                                {
-                                                "type": "string"
-                                                }
-                                            ]
+                                            },
+                                            "emails": {
+                                                "type": "array",
+                                                "items": [
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
+                        ]
                     }
                 }
             }
