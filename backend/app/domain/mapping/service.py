@@ -38,15 +38,15 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
                 #isDataPropertyMapping(jsonMappedKey)
                 if JSPropertyType != "" and (JSPropertyType in simpleTypes):
                     print("is data property mapping")
-                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, None)
+                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, None)
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Possible errors: {possibleErrors}")
                 elif JSPropertyType != "" and (JSPropertyType == "array"):
                     print("## is array property mapping ##")
-                    okRule2, possibleRule2Errors = validateRule2(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, jsonschema)
+                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, jsonschema)
                     if not okRule2:
-                        okRule3, possibleErrors3 = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, JSPropertyType,jsonschema)
+                        okRule3, possibleErrors3 = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, JSPropertyType,jsonschema)
                         if okRule3:
                             continue
                         print("ERROS SO FAR: ", possibleRule2Errors)
@@ -55,7 +55,7 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
                         raise ValueError(f"Possible errors: {possibleErrors}")
                 else:
                     # Rule 3: an object property is mapped to an ontology property   
-                    okRule3, possibleErrors = validateRule3(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, "",None)
+                    okRule3, possibleErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, "",None)
                     if okRule3:
                         continue
                     else:
@@ -89,12 +89,12 @@ def validateRule1(key, ontoValuesMappedTo, ontoClasses):
     return mappedIris
 
 
-# validateRule3 recieves the json-schema key, the ontology values mapped to and all valid ontolgy object properties. Then it does the next validations: 
+# validateRule3And4 recieves the json-schema key, the ontology values mapped to and all valid ontolgy object properties. Then it does the next validations: 
 # 1. checks if the ontology value is an existent objet property 
 # 2. checks if the domain of the object property is already correctly mapped (by checking if it is in the mappedClasses dict)
 # 3. checks if the range of the object property is already correctly mapped. If it isn't it maps it to the correct class and adds it to the newMappedClasses
 # then at the end of all mapping iteration it adds the new mapped elements to the mapping json.
-def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, JSONPropertyType, jsonschema: JsonSchema):
+def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, JSONPropertyType, jsonschema: JsonSchema):
     possibleErrors = []
     print("### Validating rule 3: ", key, "##", ontoValuesMappedTo, "###")
     for ontoElem in ontoValuesMappedTo:
@@ -154,10 +154,10 @@ def validateRule3(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, 
 
     return isDomainOk and isRangeOk, possibleErrors
 
-# validateRule2 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
+# validateRule2And4 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
 # 1. checks if the ontology value is an existent data property
 # 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
-def validateRule2(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType, jsonschema: JsonSchema):
+def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType, jsonschema: JsonSchema):
     print("### Validating rule 2: ", key, "##", ontoValuesMappedTo, "###")
     possibleErrors = []
     isRangeOk = True
