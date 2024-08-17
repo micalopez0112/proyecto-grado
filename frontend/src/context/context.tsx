@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { OntologyDataType } from '../types/OntologyData';
+import { OntologyDataType, JsonSchema} from '../types';
 
 export interface OntoElement{
   name?: string;
@@ -59,7 +59,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     type: undefined,
     ontoElement: {}
   });
-  const [jsonSchemaContext, setJsonSchemaContext] = useState<Object>({});
+  const [jsonSchemaContext, setJsonSchemaContext] = useState<JsonSchema | null>(null);
   const [mappings, setMappings] = useState<Mapping>({});
   const [ontologyDataContext, setontologyDataContext] = useState<Object>({ontoData:[],ontologyId:''});
   const [currentOntologyId, setcurrentOntologyId] = useState<string | undefined>(undefined);
@@ -126,6 +126,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
     setontologyDataContext({ontoData:[],ontologyId:''});
+    setJsonSchemaContext(null);
   };
 
   return (

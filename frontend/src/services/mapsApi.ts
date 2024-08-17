@@ -55,3 +55,12 @@ export const fetchMappings = async () => {
     console.error("Error fetching mappings", error);
   }
 };
+
+export const getMapping = async (mappingId: string) => {
+  try {
+    const response = await apiClient.get(`/mapping/${mappingId}`);
+    return response;
+  } catch (error) {
+    console.error(`Error getting mapping with id ${mappingId}: `, error);
+  }
+};

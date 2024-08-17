@@ -3,29 +3,18 @@ import "./JsonSchema.css";
 import { json as generateJsonSchema } from "generate-schema";
 import { useDataContext } from "../context/context.tsx";
 import { useNavigate } from "react-router-dom";
+import { JsonSchema, JsonSchemaProperty } from "../types";
 
-// Define types for JSON Schema properties
-interface JsonSchemaProperty {
-  type: string;
-  properties?: Record<string, JsonSchemaProperty>;
-  items?: JsonSchemaProperty;
-}
-
-// Define types for JSON Schema
-interface JsonSchema {
-  type: string;
-  properties: Record<string, JsonSchemaProperty>;
-}
 
 const Json: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
   const [lastClickedElement, setLastClickedElement] = useState<string | null>(
     null
-  ); // New state
-  const { setJsonSchemaContext, setJsonElementSelected, JsonElementSelected } =
+  );
+  const { setJsonSchemaContext, jsonSchemaContext, setJsonElementSelected, JsonElementSelected } =
     useDataContext();
-  const navigate = useNavigate();
+
 
   // useEffect(() => {
   //   console.log("jsonSchemaContext:", jsonSchemaContext);
@@ -51,7 +40,6 @@ const Json: React.FC = () => {
     type:string) => {
       setJsonElementSelected(element+'_key#'+type);
       setLastClickedElement(element); // Fix this
-      console.log(element+'_key#'+type);
     }
 
   const handleGenerateSchema = () => {
@@ -176,17 +164,11 @@ const Json: React.FC = () => {
         <button onClick={handleGenerateSchema}>Generate Schema</button>
         </div>
          </div>
-      {jsonSchema && (
+      {jsonSchemaContext && (
         <div className="json-schema-container">
-          {/* <div className="json-schema">
-            <h2>Generated JSON Schema</h2>
-            <pre className="json-schema">
-              {JSON.stringify(jsonSchema, null, 2)}
-            </pre>
-      </div>*/ }
           <div className="json-schema">
             {JsonElementSelected !== "" ? <p>{JsonElementSelected}</p> : null}
-            {renderProperties(jsonSchema.properties, "")}
+            {jsonSchemaContext ? renderProperties(jsonSchemaContext.properties, ""):null}
           </div>
         </div>
       )}

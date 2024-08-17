@@ -1,32 +1,63 @@
 import React, {useEffect, useState} from 'react'
 import Json from '../components/JsonSchema.tsx'
 import OntologyData from '../components/OntologyData.tsx';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDataContext } from '../context/context.tsx';
-import {saveMappings,uploadOntology} from '../services/mapsApi.ts'
+import {saveMappings,uploadOntology,getMapping} from '../services/mapsApi.ts'
 import './Mapping.css'
 import { OntologyDataType } from '../types/OntologyData.ts';
 
 export const Mapping = () => {    
     const navigate = useNavigate();
+    const location = useLocation();
+
     const { mappings,clearMappings,addNewMapping,
         currentOntologyId ,setcurrentOntologyId,jsonSchemaContext,
-        ontologyDataContext,setontologyDataContext
+        ontologyDataContext,setontologyDataContext,setMappings,setJsonSchemaContext
     } = useDataContext();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [mappingName, setMappingName] = useState<string>('');
+    const [mappingId, setMappingId] = useState<string>('');
     useEffect(() => { //cambiar logica cuando se obtenga el id desde el back
         
     },[]);
 
     useEffect(() => {
+        const state = location.state;
+        if(state){
+            setMappingId(state.mappingId);
+        }
+        else{//limpiar contexto si es nuevo mapeo
+            if(mappings)
+                clearMappings();
+        }
+    },[]);
+
+    useEffect(() => {
+        const getMappingData = async () => {
+            if(mappingId){
+                try{
+                    const response = await getMapping(mappingId);
+                    console.log("Response de getMapping: ", response);
+                    if(response){
+                        const {mapping,schema,ontology} = response.data;
+                        setMappings(mapping);
+                        setJsonSchemaContext(schema);
+                        setontologyDataContext(ontology);
+                    }
+                }
+                catch(error){
+                    console.error("error en getMappingData", error);
+                }
+            }
+        }
+        getMappingData();
+    },[mappingId]);
+
+    useEffect(() => {
         console.log('ontologyDataContext has changed:', ontologyDataContext);
       }, [ontologyDataContext]);
 
-
-    const prueba = async () => {
-        navigate('/Ontology');
-    }
 
     const saveMappingsApiCall = async () => {
         try{
@@ -110,7 +141,22 @@ export const Mapping = () => {
                 <input className='file-upload-label' type='file' onChange={handleFileChange}></input>
                 <button onClick={handleFileSubmit}>Submit archivo</button>
             </div>
-           
+            {
+                Object.keys(mappings).map((key) => {
+                    return (
+                        <div>
+                            <h2>{key}</h2>
+                            <ul>
+                                {
+                                    mappings[key].map((element) => {
+                                        return <li>{element.name}</li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    )
+                })
+            }
         </div>
     </div>
     )
