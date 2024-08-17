@@ -77,8 +77,6 @@ export const Mapping = () => {
               console.log("Ontologia desde el back", response);
               const ontologyData: OntologyDataType = response?.data.ontologyData;
               const ontologyId = response?.data.ontologyData.ontology_id;
-              console.log("Ontology ID desde el back", ontologyId);
-              console.log("Ontology Data desde el back", ontologyData);
               setcurrentOntologyId(ontologyId);
               setontologyDataContext(ontologyData);
             }

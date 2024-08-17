@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 import { OntologyDataType } from '../types/OntologyData';
 
-interface OntoElement{
+export interface OntoElement{
   name?: string;
   iri?: string;
+  range?:Array<OntoElement>;
 }
 interface OntoSelect{
   type?:"class"| "object_property" | "data_property";
@@ -65,19 +66,44 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 
   const addNewMapping = () =>{
-    console.log("Adding new mapping");
+    console.log("Adding new mapping, actual mappings are: ", mappings);
+    if(JsonElementSelected !== '' && OntoElementSelected.type !== undefined){
     if(OntoElementSelected.type === "class"){
       setMappings({
         ...mappings,
         [JsonElementSelected+'_value']: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
       });
     }
-    else if (OntoElementSelected.type === "object_property"){
-      setMappings({
-        ...mappings,
-        [JsonElementSelected+'_key']: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
+    else if (OntoElementSelected.type === "object_property") {
+      console.log("Object Property seleccionado en context", OntoElementSelected.ontoElement);
+      console.log("JsonElementSelected en context", JsonElementSelected);
+      console.log("Rango de OntoElementSelected que se está agregando en context", OntoElementSelected.ontoElement.range);
+    
+      const rango = OntoElementSelected.ontoElement.range;
+      const key = { name: OntoElementSelected.ontoElement.name, iri: OntoElementSelected.ontoElement.iri };
+      console.log("Key que se está agregando en context", key);
+    
+      // Combina todas las actualizaciones en un solo objeto
+      setMappings((prevMappings) => {
+        const newMappings = {
+          ...prevMappings,
+          [JsonElementSelected + '_key']: [
+            ...(prevMappings[JsonElementSelected + '_key'] || []),
+            key
+          ]
+        };
+    
+        if (rango) {
+          newMappings[JsonElementSelected + '_value'] = [
+            ...(prevMappings[JsonElementSelected + '_value'] || []),
+            ...rango
+          ];
+        } else {
+          console.error("Error al agregar mapeo de object property, no presenta rango");
+        }
+    
+        return newMappings;
       });
-
     }
     else{
       console.log("JsonElementSelected en context",JsonElementSelected);
@@ -88,7 +114,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
-    //diferenciar según casos?
+    }
+    else{
+      console.log("mappings vaciós");
+      alert("Para agregar un mapeo primero debe seleccionarse un elemento del JSONSchema y de la ontología");
+    }
   }
 
   const clearMappings = () => {

@@ -3,6 +3,7 @@ import "./OntologyData.css";
 import { useDataContext} from '../context/context.tsx';
 import { OntologyDataType } from '../types';
 import Modal from 'react-modal';
+import { OntoElement } from '../context/context.tsx';
 
 Modal.setAppElement('#root');
 
@@ -11,9 +12,9 @@ const OntologyData: React.FC<{}> = () => {
 
   const { OntoElementSelected, setOntoElementSelected, ontologyDataContext } = useDataContext();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [rangeList, setRangeList] = useState<Array<string>>([]);
-  const [selectedRange, setSelectedRange] = useState<Array<string>>([]);
-
+  const [rangeList, setRangeList] = useState<Array<OntoElement>>([]);
+  const [selectedRange, setSelectedRange] = useState<Array<OntoElement>>([]);
+  const [objectPropertyElement, setObjectPropertyElement] = useState<any>();
 
   const handleClickOntoElem = (element: any, type:string) => {
     console.log("Onto element selected",element);
@@ -24,23 +25,48 @@ const OntologyData: React.FC<{}> = () => {
     else if(isMapping && type === 'object_property'){
       console.log("Object Property selected",element);
       console.log("Range of object property",element.range);
-      setRangeList([...rangeList, element.range.name]);
+      setRangeList([...rangeList, element.range]);
+      setObjectPropertyElement(element);
       setModalIsOpen(true);
       //agregar boton de aceptar y ahí hacer el setOntoElementSelected para este caso.
     }
   };
 
-  const handleAddElemToRange = (rangeItem: string) => {
-    if (selectedRange.includes(rangeItem)) {
-      setSelectedRange(selectedRange.filter(selected => selected !== rangeItem));
-    } else {
-      setSelectedRange([...selectedRange, rangeItem]);
+  const handleAddElemToRange = (rangeItem: OntoElement) => {
+    if (rangeItem === undefined)
+      return;
+    else{
+      if (selectedRange.includes(rangeItem)) {
+        setSelectedRange(selectedRange.filter(selected => selected !== rangeItem));
+      } else {
+        setSelectedRange([...selectedRange, rangeItem]);
+      }
     }
   }
 
+  const closeModal = () =>{
+    setModalIsOpen(false);
+    setRangeList([]);
+    setObjectPropertyElement({});
+    setSelectedRange([]);
+  }
+
+  const confirmationModal = (objectPropertyElement:any) =>{
+    //use
+    setOntoElementSelected(
+      {type:'object_property', 
+      ontoElement: {name: objectPropertyElement.name, iri:objectPropertyElement.iri,
+      range: selectedRange}});
+    
+    setSelectedRange([]);
+    setObjectPropertyElement({});
+    setRangeList([]);
+    setModalIsOpen(false);
+  }
+
   useEffect(() => {
-    console.log("Ontology Data Context: ", ontologyDataContext);
   }, []);
+
 
 
 
@@ -49,6 +75,7 @@ const OntologyData: React.FC<{}> = () => {
       <Modal 
         isOpen={modalIsOpen} 
         onRequestClose={() => setModalIsOpen(false)}
+        shouldCloseOnOverlayClick={false}
         style={ModalStyles}
         >
         <div style={ModalStyles.modalContent}>
@@ -58,24 +85,25 @@ const OntologyData: React.FC<{}> = () => {
         <ul style={ModalStyles.listStyle}>
           {rangeList.map((item) => (
             <li 
-              key={item} 
+              key={item.iri} 
               onClick={() => handleAddElemToRange(item)} 
               style={{...ModalStyles.listItemStyle,
-                    ...(selectedRange.includes(item)?ModalStyles.selectedItemStyle:{})}}>
-              {item}
+                    ...(selectedRange.includes(item) ? ModalStyles.selectedItemStyle : {})}}>
+              {item.name}
             </li>
           ))}
         </ul>
           </div>
           <div style={ModalStyles.modalfooter}>
-            <button
-              onClick={() => setModalIsOpen(false)}>Cerrar</button>
+            <button style={ModalStyles.modalCancelButton}
+              onClick={() => closeModal()}>Cerrar</button>
+            <button style={ModalStyles.modalOkButton}
+              onClick={() => confirmationModal(objectPropertyElement)}>Aceptar</button>
           </div>
           
         </div>
-        
-        
       </Modal>
+
       <span className='ontology-title'>Elementos de la ontología: </span>
       {OntoElementSelected.type != undefined ? <strong style={{ fontFamily: 'cursive' }}> An Element is selected {OntoElementSelected.ontoElement.iri}</strong> : null}
       {ontologyDataContext?.ontoData.map((ontology, i) => (
@@ -140,7 +168,7 @@ const OntologyData: React.FC<{}> = () => {
 
 const ModalStyles: { [key: string]: React.CSSProperties } = {
   content: {
-    top: '30%',
+    top: '50%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
@@ -182,7 +210,21 @@ const ModalStyles: { [key: string]: React.CSSProperties } = {
   modalcontainer:{
 
   },
- 
+  modalCancelButton:{
+    backgroundColor: '#ff3f1b',
+    color: 'white',
+    padding: '10px',
+    borderRadius: '5px',
+    marginRight: '8px',
+    cursor: 'pointer',
+  },
+  modalOkButton:{
+    backgroundColor: '#ffffff',
+    color: 'black',
+    padding: '10px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  } 
 }
 
 export default OntologyData;
