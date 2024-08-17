@@ -39,12 +39,12 @@ async def upload_ontology(type: str = Form(...), ontology_file: UploadFile = Fil
                 "name": ontology_file.filename,
                 "data": [{
                     "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
-                    "object_properties": [{"name": prop.name, "iri": prop.iri} for prop in object_properties],
+                    "object_properties": [{"name": prop.name, "iri": prop.iri, "range":{"name":range.name,"iri":range.iri}} for prop in object_properties for range in prop.range],
                     "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
                 }]
             }]
         }
-
+        print("Ontology data", ontology_data)
         return JSONResponse(content={
             "message": "File uploaded and processed successfully",
             "ontologyData": ontology_data
