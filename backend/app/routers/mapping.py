@@ -92,7 +92,8 @@ async def get_mapping(mapping_process_id: str):
         complete_mapping = {
             'ontology': ontology_data,
             'schema': JSONSchema,
-            'mapping': mappingProcessDocu.mapping
+            'mapping': mappingProcessDocu.mapping,
+            'mapping_name': mappingProcessDocu.name
         }
 
         print("complete_mapping", complete_mapping)

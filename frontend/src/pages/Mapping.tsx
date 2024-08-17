@@ -40,10 +40,11 @@ export const Mapping = () => {
                     const response = await getMapping(mappingId);
                     console.log("Response de getMapping: ", response);
                     if(response){
-                        const {mapping,schema,ontology} = response.data;
+                        const {mapping_name,mapping,schema,ontology} = response.data;
                         setMappings(mapping);
                         setJsonSchemaContext(schema);
                         setontologyDataContext(ontology);
+                        setMappingName(mapping_name);
                     }
                 }
                 catch(error){
