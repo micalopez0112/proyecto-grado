@@ -30,14 +30,14 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
             ontology_path = ontology_document.file
             ontology = get_ontology(ontology_path).load()
         
-        # here we validate if the mapping is correct
-        status = process_mapping(request.mapping, ontology)
-        print("validation OK")
-
         # saving json schema
         schema_dict = request.jsonSchema.dict(by_alias=True)
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id
+
+        # here we validate if the mapping is correct
+        status = process_mapping(request.mapping, ontology, request.jsonSchema)
+        print("validation OK")
 
         # saving mapping process
         mapping = request.mapping
