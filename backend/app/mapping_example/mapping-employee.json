@@ -1,0 +1,120 @@
+{
+    "mapping_name": "mapping paula",
+    "mapping": {
+        "employee_value": [
+            {
+                "name": "Accommodation",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Accommodation"
+            },
+            {
+                "name": "Activity",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Activity"
+            }
+        ],
+        "employee-area_value": [
+            {
+                "name": "AccommodationRating",
+                "iri": "http://www.owl-ontologies.com/travel.owl#AccommodationRating"
+            },
+            {
+                "name": "Contact",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Contact"
+            }
+        ],
+        "employee-area_key": [
+            {
+                "name": "hasContact",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasContact"
+            },
+            {
+                "name": "hasRating",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasRating"
+            }
+        ]
+    },
+    "jsonSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "destination": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "accomodation": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "ratings": {
+                                "type": "string"
+                            },
+                            "category": {
+                                "type": "string"
+                            },
+                            "amenities": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "adddress": {
+                                "type": "object",
+                                "properties": {
+                                    "street": {
+                                        "type": "string"
+                                    },
+                                    "number": {
+                                        "type": "integer"
+                                    },
+                                    "zip": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "activity": {
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "contact": {
+                                        "type": "object",
+                                        "properties": {
+                                            "street": {
+                                                "type": "string"
+                                            },
+                                            "emails": {
+                                                "type": "array",
+                                                "items": [
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

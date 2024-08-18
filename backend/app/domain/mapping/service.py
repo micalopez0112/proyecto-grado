@@ -49,7 +49,7 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
                         okRule3, possibleErrors3 = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, JSPropertyType,jsonschema)
                         if okRule3:
                             continue
-                        print("ERROS SO FAR: ", possibleRule2Errors)
+                        print("ERRORS SO FAR: ", possibleRule2Errors)
                         possibleRule2Errors.extend(possibleErrors3)
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Possible errors: {possibleErrors}")
@@ -61,6 +61,7 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
                     else:
                         raise ValueError(f"Possible errors: {possibleErrors}")
         except Exception as e:
+            print("## Mapped clases: ### ", mappedClasses)
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
     
@@ -104,10 +105,8 @@ def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperti
         domainName = getParentProperty(key)
         rangeName =  getSonProperty(key)
         # ojo porque esto es una lista! (ya que una property del json puede haber sido mapeado a varias clases)
-        domainIrisList = mappedClasses.get(domainName, None)
-        print("DOMAIN IRIS LIST: ", domainIrisList)
+        domainIrisList = mappedClasses.get(domainName, None)     
         rangeIrisList = mappedClasses.get(rangeName, None)
-        print("RANGE IRIS LIST: ", rangeIrisList)
         if domainIrisList is None:
             possibleErrors.append(f"Element name:{domainName} I not mapped to a class")
             return False, possibleErrors
@@ -115,7 +114,7 @@ def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperti
         if rangeIrisList is None:
             possibleErrors.append(f"Element name:{rangeName} not mapped to a class")
             return False, possibleErrors
-        
+
         objectProperty = getOntoPropertyByIri(ontologyProperty, ontoObjectProperties)
         if objectProperty is None:
             possibleErrors.append(f"Element {ontologyProperty} not found in ontology object properties")
@@ -127,7 +126,8 @@ def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperti
                 break
 
         if not isDomainOk:
-            possibleErrors.append(f"Element {domainIri} not found in object property domain")
+            possibleErrors.append(f"Element {domainIri} not found in object property {objectProperty.name} domain")
+            print("Searching domain of object property: ", objectProperty.name)
             return False, possibleErrors
         
         if JSONPropertyType == "array":
@@ -229,7 +229,9 @@ def isIriInOntologyElem(iri, ontoElems):
     return False
 
 def getOntoPropertyByIri(iri, ontoProperties):
-    for obj_prop in ontoProperties:
+    # se copia en una variable, porque si no se modifica el original
+    ontoProps = ontoProperties
+    for obj_prop in ontoProps:
         if obj_prop.iri == iri:
             return obj_prop
 
