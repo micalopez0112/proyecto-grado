@@ -74,6 +74,7 @@ async def get_mapping(mapping_process_id: str):
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
         ontology_data = {
+            "ontology_id":onto_id,
             "ontoData": [{
                 "data": [{
                     "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],

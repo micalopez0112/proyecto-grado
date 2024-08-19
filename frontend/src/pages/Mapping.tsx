@@ -26,6 +26,7 @@ export const Mapping = () => {
         const state = location.state;
         if(state){
             setMappingId(state.mappingId);
+            //usarlo para invocar un patch al back para actualizar el mapeo
         }
         else{//limpiar contexto si es nuevo mapeo
             if(mappings)
@@ -43,6 +44,7 @@ export const Mapping = () => {
                         const {mapping_name,mapping,schema,ontology} = response.data;
                         setMappings(mapping);
                         setJsonSchemaContext(schema);
+                        setcurrentOntologyId(ontology.ontology_id);
                         setontologyDataContext(ontology);
                         setMappingName(mapping_name);
                     }
@@ -54,11 +56,6 @@ export const Mapping = () => {
         }
         getMappingData();
     },[mappingId]);
-
-    useEffect(() => {
-        console.log('ontologyDataContext has changed:', ontologyDataContext);
-      }, [ontologyDataContext]);
-
 
     const saveMappingsApiCall = async () => {
         try{
@@ -75,6 +72,8 @@ export const Mapping = () => {
                     const {status,message,mapping_id} = response.data;
                     navigate('/Result', {state:{mapping_process:mapping_id}});
                 }
+            }else{
+                console.log("No hay ontologyId");
             }
           }
           else{
