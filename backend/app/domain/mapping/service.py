@@ -21,6 +21,8 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
     mappignItemsOrdered = sorted(mappingItems, key=lambda x: isJSONValue(x[0]), reverse=True)
     # Ordenamos los mapeos de clases primero
     possibleErrors = []
+    ontoObjectPropertiesList = list(ontoObjectProperties)
+    ontoDataPropertiesList = list(ontoDataProperties)
     for jsonMappedKey, ontoValue in mappignItemsOrdered:
         okRule3 = False
         okRule2 = False
@@ -35,42 +37,36 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
             if isJSONKey(jsonMappedKey):              
                 # Rule 2: a simple property is mapped to an ontology data property
                 JSPropertyType = getJsonSchemaPropertieType(jsonMappedKey)
-                #isDataPropertyMapping(jsonMappedKey)
                 if JSPropertyType != "" and (JSPropertyType in simpleTypes):
                     print("is data property mapping")
-                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, None)
+                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, None)
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Possible errors: {possibleErrors}")
                 elif JSPropertyType != "" and (JSPropertyType == "array"):
-                    print("## is array property mapping ##")
-                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataProperties, JSPropertyType, jsonschema)
-                    if not okRule2:
-                        okRule3, possibleErrors3 = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, JSPropertyType,jsonschema)
-                        if okRule3:
-                            continue
-                        print("ERRORS SO FAR: ", possibleRule2Errors)
-                        possibleRule2Errors.extend(possibleErrors3)
-                        possibleErrors.extend(possibleRule2Errors)
-                        raise ValueError(f"Possible errors: {possibleErrors}")
+                    posibleArrayErrors = []
+                    # acomodar
+                    if IsMappedToOP(ontoValue, ontoObjectPropertiesList):
+                        okRule3, posibleArrayErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, JSPropertyType,jsonschema) 
+                    else :
+                        okRule2, posibleArrayErrors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, jsonschema)
+                    
+                    if okRule2 or okRule3:
+                        continue
+                    
+                    raise ValueError(f"Possible errors: {posibleArrayErrors}")
                 else:
                     # Rule 3: an object property is mapped to an ontology property   
-                    okRule3, possibleErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectProperties, "",None)
+                    okRule3, possibleErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, "",None)
                     if okRule3:
                         continue
                     else:
                         raise ValueError(f"Possible errors: {possibleErrors}")
         except Exception as e:
-            print("## Mapped clases: ### ", mappedClasses)
             print("ERROR processing key:", jsonMappedKey, "value:", ontoValue, "error:", e)
             raise e
     
     originalMappingJson = mapping
-    # for key, value in newMappedClasses.items():
-    #     if key in originalMappingJson:
-    #         originalMappingJson[key].extend(value)
-    #     else:
-    #         originalMappingJson[key] = value
     print("## Final mapping: ", originalMappingJson, "##")
     return None
 
@@ -79,7 +75,6 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
 def validateRule1(key, ontoValuesMappedTo, ontoClasses):
     mappedIris = []
     for ontoElem in ontoValuesMappedTo:
-        print("Elem: ##", ontoElem, "##")
         ontologyClassIri = ontoElem['iri']
         if not isIriInOntologyElem(ontologyClassIri, ontoClasses):
             raise ValueError(f"Element {ontologyClassIri} not found in ontology classes")
@@ -88,6 +83,15 @@ def validateRule1(key, ontoValuesMappedTo, ontoClasses):
             mappedIris.append(ontologyClassIri)
 
     return mappedIris
+
+# IsMappedToOP checks if the the first mapped iri is an object property
+def IsMappedToOP(ontoValuesMappedTo, ontoObjectProperties):
+    ontoValues = list(ontoValuesMappedTo)
+    firstMappedIri = ontoValues[0]['iri']
+    if isIriInOntologyElem(firstMappedIri, ontoObjectProperties):
+        return True
+    else :
+       return  False
 
 
 # validateRule3And4 recieves the json-schema key, the ontology values mapped to and all valid ontolgy object properties. Then it does the next validations: 
@@ -222,7 +226,8 @@ def checkAllJsonaSchemaTypes( jsonSchema: JsonSchema, key, propType):
 
 # isIriInOntologyElem checks if an iri exists in an ontology elements list (class, property, etc)
 def isIriInOntologyElem(iri, ontoElems):
-    for elem in ontoElems:
+    ontoElemsCopy = ontoElems
+    for elem in ontoElemsCopy:
         if elem.iri == iri:
             return True
 
@@ -230,8 +235,8 @@ def isIriInOntologyElem(iri, ontoElems):
 
 def getOntoPropertyByIri(iri, ontoProperties):
     # se copia en una variable, porque si no se modifica el original
-    ontoProps = ontoProperties
-    for obj_prop in ontoProps:
+    for obj_prop in ontoProperties:
+        print("## Object property: ", obj_prop, "##")
         if obj_prop.iri == iri:
             return obj_prop
 
