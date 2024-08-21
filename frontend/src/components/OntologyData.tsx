@@ -17,14 +17,10 @@ const OntologyData: React.FC<{}> = () => {
   const [objectPropertyElement, setObjectPropertyElement] = useState<any>();
 
   const handleClickOntoElem = (element: any, type:string) => {
-    console.log("Onto element selected",element);
-    console.log("Type of element selected",type);
     if (isMapping && type !=='object_property') {
       setOntoElementSelected({type:type, ontoElement: element});
     }
     else if(isMapping && type === 'object_property'){
-      console.log("Object Property selected",element);
-      console.log("Range of object property",element.range);
       setRangeList([...rangeList, element.range]);
       setObjectPropertyElement(element);
       setModalIsOpen(true);
@@ -80,20 +76,20 @@ const OntologyData: React.FC<{}> = () => {
         >
         <div style={ModalStyles.modalContent}>
         <label style={{border:'solid 3px black', padding:'2px'}}>Mapeo de rango</label>
-          <div style={{marginTop:'10px'}}> 
-          <p>Selecciona los elementos del rango que deben ser mapeados:</p>
-        <ul style={ModalStyles.listStyle}>
-          {rangeList.map((item) => (
-            <li 
-              key={item.iri} 
-              onClick={() => handleAddElemToRange(item)} 
-              style={{...ModalStyles.listItemStyle,
-                    ...(selectedRange.includes(item) ? ModalStyles.selectedItemStyle : {})}}>
-              {item.name}
-            </li>
-          ))}
-        </ul>
-          </div>
+            <div style={{marginTop:'10px'}}> 
+            <p>Selecciona los elementos del rango que deben ser mapeados:</p>
+          <ul style={ModalStyles.listStyle}>
+            {rangeList.map((item,i) => (
+              <li 
+                key={i} 
+                onClick={() => handleAddElemToRange(item)} 
+                style={{...ModalStyles.listItemStyle,
+                      ...(selectedRange.includes(item) ? ModalStyles.selectedItemStyle : {})}}>
+                {item.name}
+              </li>
+            ))}
+          </ul>
+            </div>
           <div style={ModalStyles.modalfooter}>
             <button style={ModalStyles.modalCancelButton}
               onClick={() => closeModal()}>Cerrar</button>
@@ -130,11 +126,11 @@ const OntologyData: React.FC<{}> = () => {
                 <>
                   <span className='text'>Object Properties:</span>
                   <div className='columns-container'>
-                    {x?.object_properties?.map((objectProperty) => (
+                    {x?.object_properties?.map((objectProperty,index) => (
                       <div
                         className={`column-name-container ${isMapping ? 'is-mapping' : ''}`}
                         onClick={() => handleClickOntoElem(objectProperty,"object_property")}
-                        key={objectProperty?.iri}
+                        key={`${objectProperty?.iri}-${index}`}
                       >
                         <span className='text'>{objectProperty?.name}</span>
                       </div>

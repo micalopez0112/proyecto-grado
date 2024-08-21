@@ -15,12 +15,6 @@ const Json: React.FC = () => {
   const { setJsonSchemaContext, jsonSchemaContext, setJsonElementSelected, JsonElementSelected } =
     useDataContext();
 
-
-  // useEffect(() => {
-  //   console.log("jsonSchemaContext:", jsonSchemaContext);
-  //   console.log("JsonElementSelected:", JsonElementSelected);
-  // }, [jsonSchemaContext, JsonElementSelected]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
   };
@@ -42,10 +36,17 @@ const Json: React.FC = () => {
       setLastClickedElement(element); // Fix this
     }
 
+  const handleClickArrayProperty = (e: React.MouseEvent<HTMLDivElement>,
+    element: string) => {
+      setJsonElementSelected(element+'_key#array');
+      setLastClickedElement(element); // Fix this
+    }
+
   const handleGenerateSchema = () => {
     try {
       const jsonData = JSON.parse(jsonInput);
       const schema = generateJsonSchema(jsonData);
+      console.log("##GENERATED SCHEMA##", schema);
       setJsonSchema(schema);
       setJsonSchemaContext(schema);
     } catch (error) {
@@ -85,7 +86,7 @@ const Json: React.FC = () => {
               className={`json-elem ${
                 lastClickedElement === parent + key ? "active" : ""
               }`}
-              onClick={(e) => handleClickElement(e, parent +'-'+ key)}
+              onClick={(e) => handleClickArrayProperty(e, parent +'-'+ key)}
             >
               <strong>{key}:</strong> array
             </div>
@@ -116,16 +117,16 @@ const Json: React.FC = () => {
     if (items.type === "object" && items.properties) {
       return (
         <>
-          <div
+          {/* <div
             className={`json-elem ${
               lastClickedElement === parent + `items` ? "active" : ""
             }`}
             onClick={(e) => handleClickElement(e, parent + `items`)}
           >
             <strong>items:</strong> object
-          </div>
+          </div> */}
           <div className="object-properties">
-            {renderProperties(items.properties, parent + `items`)}
+            {renderProperties(items.properties, parent)}
           </div>
         </>
       );
@@ -133,12 +134,12 @@ const Json: React.FC = () => {
     return (
       <>
         <div
-          className={`json-elem ${
+          className={`json-arrayItem-elem ${
             lastClickedElement === parent + `items` ? "active" : ""
           }`}
-          onClick={(e) => handleClickElement(e, parent + `items`)}
+          onClick={(e) => console.log("clicked array item, doesn´t do anything")}
         >
-          <strong>items:</strong> {items.type}
+          <strong>array items:</strong> {items.type}
         </div>
       </>
     );

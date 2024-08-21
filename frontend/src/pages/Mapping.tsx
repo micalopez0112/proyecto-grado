@@ -13,7 +13,8 @@ export const Mapping = () => {
 
     const { mappings,clearMappings,addNewMapping,
         currentOntologyId ,setcurrentOntologyId,jsonSchemaContext,
-        ontologyDataContext,setontologyDataContext,setMappings,setJsonSchemaContext
+        ontologyDataContext,setontologyDataContext,setMappings,setJsonSchemaContext,
+        removeMapping
     } = useDataContext();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [mappingName, setMappingName] = useState<string>('');
@@ -147,11 +148,18 @@ export const Mapping = () => {
                         <div>
                             <h2>{key}</h2>
                             <ul>
-                                {
-                                    mappings[key].map((element) => {
-                                        return <li>{element.name}</li>
-                                    })
-                                }
+                                {mappings[key].map((element, index) => (
+                                    <li key={index}>
+                                        {element.name}
+                                        <button
+                                            style={{ marginLeft: '5px' }}
+                                            onClick={() => 
+                                                removeMapping(key, element as { name: string; iri: string })}
+                                        >
+                                            Eliminar mapping
+                                        </button>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     )

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { OntologyDataType, JsonSchema} from '../types';
+import { OntologyDataType,getRangeByObjectPropertyName, JsonSchema} from '../types/index.ts';
+
 
 export interface OntoElement{
   name?: string;
@@ -28,13 +29,9 @@ interface JsonSchemaContextProps {
   mappings: Mapping;
   setMappings: (mappings: Mapping) => void;
   addNewMapping : () => void;
+  removeMapping: (key: string, elementToRemove: { name: string; iri: string }) => void;
   clearMappings: () => void;
 }
-
-/*
-Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.tsx
-
-*/
 
  const Context = createContext<JsonSchemaContextProps>({
   currentOntologyId: undefined,
@@ -50,6 +47,7 @@ Arreglar tipos para que se use el JsonSchema interface declarado en JsonSchema.t
   setOntoElementSelected: () => {},
   setMappings:  () => {},
   addNewMapping: () =>{},
+  removeMapping: () => {},
   clearMappings: () => {},
 });
 
@@ -61,7 +59,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const [jsonSchemaContext, setJsonSchemaContext] = useState<JsonSchema | null>(null);
   const [mappings, setMappings] = useState<Mapping>({});
-  const [ontologyDataContext, setontologyDataContext] = useState<Object>({ontoData:[],ontologyId:''});
+  const [ontologyDataContext, setontologyDataContext] = useState<OntologyDataType>({ontoData:[],ontologyId:''});
   const [currentOntologyId, setcurrentOntologyId] = useState<string | undefined>(undefined);
 
 
@@ -83,19 +81,20 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       const key = { name: OntoElementSelected.ontoElement.name, iri: OntoElementSelected.ontoElement.iri };
       console.log("Key que se está agregando en context", key);
     
-      // Combina todas las actualizaciones en un solo objeto
+      // Mejor hacer todas las las actualizaciones de una sino hay problemas con el estado
       setMappings((prevMappings) => {
         const newMappings = {
           ...prevMappings,
-          [JsonElementSelected + '_key']: [
-            ...(prevMappings[JsonElementSelected + '_key'] || []),
+          [JsonElementSelected.endsWith('_key#array')? JsonElementSelected : JsonElementSelected+'_key']: [
+            ...(prevMappings[JsonElementSelected.endsWith('_key#array')? JsonElementSelected : JsonElementSelected+'_key'] || []),
             key
           ]
         };
     
         if (rango) {
-          newMappings[JsonElementSelected + '_value'] = [
-            ...(prevMappings[JsonElementSelected + '_value'] || []),
+          let claveMap = JsonElementSelected.endsWith('_key#array')?JsonElementSelected.slice(0,JsonElementSelected.length-10):JsonElementSelected;
+          newMappings[claveMap + '_value'] = [
+            ...(prevMappings[claveMap + '_value'] || []),
             ...rango
           ];
         } else {
@@ -121,6 +120,36 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const removeMapping = (key: string, elementToRemove:{ name: string; iri: string }) => {
+    setMappings((prevMappings) => {
+      const updatedMappings = { ...prevMappings };
+      if (updatedMappings[key]) {
+
+        //TODO:check if it is an object property mapping with _key
+        //if so, remove the _key and _value mappings{
+
+        updatedMappings[key] = updatedMappings[key].filter(
+            (element) => element.name !== elementToRemove.name || element.iri !== elementToRemove.iri
+        );
+        if(key.endsWith('_key') || key.endsWith('_key#array')){
+          //obtener el rango de la object property
+          const objectPropertyRange = getRangeByObjectPropertyName(ontologyDataContext,elementToRemove.name);
+          console.log("El rango de la object property que se está eliminando es: ", objectPropertyRange);
+          /*updatedMappings[key.slice(0,key.length-4)+'_value'].filter(
+            (element) => element.name !== elementToRemove.name || element.iri !== elementToRemove.iri
+          ); *///fix
+          //falta caso de array
+        }
+        // Delete key if it has no elements
+        // necessary?
+        if (updatedMappings[key].length === 0) {
+            delete updatedMappings[key];
+        }
+      }
+      return updatedMappings;
+   });
+  };
+
   const clearMappings = () => {
     setMappings({});
     setOntoElementSelected({type:undefined, ontoElement:{}});
@@ -132,6 +161,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Context.Provider
       value={{
+        
         currentOntologyId,
         setcurrentOntologyId,
         jsonSchemaContext,
@@ -145,6 +175,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         mappings,
         setMappings,
         addNewMapping,
+        removeMapping,
         clearMappings
       }}
     >
