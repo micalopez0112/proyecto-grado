@@ -9,7 +9,24 @@ from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
 
+
+from genson import SchemaBuilder
+from pydantic import BaseModel
+
 router = APIRouter()
+
+class JsonRequest(BaseModel):
+    json_data: dict
+
+@router.post("/generate-schema/")
+async def generate_schema(request: JsonRequest):
+    try:
+        builder = SchemaBuilder()
+        builder.add_object(request.json_data)
+        schema = builder.to_schema()
+        return schema
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
 async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
@@ -78,7 +95,7 @@ async def get_mapping(mapping_process_id: str):
             "ontoData": [{
                 "data": [{
                     "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
-                    "object_properties": [{"name": prop.name, "iri": prop.iri} for prop in object_properties],
+                    "object_properties": [{"name": prop.name, "iri": prop.iri,"range":{"name":range.name,"iri":range.iri}} for prop in object_properties for range in prop.range],
                     "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
                 }]
             }]
