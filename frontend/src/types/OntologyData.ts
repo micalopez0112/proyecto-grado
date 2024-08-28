@@ -13,19 +13,3 @@ export interface OntologyDataType {
     }>;
   }>;
 }
-
-export const getRangeByObjectPropertyName = (
-  ontologyData: OntologyDataType,
-  objectPropertyName: string
-): Array<{ name: string; iri: string }> | undefined => {
-  for (const onto of ontologyData.ontoData) {
-    for (const dataItem of onto.data) {
-      for (const objectProperty of dataItem.object_properties) {
-        if (objectProperty.name === objectPropertyName) {
-          return objectProperty.range;
-        }
-      }
-    }
-  }
-  return undefined;
-};

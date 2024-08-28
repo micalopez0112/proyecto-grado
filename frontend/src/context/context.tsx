@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { OntologyDataType,getRangeByObjectPropertyName, JsonSchema} from '../types/index.ts';
+import { OntologyDataType, JsonSchema} from '../types';
 
 
 export interface OntoElement{
@@ -134,10 +134,21 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         if(key.endsWith('_key') || key.endsWith('_key#array')){
           //obtener el rango de la object property
           const objectPropertyRange = getRangeByObjectPropertyName(ontologyDataContext,elementToRemove.name);
-          console.log("El rango de la object property que se está eliminando es: ", objectPropertyRange);
-          /*updatedMappings[key.slice(0,key.length-4)+'_value'].filter(
-            (element) => element.name !== elementToRemove.name || element.iri !== elementToRemove.iri
-          ); *///fix
+          if(objectPropertyRange && objectPropertyRange.length > 0){
+            const objectPropertyRangeNames = objectPropertyRange.map((rangeItem) => rangeItem.name);
+            console.log("El rango de la object property que se está eliminando es: ", objectPropertyRange);
+            console.log("De este rango los nombres son: ", objectPropertyRangeNames);
+            console.log("El rango que se quiere eliminar es: ", objectPropertyRange[0].name);
+            console.log("Entradas de la key que se quiere eliminar: ", updatedMappings[key.slice(0,key.length-4)+'_value']);
+            updatedMappings[key.slice(0,key.length-4)+'_value'] = updatedMappings[key.slice(0,key.length-4)+'_value'].filter(
+              //fix needed to work with arrays and multiple values in range
+              (element) => element.name !== objectPropertyRange[0].name || element.iri !== objectPropertyRange[0].iri
+            ); 
+            console.log("Entradas de la key después de eliminar: ", updatedMappings[key.slice(0,key.length-4)+'_value']);
+          }
+          else{
+            //handle not range, POSSIBLE??
+          }
           //falta caso de array
         }
         // Delete key if it has no elements
@@ -148,6 +159,27 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       }
       return updatedMappings;
    });
+  };
+
+  const getRangeByObjectPropertyName = (
+    ontologyData: OntologyDataType,
+    objectPropertyName: string
+  ): Array<{ name: string; iri: string }> => {
+    console.log("Ontología del detail", ontologyData);
+    for (const onto of ontologyData.ontoData) {
+      for (const dataItem of onto.data) {
+        for (const objectProperty of dataItem.object_properties) {
+          if (objectProperty.name === objectPropertyName) {
+            console.log("ENTRO BIEN BIEN")
+            console.log("El rango de la object property es: ", objectProperty.range);
+            return Array.isArray(objectProperty.range)
+              ? objectProperty.range
+              : [objectProperty.range];
+          }
+        }
+      }
+    }
+    return [];
   };
 
   const clearMappings = () => {
