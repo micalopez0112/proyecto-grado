@@ -23,7 +23,7 @@ class MappingDocument(BaseModel):
 # This represents the JSON Schema for the mapping entity
 class JsonSchema(BaseModel):
     schema: str = Field(alias="$schema")
-    type: str
+    type: str 
     properties: Dict[str, Any]
     # { "destinp": { "type": "object", "properties": {}} }
     required: Optional[List[str]] = None
@@ -61,10 +61,13 @@ class JsonSchema(BaseModel):
     
 #Requests bodys
 class MappingRequest(BaseModel):
+    name: str = Field(default=None)
+    mapping: Dict[str, Any] = Field(default=None) 
+    jsonSchema: Dict[str, Any] = Field(default=None) 
+
+class EditMappingRequest(BaseModel):
     mapping_name: str = Field()
     mapping: Dict[str, Any] = Field()
-    jsonSchema: JsonSchema = Field(..., description="Esquema JSON")
-
 # Responses
 class MappingResponse(BaseModel):
     status : str
