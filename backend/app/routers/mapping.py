@@ -4,7 +4,7 @@ from owlready2 import get_ontology
 import motor.motor_asyncio
 from typing import Dict, Any
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
-from app.domain.mapping.models import MappingProcessDocument, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
+from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
@@ -138,3 +138,31 @@ async def get_mappings():
         response = MappingResponse(message=msg, status="error")
         return response
 
+
+
+@router.put("/{mapping_process_id}")
+async def put_mapping(mapping_process_id: str, request: MappingRequest = Body(...)):
+    try:
+        mapping_pr_id = ObjectId(mapping_process_id)
+        mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+        if not mapping_process_docu:
+            return MappingResponse(message="Mapping process not found", status="error")
+        
+        update_data = {}
+        for key, value in request.model_dump().items():
+            print("value", value)
+            if value is not None and value != "" and value != {} and value != "string":
+                update_data[key] = value
+    
+        queryTOUpdate = {'_id': mapping_pr_id}
+        tryUpdate =  {'$set': update_data}
+        result = await mapping_process_collection.update_one(
+            queryTOUpdate,
+            tryUpdate
+        )
+ 
+        return MappingResponse(message="Mapping process updated successfully", status="success")
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
