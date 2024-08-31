@@ -64,3 +64,12 @@ export const getMapping = async (mappingId: string) => {
     console.error(`Error getting mapping with id ${mappingId}: `, error);
   }
 };
+
+export const fetchOntologies = async () => {
+  try {
+    const response = await apiClient.get("/ontologies");
+    return response;
+  } catch (error) {
+    console.error("Error fetching ontologies", error);
+  }
+};

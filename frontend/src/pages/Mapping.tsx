@@ -207,22 +207,4 @@ export const Mapping = () => {
       </div>
     </div>
   );
-  /*
-     {
-                Object.keys(mappings).map((key) => {
-                    return (
-                        <div>
-                            <h2>{key}</h2>
-                            <ul>
-                                {
-                                    mappings[key].map((element) => {
-                                        return <li>{element.name}</li>
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    )
-                })
-            }
-    */
 };
