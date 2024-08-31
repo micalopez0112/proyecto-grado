@@ -69,7 +69,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     if(OntoElementSelected.type === "class"){
       setMappings({
         ...mappings,
-        [JsonElementSelected+'_value']: [...(mappings[JsonElementSelected] || []), OntoElementSelected.ontoElement]
+        [JsonElementSelected+'_value']: [...(mappings[JsonElementSelected+'_value'] || []), OntoElementSelected.ontoElement]
       });
     }
     else if (OntoElementSelected.type === "object_property") {
