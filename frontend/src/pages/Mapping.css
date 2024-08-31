@@ -40,7 +40,7 @@
   padding: 30px;
   flex-direction: row;
   gap: 10px;
-  font-size:18px;
+  font-size: 18px;
 }
 
 .mapping {
@@ -77,14 +77,14 @@
 }
 
 .list-elem {
-  display: grid;
-  grid-template-columns: 10fr 1fr;
+  display: flex;
 }
 
 .mapping-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .list-container {

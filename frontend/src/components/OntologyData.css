@@ -40,6 +40,7 @@
   justify-content: center;
   align-items: center;
   cursor: normal;
+  padding: 2px;
 }
 
 .column-name-container.active {
@@ -112,9 +113,17 @@
 }
 
 .line {
+  display: flex;
 }
 
 .onto-elem {
   padding: 6px 15px;
   font-size: 20px;
+}
+
+.column-name-container.active {
+  background-color: #f39c12; /* Example active state style */
+  font-weight: bold;
+  border-radius: 5px;
+  padding-right: 10px;
 }
