@@ -188,6 +188,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setJsonElementSelected('');
     setontologyDataContext({ontoData:[],ontologyId:''});
     setJsonSchemaContext(null);
+    setcurrentOntologyId(undefined);
   };
 
   return (

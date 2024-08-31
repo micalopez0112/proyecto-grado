@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchMappings } from '../services/mapsApi.ts';
-
-const MappingCard = ({ id, name, onClickCallback }: { id: string, name: string, onClickCallback: (id: string) => void }) => {
-    return (
-        <div style={styles.mappingCard} onClick={() => onClickCallback(id)}>
-            <h3>{name}</h3>
-            <p><strong>Mapping ID:</strong> {id}</p>
-        </div>
-    );
-};
+import MappingCard from '../components/MappingCard.tsx';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -33,17 +25,20 @@ const HomeScreen = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Pantalla de Inicio</h1>
-      <button onClick={() => navigate('/Mappings')} style={styles.button}>Ir a Mappings</button>
+      <button onClick={() => navigate('/OntologySelect')} style={styles.button}>Ir a Mappings</button>
+      { mappings &&
       <div style={styles.dashboard}>
         {mappings.map(mapping => (
           <MappingCard
             key={mapping.id}
             id={mapping.id}
             name={mapping.name}
+            style={styles.mappingCard}
             onClickCallback={onClickMappingCard}
           />
         ))}
       </div>
+      }
     </div>
   );
 };

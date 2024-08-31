@@ -1,36 +1,147 @@
 .file-upload-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .file-upload-label {
-    color: black;
-    padding: 10px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    text-align: center;
-    display: inline-block;
-  }
-  
-  .file-upload-label:hover {
-    background-color: #a0c8f4;
-  }
-  
-  .upload-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #28a745;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .upload-button:hover {
-    background-color: #218838;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.file-upload-label {
+  color: black;
+  padding: 10px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  display: inline-block;
+}
+
+.file-upload-label:hover {
+  background-color: #a0c8f4;
+}
+
+.upload-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.upload-button:hover {
+  background-color: #218838;
+}
+
+.mapping-name {
+  display: flex;
+  gap: 4px;
+  padding: 30px;
+  flex-direction: row;
+  gap: 10px;
+  font-size:18px;
+}
+
+.mapping {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 0px 20px;
+  background-color: white;
+}
+
+.mappings {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.trash-icon {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.content-box {
+  overflow-y: auto;
+  height: 80vh;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #0d245b;
+}
+
+.list-elem {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+}
+
+.mapping-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.mapping-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.key-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.key-title {
+  font-size: 12px;
+  color: #979797;
+}
+
+.element-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.element-title {
+  font-size: 12px;
+  color: #979797;
+}
+
+.arrow-icon {
+  margin: 0 10px;
+}
+
+.trash-icon {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f44336;
+  padding: 0;
+  justify-self: right;
+}
+
+.value-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.add-clean-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+}

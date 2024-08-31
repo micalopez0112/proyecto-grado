@@ -1,6 +1,8 @@
 .json-schema-container {
   display: flex;
   flex-direction: row;
+  background-color: white;
+  border-radius: 8px;
 }
 .schema-select {
   display: flex;
@@ -13,19 +15,18 @@
 
 .object-properties {
   margin-left: 50px;
-  border: 1px solid #b0b0b0;
 }
 
-.json-input{
-  display:flex;
-  flex-direction:column;
-  
+.json-input {
+  display: flex;
+  flex-direction: column;
+  display: none;
 }
 
 .json-elem {
   background-color: #cbd5ef;
   width: fit-content;
-  padding: 10px;
+  padding: 5px 10px;
   border-radius: 5px;
   margin: 10px 5px 10px 10px;
 }
@@ -35,7 +36,7 @@
   cursor: pointer;
 }
 
-.json-arrayItem-elem{
+.json-arrayItem-elem {
   background-color: #cbd5ef;
   width: fit-content;
   padding: 10px;
@@ -67,8 +68,8 @@
 
 .container {
   display: flex;
-  flex-direction: row;
-  gap: 50px;
+  flex-direction: column;
+  padding: 20px;
 }
 
 .object-wrapper {

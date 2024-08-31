@@ -74,3 +74,12 @@ export const editMapping = async (mappingId: string, data: any) => {
     console.error("Error in call of editing mapping: ", error);
   }
 };
+
+export const fetchOntologies = async () => {
+  try {
+    const response = await apiClient.get("/ontologies");
+    return response;
+  } catch (error) {
+    console.error("Error fetching ontologies", error);
+  }
+};
