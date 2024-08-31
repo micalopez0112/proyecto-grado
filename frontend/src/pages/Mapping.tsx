@@ -43,7 +43,13 @@ export const Mapping = () => {
       //usarlo para invocar un patch al back para actualizar el mapeo
     } else {
       //limpiar contexto si es nuevo mapeo
-      if (mappings) clearMappings();
+      if (mappings) 
+      {
+        console.log("JsonSchemaContext: ", jsonSchemaContext);
+        console.log("OntologyDataContext: ", ontologyDataContext);
+        console.log("Se ejecuta clearMappings")
+        //clearMappings();
+      }
     }
   }, []);
 
