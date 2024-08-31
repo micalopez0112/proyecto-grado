@@ -132,7 +132,7 @@ const OntologyData: React.FC<{}> = () => {
               {x?.classes?.length > 0 && (
                 <>
                   <div className="ontolo-elems-container">
-                    <span className="text">Classes:</span>
+                    <div className="onto-elem">Classes:</div>
                     <div className="columns-container">
                       {x?.classes?.map((c) => (
                         <div
@@ -155,7 +155,7 @@ const OntologyData: React.FC<{}> = () => {
               {x?.object_properties?.length > 0 && (
                 <>
                   <div className="ontolo-elems-container">
-                    <span className="text">Object Properties:</span>
+                    <div className="onto-elem">Object Properties:</div>
                     <div className="columns-container">
                       {x?.object_properties?.map((objectProperty, index) => (
                         <div
@@ -183,7 +183,7 @@ const OntologyData: React.FC<{}> = () => {
               {x?.data_properties?.length > 0 && (
                 <>
                   <div className="ontolo-elems-container">
-                    <span className="text">Data Properties:</span>
+                    <div className="onto-elem">Data Properties:</div>
                     <div className="columns-container">
                       {x?.data_properties?.map((dataProperty) => (
                         <div
