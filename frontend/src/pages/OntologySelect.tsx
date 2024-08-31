@@ -79,12 +79,12 @@ const OntologySelectScreen = () =>{
             <h1>Seleccione la ontología de contexto</h1>
             <button className='button' onClick={handleSubmit}>Confirmar selección</button>
             <div style ={styles.selectHeader}>
-                <p style={{display:'flex',alignItems:'flex-start', fontSize:'16px'}}>Se puede cargar la ontología:</p>
+                <p style={{display:'flex',alignItems:'flex-start', fontSize:'18px'}}>Cargar la ontología:</p>
                 <input style={{display:'flex',alignSelf:'center', fontSize:'16px'}} 
                     type='file' onChange={handleFileChange} ref={fileInputRef}>
                 </input>
             </div>
-            {ontologies &&
+            {/* {ontologies &&
             <div>
                 <p style={{fontSize:'16px'}}>
                 O se puede seleccionar una de las siguientes ontologías:
@@ -102,7 +102,7 @@ const OntologySelectScreen = () =>{
                     })}
                 </div>
             </div>
-            }
+            } */}
         </div>
         
     );

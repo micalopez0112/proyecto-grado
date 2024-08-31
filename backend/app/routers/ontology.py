@@ -65,3 +65,5 @@ async def get_ontologies():
         return documents
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener ontologías: {e}")
+    
+

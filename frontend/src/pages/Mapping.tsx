@@ -144,14 +144,14 @@ export const Mapping = () => {
           onChange={(e) => setMappingName(e.target.value)}
         ></input>
       </div>
-      <input
+      {/* <input
         className="file-upload-label"
         type="file"
         onChange={handleFileChange}
       ></input>
       <button className="button" onClick={handleFileSubmit}>
         Submit archivo
-      </button>
+      </button> */}
       <div className="content-container">
         <div className="content-box">
           <Json></Json>

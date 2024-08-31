@@ -40,6 +40,7 @@
   padding: 30px;
   flex-direction: row;
   gap: 10px;
+  font-size:18px;
 }
 
 .mapping {
