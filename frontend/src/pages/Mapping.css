@@ -47,6 +47,7 @@
   border: 1px solid black;
   border-radius: 5px;
   padding: 0px 20px;
+  background-color: white;
 }
 
 .mappings {
@@ -66,10 +67,23 @@
   align-items: center;
 }
 
+.content-box {
+  overflow-y: auto;
+  height: 80vh;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #0d245b;
+}
+
 .list-elem {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+}
+
+.mapping-container {
   display: flex;
   align-items: center;
-  gap: 20px;
   justify-content: space-between;
 }
 
@@ -77,10 +91,57 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-left: 0;
+  list-style: none;
 }
 
 .mapping-button-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.key-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.key-title {
+  font-size: 12px;
+  color: #979797;
+}
+
+.element-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.element-title {
+  font-size: 12px;
+  color: #979797;
+}
+
+.arrow-icon {
+  margin: 0 10px;
+}
+
+.trash-icon {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f44336;
+  padding: 0;
+  justify-self: right;
+}
+
+.value-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+.add-clean-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
 }

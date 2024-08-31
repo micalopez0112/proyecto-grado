@@ -4,6 +4,7 @@ import { useDataContext } from "../context/context.tsx";
 import { OntologyDataType } from "../types";
 import Modal from "react-modal";
 import { OntoElement } from "../context/context.tsx";
+import { IoRemoveOutline } from "react-icons/io5";
 
 Modal.setAppElement("#root");
 
@@ -68,7 +69,7 @@ const OntologyData: React.FC<{}> = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className="onto-data-display-container">
+    <div className="container">
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -116,7 +117,9 @@ const OntologyData: React.FC<{}> = () => {
         </div>
       </Modal>
 
-      <span className="ontology-title">Elementos de la ontología: </span>
+      <div className="title-wrapper">
+        <h1 className="title">Elementos de la ontología</h1>
+      </div>
       {OntoElementSelected.type != undefined ? (
         <strong style={{ fontFamily: "cursive" }}>
           An Element is selected {OntoElementSelected.ontoElement.iri}
@@ -139,6 +142,9 @@ const OntologyData: React.FC<{}> = () => {
                           onClick={() => handleClickOntoElem(c, "class")}
                           key={c?.iri}
                         >
+                          <div className="line">
+                            <IoRemoveOutline size={20} />
+                          </div>
                           <span className="text">{c?.name}</span>
                         </div>
                       ))}
@@ -164,6 +170,9 @@ const OntologyData: React.FC<{}> = () => {
                           }
                           key={`${objectProperty?.iri}-${index}`}
                         >
+                          <div className="line">
+                            <IoRemoveOutline size={20} />
+                          </div>
                           <span className="text">{objectProperty?.name}</span>
                         </div>
                       ))}
@@ -186,6 +195,9 @@ const OntologyData: React.FC<{}> = () => {
                           }
                           key={dataProperty?.iri}
                         >
+                          <div className="line">
+                            <IoRemoveOutline size={20} />
+                          </div>
                           <span className="text">{dataProperty?.name}</span>
                         </div>
                       ))}

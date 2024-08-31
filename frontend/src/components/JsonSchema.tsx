@@ -161,7 +161,10 @@ const Json: React.FC = () => {
 
   return (
     <div className="container">
-      <div>JSON Schema</div>
+      <div className="title-wrapper">
+        <h1 className="title">JSON Schema</h1>
+      </div>
+
       {/* <div className="json-input">
         <span
           style={{

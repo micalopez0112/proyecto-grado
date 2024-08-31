@@ -1,7 +1,7 @@
 .text {
   font-size: 15px;
   text-align: start;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .icon-text {
@@ -75,12 +75,6 @@
   width: 100%;
   border-radius: 4px;
 }
-
-.ontology-title {
-  font-size: 25px;
-  margin-bottom: 10px;
-}
-
 .spinner-container {
   display: flex;
   align-items: center;
@@ -113,5 +107,9 @@
 }
 
 .ontolo-elems-container {
-  border: 1px solid black;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.line {
 }
