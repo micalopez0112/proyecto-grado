@@ -64,3 +64,13 @@ export const getMapping = async (mappingId: string) => {
     console.error(`Error getting mapping with id ${mappingId}: `, error);
   }
 };
+
+export const editMapping = async (mappingId: string, data: any) => {
+  try {
+    const response = await apiClient.put(`/mapping/${mappingId}`, data);
+    //console.log("Response from editing mapping: ", response);
+    return response;
+  } catch (error) {
+    console.error("Error in call of editing mapping: ", error);
+  }
+};

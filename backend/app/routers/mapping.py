@@ -161,7 +161,7 @@ async def put_mapping(mapping_process_id: str, request: MappingRequest = Body(..
             tryUpdate
         )
  
-        return MappingResponse(message="Mapping process updated successfully", status="success")
+        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_process_id)
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")

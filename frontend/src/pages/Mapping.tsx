@@ -3,7 +3,7 @@ import Json from '../components/JsonSchema.tsx'
 import OntologyData from '../components/OntologyData.tsx';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDataContext } from '../context/context.tsx';
-import {saveMappings,uploadOntology,getMapping} from '../services/mapsApi.ts'
+import {saveMappings,uploadOntology,getMapping, editMapping} from '../services/mapsApi.ts'
 import './Mapping.css'
 import { OntologyDataType } from '../types/OntologyData.ts';
 
@@ -61,7 +61,18 @@ export const Mapping = () => {
     const saveMappingsApiCall = async () => {
         try{
           if(Object.keys(mappings).length > 0){
-            if(currentOntologyId){
+            if(mappingId){
+              //invocar put
+              const body = { name:mappingName,mapping: mappings, jsonSchema: jsonSchemaContext };
+              const response = await editMapping(mappingId,body);
+              console.log("Respuesta al editar mapping: ", response);
+              if(response ){
+                  const {status,message,mapping_id} = response.data;
+                  navigate('/Result', {state:{mapping_process:mapping_id}});
+              }
+            }
+            else{//new mapping
+              if(currentOntologyId){
                 console.log("JSON SCHEMAAA: ", jsonSchemaContext);
                 const jsonschema = jsonSchemaContext;
                 const body = { mapping_name:mappingName,mapping: mappings, jsonSchema: jsonschema };
@@ -71,11 +82,17 @@ export const Mapping = () => {
                     console.log(response.data);
                     alert('Mappings enviados con exito');
                     const {status,message,mapping_id} = response.data;
-                    navigate('/Result', {state:{mapping_process:mapping_id}});
+                    if(mapping_id){
+                       navigate('/Result', {state:{mapping_process:mapping_id}});
+                    }
+                    else{
+                        alert('No se pudo obtener el id del mapeo');
+                    }
                 }
             }else{
                 console.log("No hay ontologyId");
             }
+          }
           }
           else{
             alert('No hay mappings para enviar');
