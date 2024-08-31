@@ -33,17 +33,15 @@ const SchemaSelect = () => {
     return (
         <div style={styles.container}>
             <h1>Schema Select</h1>
-            <div className='content-container'>
-                <div style={{display:'flex',flexDirection:'column',}}>
-                <span style={{fontFamily:'Roboto',fontSize:'25px', marginBottom:'10px'}}>JSON to JSON Schema Converter</span>
-                    <textarea
-                    rows={20}
-                    cols={35}
-                    value={jsonInput}
-                    onChange={handleInputChange}
-                    placeholder="Enter JSON here"
-                    />
-                </div>
+            <div style={{display:'flex',flexDirection:'column',}}>
+            <span style={{fontFamily:'Roboto',fontSize:'25px', marginBottom:'10px'}}>JSON to JSON Schema Converter</span>
+                <textarea
+                rows={20}
+                cols={35}
+                value={jsonInput}
+                onChange={handleInputChange}
+                placeholder="Enter JSON here"
+                />
             </div>
             <div style={{
           display: "flex",
@@ -70,6 +68,9 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: '20px',
         backgroundColor: '#f0f0f0',
         minHeight: '100vh',
+      },
+      inputWrapper:{
+
       }
 
 }
