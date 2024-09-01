@@ -67,41 +67,28 @@ const MappingResult = () => {
         <div className="result-box">
           <div
             style={{
-              display: "grid",
-              backgroundColor: "white",
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#0d245b",
               height: "100%",
-              width: "100%",
+              padding: "0px 5px",
               borderRadius: "8px",
-              gridTemplateColumns: "2fr 3fr",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "#0d245b",
-                height: "100%",
-                padding: "5px",
-                borderRadius: "8px",
-              }}
-            >
-              <h4 className="title">
-                Correspondencias JSON Schema - Ontologia
-              </h4>
-              <div className="result-mapping-wrapper">
-                <MappingList isResult={true} />
-              </div>
+            <h4 className="title">Correspondencias JSON Schema - Ontologia</h4>
+            <div className="result-mapping-wrapper">
+              <MappingList isResult={true} />
             </div>
-            <div>
-              {graphData ? (
-                <Graph
-                  key={uuidv4()}
-                  graph={graph}
-                  options={options}
-                  events={{}}
-                />
-              ) : null}
-            </div>
+          </div>
+          <div>
+            {graphData ? (
+              <Graph
+                key={uuidv4()}
+                graph={graph}
+                options={options}
+                events={{}}
+              />
+            ) : null}
           </div>
         </div>
       </div>
