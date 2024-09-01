@@ -87,3 +87,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #9595a1;
 }
+
+.success {
+  background-color: #41a339;
+}

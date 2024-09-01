@@ -1,0 +1,13 @@
+.result-container {
+}
+
+.result-box {
+  overflow-y: auto;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.result-mapping-wrapper {
+  min-height: 700px;
+}
