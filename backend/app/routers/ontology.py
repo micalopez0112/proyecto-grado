@@ -14,9 +14,8 @@ toDirectory = "upload/ontologies"
 @router.post("/")
 async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        # Verifica si se proporciona un archivo o una URI
+        
         if ontology_file:
-            # Manejo del archivo
             if not os.path.exists(toDirectory):
                 os.makedirs(toDirectory)
 
@@ -37,7 +36,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         else:
             raise HTTPException(status_code=400, detail="No ontology file or URI provided")
 
-        # Guardar el documento en la base de datos
+       
         result = await onto_collection.insert_one(ontoDocu.dict())
         ontology_id = result.inserted_id
 
