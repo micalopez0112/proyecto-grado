@@ -12,46 +12,59 @@ router = APIRouter()
 
 toDirectory = "upload/ontologies"
 @router.post("/")
-async def upload_ontology(type: str = Form(...), ontology_file: UploadFile = File(...), uri: Optional[str] = Form(None)):
+async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        if not os.path.exists(toDirectory):
-            os.makedirs(toDirectory)
+        # Verifica si se proporciona un archivo o una URI
+        if ontology_file:
+            # Manejo del archivo
+            if not os.path.exists(toDirectory):
+                os.makedirs(toDirectory)
 
-        completePath = os.path.join(toDirectory, ontology_file.filename)
-        with open(completePath, "wb") as f:
-            ontology_content = await ontology_file.read()
-            f.write(ontology_content)
-        
-        print("onto path", completePath)
-        ontoDocu = OntologyDocument(type=type, file=completePath)
+            completePath = os.path.join(toDirectory, ontology_file.filename)
+            with open(completePath, "wb") as f:
+                ontology_content = await ontology_file.read()
+                f.write(ontology_content)
+
+            print("onto path", completePath)
+            ontoDocu = OntologyDocument(type=type, file=completePath)
+            ontology = get_ontology(completePath).load()
+        elif uri:
+            # Manejo de la URI
+            print("onto uri", uri)
+            ontoDocu = OntologyDocument(type=type, file=uri)
+            ontology = get_ontology(str(uri).strip()).load()
+            print("onto data from uri: ", ontology)
+        else:
+            raise HTTPException(status_code=400, detail="No ontology file or URI provided")
+
+        # Guardar el documento en la base de datos
         result = await onto_collection.insert_one(ontoDocu.dict())
         ontology_id = result.inserted_id
 
-        # en esta parte se obtiene la ontología y se devuelven sus partes para mostrarlas en el front
-        # Mover esto para un lugar más adecuado
-        ontology = get_ontology(completePath).load()
+        # Obtener las clases y propiedades de la ontología
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
         ontology_data = {
             "ontology_id": str(ontology_id),
             "ontoData": [{
-                "name": ontology_file.filename,
+                "name": ontology_file.filename if ontology_file else uri,
                 "data": [{
                     "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
-                    "object_properties": [{"name": prop.name, "iri": prop.iri, "range":{"name":range.name,"iri":range.iri}} for prop in object_properties for range in prop.range],
+                    "object_properties": [{"name": prop.name, "iri": prop.iri, "range": {"name": range.name, "iri": range.iri}} for prop in object_properties for range in prop.range],
                     "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
                 }]
             }]
         }
         print("Ontology data", ontology_data)
         return JSONResponse(content={
-            "message": "File uploaded and processed successfully",
+            "message": "Ontology loaded and processed successfully",
             "ontologyData": ontology_data
         })
     except Exception as e:
-        print("Error saving :", e)
+        print("Error processing ontology:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Borrar luego 
 @router.get("/", response_model=List[OntologyDocument])

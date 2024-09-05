@@ -8,6 +8,7 @@ from app.domain.mapping.models import MappingProcessDocument, get_mapping_proces
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
+from typing import List
 
 
 from genson import SchemaBuilder
@@ -27,6 +28,23 @@ async def generate_schema(request: JsonRequest):
         return schema
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+class JsonRequestList(BaseModel):
+    json_data: List[dict]  # Cambiado para aceptar una lista de JSON
+
+@router.post("/generate-schemaList/")
+async def generate_schema(request: JsonRequestList):
+    try:
+        builder = SchemaBuilder()
+        for json_obj in request.json_data:
+            builder.add_object(json_obj)
+        schema = builder.to_schema()
+        return schema
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+#  seed_schema = {'type': 'array', 'items': []}
+# >>> builder.add_schema(seed_schema)
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
 async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
