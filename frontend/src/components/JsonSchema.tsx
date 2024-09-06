@@ -22,13 +22,15 @@ const Json: React.FC = () => {
     setJsonInput(e.target.value);
   };
 
+  console.log("lastClickedElement: " + lastClickedElement);
+
   const handleClickElement = (
     e: React.MouseEvent<HTMLDivElement>,
     element: string
   ) => {
     setJsonElementSelected(element);
     setLastClickedElement(element); // Fix this
-    console.log(element);
+    console.log("element: " + element);
     // navigate("/testroute");
   };
 
@@ -39,6 +41,7 @@ const Json: React.FC = () => {
   ) => {
     setJsonElementSelected(element + "_key#" + type);
     setLastClickedElement(element); // Fix this
+    console.log("element: " + element);
   };
 
   const handleClickArrayProperty = (
@@ -47,6 +50,7 @@ const Json: React.FC = () => {
   ) => {
     setJsonElementSelected(element + "_key#array");
     setLastClickedElement(element); // Fix this
+    console.log("element: " + element);
   };
 
   // const handleGenerateSchema = () => {
@@ -72,7 +76,9 @@ const Json: React.FC = () => {
           <div className="property-box" key={key}>
             <div
               className={`json-elem ${
-                lastClickedElement === parent + key ? "active" : ""
+                lastClickedElement === (parent ? parent + "-" + key : key)
+                  ? "active"
+                  : ""
               }`}
               onClick={(e) =>
                 handleClickElement(e, parent ? parent + "-" + key : key)
@@ -94,7 +100,9 @@ const Json: React.FC = () => {
           <div className="property-box" key={key}>
             <div
               className={`json-elem ${
-                lastClickedElement === parent + key ? "active" : ""
+                lastClickedElement === (parent ? parent + "-" + key : key)
+                  ? "active"
+                  : ""
               }`}
               onClick={(e) => handleClickArrayProperty(e, parent + "-" + key)}
             >
@@ -111,7 +119,9 @@ const Json: React.FC = () => {
         <div className="property-box" key={key}>
           <div
             className={`json-elem ${
-              lastClickedElement === parent + key ? "active" : ""
+              lastClickedElement === (parent ? parent + "-" + key : key)
+                ? "active"
+                : ""
             }`}
             onClick={(e) =>
               handleClickSimpleProperty(e, parent + "-" + key, value.type)

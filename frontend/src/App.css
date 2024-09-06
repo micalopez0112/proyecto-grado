@@ -57,6 +57,7 @@
 
 .title {
   color: #fff;
+  text-align: center;
 }
 
 .title-wrapper {
@@ -67,6 +68,7 @@
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -84,4 +86,8 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #9595a1;
+}
+
+.success {
+  background-color: #41a339;
 }

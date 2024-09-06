@@ -1,0 +1,17 @@
+.result-container {
+  width: 80%;
+}
+
+.result-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+.result-mapping-wrapper {
+  min-height: 650px;
+}
