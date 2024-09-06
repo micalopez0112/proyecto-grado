@@ -31,19 +31,19 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
             # Manejo de la URI
             print("onto uri", uri)
             ontoDocu = OntologyDocument(type=type, file=uri)
-            ontology = get_ontology(str(uri).strip()).load()
+            ontology = get_ontology(str(uri)).load()
             print("onto data from uri: ", ontology)
         else:
             raise HTTPException(status_code=400, detail="No ontology file or URI provided")
 
-       
-        result = await onto_collection.insert_one(ontoDocu.dict())
+        result = await onto_collection.insert_one(ontoDocu.model_dump())
         ontology_id = result.inserted_id
 
         # Obtener las clases y propiedades de la ontología
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
+        print("Object Propertie", object_properties[0])
         ontology_data = {
             "ontology_id": str(ontology_id),
             "ontoData": [{
