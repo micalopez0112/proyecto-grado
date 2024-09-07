@@ -94,14 +94,11 @@ const OntologyData: React.FC<{}> = () => {
             </ul>
           </div>
           <div style={ModalStyles.modalfooter}>
-            <button
-              className="button"
-              style={ModalStyles.modalCancelButton}
-              onClick={closeModal}
-            >
+            <button className="button danger" onClick={closeModal}>
               Cerrar
             </button>
             <button
+              className="button success"
               style={ModalStyles.modalOkButton}
               onClick={() => confirmationModal(objectPropertyElement)}
             >
@@ -227,10 +224,7 @@ const ModalStyles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     justifyContent: "center",
     width: "220px",
-    backgroundColor: "white",
     padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.1)",
   },
   listStyle: {
     listStyleType: "none",
@@ -252,19 +246,6 @@ const ModalStyles: { [key: string]: React.CSSProperties } = {
     display: "flex",
     justifyContent: "flex-end",
     width: "100%",
-  },
-  modalCancelButton: {
-    backgroundColor: "#ff3f1b",
-    color: "white",
-    padding: "10px",
-    borderRadius: "4px",
-    marginRight: "10px",
-  },
-  modalOkButton: {
-    backgroundColor: "#4caf50",
-    color: "white",
-    padding: "10px",
-    borderRadius: "4px",
   },
 };
 
