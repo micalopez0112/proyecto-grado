@@ -11,7 +11,8 @@ class MappingProcess(BaseModel):
     mapping : Dict[str, Any]
     ontology: Any
     jsonSchema: Any
-    
+    documentStoragePath : str
+
     class Config:
         from_attributes = True
 
@@ -64,6 +65,9 @@ class MappingRequest(BaseModel):
     name: str = Field(default=None)
     mapping: Dict[str, Any] = Field(default=None) 
     jsonSchema: Dict[str, Any] = Field(default=None) 
+    # ver como se supone que tendría que venir esto!!
+    documentStoragePath : str = Field(default=None)
+
 
 class EditMappingRequest(BaseModel):
     mapping_name: str = Field()
