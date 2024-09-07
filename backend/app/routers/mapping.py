@@ -64,9 +64,10 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
         if ontology_document.type == "FILE":
             ontology_path = ontology_document.file
             ontology = get_ontology(ontology_path).load()
-        
+        else:
+            ontology = get_ontology(str(ontology_document.uri)).load()
         # saving json schema
-        schema_dict = request.jsonSchema.dict(by_alias=True)
+        schema_dict = request.jsonSchema.model_dump(by_alias=True)
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id
 
