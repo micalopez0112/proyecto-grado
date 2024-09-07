@@ -8,8 +8,43 @@ from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
+from typing import List
+
+
+from genson import SchemaBuilder
+from pydantic import BaseModel
 
 router = APIRouter()
+
+class JsonRequest(BaseModel):
+    json_data: dict
+
+@router.post("/generate-schema/")
+async def generate_schema(request: JsonRequest):
+    try:
+        builder = SchemaBuilder()
+        builder.add_object(request.json_data)
+        schema = builder.to_schema()
+        return schema
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+class JsonRequestList(BaseModel):
+    json_data: List[dict]  # Cambiado para aceptar una lista de JSON
+
+@router.post("/generate-schemaList/")
+async def generate_schema(request: JsonRequestList):
+    try:
+        builder = SchemaBuilder()
+        for json_obj in request.json_data:
+            builder.add_object(json_obj)
+        schema = builder.to_schema()
+        return schema
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+#  seed_schema = {'type': 'array', 'items': []}
+# >>> builder.add_schema(seed_schema)
 
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
 async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
@@ -29,9 +64,10 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
         if ontology_document.type == "FILE":
             ontology_path = ontology_document.file
             ontology = get_ontology(ontology_path).load()
-        
+        else:
+            ontology = get_ontology(str(ontology_document.uri)).load()
         # saving json schema
-        schema_dict = request.jsonSchema.dict(by_alias=True)
+        schema_dict = request.jsonSchema.model_dump(by_alias=True)
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id
 
@@ -78,7 +114,7 @@ async def get_mapping(mapping_process_id: str):
             "ontoData": [{
                 "data": [{
                     "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
-                    "object_properties": [{"name": prop.name, "iri": prop.iri} for prop in object_properties],
+                    "object_properties": [{"name": prop.name, "iri": prop.iri,"range":{"name":range.name,"iri":range.iri}} for prop in object_properties for range in prop.range],
                     "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
                 }]
             }]
