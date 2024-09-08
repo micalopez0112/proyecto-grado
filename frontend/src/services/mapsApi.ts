@@ -20,12 +20,23 @@ export const saveMappings = async (ontologyId: string, data: any) => {
   }
 };
 
-export const uploadOntology = async (type: string, file: File, uri: string) => {
+export const uploadOntology = async (
+  type: string,
+  file?: File,
+  uri?: string
+) => {
   try {
     const formData = new FormData();
     formData.append("type", type);
-    formData.append("ontology_file", file);
-    if (uri) formData.append("uri", uri);
+
+    if (file) {
+      formData.append("ontology_file", file);
+    }
+
+    if (uri) {
+      formData.append("uri", uri);
+    }
+
     const response = await apiClient.post(`/ontologies/`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -33,7 +44,8 @@ export const uploadOntology = async (type: string, file: File, uri: string) => {
     });
     return response;
   } catch (error) {
-    console.error("Error in uploading ontology");
+    console.error("Error in uploading ontology", error);
+    throw error; // Recomendable lanzar el error para manejarlo fuera
   }
 };
 
