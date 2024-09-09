@@ -36,7 +36,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         else:
             raise HTTPException(status_code=400, detail="No ontology file or URI provided")
 
-        result = await onto_collection.insert_one(ontoDocu.model_dump())
+        result = await onto_collection.insert_one(ontoDocu.dict())
         ontology_id = result.inserted_id
         print("Inserted correctly - Ontology ID:", ontology_id)
 

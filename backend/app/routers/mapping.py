@@ -6,6 +6,7 @@ from typing import Dict, Any
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
 from app.domain.mapping.service import process_mapping
+from app.domain.dataquality.evaluation import evaluate_data_quality
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
 from typing import List
@@ -49,6 +50,7 @@ async def generate_schema(request: JsonRequestList):
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
 async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
     try:
+        print("Starting ontology saving 1")
         onto_id = ObjectId(ontology_id)
         ontology_docu = await onto_collection.find_one({'_id': onto_id})
         
@@ -61,13 +63,15 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
         
         ontology_docu['id'] = str(ontology_docu['_id'])
         ontology_document = OntologyDocument(**ontology_docu)
+        print("Starting ontology saving 1")
         if ontology_document.type == "FILE":
             ontology_path = ontology_document.file
             ontology = get_ontology(ontology_path).load()
         else:
             ontology = get_ontology(str(ontology_document.uri)).load()
         # saving json schema
-        schema_dict = request.jsonSchema.model_dump(by_alias=True)
+        schema_dict = request.jsonSchema
+
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id
 
@@ -77,9 +81,9 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
 
         # saving mapping process
         mapping = request.mapping
-        mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+        mapping_process_docu = MappingProcessDocument(name=request.name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
-
+     
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
     except ValueError as e:
         msg = str(e)
@@ -202,3 +206,8 @@ async def put_mapping(mapping_process_id: str, request: MappingRequest = Body(..
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
         return response
+
+
+@router.get("/evaluate/{mapping_process_id}" )
+async def evaluate_dq(mapping_process_id: str) : 
+    await evaluate_data_quality("path", mapping_process_id)
