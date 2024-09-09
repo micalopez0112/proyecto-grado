@@ -17,7 +17,6 @@ def get_documents_from_storage(path : str) :
 async def evaluate_data_quality(instances_path: str, mapping_processID : str) :
     # get documents from storage
     mapping_processID = ObjectId(mapping_processID)
-
     mapping_process_document = await mapping_process_collection.find_one({'_id': mapping_processID})
     mapping_process_docu = MappingProcessDocument(**mapping_process_document)
     # obtengo la ontología
@@ -32,8 +31,9 @@ async def evaluate_data_quality(instances_path: str, mapping_processID : str) :
     # para cada instancia del json evaluo la calidad de los datos
     mapping = mapping_process_docu.mapping
     JSONInstances = get_documents_from_storage(instances_path)
+    print("### got json instances ###")
     for json_mapped_key, onto_value in mapping.items():
-        print("item to evaluate", json_mapped_key)
+        print("##  item to evaluate ##", json_mapped_key)
         if isJSONValue(json_mapped_key) :
             print("is JSON value")
             evaluate_json_instances(JSONInstances, json_mapped_key, onto_value, ontology)
@@ -50,12 +50,16 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontol
         if element is None:
             # aca enteindo se guardaría el valor de la evaluación en los metadatos => 0 en este caso
             value =  0
+            print(" Evaluation for ", element, " is ", value)
         # por cada ontología a la cual se haya mapeado
         for onto_value in onto_values :
             # estoy evaluando un json value en este caso!
             # busco la clase de la ontologia a la cual se mapeo y recorro sus instancias
             onto_class = getOntoPropertyByIri(onto_value['iri'], list(ontology.classes()))
-            instances = onto_class.individuals()
+            print("onto class: ", onto_class)
+            instances = list(onto_class.individuals())
+            print("HERE")
+            print("onto instances: ", instances)
             for inst in instances:
                 print("onto instance: ", inst)
                 result = compare_iri_with_json_value(onto_value['iri'], element)
@@ -65,11 +69,15 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontol
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 def find_element_in_JSON_instance(json_document, path) :
     keys = path.replace('-', '_').split('_')
-    print("keys", keys)
+    json_keys = keys[:-1]
+    print("keys", json_keys)
     element = json_document
     try:
-        for key in keys:
+        for key in json_keys:
+            print("## key: ", key)
+            print("## element: ", element)
             element = element[key]
+        print("About to return element: ", element)
         return element
     except (KeyError, TypeError):
         return None
