@@ -4,6 +4,7 @@ import { fetchOntologies,uploadOntology } from '../services/mapsApi.ts';
 import OntologyCard from '../components/OntologyCard.tsx';
 import { OntologyDataType } from "../types/OntologyData.ts";
 import { useNavigate } from 'react-router-dom';
+import { Spinner } from '../components/Spinner/Spinner.tsx';
 
 const OntologySelectScreen = () =>{
 
@@ -16,22 +17,28 @@ const OntologySelectScreen = () =>{
     const navigate = useNavigate();
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
     const	[uriValue, setUriValue] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-
+    const {
+      mappings,
+      clearMappings
+    } = useDataContext();
 
     const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSelectedMethod(event.target.value);
     };
 
     useEffect (()=>{
-        const retrieveOntologies = async () =>{
-            const ontologies = await fetchOntologies();
-            if(ontologies){
-                console.log("Ontologies: ",ontologies);
-                setOntologies(ontologies.data);
-            }
-        }
-        retrieveOntologies();
+      //limpiar contexto de mappings
+      clearMappings();
+        // const retrieveOntologies = async () =>{
+        //     const ontologies = await fetchOntologies();
+        //     if(ontologies){
+        //         console.log("Ontologies: ",ontologies);
+        //         setOntologies(ontologies.data);
+        //     }
+        // }
+        // retrieveOntologies();
     },[])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +58,9 @@ const OntologySelectScreen = () =>{
       const handleSubmit = async () =>{
         console.log("a")
         try{
+            setLoading(true);
             if(selectedMethod && selectedMethod === 'file' && selectedFile){
-            
+
                   const response = await uploadOntology("FILE", selectedFile, "");
                   console.log("Ontologia desde el back", response);
                   const ontologyData: OntologyDataType = response?.data.ontologyData;
@@ -73,6 +81,7 @@ const OntologySelectScreen = () =>{
                 setcurrentOntologyId(ontologyId);
                 setontologyDataContext(ontologyData);
             }
+            setLoading(false);
             navigate('/SchemaSelect');
         }
         catch(error){
@@ -88,7 +97,8 @@ const OntologySelectScreen = () =>{
       }
 
     return (
-        <div style={styles.container}>
+      <>
+        {loading ? <Spinner/> : <div style={styles.container}>
             <h1>Seleccione la ontología de contexto</h1>
             <button className='button' onClick={handleSubmit}>Confirmar selección</button>
             <div style ={styles.selectHeader}>
@@ -160,7 +170,8 @@ const OntologySelectScreen = () =>{
             </div>
             } */}
       </div>
-        
+      }
+    </>
     );
 }
 

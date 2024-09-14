@@ -95,3 +95,16 @@ export const fetchOntologies = async () => {
     console.error("Error fetching ontologies", error);
   }
 };
+
+export const getJsonSchema = async (jsonFile: any /*JsonFile?? */) => {
+  //este método va a tener que recibir un File en un futuro
+  try {
+    const body = {
+      jsonInstances: jsonFile,
+    };
+    const response = await apiClient.post("/mapping/generate-schema/", body);
+    return response;
+  } catch (error) {
+    console.error("Error fetching JsonSchema", error);
+  }
+};

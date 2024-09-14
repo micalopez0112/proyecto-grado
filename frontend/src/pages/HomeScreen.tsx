@@ -2,18 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchMappings } from '../services/mapsApi.ts';
 import MappingCard from '../components/MappingCard.tsx';
+import { Spinner } from '../components/Spinner/Spinner.tsx';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
   const [mappings, setMappings] = useState<Array<{ id: string, name: string}>>([]);
+  const [loading,setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const retrieveMappings = async () => {
+        setLoading(true);
         const mappings = await fetchMappings();
         console.log("Mappings: ", mappings);
         //setMappings(mappings);
         if(mappings)
             setMappings(mappings.data);
+        setLoading(false);
     };
     retrieveMappings();
   }, []);
@@ -23,6 +27,10 @@ const HomeScreen = () => {
   }
 
   return (
+    <>
+    
+    {loading?<Spinner />
+    :
     <div style={styles.container}>
       <h1 style={styles.title}>Pantalla de Inicio</h1>
       <button onClick={() => navigate('/OntologySelect')} style={styles.button}>Ir a Mappings</button>
@@ -39,7 +47,9 @@ const HomeScreen = () => {
         ))}
       </div>
       }
-    </div>
+      </div>
+    }
+    </>
   );
 };
 

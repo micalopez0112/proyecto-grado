@@ -14,6 +14,7 @@ import { OntologyDataType } from "../types/OntologyData.ts";
 import { FaTrash } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import MappingList from "../components/MappingList.tsx";
+import { Spinner } from "../components/Spinner/Spinner.tsx";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ export const Mapping = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
   const [mappingId, setMappingId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     //cambiar logica cuando se obtenga el id desde el back
   }, []);
@@ -57,6 +60,7 @@ export const Mapping = () => {
     useEffect(() => {
         const getMappingData = async () => {
             if(mappingId){
+              setLoading(true);
                 try{
                     const response = await getMapping(mappingId);
                     console.log("Response de getMapping: ", response);
@@ -72,6 +76,7 @@ export const Mapping = () => {
                 catch(error){
                     console.error("error en getMappingData", error);
                 }
+                setLoading(false);
             }
         }
         getMappingData();
@@ -160,6 +165,9 @@ export const Mapping = () => {
   }, [mappingId]);
 
   return (
+    <>
+    {loading?<Spinner/>
+    :
     <div className="App">
       <div className="mapping-name">
         <label>Nombre del mapeo</label>
@@ -207,5 +215,7 @@ export const Mapping = () => {
         </div>
       </div>
     </div>
+    }
+    </>
   );
 };

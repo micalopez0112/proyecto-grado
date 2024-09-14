@@ -17,26 +17,26 @@ from pydantic import BaseModel
 router = APIRouter()
 
 class JsonRequest(BaseModel):
-    json_data: dict
+    jsonInstances: dict
 
 @router.post("/generate-schema/")
 async def generate_schema(request: JsonRequest):
     try:
         builder = SchemaBuilder()
-        builder.add_object(request.json_data)
+        builder.add_object(request.jsonInstances)
         schema = builder.to_schema()
         return schema
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 class JsonRequestList(BaseModel):
-    json_data: List[dict]  # Cambiado para aceptar una lista de JSON
+    jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
 
 @router.post("/generate-schemaList/")
 async def generate_schema(request: JsonRequestList):
     try:
         builder = SchemaBuilder()
-        for json_obj in request.json_data:
+        for json_obj in request.jsonInstances:
             builder.add_object(json_obj)
         schema = builder.to_schema()
         return schema
@@ -67,7 +67,9 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
         else:
             ontology = get_ontology(str(ontology_document.uri)).load()
         # saving json schema
-        schema_dict = request.jsonSchema.model_dump(by_alias=True)
+        print("Antes del dump");
+        schema_dict = request.jsonSchema#.model_dump(by_alias=True)
+        print("Después del dump");
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id
 

@@ -183,6 +183,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const clearMappings = () => {
+    console.log("Se ejecuta clear mappings");
     setMappings({});
     setOntoElementSelected({type:undefined, ontoElement:{}});
     setJsonElementSelected('');
