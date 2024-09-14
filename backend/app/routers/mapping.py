@@ -1,15 +1,13 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Body
+from fastapi import APIRouter, HTTPException, Query, Body
 from bson import ObjectId
 from owlready2 import get_ontology
 import motor.motor_asyncio
-from typing import Dict, Any
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
 from app.domain.mapping.service import process_mapping
-from app.domain.dataquality.evaluation import evaluate_data_quality
+from app.domain.dataquality.evaluation import StrategyContext
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
-import json
-from typing import List
+from typing import List, Optional, Dict, Any
 
 
 from genson import SchemaBuilder
@@ -208,6 +206,20 @@ async def put_mapping(mapping_process_id: str, request: MappingRequest = Body(..
         return response
 
 
-@router.get("/evaluate/{mapping_process_id}" )
-async def evaluate_dq(mapping_process_id: str) : 
-    await evaluate_data_quality("path", mapping_process_id)
+# @router.get("/evaluate/{mapping_process_id}" )
+# async def evaluate_dq(mapping_process_id: str) : 
+#     await evaluate_data_quality("path", mapping_process_id)
+
+# /evaluate/syntactic_accuracy?mapping_process_id=123
+@router.post("/evaluate/{quality_rule}")
+async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[int] = Query(None, description="ID for mapping"), request_mapping_body:Dict[str, Any]= Body(...)) :
+    try :
+        context = StrategyContext()
+        context.select_strategy(quality_rule)
+        
+
+        context.evaluate_quality(mapping_process_id, request_mapping_body)
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response

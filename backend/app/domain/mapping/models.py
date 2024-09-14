@@ -69,6 +69,8 @@ class MappingRequest(BaseModel):
     documentStoragePath : str = Field(default=None)
 
 
+
+
 class EditMappingRequest(BaseModel):
     mapping_name: str = Field()
     mapping: Dict[str, Any] = Field()
