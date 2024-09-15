@@ -59,10 +59,13 @@ class SyntanticAccuracy(QualityMetric) :
         ontology = await get_onto(self.mapping_process.ontologyId)
         print("## Got ontology correctly ##", list(ontology.individuals()))
         print("## SyntanticAccuracy: mapping elements ##") #self.mapping_elements)
+        results_dicc = {}
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
             print("##  item to evaluate ##", json_mapped_key)
             if getJsonSchemaPropertieType(json_mapped_key) != "":
-                evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology)
+                results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology)
+            results_dicc[json_mapped_key] = results_for_mapped_entrance
+        print("##---- Evaluation results: ", results_dicc, " ----##")
         return None
     
     # si todas las evaluaciones se van a basar en mapeos json esto se puede mover para la clase principal QualityMetric
@@ -133,57 +136,68 @@ def get_documents_from_storage(path : str) :
 
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
-def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontology) :
-    print("## evaluate_json_instances ##", json_instances)
+def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology) :
+    print("## SyntanticAccuracy evaluating mapping:", mapping_entrance, "###")
+    print("## SyntanticAccuracy about to evaluate:", len(json_instances))
+    results_dicc = {}
+    # algo temporal
+    index = 1
     for json_instance in json_instances :
         # a partir de la entrada del mapping, busco el valor en el json
+        result_key = mapping_entrance + "_" + str(index)
+        index = index + 1
         element = find_element_in_JSON_instance(json_instance, mapping_entrance)
-        print("elemento found: ", element)
+        print("### Found element: ", element)
         if element is None:
-            # aca enteindo se guardaría el valor de la evaluación en los metadatos => 0 en este caso
             value =  0
-            print(" Evaluation for ", element, " is ", value)
+        
         # por cada ontología a la cual se haya mapeado
-        for onto_value in onto_values :
-            # estoy evaluando un json value en este caso!
-            # busco la clase de la ontologia a la cual se mapeo y recorro sus instancias
-            print("Onto value: ", onto_value['iri'])
-            # ver aca si dejo así o vemos la forma de modulizarlo
-            onto_class = getOntoPropertyByIri(onto_value['iri'], list(ontology.data_properties()))
-            print("onto class: ", onto_class)
-            instances = list(onto_class.individuals())
-            print("HERE")
-            print("onto instances: ", instances)
+        # ver como guardar aca según la ongología a la que mapeo
+        for onto_mapped_to in onto_mapped_to_value :
+            print("## Onto value: ", onto_mapped_to['iri'])
+            # ver aca si dejamos así o vemos la forma de modulizarlo
+            onto_prop = getOntoPropertyByIri(onto_mapped_to['iri'], list(ontology.data_properties()))
+            instances = list(onto_prop.get_relations())
+            print("## Onto instances: ", instances, " ##")
             for inst in instances:
-                print("onto instance: ", inst)
-                result = compare_iri_with_json_value(onto_value['iri'], element)
-                print("result of comparison: ", result)
-
+                dp_value = inst[1]
+                value = compare_onto_with_json_value(dp_value, element)
+                print("## Evaluation result: ", value, " ##")
+                if value == 1:
+                    break
+                
+            results_dicc[result_key] = value
+    return results_dicc
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
 # accomodation aca puedo recibir value
 def find_element_in_JSON_instance(json_document, path) :
     keys = path.replace('-', '_').split('_')
     json_keys = keys[:-1]
-    print("keys", json_keys)
     # jsonFlated := [destination.accomation.name = Paris, kfkfkfkfk]
     # jsonFlated[destination.accomation.name] = Paris
     #
     element = json_document
     try:
         for key in json_keys:
-            print("## key: ", key)
-            print("## element: ", element)
             element = element[key]
-        print("About to return element: ", element)
         return element
     except (KeyError, TypeError):
         return None
 
+def compare_onto_with_json_value(onto_prop_value, json_value) :
+    # ver como hacer esto
+    # queremos hacer esto?
+    print("## Syntactic Accuracy: compare_onto_with_json_value onto:", onto_prop_value," json:", json_value,"##")
+    if onto_prop_value == json_value:
+        return 1
+    return 0
+  
 # esta función compara un iri con un valor de un json
 #Hotel" == "Hotel"
 # "http://www.owl-ontologies.com/travel.owl#Hotel"
 # "ruralarea"
+# esto capaz se va
 def compare_iri_with_json_value(iri, json_value) :
     # ver como hacer esto
     onto_name = iri.split('#')[1]
