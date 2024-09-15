@@ -3,29 +3,39 @@
 def get_hardcoded_test_documents():
     documents = [
         {
-            "destination": {
-                "name": "Paris"
+            "contacto": {
+                "city": "Montevideo",
+                "street": "ExampleStreet 123",
+                "email": "example@example.com"
             }
         },
         {
-            "destination": {
-                "name": "New York"
+            "contacto": {
+                "city": "Buenos aires",
+                "street": "ExampleStreet 123",
+                "email": "example@example.com"
             }
         },
         {
-            "adventure": {
-                "name": "Skydiving"
+            "contacto": {
+                "city": "Buenos aires",
+                "street": "ExampleStreet 123",
+                "email": "example@example.com"
             }
         },
         {
-            "adventure": {
-                "name": "CapeYork"
+            "contacto": {
+                "city": "Buenos aires",
+                "street": "ExampleStreet 123",
+                "email": "example@example.com"
             }
         },
         {
-            "accommodation": {
-                "name": "Hotel"
+            "contacto": {
+                "city": "Buenos aires",
+                "street": "ExampleStreet 123",
+                "email": "example@example.com"
             }
         }
-]
+    ]
     return documents

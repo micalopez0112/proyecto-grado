@@ -58,7 +58,7 @@ class SyntanticAccuracy(QualityMetric) :
         print("## SyntanticAccuracy: execute_measure ##")
         ontology = await get_onto(self.mapping_process.ontologyId)
         print("## Got ontology correctly ##", list(ontology.individuals()))
-        print("## SyntanticAccuracy: mapping elements ##", self.mapping_elements)
+        print("## SyntanticAccuracy: mapping elements ##") #self.mapping_elements)
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
             print("##  item to evaluate ##", json_mapped_key)
             if getJsonSchemaPropertieType(json_mapped_key) != "":
@@ -134,8 +134,8 @@ def get_documents_from_storage(path : str) :
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
 def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontology) :
+    print("## evaluate_json_instances ##", json_instances)
     for json_instance in json_instances :
-        # si no existe retorno 0
         # a partir de la entrada del mapping, busco el valor en el json
         element = find_element_in_JSON_instance(json_instance, mapping_entrance)
         print("elemento found: ", element)
@@ -147,7 +147,9 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontol
         for onto_value in onto_values :
             # estoy evaluando un json value en este caso!
             # busco la clase de la ontologia a la cual se mapeo y recorro sus instancias
-            onto_class = getOntoPropertyByIri(onto_value['iri'], list(ontology.classes()))
+            print("Onto value: ", onto_value['iri'])
+            # ver aca si dejo así o vemos la forma de modulizarlo
+            onto_class = getOntoPropertyByIri(onto_value['iri'], list(ontology.data_properties()))
             print("onto class: ", onto_class)
             instances = list(onto_class.individuals())
             print("HERE")
@@ -160,7 +162,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_values, ontol
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
 # accomodation aca puedo recibir value
-def find_element_in_JSON_instance(json_document, path, value) :
+def find_element_in_JSON_instance(json_document, path) :
     keys = path.replace('-', '_').split('_')
     json_keys = keys[:-1]
     print("keys", json_keys)
