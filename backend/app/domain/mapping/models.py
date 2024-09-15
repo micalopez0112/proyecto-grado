@@ -93,6 +93,7 @@ class MappingProcessDocument(BaseModel):
     mapping :Optional[Dict[str, Any]]= None
     ontologyId: Optional[str]= None
     jsonSchemaId: Optional[str]= None
+    document_storage_path : Optional[str]= None
     
 
 # Helper function to parse ObjectId
