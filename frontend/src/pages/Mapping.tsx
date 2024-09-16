@@ -87,6 +87,7 @@ export const Mapping = () => {
           if(Object.keys(mappings).length > 0){
             if(mappingId){
               //invocar put
+              console.log("Flujo donde existe mappingId");
               const body = { name:mappingName,mapping: mappings, jsonSchema: jsonSchemaContext };
               const response = await editMapping(mappingId,body);
               console.log("Respuesta al editar mapping: ", response);
@@ -97,9 +98,10 @@ export const Mapping = () => {
             }
             else{//new mapping
               if(currentOntologyId){
+                console.log("Flujo donde no existe mappingId");
                 console.log("JSON SCHEMAAA: ", jsonSchemaContext);
                 const jsonschema = jsonSchemaContext;
-                const body = { mapping_name:mappingName,mapping: mappings, jsonSchema: jsonschema };
+                const body = { name:mappingName,mapping: mappings, jsonSchema: jsonschema };
                 const response = await saveMappings(currentOntologyId,body);
                 console.log("Response al guardar mappings: ", response);
                 if(response && response.status===200 ){

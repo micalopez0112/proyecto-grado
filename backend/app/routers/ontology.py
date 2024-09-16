@@ -6,7 +6,8 @@ from owlready2 import get_ontology
 from typing import Optional, List
 from app.domain.mapping.models import MappingProcessDocument, OntologyDocument
 from ..database import onto_collection
-
+from typing import Dict, Any
+from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 
 router = APIRouter()
 
@@ -65,6 +66,16 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         print("Error processing ontology:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+#Retrieves the graph structure of an ontology
+@router.get("/ontology-graph/{ontology_id}", response_model = Any)
+async def get_ontology_graph(ontology_id: str):
+    try:
+        onto_for_graph = await get_ontology_info_from_pid(ontology_id)
+        graph = graph_generator(onto_for_graph, {})
+    except Exception as e:
+        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    
+    return graph
 
 # Borrar luego 
 @router.get("/", response_model=List[OntologyDocument])

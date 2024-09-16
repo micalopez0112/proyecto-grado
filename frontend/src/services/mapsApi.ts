@@ -59,6 +59,17 @@ export const getMappingGraph = async (processId: string) => {
   }
 };
 
+export const getOntologyGraph = async (ontologyId: string) => {
+  try {
+    const response = await apiClient.get(
+      `/ontologies/ontology-graph/${ontologyId}`
+    );
+    return response;
+  } catch (error) {
+    console.error("Error in getting Ontology Graph");
+  }
+};
+
 export const fetchMappings = async () => {
   try {
     const response = await apiClient.get("/mapping/");

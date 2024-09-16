@@ -53,19 +53,6 @@ const Json: React.FC = () => {
     console.log("element: " + element);
   };
 
-  // const handleGenerateSchema = () => {
-  //   try {
-  //     const jsonData = JSON.parse(jsonInput);
-  //     const schema = generateJsonSchema(jsonData);
-  //     console.log("##GENERATED SCHEMA##", schema);
-  //     setJsonSchema(schema);
-  //     setJsonSchemaContext(schema);
-  //   } catch (error) {
-  //     console.error("Invalid JSON input");
-  //     setJsonSchema(null);
-  //   }
-  // };
-
   const renderProperties = (
     properties: Record<string, JsonSchemaProperty>,
     parent: string

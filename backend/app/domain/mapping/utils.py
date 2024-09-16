@@ -26,9 +26,12 @@ async def get_ontology_info_from_pid(ontology_id):
     
     ontology_docu['id'] = str(ontology_docu['_id'])
     ontology_document = OntologyDocument(**ontology_docu)
+    print("El ontologyDocument es: ", ontology_document)
     if ontology_document.type == "FILE":
         ontology_path = ontology_document.file
         ontology = get_ontology(ontology_path).load()
+    else: ##document.type == "URI"
+        ontology = get_ontology(str(ontology_document.uri)).load()
 
     onto_classes = list(ontology.classes())
     onto_object_properties = list(ontology.object_properties())

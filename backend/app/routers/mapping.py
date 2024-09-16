@@ -79,7 +79,8 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
 
         # saving mapping process
         mapping = request.mapping
-        mapping_process_docu = MappingProcessDocument(name=request.mapping_name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+        name = request.name
+        mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
@@ -104,10 +105,15 @@ async def get_mapping(mapping_process_id: str):
         onto_id = mappingProcessDocu.ontologyId
         ontology_id = ObjectId(onto_id)
         ontology = await onto_collection.find_one({'_id': ontology_id})
-        ontology_path = ontology.get('file')
-        print("ontology_path", ontology_path)
-        # Mover esto para un lugar más adecuado
-        ontology = get_ontology(ontology_path).load()
+        if ontology.get('type') == "FILE":
+            ontology_path = ontology.get('file')
+            print("ontology_path", ontology_path)
+            # Mover esto para un lugar más adecuado
+            ontology = get_ontology(ontology_path).load()
+        else:
+            ontology_uri = ontology.get('uri')
+            print("ontology_uri", ontology_uri)
+            ontology = get_ontology(str(ontology_uri)).load()
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
@@ -155,6 +161,8 @@ async def get_graph(process_id: str):
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")
     
     return graph_with_mappings
+
+
 
 @router.get("/" )
 async def get_mappings():
