@@ -68,7 +68,7 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
             ontology = get_ontology(str(ontology_document.uri)).load()
         # saving json schema
         print("Antes del dump");
-        schema_dict = request.jsonSchema#.model_dump(by_alias=True)
+        schema_dict = request.jsonSchema
         print("Después del dump");
         schema_result = await jsonschemas_collection.insert_one(schema_dict)
         schema_id = schema_result.inserted_id

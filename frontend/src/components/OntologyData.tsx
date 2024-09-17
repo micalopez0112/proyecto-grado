@@ -7,6 +7,7 @@ import { IoRemoveOutline } from "react-icons/io5";
 import { getOntologyGraph } from "../services/mapsApi.ts";
 import Graph from "react-graph-vis";
 import { v4 as uuidv4 } from "uuid";
+import { Spinner } from "./Spinner/Spinner.tsx";
 
 Modal.setAppElement("#root");
 
@@ -20,6 +21,8 @@ const OntologyData: React.FC<{}> = () => {
   const [selectedRange, setSelectedRange] = useState<Array<OntoElement>>([]);
   const [objectPropertyElement, setObjectPropertyElement] = useState<any>();
   const [graphData, setGraphData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const graph = graphData
     ? {
         nodes: graphData.nodes,
@@ -100,11 +103,13 @@ const OntologyData: React.FC<{}> = () => {
 
   const getGraphData = async () => {
     try {
+      setLoading(true);
       if (currentOntologyId && currentOntologyId !== "") {
         const response = await getOntologyGraph(currentOntologyId);
         console.log("Ontology Graph: ", response);
         if (response) setGraphData(response.data);
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error en getGraphData (MappingResult)", error);
     }
@@ -112,7 +117,9 @@ const OntologyData: React.FC<{}> = () => {
 
   const openModal = () => {
     try{
-      getGraphData();
+      if(graphData === null){
+        getGraphData();
+    }
       setOntoModalIsOpen(true);
     }catch(error){
       console.error("Error en getGraphData (MappingResult)", error);
@@ -176,19 +183,25 @@ const OntologyData: React.FC<{}> = () => {
         style={ModalOntoStyles}
         > 
         <div style={ModalOntoStyles.modalContent}>
-              <label>
+          {loading?<Spinner/>
+          :
+          <>
+          <label>
                 Ontología Seleccionada:
               </label>
               <div style={ModalOntoStyles.graphContainer}>
                 {graphData ? (
-                <Graph
-                  key={uuidv4()}
-                  graph={graph}
-                  options={options}
-                  events={{}}
-                />
+                  <Graph
+                    key={uuidv4()}
+                    graph={graph}
+                    options={options}
+                    events={{}}
+                  />
               ) : null}
               </div>
+            </>
+              }
+              
               <button className="button" onClick={closeOntoModal}>
                 Cerrar
               </button>
