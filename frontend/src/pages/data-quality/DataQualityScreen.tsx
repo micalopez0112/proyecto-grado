@@ -39,7 +39,7 @@ const DataQualityScreen = () => {
           <div className="data-quality-container">
             {mappings && (
               <div className="mappings-container">
-                <h2 className="">Mappings</h2>
+                <h2 className="sub-title">Mappings</h2>
                 {mappings.map((mapping) => (
                   <MappingCard
                     style={styles.mappingCard}
@@ -54,7 +54,7 @@ const DataQualityScreen = () => {
 
             {mappings && (
               <div className="data-quality-rules-container">
-                <h2 className="">Data Quality Rules</h2>
+                <h2 className="sub-title">Data Quality Rules</h2>
                 {mappings.map((mapping) => (
                   <MappingCard
                     key={mapping.id}

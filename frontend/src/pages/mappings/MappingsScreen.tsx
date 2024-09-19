@@ -33,13 +33,15 @@ const MappingsScreen = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1 style={styles.title}>Pantalla de Inicio</h1>
-          <button
-            onClick={() => navigate("/OntologySelect")}
-            style={styles.button}
-          >
-            Ir a Mappings
-          </button>
+          <div style={styles.mappingsTitleContainer}>
+            <h1 style={styles.title}>Mappings</h1>
+            <button
+              onClick={() => navigate("/OntologySelect")}
+              style={styles.button}
+            >
+              Nuevo Mapping
+            </button>
+          </div>
           {mappings && (
             <div style={styles.dashboard}>
               {mappings.map((mapping) => (
@@ -82,13 +84,16 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     marginBottom: "20px",
+    position: "absolute",
+    right: "282px",
+    top: "50px",
   },
   dashboard: {
     display: "grid",
     gridTemplateColumns: "1fr",
     gap: "10px",
     width: "100%",
-    maxWidth: "800px",
+    maxWidth: "1000px",
   },
   mappingCard: {
     backgroundColor: "#fff",
@@ -100,6 +105,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: "background-color 0.3s ease",
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
+  },
+  mappingsTitleContainer: {
+    display: "flex",
   },
 };
 
