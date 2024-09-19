@@ -1,0 +1,24 @@
+.data-quality-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.mappings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.data-quality-rules-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title-section {
+  font-size: 2em;
+  color: #000;
+  margin-bottom: 20px;
+  text-align: center;
+}
