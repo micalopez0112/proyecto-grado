@@ -10,6 +10,11 @@ const DataQualityScreen = () => {
   const [mappings, setMappings] = useState<Array<{ id: string; name: string }>>(
     []
   );
+
+  const [dataQualityRules, setDataQualityRules] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,6 +27,11 @@ const DataQualityScreen = () => {
       setLoading(false);
     };
     retrieveMappings();
+
+    setDataQualityRules([
+      { id: "1", name: "Accuracy" },
+      { id: "2", name: "Accuracy 2" },
+    ]);
   }, []);
 
   const onClickMappingCard = (id: string) => {
@@ -55,14 +65,8 @@ const DataQualityScreen = () => {
             {mappings && (
               <div className="data-quality-rules-container">
                 <h2 className="sub-title">Data Quality Rules</h2>
-                {mappings.map((mapping) => (
-                  <MappingCard
-                    key={mapping.id}
-                    id={mapping.id}
-                    name={mapping.name}
-                    onClickCallback={onClickMappingCard}
-                    style={styles.mappingCard}
-                  />
+                {dataQualityRules.map((rule) => (
+                  <div>{rule.name}</div>
                 ))}
               </div>
             )}
