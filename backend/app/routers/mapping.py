@@ -4,7 +4,7 @@ from owlready2 import get_ontology
 import motor.motor_asyncio
 from typing import Dict, Any
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
-from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema
+from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest
 from app.domain.mapping.service import process_mapping
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 import json
@@ -49,6 +49,7 @@ async def generate_schema(request: JsonRequestList):
 @router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
 async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
     try:
+        print("#REQUEST#: ", request);
         onto_id = ObjectId(ontology_id)
         ontology_docu = await onto_collection.find_one({'_id': onto_id})
         
@@ -92,6 +93,68 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
     except Exception as e:
         print("Error saving mapping process:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/")
+async def put_mapping(request: PutMappingRequest = Body(...)):
+    try:
+        #case when saving a mapping process for the first time
+        if(request.mapping_process_id is None or request.mapping_process_id == ""):
+            print("Create and return mapping_proccess_id")
+            ontology_id = request.ontology_id
+            onto_id = ObjectId(ontology_id)
+            ontology_docu = await onto_collection.find_one({'_id': onto_id})
+            
+            if ontology_docu is None:
+                raise HTTPException(status_code=404, detail="Ontology not found")
+            
+            # Validate the mapping field
+            if not isinstance(request.mapping, dict):
+                raise HTTPException(status_code=400, detail="Invalid mapping body")
+            
+            ontology_docu['id'] = str(ontology_docu['_id'])
+            ontology_document = OntologyDocument(**ontology_docu)
+            if ontology_document.type == "FILE":
+                ontology_path = ontology_document.file
+                ontology = get_ontology(ontology_path).load()
+            else:
+                ontology = get_ontology(str(ontology_document.uri)).load()
+            # saving json schema
+            schema_dict = request.jsonSchema
+            schema_result = await jsonschemas_collection.insert_one(schema_dict)
+            schema_id = schema_result.inserted_id
+
+            # saving mapping process
+            mapping = request.mapping
+            name = request.name
+            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+            mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
+            return MappingResponse(message="Mapping process saved successfully", status="success",mapping_id = str(mapping_pr_id.inserted_id))
+        #case when updating a mapping process (mapping_process_id is provided)
+        else:
+            mapping_process_id = request.mapping_process_id
+            editRequest = EditMappingRequest(mapping_name=request.name, mapping=request.mapping)
+            mapping_pr_id = ObjectId(mapping_process_id)
+            mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+            if not mapping_process_docu:
+                return MappingResponse(message="Mapping process not found", status="error")
+            
+            update_data = {}
+            for key, value in editRequest:#request.model_dump().items():
+                print("value", value)
+                if value is not None and value != "" and value != {} and value != "string":
+                    update_data[key] = value
+        
+            queryTOUpdate = {'_id': mapping_pr_id}
+            tryUpdate =  {'$set': update_data}
+            result = await mapping_process_collection.update_one(
+                queryTOUpdate,
+                tryUpdate
+            )
+            return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_process_id)
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
 
 
 @router.get("/{mapping_process_id}")
@@ -149,6 +212,8 @@ async def get_mapping(mapping_process_id: str):
         return response
 
 
+
+
 @router.get("/graph/{process_id}", response_model = Any)
 async def get_graph(process_id: str):
     try:
@@ -186,29 +251,3 @@ async def get_mappings():
 
 
 
-@router.put("/{mapping_process_id}")
-async def put_mapping(mapping_process_id: str, request: MappingRequest = Body(...)):
-    try:
-        mapping_pr_id = ObjectId(mapping_process_id)
-        mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
-        if not mapping_process_docu:
-            return MappingResponse(message="Mapping process not found", status="error")
-        
-        update_data = {}
-        for key, value in request.model_dump().items():
-            print("value", value)
-            if value is not None and value != "" and value != {} and value != "string":
-                update_data[key] = value
-    
-        queryTOUpdate = {'_id': mapping_pr_id}
-        tryUpdate =  {'$set': update_data}
-        result = await mapping_process_collection.update_one(
-            queryTOUpdate,
-            tryUpdate
-        )
- 
-        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_process_id)
-    except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
