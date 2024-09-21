@@ -46,10 +46,12 @@ async def generate_schema(request: JsonRequestList):
 #  seed_schema = {'type': 'array', 'items': []}
 # >>> builder.add_schema(seed_schema)
 
-@router.post("/ontology_id/{ontology_id}", response_model=MappingResponse)
-async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
+@router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
+async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None, 
+                       request: MappingRequest = Body(...)):
     try:
-        print("#REQUEST#: ", request);
+        print("Mapping_process_id: ", mapping_proccess_id)
+        # print("#REQUEST#: ", request);
         onto_id = ObjectId(ontology_id)
         ontology_docu = await onto_collection.find_one({'_id': onto_id})
         
@@ -67,24 +69,53 @@ async def save_mapping(ontology_id: str, request: MappingRequest = Body(...)):
             ontology = get_ontology(ontology_path).load()
         else:
             ontology = get_ontology(str(ontology_document.uri)).load()
-        # saving json schema
-        print("Antes del dump");
-        schema_dict = request.jsonSchema
-        print("Después del dump");
-        schema_result = await jsonschemas_collection.insert_one(schema_dict)
-        schema_id = schema_result.inserted_id
+            
+        if mapping_proccess_id is not None:
+            #case when updating a mapping process
+            editRequest = EditMappingRequest(mapping_name=request.name, mapping=request.mapping)
+            mapping_pr_id = ObjectId(mapping_proccess_id)
+            mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+            if not mapping_process_docu:
+                return MappingResponse(message="Mapping process not found", status="error")
+            
+            ##saving(editing) mapping process
+            update_data = {}
+            for key, value in editRequest:#request.model_dump().items():
+                print("value", value)
+                if value is not None and value != "" and value != {} and value != "string":
+                    update_data[key] = value
+        
+            queryTOUpdate = {'_id': mapping_pr_id}
+            tryUpdate =  {'$set': update_data}
+            result = await mapping_process_collection.update_one(
+                queryTOUpdate,
+                tryUpdate
+            )
+            
+            # here we validate if the mapping is correct
+            status = process_mapping(request.mapping, ontology, request.jsonSchema)
+            print("validation OK")
+            return MappingResponse(message="Mapping saved and validated successfully",
+                                    status="success",mapping_id=mapping_proccess_id)
+            #catch any more exception ?
+        else:
+            #case when saving a mapping process for the first time
+            # saving json schema
+            schema_dict = request.jsonSchema
+            schema_result = await jsonschemas_collection.insert_one(schema_dict)
+            schema_id = schema_result.inserted_id
 
-        # here we validate if the mapping is correct
-        status = process_mapping(request.mapping, ontology, request.jsonSchema)
-        print("validation OK")
+            # saving whole mapping process
+            mapping = request.mapping
+            name = request.name
+            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+            mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
-        # saving mapping process
-        mapping = request.mapping
-        name = request.name
-        mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
-        mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
+             # here we validate if the mapping is correct
+            status = process_mapping(request.mapping, ontology, request.jsonSchema)
+            print("validation OK")
 
-        return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
+            return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
     except ValueError as e:
         msg = str(e)
         status = "error"
