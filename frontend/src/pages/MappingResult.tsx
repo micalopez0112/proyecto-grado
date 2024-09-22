@@ -8,13 +8,11 @@ import { useLocation } from "react-router-dom";
 import "./MappingResult.css";
 import MappingList from "../components/MappingList.tsx";
 
-//const OntologyData: React.FC<OntologyDataProps> = ({ ontoData }) =>
-
 const MappingResult = () => {
   const [graphData, setGraphData] = useState<any>(null);
   const { mappings } = useDataContext();
   const location = useLocation();
-  const mapping_process = location.state?.mapping_process; //prop parameter via navigation
+  const mapping_process = location.state?.mapping_process;
 
   const graph = graphData
     ? {
@@ -80,8 +78,9 @@ const MappingResult = () => {
               <MappingList isResult={true} />
             </div>
           </div>
-          {<div>
-            {/* {graphData ? (
+          {
+            <div>
+              {/* {graphData ? (
               <Graph
                 key={uuidv4()}
                 graph={graph}
@@ -89,7 +88,8 @@ const MappingResult = () => {
                 events={{}}
               />
             ) : null} */}
-          </div> }
+            </div>
+          }
         </div>
       </div>
     </div>

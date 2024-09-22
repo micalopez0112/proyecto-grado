@@ -2,9 +2,11 @@ import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useDataContext } from "../context/context.tsx";
+import "./MappingList.css";
 
 const MappingList = ({ isResult }) => {
   const { mappings, removeMapping } = useDataContext();
+  console.log(mappings);
 
   return (
     <div className="mappings">
@@ -14,7 +16,7 @@ const MappingList = ({ isResult }) => {
             <ul className="list-container">
               {mappings[key].map((element, index) => (
                 <li key={index} className="list-elem">
-                  <div className="mapping-container">
+                  <div className="mapping-elem">
                     <div className="value-wrapper">
                       <div className="key-title">JSON schema value</div>
                       <div className="key-text" title={key}>

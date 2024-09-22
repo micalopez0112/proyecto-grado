@@ -13,8 +13,12 @@ Modal.setAppElement("#root");
 
 const OntologyData: React.FC<{}> = () => {
   const isMapping = true;
-  const { OntoElementSelected, setOntoElementSelected, ontologyDataContext,currentOntologyId } =
-    useDataContext();
+  const {
+    OntoElementSelected,
+    setOntoElementSelected,
+    ontologyDataContext,
+    currentOntologyId,
+  } = useDataContext();
   const [ontoModalIsOpen, setOntoModalIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [rangeList, setRangeList] = useState<Array<OntoElement>>([]);
@@ -52,7 +56,7 @@ const OntologyData: React.FC<{}> = () => {
     },
   };
 
-   const handleClickOntoElem = (element: any, type: string) => {
+  const handleClickOntoElem = (element: any, type: string) => {
     if (isMapping && type !== "object_property") {
       setOntoElementSelected({ type: type, ontoElement: element });
     } else if (isMapping && type === "object_property") {
@@ -77,7 +81,7 @@ const OntologyData: React.FC<{}> = () => {
 
   const closeOntoModal = () => {
     setOntoModalIsOpen(false);
-  }
+  };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -116,17 +120,15 @@ const OntologyData: React.FC<{}> = () => {
   };
 
   const openModal = () => {
-    try{
-      if(graphData === null){
+    try {
+      if (graphData === null) {
         getGraphData();
-    }
+      }
       setOntoModalIsOpen(true);
-    }catch(error){
+    } catch (error) {
       console.error("Error en getGraphData (MappingResult)", error);
     }
   };
-
-
 
   return (
     <div className="container">
@@ -174,21 +176,19 @@ const OntologyData: React.FC<{}> = () => {
         </div>
       </Modal>
 
-
       {/*OntoModal*/}
       <Modal
         isOpen={ontoModalIsOpen}
         onRequestClose={closeOntoModal}
         shouldCloseOnOverlayClick={false}
         style={ModalOntoStyles}
-        > 
+      >
         <div style={ModalOntoStyles.modalContent}>
-          {loading?<Spinner/>
-          :
-          <>
-          <label>
-                Ontología Seleccionada:
-              </label>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <>
+              <label>Ontología Seleccionada:</label>
               <div style={ModalOntoStyles.graphContainer}>
                 {graphData ? (
                   <Graph
@@ -197,25 +197,25 @@ const OntologyData: React.FC<{}> = () => {
                     options={options}
                     events={{}}
                   />
-              ) : null}
+                ) : null}
               </div>
             </>
-              }
-              
-              <button className="button" onClick={closeOntoModal}>
-                Cerrar
-              </button>
+          )}
+
+          <button className="button" onClick={closeOntoModal}>
+            Cerrar
+          </button>
         </div>
       </Modal>
 
       <div className="title-wrapper">
         <h1 className="title">Elementos de la ontología</h1>
       </div>
-      {OntoElementSelected.type && (
+      {/* {OntoElementSelected.type && (
         <strong style={{ fontFamily: "cursive" }}>
           An Element is selected: {OntoElementSelected.ontoElement.iri}
         </strong>
-      )}
+      )} */}
       {ontologyDataContext?.ontoData.map((ontology, i) => (
         <div className="onto-container" key={`ontology-${i}`}>
           {ontology?.data?.map((x, i) => (
@@ -301,7 +301,11 @@ const OntologyData: React.FC<{}> = () => {
                   </div>
                 </div>
               )}
-              <button style={{fontSize:'16px'}} className="button" onClick={()=>openModal()}>
+              <button
+                style={{ fontSize: "16px" }}
+                className="button"
+                onClick={() => openModal()}
+              >
                 Visualizar Ontología
               </button>
             </div>
@@ -366,17 +370,17 @@ const ModalOntoStyles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     justifyContent: "center",
     width: "1200px",
-    height:"600px",
+    height: "600px",
     padding: "20px",
   },
   graphContainer: {
     border: "solid 2px black",
     borderRadius: "10px",
     marginTop: "20px",
-    width:"1000px",
-    height:"500px",
+    width: "1000px",
+    height: "500px",
     paddingBottom: "30px",
   },
-}
+};
 
 export default OntologyData;

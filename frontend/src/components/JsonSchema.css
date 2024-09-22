@@ -3,6 +3,7 @@
   flex-direction: row;
   background-color: white;
   border-radius: 8px;
+  width: 100%;
 }
 .schema-select {
   display: flex;
@@ -70,6 +71,7 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
+  align-items: center;
 }
 
 .object-wrapper {

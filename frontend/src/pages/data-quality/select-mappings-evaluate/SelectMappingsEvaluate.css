@@ -1,0 +1,22 @@
+.validate-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.validate-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.select-mappings-container {
+  background-color: #0d245b;
+  padding: 20px;
+  width: 90%;
+  border-radius: 5px;
+}

@@ -1,0 +1,38 @@
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.mappings-button {
+  background-color: #6cbea5;
+  padding: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.mappings-button:hover {
+  background-color: #6cbea5be;
+}
+
+.quality-button {
+  background-color: #ee7b3f;
+  padding: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.quality-button:hover {
+  background-color: #ee7c3fc0;
+}
