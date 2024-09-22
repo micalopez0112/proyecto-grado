@@ -4,19 +4,55 @@ import { useDataContext } from "../context/context.tsx";
 import { OntoElement } from "../context/context.tsx";
 import Modal from "react-modal";
 import { IoRemoveOutline } from "react-icons/io5";
+import { getOntologyGraph } from "../services/mapsApi.ts";
+import Graph from "react-graph-vis";
+import { v4 as uuidv4 } from "uuid";
+import { Spinner } from "./Spinner/Spinner.tsx";
 
 Modal.setAppElement("#root");
 
 const OntologyData: React.FC<{}> = () => {
   const isMapping = true;
-  const { OntoElementSelected, setOntoElementSelected, ontologyDataContext } =
+  const { OntoElementSelected, setOntoElementSelected, ontologyDataContext,currentOntologyId } =
     useDataContext();
+  const [ontoModalIsOpen, setOntoModalIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [rangeList, setRangeList] = useState<Array<OntoElement>>([]);
   const [selectedRange, setSelectedRange] = useState<Array<OntoElement>>([]);
   const [objectPropertyElement, setObjectPropertyElement] = useState<any>();
+  const [graphData, setGraphData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleClickOntoElem = (element: any, type: string) => {
+  const graph = graphData
+    ? {
+        nodes: graphData.nodes,
+        edges: graphData.edges,
+      }
+    : null;
+
+  const options = {
+    edges: {
+      color: "#000000",
+      arrows: {
+        to: false,
+      },
+      font: {
+        face: "RobotoBold",
+      },
+      length: 250,
+    },
+    nodes: {
+      shape: "box",
+      color: "rgb(51, 102, 204)",
+      margin: 6,
+      font: {
+        color: "white",
+        face: "Roboto",
+      },
+    },
+  };
+
+   const handleClickOntoElem = (element: any, type: string) => {
     if (isMapping && type !== "object_property") {
       setOntoElementSelected({ type: type, ontoElement: element });
     } else if (isMapping && type === "object_property") {
@@ -39,6 +75,10 @@ const OntologyData: React.FC<{}> = () => {
     }
   };
 
+  const closeOntoModal = () => {
+    setOntoModalIsOpen(false);
+  }
+
   const closeModal = () => {
     setModalIsOpen(false);
     setRangeList([]);
@@ -55,12 +95,38 @@ const OntologyData: React.FC<{}> = () => {
         range: selectedRange,
       },
     });
-
     setSelectedRange([]);
     setObjectPropertyElement({});
     setRangeList([]);
     setModalIsOpen(false);
   };
+
+  const getGraphData = async () => {
+    try {
+      setLoading(true);
+      if (currentOntologyId && currentOntologyId !== "") {
+        const response = await getOntologyGraph(currentOntologyId);
+        console.log("Ontology Graph: ", response);
+        if (response) setGraphData(response.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error en getGraphData (MappingResult)", error);
+    }
+  };
+
+  const openModal = () => {
+    try{
+      if(graphData === null){
+        getGraphData();
+    }
+      setOntoModalIsOpen(true);
+    }catch(error){
+      console.error("Error en getGraphData (MappingResult)", error);
+    }
+  };
+
+
 
   return (
     <div className="container">
@@ -68,23 +134,23 @@ const OntologyData: React.FC<{}> = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         shouldCloseOnOverlayClick={false}
-        style={ModalStyles}
+        style={ModalOPStyles}
       >
-        <div style={ModalStyles.modalContent}>
+        <div style={ModalOPStyles.modalContent}>
           <label style={{ border: "solid 3px black", padding: "2px" }}>
             Mapeo de rango
           </label>
           <div style={{ marginTop: "10px" }}>
             <p>Selecciona los elementos del rango que deben ser mapeados:</p>
-            <ul style={ModalStyles.listStyle}>
+            <ul style={ModalOPStyles.listStyle}>
               {rangeList.map((item, i) => (
                 <li
                   key={i}
                   onClick={() => handleAddElemToRange(item)}
                   style={{
-                    ...ModalStyles.listItemStyle,
+                    ...ModalOPStyles.listItemStyle,
                     ...(selectedRange.includes(item)
-                      ? ModalStyles.selectedItemStyle
+                      ? ModalOPStyles.selectedItemStyle
                       : {}),
                   }}
                 >
@@ -93,21 +159,52 @@ const OntologyData: React.FC<{}> = () => {
               ))}
             </ul>
           </div>
-          <div style={ModalStyles.modalfooter}>
-            <button
-              className="button"
-              style={ModalStyles.modalCancelButton}
-              onClick={closeModal}
-            >
+          <div style={ModalOPStyles.modalfooter}>
+            <button className="button danger" onClick={closeModal}>
               Cerrar
             </button>
             <button
-              style={ModalStyles.modalOkButton}
+              className="button success"
+              style={ModalOPStyles.modalOkButton}
               onClick={() => confirmationModal(objectPropertyElement)}
             >
               Aceptar
             </button>
           </div>
+        </div>
+      </Modal>
+
+
+      {/*OntoModal*/}
+      <Modal
+        isOpen={ontoModalIsOpen}
+        onRequestClose={closeOntoModal}
+        shouldCloseOnOverlayClick={false}
+        style={ModalOntoStyles}
+        > 
+        <div style={ModalOntoStyles.modalContent}>
+          {loading?<Spinner/>
+          :
+          <>
+          <label>
+                Ontología Seleccionada:
+              </label>
+              <div style={ModalOntoStyles.graphContainer}>
+                {graphData ? (
+                  <Graph
+                    key={uuidv4()}
+                    graph={graph}
+                    options={options}
+                    events={{}}
+                  />
+              ) : null}
+              </div>
+            </>
+              }
+              
+              <button className="button" onClick={closeOntoModal}>
+                Cerrar
+              </button>
         </div>
       </Modal>
 
@@ -204,6 +301,9 @@ const OntologyData: React.FC<{}> = () => {
                   </div>
                 </div>
               )}
+              <button style={{fontSize:'16px'}} className="button" onClick={()=>openModal()}>
+                Visualizar Ontología
+              </button>
             </div>
           ))}
         </div>
@@ -212,7 +312,7 @@ const OntologyData: React.FC<{}> = () => {
   );
 };
 
-const ModalStyles: { [key: string]: React.CSSProperties } = {
+const ModalOPStyles: { [key: string]: React.CSSProperties } = {
   content: {
     top: "50%",
     left: "50%",
@@ -227,10 +327,7 @@ const ModalStyles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     justifyContent: "center",
     width: "220px",
-    backgroundColor: "white",
     padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.1)",
   },
   listStyle: {
     listStyleType: "none",
@@ -253,19 +350,33 @@ const ModalStyles: { [key: string]: React.CSSProperties } = {
     justifyContent: "flex-end",
     width: "100%",
   },
-  modalCancelButton: {
-    backgroundColor: "#ff3f1b",
-    color: "white",
-    padding: "10px",
-    borderRadius: "4px",
-    marginRight: "10px",
-  },
-  modalOkButton: {
-    backgroundColor: "#4caf50",
-    color: "white",
-    padding: "10px",
-    borderRadius: "4px",
-  },
 };
+const ModalOntoStyles: { [key: string]: React.CSSProperties } = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+  modalContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "1200px",
+    height:"600px",
+    padding: "20px",
+  },
+  graphContainer: {
+    border: "solid 2px black",
+    borderRadius: "10px",
+    marginTop: "20px",
+    width:"1000px",
+    height:"500px",
+    paddingBottom: "30px",
+  },
+}
 
 export default OntologyData;

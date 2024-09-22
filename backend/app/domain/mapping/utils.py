@@ -26,9 +26,12 @@ async def get_ontology_info_from_pid(ontology_id):
     
     ontology_docu['id'] = str(ontology_docu['_id'])
     ontology_document = OntologyDocument(**ontology_docu)
+    print("El ontologyDocument es: ", ontology_document)
     if ontology_document.type == "FILE":
         ontology_path = ontology_document.file
         ontology = get_ontology(ontology_path).load()
+    else: ##document.type == "URI"
+        ontology = get_ontology(str(ontology_document.uri)).load()
 
     onto_classes = list(ontology.classes())
     onto_object_properties = list(ontology.object_properties())
@@ -144,7 +147,13 @@ def graph_generator(ontology_elements, map_proccess):
         for edge in ontology_elements[2]['data_properties']:
             if (len(edge['range']) > 0):
                 id_node = random.random()
-                node = { "id": id_node, "label": edge['range'][0], 'color': '#FFFF00', 'font': {'color': 'black'}}
+               # 
+                range = ""
+                for rangeType in edge['range'][0]:
+                    range = range + rangeType
+                print("El rango es: ", range)
+
+                node = { "id": id_node, "label": range, 'color': '#FFFF00', 'font': {'color': 'black'}}
                 nodes.append(node)
                 new_edge = { 
                     "id": edge['iri'], 

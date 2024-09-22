@@ -1,15 +1,21 @@
 import { apiClient } from "../networking/apiClient.ts";
 
-export const saveMappings = async (ontologyId: string, data: any) => {
+export const saveAndValidateMappings = async (
+  ontologyId: string,
+  mapping_pid: string,
+  data: any
+) => {
   try {
     const body = data;
-    console.log("Data to send in saveMappings: ", body);
     const response = await apiClient.post(
       `/mapping/ontology_id/${ontologyId}`,
       body,
       {
         headers: {
           "Content-Type": "application/json",
+        },
+        params: {
+          mapping_proccess_id: mapping_pid,
         },
       }
     );
@@ -20,12 +26,23 @@ export const saveMappings = async (ontologyId: string, data: any) => {
   }
 };
 
-export const uploadOntology = async (type: string, file: File, uri: string) => {
+export const uploadOntology = async (
+  type: string,
+  file?: File,
+  uri?: string
+) => {
   try {
     const formData = new FormData();
     formData.append("type", type);
-    formData.append("ontology_file", file);
-    if (uri) formData.append("uri", uri);
+
+    if (file) {
+      formData.append("ontology_file", file);
+    }
+
+    if (uri) {
+      formData.append("uri", uri);
+    }
+
     const response = await apiClient.post(`/ontologies/`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -33,7 +50,8 @@ export const uploadOntology = async (type: string, file: File, uri: string) => {
     });
     return response;
   } catch (error) {
-    console.error("Error in uploading ontology");
+    console.error("Error in uploading ontology", error);
+    throw error; // Recomendable lanzar el error para manejarlo fuera
   }
 };
 
@@ -44,6 +62,17 @@ export const getMappingGraph = async (processId: string) => {
     return response;
   } catch (error) {
     console.error("Error in getting Mapping Graph");
+  }
+};
+
+export const getOntologyGraph = async (ontologyId: string) => {
+  try {
+    const response = await apiClient.get(
+      `/ontologies/ontology-graph/${ontologyId}`
+    );
+    return response;
+  } catch (error) {
+    console.error("Error in getting Ontology Graph");
   }
 };
 
@@ -65,9 +94,11 @@ export const getMapping = async (mappingId: string) => {
   }
 };
 
-export const editMapping = async (mappingId: string, data: any) => {
+export const saveMapping = async (data: any) => {
   try {
-    const response = await apiClient.put(`/mapping/${mappingId}`, data);
+    //Tal vez agregar mapping_id como query parameter por prolijidad
+    console.log("Se manda en el put: ", data);
+    const response = await apiClient.put(`/mapping/`, data);
     //console.log("Response from editing mapping: ", response);
     return response;
   } catch (error) {
@@ -81,5 +112,18 @@ export const fetchOntologies = async () => {
     return response;
   } catch (error) {
     console.error("Error fetching ontologies", error);
+  }
+};
+
+export const getJsonSchema = async (jsonFile: any /*JsonFile?? */) => {
+  //este método va a tener que recibir un File en un futuro
+  try {
+    const body = {
+      jsonInstances: jsonFile,
+    };
+    const response = await apiClient.post("/mapping/generate-schema/", body);
+    return response;
+  } catch (error) {
+    console.error("Error fetching JsonSchema", error);
   }
 };

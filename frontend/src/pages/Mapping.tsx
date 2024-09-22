@@ -4,16 +4,17 @@ import OntologyData from "../components/OntologyData.tsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDataContext } from "../context/context.tsx";
 import {
-  saveMappings,
+  saveAndValidateMappings,
   uploadOntology,
   getMapping,
-  editMapping
+  saveMapping
 } from "../services/mapsApi.ts";
 import "./Mapping.css";
 import { OntologyDataType } from "../types/OntologyData.ts";
 import { FaTrash } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import MappingList from "../components/MappingList.tsx";
+import { Spinner } from "../components/Spinner/Spinner.tsx";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ export const Mapping = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
   const [mappingId, setMappingId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     //cambiar logica cuando se obtenga el id desde el back
   }, []);
@@ -57,9 +60,10 @@ export const Mapping = () => {
     useEffect(() => {
         const getMappingData = async () => {
             if(mappingId){
+              setLoading(true);
                 try{
                     const response = await getMapping(mappingId);
-                    console.log("Response de getMapping: ", response);
+                    //console.log("Response de getMapping: ", response);
                     if(response){
                         const {mapping_name,mapping,schema,ontology} = response.data;
                         setMappings(mapping);
@@ -72,18 +76,73 @@ export const Mapping = () => {
                 catch(error){
                     console.error("error en getMappingData", error);
                 }
+                setLoading(false);
             }
         }
         getMappingData();
     },[mappingId]);
 
     const saveMappingsApiCall = async () => {
+      try{
+        if(Object.keys(mappings).length > 0){
+          if(mappingId){
+            //invocar put
+            console.log("Flujo donde existe mappingId: ", mappingId);
+            const body = {ontology_id:'',name:mappingName,mapping: mappings,
+               jsonSchema: {}, mapping_proccess_id:mappingId};
+            const response = await saveMapping(body);
+            console.log("Respuesta al editar mapping: ", response);
+            if(response ){
+                const {status,message,mapping_id} = response.data;
+                //navigate('/Result', {state:{mapping_process:mapping_id}});
+                alert('Mapping guardado con éxito');
+            }
+          }
+          else{//new mapping
+            if(currentOntologyId){
+              console.log("Flujo donde no existe mappingId");
+              console.log("JSON SCHEMAAA: ", jsonSchemaContext);
+              const jsonschema = jsonSchemaContext;
+              const body = {ontology_id:currentOntologyId,name:mappingName,mapping: mappings,
+               jsonSchema: jsonSchemaContext, mapping_proccess_id:mappingId};
+              const response = await saveMapping(body);
+              console.log("Response al guardar mappings: ", response);
+              if(response && response.status===200 ){
+                  console.log(response.data);
+                  alert('Mappings enviados con exito');
+                  const {status,message,mapping_id} = response.data;
+                  if(mapping_id){
+                     //navigate('/Result', {state:{mapping_process:mapping_id}});
+                     alert('Mapping modificado con éxito');
+                  }
+                  else{
+                      alert('No se pudo obtener el id del mapeo');
+                  }
+              }
+          }else{
+              console.error("#ERROR#: No hay ontologyId al editar");
+          }
+        }
+        }
+        else{
+          alert('No hay mappings para enviar');
+        }
+      }
+      catch(error){
+          console.error("error en apiCall", error);
+      }
+    }
+
+    const validateAndSaveMappingsApiCall = async () => {
         try{
           if(Object.keys(mappings).length > 0){
             if(mappingId){
-              //invocar put
-              const body = { name:mappingName,mapping: mappings, jsonSchema: jsonSchemaContext };
-              const response = await editMapping(mappingId,body);
+              //invocar post con mapping_proccess_id
+              console.log("Flujo donde existe mappingId");
+              const body = { ontology_id:currentOntologyId,name:mappingName,mapping: mappings,
+                 jsonSchema: jsonSchemaContext, mapping_proccess_id:mappingId};
+              const response = await saveAndValidateMappings(currentOntologyId!,mappingId,body);
+              //capaz chequear que si currentOntologyId es undefined no se haga el post
               console.log("Respuesta al editar mapping: ", response);
               if(response ){
                   const {status,message,mapping_id} = response.data;
@@ -92,10 +151,11 @@ export const Mapping = () => {
             }
             else{//new mapping
               if(currentOntologyId){
+                console.log("Flujo donde no existe mappingId");
                 console.log("JSON SCHEMAAA: ", jsonSchemaContext);
                 const jsonschema = jsonSchemaContext;
-                const body = { mapping_name:mappingName,mapping: mappings, jsonSchema: jsonschema };
-                const response = await saveMappings(currentOntologyId,body);
+                const body = { name:mappingName,mapping: mappings, jsonSchema: jsonschema };
+                const response = await saveAndValidateMappings(currentOntologyId,'',body);
                 console.log("Response al guardar mappings: ", response);
                 if(response && response.status===200 ){
                     console.log(response.data);
@@ -121,6 +181,7 @@ export const Mapping = () => {
             console.error("error en apiCall", error);
         }
       }; 
+
   useEffect(() => {
     const state = location.state;
     if (state) {
@@ -160,6 +221,9 @@ export const Mapping = () => {
   }, [mappingId]);
 
   return (
+    <>
+    {loading?<Spinner/>
+    :
     <div className="App">
       <div className="mapping-name">
         <label>Nombre del mapeo</label>
@@ -199,13 +263,18 @@ export const Mapping = () => {
             </div>
             <MappingList isResult={false} />
             <div className="mapping-button-wrapper">
+              <button className="button success" onClick={validateAndSaveMappingsApiCall}>
+                Guardar y Validar mappings
+              </button>
               <button className="button success" onClick={saveMappingsApiCall}>
-                Validar mappings
+                Guardar mappings
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    }
+    </>
   );
 };

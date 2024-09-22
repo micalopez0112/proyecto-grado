@@ -57,7 +57,7 @@ const MappingResult = () => {
         console.error("Error en getGraphData (MappingResult)", error);
       }
     };
-    getGraphData();
+    //getGraphData();
   }, []);
 
   return (
@@ -80,16 +80,16 @@ const MappingResult = () => {
               <MappingList isResult={true} />
             </div>
           </div>
-          <div>
-            {graphData ? (
+          {<div>
+            {/* {graphData ? (
               <Graph
                 key={uuidv4()}
                 graph={graph}
                 options={options}
                 events={{}}
               />
-            ) : null}
-          </div>
+            ) : null} */}
+          </div> }
         </div>
       </div>
     </div>

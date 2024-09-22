@@ -4,6 +4,7 @@ import { fetchOntologies,uploadOntology } from '../services/mapsApi.ts';
 import OntologyCard from '../components/OntologyCard.tsx';
 import { OntologyDataType } from "../types/OntologyData.ts";
 import { useNavigate } from 'react-router-dom';
+import { Spinner } from '../components/Spinner/Spinner.tsx';
 
 const OntologySelectScreen = () =>{
 
@@ -14,16 +15,30 @@ const OntologySelectScreen = () =>{
     const [nextScreen,setNextScreen] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
+    const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+    const	[uriValue, setUriValue] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const {
+      mappings,
+      clearMappings
+    } = useDataContext();
+
+    const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSelectedMethod(event.target.value);
+    };
 
     useEffect (()=>{
-        const retrieveOntologies = async () =>{
-            const ontologies = await fetchOntologies();
-            if(ontologies){
-                console.log("Ontologies: ",ontologies);
-                setOntologies(ontologies.data);
-            }
-        }
-        retrieveOntologies();
+      //limpiar contexto de mappings
+      clearMappings();
+        // const retrieveOntologies = async () =>{
+        //     const ontologies = await fetchOntologies();
+        //     if(ontologies){
+        //         console.log("Ontologies: ",ontologies);
+        //         setOntologies(ontologies.data);
+        //     }
+        // }
+        // retrieveOntologies();
     },[])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,24 +58,31 @@ const OntologySelectScreen = () =>{
       const handleSubmit = async () =>{
         console.log("a")
         try{
-            if(selectedFile || (idSelectedOnto !== '')){
-            if (selectedFile) {
+            setLoading(true);
+            if(selectedMethod && selectedMethod === 'file' && selectedFile){
+
                   const response = await uploadOntology("FILE", selectedFile, "");
                   console.log("Ontologia desde el back", response);
                   const ontologyData: OntologyDataType = response?.data.ontologyData;
                   const ontologyId = response?.data.ontologyData.ontology_id;
                   setcurrentOntologyId(ontologyId);
                   setontologyDataContext(ontologyData);
-              }
-              else{
-                //get ontology data from backend
-                setcurrentOntologyId(idSelectedOnto);
-              }
-              navigate('/SchemaSelect');
+              
+              
+              
             }
-            else{
-                alert("Debe seleccionar una ontología");
+            else if(selectedMethod && selectedMethod === 'uri' && uriValue) {//get ontology via URI
+              //get ontology data from backend
+              //setcurrentOntologyId(idSelectedOnto);
+              const response = await uploadOntology("URI",undefined, uriValue);
+                console.log("Ontologia desde el back", response);
+                const ontologyData: OntologyDataType = response?.data.ontologyData;
+                const ontologyId = response?.data.ontologyData.ontology_id;
+                setcurrentOntologyId(ontologyId);
+                setontologyDataContext(ontologyData);
             }
+            setLoading(false);
+            navigate('/SchemaSelect');
         }
         catch(error){
             console.log("error en handleSubmit: ", error);
@@ -75,15 +97,59 @@ const OntologySelectScreen = () =>{
       }
 
     return (
-        <div style={styles.container}>
+      <>
+        {loading ? <Spinner/> : <div style={styles.container}>
             <h1>Seleccione la ontología de contexto</h1>
             <button className='button' onClick={handleSubmit}>Confirmar selección</button>
             <div style ={styles.selectHeader}>
                 <p style={{display:'flex',alignItems:'flex-start', fontSize:'18px'}}>Cargar la ontología:</p>
-                <input style={{display:'flex',alignSelf:'center', fontSize:'16px'}} 
-                    type='file' onChange={handleFileChange} ref={fileInputRef}>
-                </input>
+                
+          <div style={styles.checkboxContainer}>
+            <p style={{ fontSize: '16px' }}>Método de carga:</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap:'20px' }}>
+              <label>
+                <input
+                  type="radio"
+                  value="file"
+                  checked={selectedMethod === 'file'}
+                  onChange={handleOptionChange}
+                />
+                Archivo
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="uri"
+                  checked={selectedMethod === 'uri'}
+                  onChange={handleOptionChange}
+                />
+                URI
+              </label>
             </div>
+            
+            
+             <div style={{display:'flex',justifyContent:'center',paddingTop:'10px'}}>
+             {selectedMethod === 'file' &&
+               <input style={{fontSize:'16px'}} 
+               type='file' onChange={handleFileChange} ref={fileInputRef}>
+               </input>
+             }
+             {selectedMethod === 'uri' && 
+              <div style={{display:'flex', flexDirection:'row', gap:'8px'}}>
+                <label style={{fontSize:'16px'}}>URI:</label>
+                <input style={{}} 
+                  type='text' 
+                  value={uriValue} 
+                  onChange={(e) => setUriValue(e.target.value)}>
+                </input>
+              </div>
+            }
+            </div>
+           
+            
+          </div>
+           
+          </div>
             {/* {ontologies &&
             <div>
                 <p style={{fontSize:'16px'}}>
@@ -103,8 +169,9 @@ const OntologySelectScreen = () =>{
                 </div>
             </div>
             } */}
-        </div>
-        
+      </div>
+      }
+    </>
     );
 }
 
@@ -123,6 +190,14 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding:'10px',
         width:'800px',
         
+    },
+    checkboxContainer:{
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        border:'2px solid #000',
+        borderRadius:'8px',
+        padding:'20px',
     },
     title: {
       fontSize: '2em',

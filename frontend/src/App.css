@@ -91,3 +91,7 @@
 .success {
   background-color: #41a339;
 }
+
+.danger {
+  background-color: #c82d2d;
+}

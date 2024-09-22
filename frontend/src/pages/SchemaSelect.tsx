@@ -3,6 +3,7 @@ import { useDataContext } from '../context/context.tsx';
 import { JsonSchema, JsonSchemaProperty } from "../types";
 import { json as generateJsonSchema } from "generate-schema";
 import { useNavigate } from 'react-router-dom';
+import { getJsonSchema } from '../services/mapsApi.ts';
 
 const SchemaSelect = () => {
     
@@ -16,12 +17,14 @@ const SchemaSelect = () => {
         setJsonInput(e.target.value);
       };
 
-      const handleGenerateSchema = () => {
+      const handleGenerateSchema = async () => {
         try {
           const jsonData = JSON.parse(jsonInput);
-          const schema = generateJsonSchema(jsonData);
-          console.log("##GENERATED SCHEMA##", schema);
+          //const schema = generateJsonSchema(jsonData);
+          const response = await getJsonSchema(jsonData);
+          const schema = response?.data;
           setJsonSchema(schema);
+          console.log("##GENERATED SCHEMA##", schema);
           setJsonSchemaContext(schema);
           navigate('/Mappings');
         } catch (error) {

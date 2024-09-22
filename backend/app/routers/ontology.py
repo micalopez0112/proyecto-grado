@@ -6,7 +6,8 @@ from owlready2 import get_ontology
 from typing import Optional, List
 from app.domain.mapping.models import MappingProcessDocument, OntologyDocument
 from ..database import onto_collection
-
+from typing import Dict, Any
+from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 
 router = APIRouter()
 
@@ -14,7 +15,7 @@ toDirectory = "upload/ontologies"
 @router.post("/")
 async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        
+        ontology_id = ''
         if ontology_file:
             if not os.path.exists(toDirectory):
                 os.makedirs(toDirectory)
@@ -25,20 +26,35 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
                 f.write(ontology_content)
 
             print("onto path", completePath)
-            ontoDocu = OntologyDocument(type=type, file=completePath)
+            onto_in_collection = await onto_collection.find_one({"file": completePath})
+            #check if the file already exists (search by completePath)
+
             ontology = get_ontology(completePath).load()
+            if not onto_in_collection:    
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, file=completePath)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
         elif uri:
             # Manejo de la URI
             print("onto uri", uri)
-            ontoDocu = OntologyDocument(type=type)
+            #check if the file already exists (search by uri)
+            onto_in_collection = await onto_collection.find_one({"uri": uri})
+            if not onto_in_collection:
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, uri=uri)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
             ontology = get_ontology(str(uri)).load()
-            ontoDocu.uri = uri
         else:
             raise HTTPException(status_code=400, detail="No ontology file or URI provided")
 
-        result = await onto_collection.insert_one(ontoDocu.dict())
-        ontology_id = result.inserted_id
-        print("Inserted correctly - Ontology ID:", ontology_id)
+        if(ontology_id == ''):
+            result = await onto_collection.insert_one(ontoDocu.model_dump())
+            ontology_id = result.inserted_id
+            print("Inserted correctly - Ontology ID:", ontology_id)
+        else:
+            print("Ontology already exists - Ontology ID:", ontology_id)
 
         # Obtener las clases y propiedades de la ontología
         classes = list(ontology.classes())
@@ -56,7 +72,6 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
                 }]
             }]
         }
-        print("Ontology data", ontology_data)
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",
             "ontologyData": ontology_data
@@ -65,6 +80,16 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         print("Error processing ontology:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+#Retrieves the graph structure of an ontology
+@router.get("/ontology-graph/{ontology_id}", response_model = Any)
+async def get_ontology_graph(ontology_id: str):
+    try:
+        onto_for_graph = await get_ontology_info_from_pid(ontology_id)
+        graph = graph_generator(onto_for_graph, {})
+    except Exception as e:
+        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    
+    return graph
 
 # Borrar luego 
 @router.get("/", response_model=List[OntologyDocument])

@@ -1,0 +1,29 @@
+/* spinner.css */
+
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .spinner-image {
+    display: block;
+    height: 64px;
+    width: 64px;
+    animation: rotate 2s linear infinite;
+    margin: 0 auto;
+  }
+  
+  .spinner-image.small {
+    height: 35px;
+    width: 35px;
+  }
+  
+  .spinner-container {
+    width: 100%;
+    background-color: transparent;
+  }
+  
