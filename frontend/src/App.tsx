@@ -8,7 +8,7 @@ import MappingsScreen from "./pages/mappings/MappingsScreen.tsx";
 import MappingResult from "./pages/MappingResult.tsx";
 import { Mapping } from "./pages/mappings/Mapping.tsx";
 import SchemaSelect from "./pages/mappings/SchemaSelect.tsx";
-import SelectMappingsValidate from "./pages/data-quality/select-mappings-validate/SelectMappingsValidate.tsx";
+import SelectMappingsValidate from "./pages/data-quality/select-mappings-evaluate/SelectMappingsEvaluate.tsx";
 import OntologyData from "./components/OntologyData.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import EvaluateMappings from "./pages/data-quality/evaluate-mappings/EvaluateMappings.tsx";

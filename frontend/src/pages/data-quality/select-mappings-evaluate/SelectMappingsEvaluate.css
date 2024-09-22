@@ -13,3 +13,8 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+.select-mappings-container {
+  background-color: #0d245b;
+  padding: 20px;
+}

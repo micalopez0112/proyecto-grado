@@ -113,7 +113,6 @@ const Json: React.FC = () => {
       {jsonSchemaContext && (
         <div className="json-schema-container">
           <div className="json-schema">
-            {JsonElementSelected !== "" ? <p>{JsonElementSelected}</p> : null}
             {jsonSchemaContext
               ? renderProperties(jsonSchemaContext.properties, "")
               : null}

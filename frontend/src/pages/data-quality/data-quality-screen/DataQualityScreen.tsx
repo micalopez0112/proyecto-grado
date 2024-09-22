@@ -53,41 +53,42 @@ const DataQualityScreen = () => {
             <div className="container">
               <div className="data-quality-container">
                 <h2 className="sub-title">Mappings</h2>
-                {mappings.map((mapping) => (
-                  <MappingCard
-                    key={mapping.id}
-                    id={mapping.id}
-                    name={mapping.name}
-                    style={{
-                      ...styles.mappingCard,
-                      backgroundColor:
-                        selectedMappingId === mapping.id
-                          ? "#add8e6"
-                          : "#f0f0f0", // Light blue when selected
-                    }}
-                    onClickCallback={() => onClickMappingCard(mapping.id)}
-                  />
-                ))}
+                <div className="quality-list-container">
+                  {mappings.map((mapping) => (
+                    <MappingCard
+                      key={mapping.id}
+                      id={mapping.id}
+                      name={mapping.name}
+                      style={{
+                        ...styles.mappingCard,
+                        backgroundColor:
+                          selectedMappingId === mapping.id ? "#f39c12" : "#fff",
+                      }}
+                      onClickCallback={() => onClickMappingCard(mapping.id)}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className="container">
               <div className="data-quality-container">
                 <h2 className="sub-title">Data Quality Rules</h2>
-                {dataQualityRules.map((rule) => (
-                  <div
-                    key={rule.id}
-                    onClick={() => onClickRule(rule.id)}
-                    style={{
-                      padding: "10px",
-                      cursor: "pointer",
-                      backgroundColor:
-                        selectedRuleId === rule.id ? "#add8e6" : "#fff", // Light blue when selected
-                    }}
-                  >
-                    {rule.name}
-                  </div>
-                ))}
+                <div className="quality-list-container">
+                  {dataQualityRules.map((rule) => (
+                    <div
+                      key={rule.id}
+                      onClick={() => onClickRule(rule.id)}
+                      style={{
+                        ...styles.mappingCard,
+                        backgroundColor:
+                          selectedRuleId === rule.id ? "#f39c12" : "#fff",
+                      }}
+                    >
+                      {rule.name}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -113,9 +114,9 @@ const styles: { [key: string]: React.CSSProperties } = {
   mappingCard: {
     display: "grid",
     gridTemplateColumns: "1fr 2fr",
-    padding: "20px",
-    backgroundColor: "#f0f0f0",
+    padding: 10,
     cursor: "pointer",
+    borderRadius: 5,
   },
 };
 
