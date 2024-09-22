@@ -72,7 +72,7 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
             
         if mapping_proccess_id is not None:
             #case when updating a mapping process
-            editRequest = EditMappingRequest(mapping_name=request.name, mapping=request.mapping)
+            editRequest = EditMappingRequest(name=request.name, mapping=request.mapping)
             mapping_pr_id = ObjectId(mapping_proccess_id)
             mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
             if not mapping_process_docu:
@@ -129,7 +129,8 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
 async def put_mapping(request: PutMappingRequest = Body(...)):
     try:
         #case when saving a mapping process for the first time
-        if(request.mapping_process_id is None or request.mapping_process_id == ""):
+        print("REQUEST DEL PUT: ", request);
+        if(request.mapping_proccess_id is None or request.mapping_proccess_id == ""):
             print("Create and return mapping_proccess_id")
             ontology_id = request.ontology_id
             onto_id = ObjectId(ontology_id)
@@ -162,15 +163,17 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
             return MappingResponse(message="Mapping process saved successfully", status="success",mapping_id = str(mapping_pr_id.inserted_id))
         #case when updating a mapping process (mapping_process_id is provided)
         else:
-            mapping_process_id = request.mapping_process_id
-            editRequest = EditMappingRequest(mapping_name=request.name, mapping=request.mapping)
+            print("Update mapping_proccess_id: ", request);
+            mapping_process_id = request.mapping_proccess_id
+            editRequest = EditMappingRequest(name=request.name, mapping=request.mapping)
             mapping_pr_id = ObjectId(mapping_process_id)
             mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
+           
             if not mapping_process_docu:
                 return MappingResponse(message="Mapping process not found", status="error")
             
             update_data = {}
-            for key, value in editRequest:#request.model_dump().items():
+            for key, value in editRequest.model_dump().items():#request.model_dump().items():
                 print("value", value)
                 if value is not None and value != "" and value != {} and value != "string":
                     update_data[key] = value

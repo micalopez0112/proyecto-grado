@@ -66,14 +66,14 @@ class MappingRequest(BaseModel):
     jsonSchema: Dict[str, Any] = Field(default=None) 
 
 class PutMappingRequest(BaseModel):
-    mapping_process_id: str = Field(default=None)
+    mapping_proccess_id: str = Field(default=None)
     name: str = Field(default=None)
     mapping: Dict[str, Any] = Field(default=None) 
     jsonSchema: Dict[str, Any] = Field(default=None)
     ontology_id:str = Field(default=None)
 
 class EditMappingRequest(BaseModel):
-    mapping_name: str = Field()
+    name: str = Field()
     mapping: Dict[str, Any] = Field()
 # Responses
 class MappingResponse(BaseModel):

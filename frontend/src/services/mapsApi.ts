@@ -1,15 +1,21 @@
 import { apiClient } from "../networking/apiClient.ts";
 
-export const saveMappings = async (ontologyId: string, data: any) => {
+export const saveAndValidateMappings = async (
+  ontologyId: string,
+  mapping_pid: string,
+  data: any
+) => {
   try {
     const body = data;
-    console.log("Data to send in saveMappings: ", body);
     const response = await apiClient.post(
       `/mapping/ontology_id/${ontologyId}`,
       body,
       {
         headers: {
           "Content-Type": "application/json",
+        },
+        params: {
+          mapping_proccess_id: mapping_pid,
         },
       }
     );
@@ -88,9 +94,11 @@ export const getMapping = async (mappingId: string) => {
   }
 };
 
-export const editMapping = async (mappingId: string, data: any) => {
+export const saveMapping = async (data: any) => {
   try {
-    const response = await apiClient.put(`/mapping/${mappingId}`, data);
+    //Tal vez agregar mapping_id como query parameter por prolijidad
+    console.log("Se manda en el put: ", data);
+    const response = await apiClient.put(`/mapping/`, data);
     //console.log("Response from editing mapping: ", response);
     return response;
   } catch (error) {
