@@ -14,6 +14,23 @@ const Json: React.FC = () => {
     setJsonElementSelected(element);
   };
 
+  const handleClickSimpleProperty = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string,
+    type: string
+  ) => {
+    setJsonElementSelected(element + "_key#" + type);
+    console.log("element: " + element);
+  };
+
+  const handleClickArrayProperty = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string
+  ) => {
+    setJsonElementSelected(element + "_key#array");
+    console.log("element: " + element);
+  };
+
   const renderProperties = (
     properties: Record<string, JsonSchemaProperty>,
     parent: string
@@ -52,7 +69,7 @@ const Json: React.FC = () => {
                   ? "active"
                   : ""
               }`}
-              onClick={(e) => handleClickElement(e, parent + "-" + key)}
+              onClick={(e) => handleClickArrayProperty(e, parent + "-" + key)}
             >
               <strong>{key}:</strong> array
             </div>
@@ -70,7 +87,9 @@ const Json: React.FC = () => {
                 ? "active"
                 : ""
             }`}
-            onClick={(e) => handleClickElement(e, parent + "-" + key)}
+            onClick={(e) =>
+              handleClickSimpleProperty(e, parent + "-" + key, value.type)
+            }
           >
             <strong>{key}:</strong> {value.type}
           </div>
