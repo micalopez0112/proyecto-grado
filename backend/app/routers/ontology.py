@@ -15,7 +15,7 @@ toDirectory = "upload/ontologies"
 @router.post("/")
 async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        
+        ontology_id = ''
         if ontology_file:
             if not os.path.exists(toDirectory):
                 os.makedirs(toDirectory)
@@ -26,20 +26,35 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
                 f.write(ontology_content)
 
             print("onto path", completePath)
-            ontoDocu = OntologyDocument(type=type, file=completePath)
+            onto_in_collection = await onto_collection.find_one({"file": completePath})
+            #check if the file already exists (search by completePath)
+
             ontology = get_ontology(completePath).load()
+            if not onto_in_collection:    
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, file=completePath)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
         elif uri:
             # Manejo de la URI
             print("onto uri", uri)
-            ontoDocu = OntologyDocument(type=type)
+            #check if the file already exists (search by uri)
+            onto_in_collection = await onto_collection.find_one({"uri": uri})
+            if not onto_in_collection:
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, uri=uri)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
             ontology = get_ontology(str(uri)).load()
-            ontoDocu.uri = uri
         else:
             raise HTTPException(status_code=400, detail="No ontology file or URI provided")
 
-        result = await onto_collection.insert_one(ontoDocu.model_dump())
-        ontology_id = result.inserted_id
-        print("Inserted correctly - Ontology ID:", ontology_id)
+        if(ontology_id == ''):
+            result = await onto_collection.insert_one(ontoDocu.model_dump())
+            ontology_id = result.inserted_id
+            print("Inserted correctly - Ontology ID:", ontology_id)
+        else:
+            print("Ontology already exists - Ontology ID:", ontology_id)
 
         # Obtener las clases y propiedades de la ontología
         classes = list(ontology.classes())
@@ -57,7 +72,6 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
                 }]
             }]
         }
-        print("Ontology data", ontology_data)
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",
             "ontologyData": ontology_data
