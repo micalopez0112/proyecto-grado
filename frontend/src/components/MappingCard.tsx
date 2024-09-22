@@ -4,12 +4,12 @@ const MappingCard = ({
   id,
   name,
   style,
-  onClickCallback,
+  onClickCallback = () => null,
 }: {
   id: string;
   name: string;
   style: any;
-  onClickCallback: (id: string) => void;
+  onClickCallback?: (id: string) => void;
 }) => {
   return (
     <div style={style} onClick={() => onClickCallback(id)}>

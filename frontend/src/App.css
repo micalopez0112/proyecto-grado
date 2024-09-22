@@ -19,7 +19,9 @@
 .content-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
 }
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

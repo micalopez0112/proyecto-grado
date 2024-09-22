@@ -10,14 +10,11 @@ const DataQualityScreen = () => {
   const [mappings, setMappings] = useState<Array<{ id: string; name: string }>>(
     []
   );
-
   const [selectedMappingId, setSelectedMappingId] = useState("");
   const [selectedRuleId, setSelectedRuleId] = useState("");
-
   const [dataQualityRules, setDataQualityRules] = useState<
     Array<{ id: string; name: string }>
   >([]);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,7 +22,6 @@ const DataQualityScreen = () => {
       setLoading(true);
       const mappings = await fetchMappings();
       console.log("Mappings: ", mappings);
-      //setMappings(mappings);
       if (mappings) setMappings(mappings.data);
       setLoading(false);
     };
@@ -37,7 +33,13 @@ const DataQualityScreen = () => {
     ]);
   }, []);
 
-  const onClickMappingCard = (id: string) => {};
+  const onClickMappingCard = (id: string) => {
+    setSelectedMappingId(id);
+  };
+
+  const onClickRule = (id: string) => {
+    setSelectedRuleId(id);
+  };
 
   return (
     <>
@@ -48,42 +50,56 @@ const DataQualityScreen = () => {
           <h1 className="title-section">Data Quality</h1>
 
           <div className="quality-container">
-            {mappings && (
-              <div className="container">
-                <div className="data-quality-container">
-                  <h2 className="sub-title">Mappings</h2>
-                  {mappings.map((mapping) => (
-                    <MappingCard
-                      style={styles.mappingCard}
-                      key={mapping.id}
-                      id={mapping.id}
-                      name={mapping.name}
-                      onClickCallback={onClickMappingCard}
-                    />
-                  ))}
-                </div>
+            <div className="container">
+              <div className="data-quality-container">
+                <h2 className="sub-title">Mappings</h2>
+                {mappings.map((mapping) => (
+                  <MappingCard
+                    key={mapping.id}
+                    id={mapping.id}
+                    name={mapping.name}
+                    style={{
+                      ...styles.mappingCard,
+                      backgroundColor:
+                        selectedMappingId === mapping.id
+                          ? "#add8e6"
+                          : "#f0f0f0", // Light blue when selected
+                    }}
+                    onClickCallback={() => onClickMappingCard(mapping.id)}
+                  />
+                ))}
               </div>
-            )}
+            </div>
 
-            {mappings && (
-              <div className="container">
-                <div className="data-quality-container">
-                  <h2 className="sub-title">Data Quality Rules</h2>
-                  {dataQualityRules.map((rule) => (
-                    <div>{rule.name}</div>
-                  ))}
-                </div>
+            <div className="container">
+              <div className="data-quality-container">
+                <h2 className="sub-title">Data Quality Rules</h2>
+                {dataQualityRules.map((rule) => (
+                  <div
+                    key={rule.id}
+                    onClick={() => onClickRule(rule.id)}
+                    style={{
+                      padding: "10px",
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedRuleId === rule.id ? "#add8e6" : "#fff", // Light blue when selected
+                    }}
+                  >
+                    {rule.name}
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
           <button
             className="select-button"
             onClick={() =>
-              navigate("/SelectMappings", {
+              navigate("/SelectMappingsValidate", {
                 state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
               })
             }
+            disabled={!selectedMappingId || !selectedRuleId} // Disable if not both are selected
           >
             Seleccionar
           </button>
@@ -99,6 +115,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     gridTemplateColumns: "1fr 2fr",
     padding: "20px",
     backgroundColor: "#f0f0f0",
+    cursor: "pointer",
   },
 };
 
