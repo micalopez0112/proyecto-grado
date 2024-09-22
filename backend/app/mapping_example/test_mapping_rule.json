@@ -1,0 +1,58 @@
+{
+    "name": "Mapping para prueba de evaluacion de calidad",
+    "mapping": {
+        "contacto_value": [
+            {
+                "name": "Contact",
+                "iri": "http://www.owl-ontologies.com/travel.owl#Contact"
+            }
+        ],
+        "contacto-city_key#string": [
+            {
+                "name": "hasCity",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasCity"
+            }
+        ],
+        "contacto-street_key#string": [
+            {
+                "name": "hasStreet",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasStreet"
+            }
+        ],
+        "contacto-email_key#string": [
+            {
+                "name": "hasEmail",
+                "iri": "http://www.owl-ontologies.com/travel.owl#hasEMail"
+            }
+        ]
+    },
+    "jsonSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "contacto": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string"
+                    },
+                    "street": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "city",
+                    "street",
+                    "email"
+                ]
+            }
+        },
+        "required": [
+            "contacto"
+        ]
+    },
+    "documentStoragePath": "aca"
+}

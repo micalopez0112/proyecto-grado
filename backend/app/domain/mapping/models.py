@@ -11,7 +11,8 @@ class MappingProcess(BaseModel):
     mapping : Dict[str, Any]
     ontology: Any
     jsonSchema: Any
-    
+    documentStoragePath : str
+
     class Config:
         from_attributes = True
 
@@ -64,6 +65,11 @@ class MappingRequest(BaseModel):
     name: str = Field(default=None)
     mapping: Dict[str, Any] = Field(default=None) 
     jsonSchema: Dict[str, Any] = Field(default=None) 
+    # ver como se supone que tendría que venir esto!!
+    documentStoragePath : str = Field(default=None)
+
+
+
 
 class PutMappingRequest(BaseModel):
     mapping_proccess_id: str = Field(default=None)
@@ -94,6 +100,7 @@ class MappingProcessDocument(BaseModel):
     mapping :Optional[Dict[str, Any]]= None
     ontologyId: Optional[str]= None
     jsonSchemaId: Optional[str]= None
+    document_storage_path : Optional[str]= None
     
 
 # Helper function to parse ObjectId
