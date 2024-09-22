@@ -283,6 +283,8 @@ def isDataPropertyMapping(str):
     return False
 
 # valores posibles que retorna = string, int, bool, float, array
+# con esto nos dice si el mapping es una dataproperty o no
+# destion-accomodation_key#string
 def getJsonSchemaPropertieType(str):
     splittedMappingKey = str.split("_")
     keyPart = splittedMappingKey[1]

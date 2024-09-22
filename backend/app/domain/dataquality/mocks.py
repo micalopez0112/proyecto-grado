@@ -1,5 +1,4 @@
 
-
 def get_hardcoded_test_documents():
     documents = [
         {
@@ -11,7 +10,7 @@ def get_hardcoded_test_documents():
         },
         {
             "contacto": {
-                "city": "Buenos aires",
+                "city": "Bueno Aires",
                 "street": "Libertador 455",
                 "email": "moni123@casilla.com"
             }

@@ -64,10 +64,15 @@ class SyntanticAccuracy(QualityMetric) :
             print("##  item to evaluate ##", json_mapped_key)
             if getJsonSchemaPropertieType(json_mapped_key) != "":
                 results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology)
-            results_dicc[json_mapped_key] = results_for_mapped_entrance
+                results_dicc[json_mapped_key] = results_for_mapped_entrance
+            else :
+                # ver como manejamos esto
+                results_for_mapped_entrance = {}
+            
         print("##---- Evaluation results: ", results_dicc, " ----##")
         return None
     
+
     # si todas las evaluaciones se van a basar en mapeos json esto se puede mover para la clase principal QualityMetric
     def get_data_to_evaluate(self) : 
         print("## SyntanticAccuracy: get_data_to_evaluate ##")
@@ -79,6 +84,7 @@ class SyntanticAccuracy(QualityMetric) :
     
     async def save_result(self, result) -> None :     
         print("saved")
+        
 class StrategyContext():
     def __init__(self) -> None:
         pass
@@ -97,7 +103,7 @@ class StrategyContext():
             print("INSTANCIADA ")
         
     async def evaluate_quality(self, mapping_id: str, request_mapping_body: Dict[str, Any]) -> None:
-        # no se si vamos a mentere esto o mandamos el mapping id como parametro siempre VER
+        # no se si vamos a menter esto o mandamos el mapping id como parametro siempre VER
         if mapping_id != "":
            # ver si queda aca o lo mando por parametro al contstructor
            await self.quality_strategy.set_mapping_process(mapping_id)
@@ -153,6 +159,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         
         # por cada ontología a la cual se haya mapeado
         # ver como guardar aca según la ongología a la que mapeo
+        # si esta OK en alguna de los ontologias se toma como que es válido
         for onto_mapped_to in onto_mapped_to_value :
             print("## Onto value: ", onto_mapped_to['iri'])
             # ver aca si dejamos así o vemos la forma de modulizarlo
@@ -165,8 +172,9 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
                 print("## Evaluation result: ", value, " ##")
                 if value == 1:
                     break
-                
             results_dicc[result_key] = value
+            break
+            
     return results_dicc
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
@@ -188,6 +196,7 @@ def find_element_in_JSON_instance(json_document, path) :
 def compare_onto_with_json_value(onto_prop_value, json_value) :
     # ver como hacer esto
     # queremos hacer esto?
+    # hacer un toLower() aca o
     print("## Syntactic Accuracy: compare_onto_with_json_value onto:", onto_prop_value," json:", json_value,"##")
     if onto_prop_value == json_value:
         return 1
