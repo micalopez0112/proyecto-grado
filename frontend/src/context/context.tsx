@@ -131,6 +131,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           return newMappings;
         });
       } else {
+        // Data property
         console.log("JsonElementSelected en context", JsonElementSelected);
         setMappings({
           ...mappings,

@@ -67,7 +67,7 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
         else:
             ontology = get_ontology(str(ontology_document.uri)).load()
             
-        if mapping_proccess_id is not None:
+        if (mapping_proccess_id is not None):
             #case when updating a mapping process
             editRequest = EditMappingRequest(name=request.name, mapping=request.mapping)
             mapping_pr_id = ObjectId(mapping_proccess_id)

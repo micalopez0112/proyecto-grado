@@ -7,17 +7,27 @@ export const saveAndValidateMappings = async (
 ) => {
   try {
     const body = data;
-    const response = await apiClient.post(
-      `/mapping/ontology_id/${ontologyId}`,
-      body,
-      {
+    let options = {};
+    if (mapping_pid !== "") {
+      options = {
         headers: {
           "Content-Type": "application/json",
         },
         params: {
           mapping_proccess_id: mapping_pid,
         },
-      }
+      };
+    } else {
+      options = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+    }
+    const response = await apiClient.post(
+      `/mapping/ontology_id/${ontologyId}`,
+      body,
+      options
     );
     console.log("#Se enviaron los mappings al back#: ", response);
     return response;

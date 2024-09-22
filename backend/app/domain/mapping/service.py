@@ -209,7 +209,7 @@ def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties
 
 def checkAllJsonaSchemaTypes( jsonSchema: JsonSchema, key, propType):
     print("JSONSCHEMA: ", jsonSchema)
-    #jsonSchema = JsonSchema(**jsonschema)
+    jsonSchema = JsonSchema(**jsonSchema)
     propertyBeingLooked = jsonSchema.findPropertyInJsonSchema(key)
     if propertyBeingLooked["type"] != "array":
         return False
