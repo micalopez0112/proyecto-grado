@@ -11,6 +11,7 @@ import SchemaSelect from "./pages/mappings/SchemaSelect.tsx";
 import SelectMappingsValidate from "./pages/data-quality/select-mappings-validate/SelectMappingsValidate.tsx";
 import OntologyData from "./components/OntologyData.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
+import EvaluateMappings from "./pages/data-quality/evaluate-mappings/EvaluateMappings.tsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           path="/SelectMappingsValidate"
           element={<SelectMappingsValidate />}
         />
+        <Route path="/EvaluateMappings" element={<EvaluateMappings />} />
       </Routes>
     </Router>
   );

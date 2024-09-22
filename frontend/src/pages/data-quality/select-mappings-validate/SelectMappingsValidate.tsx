@@ -1,52 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchMappings, getMapping } from "../../../services/mapsApi.ts";
-import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 const SelectMappingsValidate = () => {
   const navigate = useNavigate();
-  const {
-    mappings,
-    setcurrentOntologyId,
-    setontologyDataContext,
-    setMappings,
-    setJsonSchemaContext,
-  } = useDataContext();
-  const [mappingName, setMappingName] = useState<string>("");
+  const { mappings, setMappings } = useDataContext();
 
   const location = useLocation();
   const mappingId = location.state?.mappingId;
   const ruleId = location.state?.ruleId;
 
-  console.log(mappingId);
-  console.log(ruleId);
-
-  // const [selectedMappingId, setSelectedMappingId] = useState("");
-  // const [selectedRuleId, setSelectedRuleId] = useState("");
-
-  // const [dataQualityRules, setDataQualityRules] = useState<
-  //   Array<{ id: string; name: string }>
-  // >([]);
-
+  const [mappingName, setMappingName] = useState<string>("");
+  const [selectedMappings, setSelectedMappings] = useState<Set<string>>(
+    new Set()
+  );
   const [loading, setLoading] = useState<boolean>(false);
 
+  // Fetch the selected mapping data
   useEffect(() => {
     const getMappingData = async () => {
       if (mappingId) {
         setLoading(true);
         try {
           const response = await getMapping(mappingId);
-          //console.log("Response de getMapping: ", response);
           if (response) {
-            const { mapping_name, mapping, schema, ontology } = response.data;
+            const { mapping_name, mapping } = response.data;
             setMappings(mapping);
             setMappingName(mapping_name);
           }
         } catch (error) {
-          console.error("error en getMappingData", error);
+          console.error("Error fetching mapping data:", error);
         }
         setLoading(false);
       }
@@ -54,7 +40,28 @@ const SelectMappingsValidate = () => {
     getMappingData();
   }, [mappingId]);
 
-  // const onClickMappingCard = (id: string) => {};
+  // Handle checkbox toggle
+  const handleToggleMapping = (key: string) => {
+    setSelectedMappings((prev) => {
+      const updated = new Set(prev);
+      if (updated.has(key)) {
+        updated.delete(key);
+      } else {
+        updated.add(key);
+      }
+      return updated;
+    });
+  };
+
+  // Handle validation button click
+  const handleValidateSelectedMappings = () => {
+    navigate("/EvaluateMappings", {
+      state: {
+        selectedMappings: Array.from(selectedMappings),
+        ruleId: ruleId,
+      },
+    });
+  };
 
   return (
     <>
@@ -62,7 +69,7 @@ const SelectMappingsValidate = () => {
         <Spinner />
       ) : (
         <div className="container">
-          <h1 className="title-section">Data Quality</h1>
+          <h1 className="title-section">Select Mappings to Validate</h1>
 
           <div className="data-quality-container">
             {mappings && (
@@ -71,7 +78,16 @@ const SelectMappingsValidate = () => {
                 <div className="mappings">
                   {Object.keys(mappings).map((key) => {
                     return (
-                      <div className="mapping">
+                      <div className="mapping" key={key}>
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={selectedMappings.has(key)}
+                            onChange={() => handleToggleMapping(key)}
+                          />
+                          {key}
+                        </label>
+
                         <ul className="list-container">
                           {mappings[key].map((element, index) => (
                             <li key={index} className="list-elem">
@@ -86,6 +102,7 @@ const SelectMappingsValidate = () => {
                                 </div>
 
                                 <FaArrowRightLong className="arrow-icon" />
+
                                 <div className="value-wrapper">
                                   <div className="element-title">
                                     Ontology element
@@ -105,6 +122,15 @@ const SelectMappingsValidate = () => {
                     );
                   })}
                 </div>
+
+                {/* Button to validate selected mappings */}
+                <button
+                  className="validate-button"
+                  onClick={handleValidateSelectedMappings}
+                  disabled={selectedMappings.size === 0}
+                >
+                  Validate Selected Mappings
+                </button>
               </div>
             )}
           </div>
@@ -112,15 +138,6 @@ const SelectMappingsValidate = () => {
       )}
     </>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  mappingCard: {
-    display: "grid",
-    gridTemplateColumns: "1fr 2fr",
-    padding: "20px",
-    backgroundColor: "#f0f0f0",
-  },
 };
 
 export default SelectMappingsValidate;

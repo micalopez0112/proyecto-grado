@@ -1,0 +1,15 @@
+.validate-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.validate-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
