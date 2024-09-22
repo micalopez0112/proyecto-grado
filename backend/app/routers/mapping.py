@@ -1,14 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Body
+from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
 from bson import ObjectId
 from owlready2 import get_ontology
-import motor.motor_asyncio
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest
 from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
-from typing import List, Optional, Dict, Any
-
+from typing import List,Optional, Dict, Any
 
 from genson import SchemaBuilder
 from pydantic import BaseModel
