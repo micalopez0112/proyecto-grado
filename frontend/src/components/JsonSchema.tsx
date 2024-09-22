@@ -22,8 +22,6 @@ const Json: React.FC = () => {
     setJsonInput(e.target.value);
   };
 
-  console.log("lastClickedElement: " + lastClickedElement);
-
   const handleClickElement = (
     e: React.MouseEvent<HTMLDivElement>,
     element: string

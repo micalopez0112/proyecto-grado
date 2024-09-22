@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
+import { useEffect, useState } from "react";
 import {
-  editMapping,
   getMapping,
-  saveMappings,
+  saveAndValidateMappings,
+  saveMapping,
 } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import Json from "../../components/JsonSchema.tsx";
 import OntologyData from "../../components/OntologyData.tsx";
+import React from "react";
 import MappingList from "../../components/MappingList.tsx";
+import Json from "../../components/JsonSchema.tsx";
 import "./Mapping.css";
 
 export const Mapping = () => {
@@ -59,7 +60,7 @@ export const Mapping = () => {
         setLoading(true);
         try {
           const response = await getMapping(mappingId);
-          console.log("Response de getMapping: ", response);
+          //console.log("Response de getMapping: ", response);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
             setMappings(mapping);
@@ -82,13 +83,78 @@ export const Mapping = () => {
       if (Object.keys(mappings).length > 0) {
         if (mappingId) {
           //invocar put
+          console.log("Flujo donde existe mappingId: ", mappingId);
+          const body = {
+            ontology_id: "",
+            name: mappingName,
+            mapping: mappings,
+            jsonSchema: {},
+            mapping_proccess_id: mappingId,
+          };
+          const response = await saveMapping(body);
+          console.log("Respuesta al editar mapping: ", response);
+          if (response) {
+            const { status, message, mapping_id } = response.data;
+            //navigate('/Result', {state:{mapping_process:mapping_id}});
+            alert("Mapping guardado con éxito");
+          }
+        } else {
+          //new mapping
+          if (currentOntologyId) {
+            console.log("Flujo donde no existe mappingId");
+            console.log("JSON SCHEMAAA: ", jsonSchemaContext);
+            const jsonschema = jsonSchemaContext;
+            const body = {
+              ontology_id: currentOntologyId,
+              name: mappingName,
+              mapping: mappings,
+              jsonSchema: jsonSchemaContext,
+              mapping_proccess_id: mappingId,
+            };
+            const response = await saveMapping(body);
+            console.log("Response al guardar mappings: ", response);
+            if (response && response.status === 200) {
+              console.log(response.data);
+              alert("Mappings enviados con exito");
+              const { status, message, mapping_id } = response.data;
+              if (mapping_id) {
+                //navigate('/Result', {state:{mapping_process:mapping_id}});
+                alert("Mapping modificado con éxito");
+              } else {
+                alert("No se pudo obtener el id del mapeo");
+              }
+            }
+          } else {
+            console.error("#ERROR#: No hay ontologyId al editar");
+          }
+        }
+      } else {
+        alert("No hay mappings para enviar");
+      }
+    } catch (error) {
+      console.error("error en apiCall", error);
+    }
+  };
+
+  const validateAndSaveMappingsApiCall = async () => {
+    try {
+      if (Object.keys(mappings).length > 0) {
+        if (mappingId) {
+          //invocar post con mapping_proccess_id
           console.log("Flujo donde existe mappingId");
           const body = {
+            ontology_id: currentOntologyId,
             name: mappingName,
             mapping: mappings,
             jsonSchema: jsonSchemaContext,
+            mapping_proccess_id: mappingId,
           };
-          const response = await editMapping(mappingId, body);
+          const response = await saveAndValidateMappings(
+            currentOntologyId!,
+            mappingId,
+            body
+          );
+          //capaz chequear que si currentOntologyId es undefined no se haga el post
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message, mapping_id } = response.data;
@@ -105,7 +171,11 @@ export const Mapping = () => {
               mapping: mappings,
               jsonSchema: jsonschema,
             };
-            const response = await saveMappings(currentOntologyId, body);
+            const response = await saveAndValidateMappings(
+              currentOntologyId,
+              "",
+              body
+            );
             console.log("Response al guardar mappings: ", response);
             if (response && response.status === 200) {
               console.log(response.data);
@@ -128,6 +198,7 @@ export const Mapping = () => {
       console.error("error en apiCall", error);
     }
   };
+
   useEffect(() => {
     const state = location.state;
     if (state) {
@@ -212,9 +283,15 @@ export const Mapping = () => {
                 <div className="mapping-button-wrapper">
                   <button
                     className="button success"
+                    onClick={validateAndSaveMappingsApiCall}
+                  >
+                    Guardar y Validar mappings
+                  </button>
+                  <button
+                    className="button success"
                     onClick={saveMappingsApiCall}
                   >
-                    Validar mappings
+                    Guardar mappings
                   </button>
                 </div>
               </div>

@@ -79,7 +79,7 @@
 .spinner-container {
   display: flex;
   align-items: center;
-  height: 20rem;
+  height: 90vh;
   justify-content: center;
   width: 100%;
 }

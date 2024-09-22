@@ -1,0 +1,39 @@
+.quality-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 70vh;
+}
+
+.data-quality-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  height: 65vh;
+  margin: 15px;
+  background: #0d245b;
+  width: 100%;
+}
+
+.title-section {
+  font-size: 2em;
+  color: #000;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sub-title {
+  text-align: center;
+}
+
+.select-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  width: 120px;
+}

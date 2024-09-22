@@ -67,7 +67,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#fff",
     minHeight: "100vh",
   },
   title: {
@@ -86,7 +86,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: "20px",
     position: "absolute",
     right: "282px",
-    top: "50px",
+    top: 100,
   },
   dashboard: {
     display: "grid",
@@ -96,7 +96,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     maxWidth: "1000px",
   },
   mappingCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "rgb(239 239 239)",
     padding: "15px",
     borderRadius: "5px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",

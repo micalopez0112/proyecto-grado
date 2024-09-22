@@ -95,3 +95,8 @@
 .danger {
   background-color: #c82d2d;
 }
+
+body {
+  margin-top: 60px;
+  background: white;
+}

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchMappings } from "../../services/mapsApi.ts";
-import MappingCard from "../../components/MappingCard.tsx";
-import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import "./DataQualityScreen.css";
+import { fetchMappings } from "../../../services/mapsApi.ts";
+import MappingCard from "../../../components/MappingCard.tsx";
+import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 
-const DataQualityScreen = () => {
+const SelectMappingsValidate = () => {
   const navigate = useNavigate();
   const [mappings, setMappings] = useState<Array<{ id: string; name: string }>>(
     []
   );
+
+  const [selectedMappingId, setSelectedMappingId] = useState("");
+  const [selectedRuleId, setSelectedRuleId] = useState("");
 
   const [dataQualityRules, setDataQualityRules] = useState<
     Array<{ id: string; name: string }>
@@ -34,9 +36,7 @@ const DataQualityScreen = () => {
     ]);
   }, []);
 
-  const onClickMappingCard = (id: string) => {
-    navigate("/Mapping", { state: { mappingId: id } });
-  };
+  const onClickMappingCard = (id: string) => {};
 
   return (
     <>
@@ -71,6 +71,17 @@ const DataQualityScreen = () => {
               </div>
             )}
           </div>
+
+          <button
+            className="button"
+            onClick={() =>
+              navigate("/SelectMappings", {
+                state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
+              })
+            }
+          >
+            Seleccionar
+          </button>
         </div>
       )}
     </>
@@ -79,12 +90,11 @@ const DataQualityScreen = () => {
 
 const styles: { [key: string]: React.CSSProperties } = {
   mappingCard: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: "grid",
+    gridTemplateColumns: "1fr 2fr",
     padding: "20px",
     backgroundColor: "#f0f0f0",
   },
 };
 
-export default DataQualityScreen;
+export default SelectMappingsValidate;
