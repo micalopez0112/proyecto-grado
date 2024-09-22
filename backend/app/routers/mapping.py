@@ -245,24 +245,6 @@ async def get_mapping(mapping_process_id: str):
         response = MappingResponse(message=msg, status="error")
         return response
 
-
-
-
-@router.get("/graph/{process_id}", response_model = Any)
-async def get_graph(process_id: str):
-    try:
-        pid = ObjectId(process_id)
-        mapping_process_docu = await mapping_process_collection.find_one({'_id': pid})
-        onto_for_graph = await get_ontology_info_from_pid(mapping_process_docu['ontologyId'])
-        graph_with_mappings = graph_generator(onto_for_graph, mapping_process_docu['mapping'])
-        
-    except Exception as e:
-        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
-    
-    return graph_with_mappings
-
-
-
 @router.get("/" )
 async def get_mappings():
     try :
