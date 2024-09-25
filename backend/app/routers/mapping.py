@@ -269,6 +269,7 @@ async def get_mappings():
 # /evaluate/syntactic_accuracy?mapping_process_id=123
 @router.post("/evaluate/{quality_rule}")
 async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)) :
+    print(f'request_mapping_body: {request_mapping_body}')
     try :
         context = StrategyContext()
         context.select_strategy(quality_rule)

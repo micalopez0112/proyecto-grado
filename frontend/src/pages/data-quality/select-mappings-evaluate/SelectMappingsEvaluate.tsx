@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getMapping } from "../../../services/mapsApi.ts";
+import { evaluateMapping, getMapping } from "../../../services/mapsApi.ts";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
+
+const SYNTCTATIC_ACCURACY = "syntactic_accuracy";
+const QUALITY_RULES = [SYNTCTATIC_ACCURACY];
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -15,8 +18,8 @@ const SelectMappingsEvaluate = () => {
   const ruleId = location.state?.ruleId;
 
   const [mappingName, setMappingName] = useState<string>("");
-  const [selectedMappings, setSelectedMappings] = useState<Set<string>>(
-    new Set()
+  const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
+    {}
   );
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -29,6 +32,7 @@ const SelectMappingsEvaluate = () => {
           if (response) {
             const { mapping_name, mapping } = response.data;
             setMappings(mapping);
+            console.log(mapping);
             setMappingName(mapping_name);
           }
         } catch (error) {
@@ -40,27 +44,34 @@ const SelectMappingsEvaluate = () => {
     getMappingData();
   }, [mappingId]);
 
-  const handleToggleMapping = (key: string) => {
+  const handleToggleMapping = (key: string, mappingElement: any) => {
     setSelectedMappings((prev) => {
-      const updated = new Set(prev);
-      if (updated.has(key)) {
-        updated.delete(key);
+      const updated = { ...prev };
+      if (updated[key]) {
+        // If the key is already in selectedMappings, remove it
+        delete updated[key];
       } else {
-        updated.add(key);
+        // Add the selected key and its associated mappings
+        updated[key] = mappingElement;
       }
       return updated;
     });
   };
 
-  // Monitor the selected mappings
   useEffect(() => {
-    console.log("Selected mappings updated: ", Array.from(selectedMappings));
+    console.log("Selected mappings updated: ", selectedMappings);
   }, [selectedMappings]);
 
-  const handleEvaluateSelectedMappings = () => {
+  const handleEvaluateSelectedMappings = async () => {
+    const response = await evaluateMapping(
+      SYNTCTATIC_ACCURACY,
+      mappingId,
+      selectedMappings
+    );
+
     navigate("/EvaluateMappings", {
       state: {
-        selectedMappings: Array.from(selectedMappings),
+        selectedMappings: selectedMappings,
         ruleId: ruleId,
       },
     });
@@ -77,48 +88,45 @@ const SelectMappingsEvaluate = () => {
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
-                {Object.keys(mappings).map((key) => {
-                  return (
-                    <div className="mapping" key={key}>
-                      <ul className="list-container">
-                        {mappings[key].map((element, index) => (
-                          <li key={index} className="list-elem">
-                            <div className="value-wrapper">
-                              <div className="key-title">JSON schema value</div>
-                              <div className="key-text" title={key}>
-                                {key}
-                              </div>
+                {Object.keys(mappings).map((key) => (
+                  <div className="mapping" key={key}>
+                    <ul className="list-container">
+                      {mappings[key].map((element, index) => (
+                        <li key={index} className="list-elem">
+                          <div className="value-wrapper">
+                            <div className="key-title">JSON schema value</div>
+                            <div className="key-text" title={key}>
+                              {key}
                             </div>
+                          </div>
 
-                            <FaArrowRightLong className="arrow-icon" />
+                          <FaArrowRightLong className="arrow-icon" />
 
-                            <div className="value-wrapper">
-                              <div className="element-title">
-                                Ontology element
-                              </div>
-                              <div
-                                className="element-name"
-                                title={element.name}
-                              >
-                                {element.name}
-                              </div>
+                          <div className="value-wrapper">
+                            <div className="element-title">
+                              Ontology element
                             </div>
+                            <div className="element-name" title={element.name}>
+                              {element.name}
+                            </div>
+                          </div>
 
-                            <input
-                              type="checkbox"
-                              onChange={() => handleToggleMapping(key)}
-                            />
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
+                          <input
+                            type="checkbox"
+                            onChange={() =>
+                              handleToggleMapping(key, mappings[key])
+                            }
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
 
                 <button
                   className="button success"
                   onClick={handleEvaluateSelectedMappings}
-                  disabled={selectedMappings.size === 0}
+                  disabled={Object.keys(selectedMappings).length === 0}
                 >
                   Evaluate Selected Mappings
                 </button>
