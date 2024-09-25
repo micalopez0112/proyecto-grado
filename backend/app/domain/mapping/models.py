@@ -101,6 +101,7 @@ class MappingProcessDocument(BaseModel):
     ontologyId: Optional[str]= None
     jsonSchemaId: Optional[str]= None
     document_storage_path : Optional[str]= None
+    mapping_suscc_validated : Optional[bool] = None
     
 
 # Helper function to parse ObjectId

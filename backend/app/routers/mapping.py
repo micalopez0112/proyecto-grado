@@ -76,7 +76,7 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
                 return MappingResponse(message="Mapping process not found", status="error")
             
             ##saving(editing) mapping process
-            update_data = {}
+            update_data = {'mapping_suscc_validated': False}
             for key, value in editRequest:#request.model_dump().items():
                 print("value", value)
                 if value is not None and value != "" and value != {} and value != "string":
@@ -91,7 +91,14 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
             
             # here we validate if the mapping is correct
             status = process_mapping(request.mapping, ontology, request.jsonSchema)
-            print("validation OK")
+
+            #updates the inserted mapping_process with the validation status
+            update_data = {'mapping_suscc_validated': True}
+            result = await mapping_process_collection.update_one(
+                queryTOUpdate,
+                tryUpdate
+            )
+
             return MappingResponse(message="Mapping saved and validated successfully",
                                     status="success",mapping_id=mapping_proccess_id)
             #catch any more exception ?
@@ -105,14 +112,28 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
             # saving whole mapping process
             mapping = request.mapping
             name = request.name
-            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping,
+                                                           ontologyId=ontology_id,
+                                                           jsonSchemaId=str(schema_id),
+                                                           mapping_suscc_validated=False)
             mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
 
              # here we validate if the mapping is correct
             status = process_mapping(request.mapping, ontology, request.jsonSchema)
-            print("validation OK")
 
-            return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_pr_id.inserted_id))
+            #updates the inserted mapping_process with the validation status
+            mapping_id = str(mapping_pr_id.inserted_id)
+            mapping_pr_id = ObjectId(mapping_pr_id.inserted_id)
+            update_data = {'mapping_suscc_validated': True}
+
+            queryTOUpdate = {'_id': mapping_pr_id}
+            tryUpdate =  {'$set': update_data}
+            result = await mapping_process_collection.update_one(
+                queryTOUpdate,
+                tryUpdate
+            )
+            #print("validation OK")
+            return MappingResponse(message="Mapped successfully", status="success",mapping_id=mapping_id)
     except ValueError as e:
         msg = str(e)
         status = "error"
@@ -155,7 +176,10 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
             # saving mapping process
             mapping = request.mapping
             name = request.name
-            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping, ontologyId=ontology_id,jsonSchemaId=str(schema_id))
+            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping,
+                                                           ontologyId=ontology_id,
+                                                           jsonSchemaId=str(schema_id),
+                                                           mapping_suscc_validated=False)
             mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
             return MappingResponse(message="Mapping process saved successfully", status="success",mapping_id = str(mapping_pr_id.inserted_id))
         #case when updating a mapping process (mapping_process_id is provided)
@@ -169,7 +193,7 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
             if not mapping_process_docu:
                 return MappingResponse(message="Mapping process not found", status="error")
             
-            update_data = {}
+            update_data = {'mapping_suscc_validated': False}
             for key, value in editRequest.model_dump().items():#request.model_dump().items():
                 print("value", value)
                 if value is not None and value != "" and value != {} and value != "string":
