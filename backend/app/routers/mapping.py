@@ -146,9 +146,9 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
 @router.put("/")
 async def put_mapping(request: PutMappingRequest = Body(...)):
     try:
-        #case when saving a mapping process for the first time
         print("REQUEST DEL PUT: ", request);
         if(request.mapping_proccess_id is None or request.mapping_proccess_id == ""):
+            #case when saving a mapping process for the first time
             print("Create and return mapping_proccess_id")
             ontology_id = request.ontology_id
             onto_id = ObjectId(ontology_id)
@@ -182,8 +182,9 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
                                                            mapping_suscc_validated=False)
             mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
             return MappingResponse(message="Mapping process saved successfully", status="success",mapping_id = str(mapping_pr_id.inserted_id))
-        #case when updating a mapping process (mapping_process_id is provided)
+        
         else:
+            #case when updating a mapping process (mapping_process_id is provided)
             print("Update mapping_proccess_id: ", request);
             mapping_process_id = request.mapping_proccess_id
             editRequest = EditMappingRequest(name=request.name, mapping=request.mapping)
