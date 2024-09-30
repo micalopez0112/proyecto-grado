@@ -75,7 +75,7 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
             if not mapping_process_docu:
                 return MappingResponse(message="Mapping process not found", status="error")
             
-            ##saving(editing) mapping process
+            #saving(editing) mapping process
             update_data = {'mapping_suscc_validated': False}
             for key, value in editRequest:#request.model_dump().items():
                 print("value", value)
@@ -91,14 +91,17 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None,
             
             # here we validate if the mapping is correct
             status = process_mapping(request.mapping, ontology, request.jsonSchema)
+            print("Validation OK")
 
+            print("Update mapping proccess to be valid:", mapping_proccess_id)
             #updates the inserted mapping_process with the validation status
+            
             update_data = {'mapping_suscc_validated': True}
+            tryUpdate =  {'$set': update_data}
             result = await mapping_process_collection.update_one(
                 queryTOUpdate,
                 tryUpdate
             )
-
             return MappingResponse(message="Mapping saved and validated successfully",
                                     status="success",mapping_id=mapping_proccess_id)
             #catch any more exception ?
@@ -268,9 +271,12 @@ async def get_mapping(mapping_process_id: str):
         return response
 
 @router.get("/" )
-async def get_mappings():
+async def get_mappings(validated_mappings: Optional[bool] = None) :
     try :
-        mapping_docus =  mapping_process_collection.find({})
+        if((validated_mappings is not None) and (validated_mappings == True)):
+            mapping_docus =  mapping_process_collection.find({'mapping_suscc_validated': True})
+        else:
+            mapping_docus =  mapping_process_collection.find({})
         mapping_process_docs = await mapping_docus.to_list(length=None)  
         mappingpr_names = []
         for mapping_process_doc in mapping_process_docs:
