@@ -25,7 +25,8 @@ const SelectMappingsEvaluate = () => {
       if (mappingId) {
         setLoading(true);
         try {
-          const response = await getMapping(mappingId);
+          const response = await getMapping(mappingId,true);
+          console.log("Mapping data: ", response);
           if (response) {
             const { mapping_name, mapping } = response.data;
             setMappings(mapping);

@@ -86,18 +86,30 @@ export const getOntologyGraph = async (ontologyId: string) => {
   }
 };
 
-export const fetchMappings = async () => {
+export const fetchMappings = async (filter_validated_mappings?: boolean) => {
   try {
-    const response = await apiClient.get("/mapping/");
+    let params = {};
+    if (filter_validated_mappings) {
+      params = {
+        validated_mappings: filter_validated_mappings,
+      };
+    }
+    const response = await apiClient.get("/mapping/", { params });
     return response;
   } catch (error) {
     console.error("Error fetching mappings", error);
   }
 };
 
-export const getMapping = async (mappingId: string) => {
+export const getMapping = async (mappingId: string, filter_dp?: boolean) => {
   try {
-    const response = await apiClient.get(`/mapping/${mappingId}`);
+    let params = {};
+    if (filter_dp) {
+      params = {
+        filter_dp: filter_dp,
+      };
+    }
+    const response = await apiClient.get(`/mapping/${mappingId}`, { params });
     return response;
   } catch (error) {
     console.error(`Error getting mapping with id ${mappingId}: `, error);

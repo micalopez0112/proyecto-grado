@@ -20,7 +20,7 @@ const DataQualityScreen = () => {
   useEffect(() => {
     const retrieveMappings = async () => {
       setLoading(true);
-      const mappings = await fetchMappings();
+      const mappings = await fetchMappings(true);
       console.log("Mappings: ", mappings);
       if (mappings) setMappings(mappings.data);
       setLoading(false);

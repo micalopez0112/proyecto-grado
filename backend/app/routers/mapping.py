@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
 from bson import ObjectId
 from owlready2 import get_ontology
+
+from app.domain.mapping.service import getJsonSchemaPropertieType
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest
 from app.domain.mapping.service import process_mapping
@@ -217,13 +219,24 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
 
 
 @router.get("/{mapping_process_id}")
-async def get_mapping(mapping_process_id: str):
+async def get_mapping(mapping_process_id: str, filter_dp: Optional[bool] = None):
     try:
         mapping_pr_id = ObjectId(mapping_process_id)
         mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
         mappingProcessDocu = MappingProcessDocument(**mapping_process_docu)
         print("mappingProcessDocu", mappingProcessDocu)
+        
+        if(filter_dp is not None and filter_dp == True):
+            # Filter mapping_process to retrieve only data properties components
+            mapping = mappingProcessDocu.mapping
+            mapping = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != '') }#not v.get('isDataProperty')}
+            print("Ver si funcionó el mapping", mapping)
+            #getJsonSchemaPropertieType
+            ##mappingProcessDocu.mapping = mapping
         # TERMINAR ##
+        else:
+            mapping = mappingProcessDocu.mapping
+
         onto_id = mappingProcessDocu.ontologyId
         ontology_id = ObjectId(onto_id)
         ontology = await onto_collection.find_one({'_id': ontology_id})
@@ -259,11 +272,11 @@ async def get_mapping(mapping_process_id: str):
         complete_mapping = {
             'ontology': ontology_data,
             'schema': JSONSchema,
-            'mapping': mappingProcessDocu.mapping,
+            'mapping': mapping,
             'mapping_name': mappingProcessDocu.name
         }
 
-        print("complete_mapping", complete_mapping)
+        #print("complete_mapping", complete_mapping)
         return complete_mapping
     except Exception as e:
         msg = str(e)
@@ -280,13 +293,13 @@ async def get_mappings(validated_mappings: Optional[bool] = None) :
         mapping_process_docs = await mapping_docus.to_list(length=None)  
         mappingpr_names = []
         for mapping_process_doc in mapping_process_docs:
-            print("Mapping process doc", mapping_process_doc)
+            #print("Mapping process doc", mapping_process_doc)
             mappingpr = {
                 "id": str(mapping_process_doc['_id']),
                 "name": mapping_process_doc['name'],
             }
             mappingpr_names.append(mappingpr)
-        print("Mappings", mappingpr_names)
+        #print("Mappings", mappingpr_names)
         return mappingpr_names
     except Exception as e:
         msg = str(e)
