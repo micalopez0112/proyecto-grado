@@ -1,0 +1,10 @@
+{
+    "title":"Forrest Gump",
+    "some_info": {
+        "release_date": "1994-06-23",
+        "adult": "False",
+        "imdb_id": "tt0109830"
+    },
+    "genres":["Comedy","Drama","Romance"]
+
+}

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
+import json
 from bson import ObjectId
 from owlready2 import get_ontology
 
@@ -31,12 +32,27 @@ async def generate_schema(request: JsonRequest):
 class JsonRequestList(BaseModel):
     jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
 
+
 @router.post("/generate-schemaList/")
 async def generate_schema(request: JsonRequestList):
     try:
         builder = SchemaBuilder()
         for json_obj in request.jsonInstances:
             builder.add_object(json_obj)
+        schema = builder.to_schema()
+        return schema
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+        
+@router.post("/generate-schemaListFromFiles/")
+async def generate_schema(request: List[UploadFile] = File(...)):
+    try:
+        builder = SchemaBuilder()
+        for file in request:
+            content = await file.read() 
+            json_data = json.loads(content)
+            builder.add_object(json_data) 
         schema = builder.to_schema()
         return schema
     except Exception as e:
