@@ -148,15 +148,24 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     results_dicc = {}
     # algo temporal
     index = 1
+    # estas son las instancias de los jsons
     for json_instance in json_instances :
         # a partir de la entrada del mapping, busco el valor en el json
         result_key = mapping_entrance + "_" + str(index)
+        # de mapping entrance podemos sacar el field
+        # field = getfield(mapping_entrance)
+        # destination
         index = index + 1
+           
+        # NODO_INSTANCIA = get_nodo_from_collection(json_instances.id)
+        ## TODO: evaluar si obtener el nodo FIELD aca adentro!!!
         element = find_element_in_JSON_instance(json_instance, mapping_entrance)
+        # NODO_FIELD = getFieldFromNode(nodo_instancia, "destination")
         print("### Found element: ", element)
         if element is None:
             value =  0
-        
+     
+
         # por cada ontología a la cual se haya mapeado
         # ver como guardar aca según la ongología a la que mapeo
         # si esta OK en alguna de los ontologias se toma como que es válido
@@ -166,19 +175,24 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
             onto_prop = getOntoPropertyByIri(onto_mapped_to['iri'], list(ontology.data_properties()))
             instances = list(onto_prop.get_relations())
             print("## Onto instances: ", instances, " ##")
+            ## instancias de las clases de la ontología
             for inst in instances:
                 dp_value = inst[1]
                 value = compare_onto_with_json_value(dp_value, element)
+
                 print("## Evaluation result: ", value, " ##")
                 if value == 1:
                     break
+                # setValorField(field, value)
             results_dicc[result_key] = value
+            # saveResultInNeo4j(NODO_FIELD, value)
             break
             
     return results_dicc
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
 # accomodation aca puedo recibir value
+# TODO: ver posibilidad de obtener el nodo FIELD, aprovechando la anidación entre los campos del json
 def find_element_in_JSON_instance(json_document, path) :
     keys = path.replace('-', '_').split('_')
     json_keys = keys[:-1]

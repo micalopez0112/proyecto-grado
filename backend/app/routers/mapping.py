@@ -62,7 +62,7 @@ async def generate_schema(request: List[UploadFile] = File(...)):
 # >>> builder.add_schema(seed_schema)
 
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
-async def save_mapping(ontology_id: str, mapping_proccess_id: str | None = None, 
+async def save_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
                        request: MappingRequest = Body(...)):
     try:
         print("Mapping_process_id: ", mapping_proccess_id)
