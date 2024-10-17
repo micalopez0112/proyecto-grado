@@ -5,3 +5,4 @@ pydantic
 motor
 bson
 genson
+neo4j

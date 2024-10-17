@@ -149,3 +149,23 @@ export const getJsonSchema = async (jsonFile: any /*JsonFile?? */) => {
     console.error("Error fetching JsonSchema", error);
   }
 };
+
+export const evaluateMapping = async (
+  qualityRuleId: string,
+  mapping_pid: string | null, // make it optional since the backend allows it
+  body: any
+) => {
+  try {
+    // Prepare the query string for the optional mapping_pid
+    const query = mapping_pid ? `?mapping_process_id=${mapping_pid}` : "";
+
+    const response = await apiClient.post(
+      `/mapping/evaluate/${qualityRuleId}${query}`, // Append query to the URL
+      body // Send the body as-is
+    );
+
+    return response;
+  } catch (error) {
+    console.error("Error in call of evaluating mapping: ", error);
+  }
+};
