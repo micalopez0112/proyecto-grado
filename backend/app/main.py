@@ -25,7 +25,7 @@ app.include_router(ontology_router, prefix="/ontologies", tags=["ontologies"])
 
 
 #Descomentar para probar la generación del grafo de ColeccionPeliculas
-driver = connect_to_governanceDB()
+# driver = connect_to_governanceDB()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
