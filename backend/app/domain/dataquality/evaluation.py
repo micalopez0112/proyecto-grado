@@ -58,13 +58,14 @@ class SyntanticAccuracy(QualityMetric) :
         # ver ss movemos esto
         print("## SyntanticAccuracy: execute_measure ##")
         ontology = await get_onto(self.mapping_process.ontologyId)
+        jsonSchemaId = self.mapping_process.jsonSchemaId
         print("## Got ontology correctly ##", list(ontology.individuals()))
         print("## SyntanticAccuracy: mapping elements ##") #self.mapping_elements)
         results_dicc = {}
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
             print("##  item to evaluate ##", json_mapped_key)
             if getJsonSchemaPropertieType(json_mapped_key) != "":
-                results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology)
+                results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology, jsonSchemaId)
                 results_dicc[json_mapped_key] = results_for_mapped_entrance
             else :
                 # ver como manejamos esto
@@ -143,9 +144,12 @@ def get_documents_from_storage(path : str) :
 
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
-def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology) :
+def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
+    #TODO: delete hardcoded jsonSchemaId
+    jsonSchemaId = 1
     print("## SyntanticAccuracy evaluating mapping:", mapping_entrance, "###")
     print("## SyntanticAccuracy about to evaluate:", len(json_instances))
+
     results_dicc = {}
     # algo temporal
     index = 1
@@ -180,17 +184,13 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
             for inst in instances:
                 dp_value = inst[1]
                 value = compare_onto_with_json_value(dp_value, element)
-
                 print("## Evaluation result: ", value, " ##")
-                print(f'json_keys {json_keys}')
-
-                # Call insert_or_update_field_value_measure for each evaluation
                 if value == 1:
                     break
 
         # setValorField(field, value)
         field_measures.append(value)
-        insert_or_update_field_value_measure(json_keys, value, json_instance['id'])
+        insert_or_update_field_value_measure(json_keys, value, json_instance['id'], jsonSchemaId)
         results_dicc[result_key] = value
 
         
@@ -198,7 +198,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     # Aggregate all field measures and insert the result
     if field_measures:
         aggregated_measure_value = sum(field_measures) / len(field_measures)
-        insert_field_measure(json_keys, aggregated_measure_value)
+        insert_field_measure(json_keys, aggregated_measure_value, jsonSchemaId)
 
     return results_dicc
 
@@ -209,10 +209,11 @@ from neo4j import GraphDatabase
 URI = "bolt://localhost:7687"
 AUTH = ("neo4j","tesis2024")
 
-def insert_or_update_field_value_measure(json_keys, value, id_document):
+def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSchemaId):
+    
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
         first_key = json_keys[0]
-        graph_path = f"MATCH (c:Collection {{name: 'JsonSchemaCollection'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+        graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
         for key in json_keys[1:]:
             node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
@@ -233,10 +234,10 @@ def insert_or_update_field_value_measure(json_keys, value, id_document):
         driver.execute_query(query)
 
 
-def insert_field_measure(json_keys, value):
+def insert_field_measure(json_keys, value, jsonSchemaId):
     with GraphDatabase.driver(URI, auth=AUTH) as driver:
         first_key = json_keys[0]
-        graph_path = f"MATCH (c:Collection {{name: 'JsonSchemaCollection'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+        graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
         for key in json_keys[1:]:
             node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"

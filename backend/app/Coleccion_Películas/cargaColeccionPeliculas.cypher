@@ -88,7 +88,7 @@
 // Insertar schema
 
 // Create a Collection node to represent the JSON schema
-MERGE (c:Collection {name: "JsonSchemaCollection"})
+MERGE (c:Collection {name: "JsonSchemaCollection" , id_dataset: 1})
 
 // Insert the top-level Field for `id`
 MERGE (idField:Field {name: "id", type: "integer"})
