@@ -190,11 +190,13 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
 
         # setValorField(field, value)
         field_measures.append(value)
+
+        #si ya hay FielValueMeasures pisa los resultados anteriores, asi solo almacenamos la ultima corrida de FielValueMeasures
         insert_or_update_field_value_measure(json_keys, value, json_instance['id'], jsonSchemaId)
         results_dicc[result_key] = value
 
         
-
+    #almacena un FieldMeasure por corrida, asi manetemos el historicos del las corridas
     # Aggregate all field measures and insert the result
     if field_measures:
         aggregated_measure_value = sum(field_measures) / len(field_measures)
