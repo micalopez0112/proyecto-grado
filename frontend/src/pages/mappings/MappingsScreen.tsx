@@ -10,13 +10,13 @@ const MappingsScreen = () => {
     []
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const retrieveMappings = async () => {
       setLoading(true);
       const mappings = await fetchMappings();
       console.log("Mappings: ", mappings);
-      //setMappings(mappings);
       if (mappings) setMappings(mappings.data);
       setLoading(false);
     };
@@ -26,6 +26,10 @@ const MappingsScreen = () => {
   const onClickMappingCard = (id: string) => {
     navigate("/Mapping", { state: { mappingId: id } });
   };
+
+  const filteredMappings = mappings.filter((mapping) =>
+    mapping.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -42,9 +46,16 @@ const MappingsScreen = () => {
               Nuevo Mapping
             </button>
           </div>
-          {mappings && (
+          <input
+            type="text"
+            placeholder="Search Mappings..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={styles.searchInput}
+          />
+          {filteredMappings.length > 0 ? (
             <div style={styles.dashboard}>
-              {mappings.map((mapping) => (
+              {filteredMappings.map((mapping) => (
                 <MappingCard
                   key={mapping.id}
                   id={mapping.id}
@@ -54,6 +65,8 @@ const MappingsScreen = () => {
                 />
               ))}
             </div>
+          ) : (
+            <p>No mappings found</p>
           )}
         </div>
       )}
@@ -87,6 +100,15 @@ const styles: { [key: string]: React.CSSProperties } = {
     position: "absolute",
     right: "282px",
     top: 100,
+  },
+  searchInput: {
+    width: "100%",
+    maxWidth: "400px",
+    padding: "10px",
+    fontSize: "1em",
+    marginBottom: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
   },
   dashboard: {
     display: "grid",

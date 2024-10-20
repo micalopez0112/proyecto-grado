@@ -113,7 +113,7 @@ const SelectMappingsEvaluate = () => {
                     <ul className="list-container">
                       {mappings[key].map((element, index) => (
                         <li key={index} className="list-elem-evaluate">
-                          <div className="value-wrapper">
+                          <div className="value-wrapper-evaluation">
                             <div className="key-title">JSON schema value</div>
                             <div className="key-text" title={key}>
                               {key}
@@ -122,7 +122,7 @@ const SelectMappingsEvaluate = () => {
 
                           <FaArrowRightLong className="arrow-icon" />
 
-                          <div className="value-wrapper">
+                          <div className="value-wrapper-evaluation">
                             <div className="element-title">
                               Ontology element
                             </div>
