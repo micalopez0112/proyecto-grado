@@ -145,6 +145,7 @@ def get_documents_from_storage(path : str) :
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
 def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
+    print(f'jsonSchemaId: {jsonSchemaId}')
     #TODO: delete hardcoded jsonSchemaId
     jsonSchemaId = 1
     print("## SyntanticAccuracy evaluating mapping:", mapping_entrance, "###")
@@ -226,9 +227,9 @@ def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSche
 
         insert_measure = f"""
         MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
-        ON CREATE SET m.measure = {value}, m.date = '{current_datetime}'
-        ON MATCH SET m.measure = {value}, m.date = '{current_datetime}'
+        SET m.measure = {value}, m.date = '{current_datetime}'
         """
+
 
         query = graph_path + insert_measure
         print(f"query value: {query}")
