@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from app.database import mapping_process_collection, onto_collection
 from bson import ObjectId
 from app.domain.mapping.models import MappingProcess, MappingProcessDocument,OntologyDocument
@@ -148,6 +149,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     results_dicc = {}
     # algo temporal
     index = 1
+    field_measures = []
     # estas son las instancias de los jsons
     for json_instance in json_instances :
         # a partir de la entrada del mapping, busco el valor en el json
@@ -156,20 +158,19 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         # field = getfield(mapping_entrance)
         # destination
         index = index + 1
-           
+        
+            
         # NODO_INSTANCIA = get_nodo_from_collection(json_instances.id)
         ## TODO: evaluar si obtener el nodo FIELD aca adentro!!!
-        element = find_element_in_JSON_instance(json_instance, mapping_entrance)
-        # NODO_FIELD = getFieldFromNode(nodo_instancia, "destination")
+        
+        element, json_keys = find_element_in_JSON_instance(json_instance, mapping_entrance)
         print("### Found element: ", element)
         if element is None:
-            value =  0
-     
-
+            value = 0
         # por cada ontología a la cual se haya mapeado
         # ver como guardar aca según la ongología a la que mapeo
         # si esta OK en alguna de los ontologias se toma como que es válido
-        for onto_mapped_to in onto_mapped_to_value :
+        for onto_mapped_to in onto_mapped_to_value:
             print("## Onto value: ", onto_mapped_to['iri'])
             # ver aca si dejamos así o vemos la forma de modulizarlo
             onto_prop = getOntoPropertyByIri(onto_mapped_to['iri'], list(ontology.data_properties()))
@@ -181,29 +182,103 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
                 value = compare_onto_with_json_value(dp_value, element)
 
                 print("## Evaluation result: ", value, " ##")
+                print(f'json_keys {json_keys}')
+
+                # Call insert_or_update_field_value_measure for each evaluation
                 if value == 1:
                     break
-                # setValorField(field, value)
-            results_dicc[result_key] = value
-            # saveResultInNeo4j(NODO_FIELD, value)
-            break
-            
+
+        # setValorField(field, value)
+        field_measures.append(value)
+        insert_or_update_field_value_measure(json_keys, value, json_instance['id'])
+        results_dicc[result_key] = value
+
+        
+
+    # Aggregate all field measures and insert the result
+    if field_measures:
+        aggregated_measure_value = sum(field_measures) / len(field_measures)
+        insert_field_measure(json_keys, aggregated_measure_value)
+
     return results_dicc
+
+
+from datetime import datetime
+from neo4j import GraphDatabase
+
+URI = "bolt://localhost:7687"
+AUTH = ("neo4j","tesis2024")
+
+def insert_or_update_field_value_measure(json_keys, value, id_document):
+    with GraphDatabase.driver(URI, auth=AUTH) as driver:
+        first_key = json_keys[0]
+        graph_path = f"MATCH (c:Collection {{name: 'JsonSchemaCollection'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+
+        for key in json_keys[1:]:
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+            graph_path += node_path
+
+        latest_item = json_keys[-1]
+        current_datetime = datetime.now()
+
+        insert_measure = f"""
+        MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
+        ON CREATE SET m.measure = {value}, m.date = '{current_datetime}'
+        ON MATCH SET m.measure = {value}, m.date = '{current_datetime}'
+        """
+
+        query = graph_path + insert_measure
+        print(f"query value: {query}")
+
+        driver.execute_query(query)
+
+
+def insert_field_measure(json_keys, value):
+    with GraphDatabase.driver(URI, auth=AUTH) as driver:
+        first_key = json_keys[0]
+        graph_path = f"MATCH (c:Collection {{name: 'JsonSchemaCollection'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+
+        for key in json_keys[1:]:
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+            graph_path += node_path
+
+        print(f'graph_path: {graph_path}')
+
+        latest_item = json_keys[-1]
+        current_datetime = datetime.now()
+
+        insert_measure = f"""
+        CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
+        """
+        print(f'insert_measure: {insert_measure}')
+
+        query = graph_path + insert_measure
+        print(f"query: {query}")
+
+         # Execute the query
+        driver.execute_query(query)
+
+
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
 # accomodation aca puedo recibir value
 # TODO: ver posibilidad de obtener el nodo FIELD, aprovechando la anidación entre los campos del json
 def find_element_in_JSON_instance(json_document, path) :
+
+    print(f'json_document ${json_document}')
+    print(f'path ${path}') #contacto-city_key#string
     keys = path.replace('-', '_').split('_')
-    json_keys = keys[:-1]
-    # jsonFlated := [destination.accomation.name = Paris, kfkfkfkfk]
-    # jsonFlated[destination.accomation.name] = Paris
-    #
+    for key in keys:
+        print(key)
+    print(f'keys ${keys}')
+
+    # json_keys = ['contacto', 'city']
+    json_keys = keys[:-1] 
     element = json_document
     try:
         for key in json_keys:
             element = element[key]
-        return element
+        return element, json_keys
     except (KeyError, TypeError):
         return None
 

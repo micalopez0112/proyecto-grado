@@ -2,6 +2,7 @@
 def get_hardcoded_test_documents():
     documents = [
         {
+            "id": 1,
             "contacto": {
                 "city": "Montevideo",
                 "street": "Trabajo 5050",
@@ -9,6 +10,7 @@ def get_hardcoded_test_documents():
             }
         },
         {
+            "id": 2,
             "contacto": {
                 "city": "Bueno Aires",
                 "street": "Libertador 455",
@@ -16,6 +18,7 @@ def get_hardcoded_test_documents():
             }
         },
         {
+            "id": 3,
             "contacto": {
                 "city": "Asuncion",
                 "street": "Av Italia 88",
@@ -23,6 +26,7 @@ def get_hardcoded_test_documents():
             }
         },
         {
+            "id": 4,
             "contacto": {
                 "city": "Buenos aires",
                 "street": "ExampleStreet 123",
@@ -30,6 +34,7 @@ def get_hardcoded_test_documents():
             }
         },
         {
+            "id": 5,
             "contacto": {
                 "city": "Buenos aires",
                 "street": "ExampleStreet 123",
@@ -38,3 +43,5 @@ def get_hardcoded_test_documents():
         }
     ]
     return documents
+
+
