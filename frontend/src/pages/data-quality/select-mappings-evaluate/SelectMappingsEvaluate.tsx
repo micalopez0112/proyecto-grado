@@ -22,18 +22,17 @@ const SelectMappingsEvaluate = () => {
     {}
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [allSelected, setAllSelected] = useState<boolean>(false); // New state for tracking if all mappings are selected
 
   useEffect(() => {
     const getMappingData = async () => {
       if (mappingId) {
         setLoading(true);
         try {
-          const response = await getMapping(mappingId,true);
-          console.log("Mapping data: ", response);
+          const response = await getMapping(mappingId, true);
           if (response) {
             const { mapping_name, mapping } = response.data;
             setMappings(mapping);
-            console.log(mapping);
             setMappingName(mapping_name);
           }
         } catch (error) {
@@ -49,10 +48,8 @@ const SelectMappingsEvaluate = () => {
     setSelectedMappings((prev) => {
       const updated = { ...prev };
       if (updated[key]) {
-        // If the key is already in selectedMappings, remove it
         delete updated[key];
       } else {
-        // Add the selected key and its associated mappings
         updated[key] = mappingElement;
       }
       return updated;
@@ -62,6 +59,20 @@ const SelectMappingsEvaluate = () => {
   useEffect(() => {
     console.log("Selected mappings updated: ", selectedMappings);
   }, [selectedMappings]);
+
+  // New function to handle selecting/deselecting all mappings
+  const handleSelectAllMappings = () => {
+    if (!allSelected) {
+      const allMappings: Record<string, any> = {};
+      Object.keys(mappings).forEach((key) => {
+        allMappings[key] = mappings[key];
+      });
+      setSelectedMappings(allMappings);
+    } else {
+      setSelectedMappings({});
+    }
+    setAllSelected(!allSelected); // Toggle between selecting and deselecting all
+  };
 
   const handleEvaluateSelectedMappings = async () => {
     const response = await evaluateMapping(
@@ -89,11 +100,19 @@ const SelectMappingsEvaluate = () => {
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
+                {/* Add the Select All button */}
+                <button
+                  className="button select-all"
+                  onClick={handleSelectAllMappings}
+                >
+                  {allSelected ? "Deselect All" : "Select All"}
+                </button>
+
                 {Object.keys(mappings).map((key) => (
                   <div className="mapping" key={key}>
                     <ul className="list-container">
                       {mappings[key].map((element, index) => (
-                        <li key={index} className="list-elem">
+                        <li key={index} className="list-elem-evaluate">
                           <div className="value-wrapper">
                             <div className="key-title">JSON schema value</div>
                             <div className="key-text" title={key}>
@@ -114,6 +133,7 @@ const SelectMappingsEvaluate = () => {
 
                           <input
                             type="checkbox"
+                            checked={!!selectedMappings[key]} // Update to reflect selected mappings
                             onChange={() =>
                               handleToggleMapping(key, mappings[key])
                             }

@@ -8,24 +8,27 @@ from owlready2 import get_ontology
 from typing import Dict, Any
 from typing import Dict, Any
 from abc import ABC, abstractmethod
+from datetime import datetime
+from neo4j import GraphDatabase
 
 SYNTCTATIC_ACCURACY = "syntactic_accuracy"
 QUALITY_RULES = [SYNTCTATIC_ACCURACY]
 
 class QualityMetric(ABC) : 
-    async def evaluation(self) -> None :
+    async def evaluation(self, driver: GraphDatabase.driver) -> None :
         print("## QualityMetric: evaluation ##")
         data = self.get_data_to_evaluate()
         print("## QualityMetric: data ##", data)
-        result = await self.execute_measure(data)
+        result = await self.execute_measure(data, driver)
         await self.save_result(result) # esto capaz se mueve para execute_measure y se guarda enseguida que se calcula
+        return result
 
     @abstractmethod
     def get_data_to_evaluate(self) -> None : 
         pass
 
     @abstractmethod  
-    async def execute_measure(self, data) :    
+    async def execute_measure(self, data, driver) :    
         pass
     
     @abstractmethod
@@ -54,7 +57,7 @@ class SyntanticAccuracy(QualityMetric) :
         print("## SyntanticAccuracy: set_mapping_elements ##", mapping_elems)
         self.mapping_elements = mapping_elems
 
-    async def execute_measure(self, data_to_evaluate) :
+    async def execute_measure(self, data_to_evaluate, driver: GraphDatabase.driver) :
         # ver ss movemos esto
         print("## SyntanticAccuracy: execute_measure ##")
         ontology = await get_onto(self.mapping_process.ontologyId)
@@ -65,14 +68,14 @@ class SyntanticAccuracy(QualityMetric) :
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
             print("##  item to evaluate ##", json_mapped_key)
             if getJsonSchemaPropertieType(json_mapped_key) != "":
-                results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology, jsonSchemaId)
+                results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology, jsonSchemaId, driver)
                 results_dicc[json_mapped_key] = results_for_mapped_entrance
             else :
                 # ver como manejamos esto
                 results_for_mapped_entrance = {}
             
         print("##---- Evaluation results: ", results_dicc, " ----##")
-        return None
+        return results_dicc
     
 
     # si todas las evaluaciones se van a basar en mapeos json esto se puede mover para la clase principal QualityMetric
@@ -104,7 +107,7 @@ class StrategyContext():
             self._quality_strategy = SyntanticAccuracy()
             print("INSTANCIADA ")
         
-    async def evaluate_quality(self, mapping_id: str, request_mapping_body: Dict[str, Any]) -> None:
+    async def evaluate_quality(self, mapping_id: str, request_mapping_body: Dict[str, Any], driver: GraphDatabase.driver) -> None:
         # no se si vamos a menter esto o mandamos el mapping id como parametro siempre VER
         if mapping_id != "":
            # ver si queda aca o lo mando por parametro al contstructor
@@ -114,7 +117,8 @@ class StrategyContext():
             self.quality_strategy.set_mapping_elements(request_mapping_body)
             
 
-        result = await self._quality_strategy.evaluation()
+        result = await self._quality_strategy.evaluation(driver)
+        return result
 
 
 async def get_mapping_process(mapping_processID: str) -> MappingProcessDocument:
@@ -144,7 +148,7 @@ def get_documents_from_storage(path : str) :
 
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
-def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
+def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId, driver: GraphDatabase.driver) :
     print(f'jsonSchemaId: {jsonSchemaId}')
     #TODO: delete hardcoded jsonSchemaId
     jsonSchemaId = 1
@@ -157,11 +161,13 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     field_measures = []
     # estas son las instancias de los jsons
     for json_instance in json_instances :
+        print(f'json_instance {json_instance}')
         # a partir de la entrada del mapping, busco el valor en el json
         result_key = mapping_entrance + "_" + str(index)
         # de mapping entrance podemos sacar el field
         # field = getfield(mapping_entrance)
         # destination
+        print(f'result_key {result_key}')
         index = index + 1
         
             
@@ -193,7 +199,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         field_measures.append(value)
 
         #si ya hay FielValueMeasures pisa los resultados anteriores, asi solo almacenamos la ultima corrida de FielValueMeasures
-        insert_or_update_field_value_measure(json_keys, value, json_instance['id'], jsonSchemaId)
+        insert_or_update_field_value_measure(json_keys, value, json_instance['id'], jsonSchemaId, driver)
         results_dicc[result_key] = value
 
         
@@ -201,66 +207,52 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     # Aggregate all field measures and insert the result
     if field_measures:
         aggregated_measure_value = sum(field_measures) / len(field_measures)
-        insert_field_measure(json_keys, aggregated_measure_value, jsonSchemaId)
+        insert_field_measure(json_keys, aggregated_measure_value, jsonSchemaId, driver)
 
     return results_dicc
 
 
-from datetime import datetime
-from neo4j import GraphDatabase
+def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSchemaId, driver: GraphDatabase.driver):
+    first_key = json_keys[0]
+    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
-URI = "bolt://localhost:7687"
-AUTH = ("neo4j","tesis2024")
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
 
-def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSchemaId):
-    
-    with GraphDatabase.driver(URI, auth=AUTH) as driver:
-        first_key = json_keys[0]
-        graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+    latest_item = json_keys[-1]
+    current_datetime = datetime.now()
 
-        for key in json_keys[1:]:
-            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-            graph_path += node_path
+    insert_measure = f"""
+    MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
+    SET m.measure = {value}, m.date = '{current_datetime}'
+    """
 
-        latest_item = json_keys[-1]
-        current_datetime = datetime.now()
+    query = graph_path + insert_measure
+    print(f"query value: {query}")
 
-        insert_measure = f"""
-        MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
-        SET m.measure = {value}, m.date = '{current_datetime}'
-        """
+    driver.execute_query(query)
 
 
-        query = graph_path + insert_measure
-        print(f"query value: {query}")
+def insert_field_measure(json_keys, value, jsonSchemaId, driver: GraphDatabase.driver):
+    first_key = json_keys[0]
+    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
-        driver.execute_query(query)
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
 
+    latest_item = json_keys[-1]
+    current_datetime = datetime.now()
 
-def insert_field_measure(json_keys, value, jsonSchemaId):
-    with GraphDatabase.driver(URI, auth=AUTH) as driver:
-        first_key = json_keys[0]
-        graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+    insert_measure = f"""
+    CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
+    """
 
-        for key in json_keys[1:]:
-            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-            graph_path += node_path
+    query = graph_path + insert_measure
+    print(f"query: {query}")
 
-        print(f'graph_path: {graph_path}')
-
-        latest_item = json_keys[-1]
-        current_datetime = datetime.now()
-
-        insert_measure = f"""
-        CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
-        """
-        print(f'insert_measure: {insert_measure}')
-
-        query = graph_path + insert_measure
-        print(f"query: {query}")
-
-         # Execute the query
-        driver.execute_query(query)
+    driver.execute_query(query)
 
 
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
