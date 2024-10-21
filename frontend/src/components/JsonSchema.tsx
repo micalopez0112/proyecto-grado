@@ -20,7 +20,8 @@ const Json: React.FC = () => {
     type: string
   ) => {
     setJsonElementSelected(element + "_key#" + type);
-    console.log("element: " + element);
+    console.log("setJsonElementSelected " + JsonElementSelected);
+    console.log("simple element: " + element);
   };
 
   const handleClickArrayProperty = (
@@ -35,6 +36,7 @@ const Json: React.FC = () => {
     properties: Record<string, JsonSchemaProperty>,
     parent: string
   ) => {
+    console.log("parent: " + parent);
     return Object.entries(properties).map(([key, value]) => {
       if (value.type === "object" && value.properties) {
         return (
@@ -83,7 +85,8 @@ const Json: React.FC = () => {
         <div className="property-box" key={key}>
           <div
             className={`json-elem ${
-              JsonElementSelected === (parent ? parent + "-" + key : key)
+              JsonElementSelected ===
+              (parent ? parent + "-" + key + "_key#" + value.type : key)
                 ? "active"
                 : ""
             }`}
