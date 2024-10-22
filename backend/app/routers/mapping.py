@@ -30,6 +30,7 @@ async def get_schema_from_path(collectionFilePath: str):
             for json_obj in json_data.jsonInstances:
                 builder.add_object(json_obj)
             schema = builder.to_schema()
+            ##add method to clean nulls
             return schema
     except OSError as fileError:
         print("Error en la lectura del archivo de la colección", fileError)
