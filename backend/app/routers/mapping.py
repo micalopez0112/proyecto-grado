@@ -24,12 +24,21 @@ class JsonRequest(BaseModel):
     jsonInstances: dict
 
 @router.post("/generate-schema/")
-async def generate_schema(request: JsonRequest):
+async def get_schema_from_path(collectionFilePath: str):
     try:
-        builder = SchemaBuilder()
-        builder.add_object(request.jsonInstances)
-        schema = builder.to_schema()
-        return schema
+        with open (collectionFilePath,"r",encoding='utf-8') as file:
+            builder = SchemaBuilder()
+            # data = await file.read()
+            file_content = json.load(file)
+            json_data = JsonRequestList(jsonInstances=file_content)
+            for json_obj in json_data.jsonInstances:
+                builder.add_object(json_obj)
+            schema = builder.to_schema()
+            ##add method to clean nulls
+            return schema
+    except OSError as fileError:
+        print("Error en la lectura del archivo de la colección", fileError)
+        raise HTTPException(status_code=400, detail=str(fileError))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
