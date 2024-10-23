@@ -13,6 +13,7 @@ from typing import List,Optional, Dict, Any
 
 from genson import SchemaBuilder
 from pydantic import BaseModel
+from app.Coleccion_Películas.governance import cleanJsonSchema
 
 router = APIRouter()
 
@@ -30,7 +31,11 @@ async def get_schema_from_path(collectionFilePath: str):
             for json_obj in json_data.jsonInstances:
                 builder.add_object(json_obj)
             schema = builder.to_schema()
+            print(f'## RAW SCHEMA ##: {schema}')
+            print("###################################")
             ##add method to clean nulls
+            modified_schema = cleanJsonSchema(schema)
+            print("## Modified schema ##: ", modified_schema)
             return schema
     except OSError as fileError:
         print("Error en la lectura del archivo de la colección", fileError)
