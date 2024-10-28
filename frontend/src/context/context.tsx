@@ -18,6 +18,8 @@ interface JsonSchemaContextProps {
   currentOntologyId?: string;
   setcurrentOntologyId: (value: string | undefined) => void;
   jsonSchemaContext: any;
+  collectionPath: string;
+  setCollectionPath: (value: string) => void;
   ontologyDataContext: any;
   setontologyDataContext: (value: any) => void;
   setJsonSchemaContext: (value: any) => void;
@@ -37,13 +39,14 @@ interface JsonSchemaContextProps {
 
 const Context = createContext<JsonSchemaContextProps>({
   currentOntologyId: undefined,
-  setcurrentOntologyId: () => {},
   jsonSchemaContext: {},
   JsonElementSelected: {},
-  setontologyDataContext: () => {},
   ontologyDataContext: {},
   OntoElementSelected: { type: undefined, ontoElement: {} },
+  collectionPath: "",
   mappings: {},
+  setcurrentOntologyId: () => {},
+  setontologyDataContext: () => {},
   setJsonSchemaContext: () => {},
   setJsonElementSelected: () => {},
   setOntoElementSelected: () => {},
@@ -51,6 +54,7 @@ const Context = createContext<JsonSchemaContextProps>({
   addNewMapping: () => {},
   removeMapping: () => {},
   clearMappings: () => {},
+  setCollectionPath: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -68,6 +72,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentOntologyId, setcurrentOntologyId] = useState<
     string | undefined
   >(undefined);
+  const [collectionPath, setCollectionPath] = useState<string>("");
 
   const addNewMapping = () => {
     console.log("Adding new mapping, actual mappings are: ", mappings);
@@ -267,6 +272,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         addNewMapping,
         removeMapping,
         clearMappings,
+        collectionPath,
+        setCollectionPath
       }}
     >
       {children}

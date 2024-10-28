@@ -14,6 +14,10 @@ from typing import List,Optional, Dict, Any
 from genson import SchemaBuilder
 from pydantic import BaseModel
 from app.Coleccion_Películas.governance import cleanJsonSchema
+from dotenv import load_dotenv
+import os
+
+zone_path = os.getenv("ZONE_PATH")
 
 router = APIRouter()
 
@@ -23,7 +27,8 @@ class JsonRequest(BaseModel):
 @router.post("/generate-schema/")
 async def get_schema_from_path(collectionFilePath: str):
     try:
-        with open (collectionFilePath,"r",encoding='utf-8') as file:
+        realPath = zone_path + collectionFilePath
+        with open (realPath,"r",encoding='utf-8') as file:
             builder = SchemaBuilder()
             # data = await file.read()
             file_content = json.load(file)

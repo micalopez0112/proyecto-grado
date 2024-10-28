@@ -29,6 +29,7 @@ export const Mapping = () => {
     setMappings,
     setJsonSchemaContext,
     removeMapping,
+    collectionPath
   } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
@@ -37,6 +38,7 @@ export const Mapping = () => {
 
   useEffect(() => {
     //cambiar logica cuando se obtenga el id desde el back
+    console.log("#COLLECTION PATH EN MAPPINGS.TSX: ", collectionPath);
   }, []);
 
   useEffect(() => {

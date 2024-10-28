@@ -137,16 +137,17 @@ export const fetchOntologies = async () => {
   }
 };
 
-export const getJsonSchema = async (jsonFile: any /*JsonFile?? */) => {
-  //este método va a tener que recibir un File en un futuro
+export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
   try {
-    const body = {
-      jsonInstances: jsonFile,
-    };
-    const response = await apiClient.post("/mapping/generate-schema/", body);
+    const queryParam = `?collectionFilePath=${jsonFilePath}`;
+    const response = await apiClient.post(
+      `/mapping/generate-schema/${queryParam}`
+    );
+    console.log("Response from generating schema: ", response);
     return response;
   } catch (error) {
     console.error("Error fetching JsonSchema", error);
+    throw error;
   }
 };
 
