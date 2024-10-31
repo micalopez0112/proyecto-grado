@@ -105,7 +105,6 @@ def generateFieldsMetadataV2(driver:GraphDatabase.driver, parentNodeId:str, pare
 
 
 def cleanJsonSchema (jsonSchema:Dict[str,Any])->Dict[str,Any]:
-    
     try:
         properties = jsonSchema.get("properties", {})
         for field_key, field_value in properties.items():

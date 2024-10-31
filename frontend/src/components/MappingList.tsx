@@ -6,7 +6,7 @@ import "./MappingList.css";
 
 const MappingList = ({ isResult }) => {
   const { mappings, removeMapping } = useDataContext();
-  console.log(mappings);
+  // console.log(mappings);
 
   return (
     <div className="mappings">

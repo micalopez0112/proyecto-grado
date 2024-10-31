@@ -75,13 +75,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [collectionPath, setCollectionPath] = useState<string>("");
 
   const addNewMapping = () => {
+
     console.log("Adding new mapping, actual mappings are: ", mappings);
     if (JsonElementSelected !== "" && OntoElementSelected.type !== undefined) {
+      console.log("ONTO ELEMENT SELECTED", OntoElementSelected);
       if (OntoElementSelected.type === "class") {
         setMappings({
           ...mappings,
-          [JsonElementSelected + "_value"]: [
-            ...(mappings[JsonElementSelected + "_value"] || []),
+          [JsonElementSelected]: [
+            ...(mappings[JsonElementSelected] || []),
             OntoElementSelected.ontoElement,
           ],
         });
@@ -97,6 +99,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         );
 
         const rango = OntoElementSelected.ontoElement.range;
+        console.log("RANGO", rango);
         const key = {
           name: OntoElementSelected.ontoElement.name,
           iri: OntoElementSelected.ontoElement.iri,
@@ -104,35 +107,49 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Key que se está agregando en context", key);
 
         // Mejor hacer todas las las actualizaciones de una sino hay problemas con el estado
-        setMappings((prevMappings) => {
-          const newMappings = {
-            ...prevMappings,
-            [JsonElementSelected.endsWith("_key#array")
-              ? JsonElementSelected
-              : JsonElementSelected + "_key"]: [
-              ...(prevMappings[
-                JsonElementSelected.endsWith("_key#array")
-                  ? JsonElementSelected
-                  : JsonElementSelected + "_key"
-              ] || []),
-              key,
-            ],
-          };
+        // setMappings((prevMappings) => {
+        //   const newMappings = {
+        //     ...prevMappings,
+        //     [JsonElementSelected.endsWith("_key#array")
+        //       ? JsonElementSelected
+        //       : JsonElementSelected + "_key"]: [
+        //       ...(prevMappings[
+        //         JsonElementSelected.endsWith("_key#array")
+        //           ? JsonElementSelected
+        //           : JsonElementSelected + "_key"
+        //       ] || []),
+        //       key,
+        //     ],
+        //   };
+          setMappings((prevMappings) => {
+            const newMappings = {
+              ...prevMappings,
+              [JsonElementSelected]: [
+                ...(prevMappings[JsonElementSelected] || []),
+                key,
+              ],
+            };
 
-          if (rango) {
+          //acá tendría que preguntar si el object ya está mappeado no hago nada
+          //y si no está mappeado agrego el _value con el rango
+
+          //Enrealidad se haría en el ontologyData.tsx al buscar en mappings
+          //si el _key es seleccionado y el _value aún no => se abre el modal
+          if (rango && rango.length >0 ) {
+            console.log("RANGO RANGO RANGO", rango);
             let claveMap = JsonElementSelected.endsWith("_key#array")
-              ? JsonElementSelected.slice(0, JsonElementSelected.length - 10)
-              : JsonElementSelected;
+              ? JsonElementSelected.slice(0, JsonElementSelected.length - 10)//quitar _key#array
+              : JsonElementSelected.slice(0, JsonElementSelected.length - 4);//quitar _key
+            console.log("ClaveMap", claveMap);
             newMappings[claveMap + "_value"] = [
               ...(prevMappings[claveMap + "_value"] || []),
               ...rango,
             ];
           } else {
-            console.error(
-              "Error al agregar mapeo de object property, no presenta rango"
+            console.log(
+              "Se mapeó Object Property pero no se agregó el rango siendo el mismo: ", rango
             );
           }
-
           return newMappings;
         });
       } else {
@@ -197,7 +214,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
               "Entradas de la key que se quiere eliminar: ",
               updatedMappings[key.slice(0, key.length - 4) + "_value"]
             );
-            updatedMappings[key.slice(0, key.length - 4) + "_value"] =
+            if (updatedMappings[key.slice(0, key.length - 4) + "_value"] != undefined){
+              updatedMappings[key.slice(0, key.length - 4) + "_value"] =
               updatedMappings[key.slice(0, key.length - 4) + "_value"].filter(
                 //fix needed to work with arrays and multiple values in range
                 (element) =>
@@ -208,10 +226,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
               "Entradas de la key después de eliminar: ",
               updatedMappings[key.slice(0, key.length - 4) + "_value"]
             );
+            }
           } else {
             //handle not range, POSSIBLE??
           }
-          //falta caso de array
+          //falta caso de array sería con slice -10
         }
         // Delete key if it has no elements
         // necessary?
