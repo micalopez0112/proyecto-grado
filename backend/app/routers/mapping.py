@@ -14,6 +14,11 @@ from neo4j import GraphDatabase
 
 from genson import SchemaBuilder
 from pydantic import BaseModel
+from app.Coleccion_Películas.governance import cleanJsonSchema
+from dotenv import load_dotenv
+import os
+
+zone_path = os.getenv("ZONE_PATH")
 
 URI = "bolt://localhost:7687"
 AUTH = ("neo4j","tesis2024")
@@ -26,7 +31,8 @@ class JsonRequest(BaseModel):
 @router.post("/generate-schema/")
 async def get_schema_from_path(collectionFilePath: str):
     try:
-        with open (collectionFilePath,"r",encoding='utf-8') as file:
+        realPath = zone_path + collectionFilePath
+        with open (realPath,"r",encoding='utf-8') as file:
             builder = SchemaBuilder()
             # data = await file.read()
             file_content = json.load(file)
@@ -34,7 +40,11 @@ async def get_schema_from_path(collectionFilePath: str):
             for json_obj in json_data.jsonInstances:
                 builder.add_object(json_obj)
             schema = builder.to_schema()
+            print(f'## RAW SCHEMA ##: {schema}')
+            print("###################################")
             ##add method to clean nulls
+            modified_schema = cleanJsonSchema(schema)
+            print("## Modified schema ##: ", modified_schema)
             return schema
     except OSError as fileError:
         print("Error en la lectura del archivo de la colección", fileError)

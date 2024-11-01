@@ -72,6 +72,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
                 }]
             }]
         }
+        print("Ontology data", ontology_data);
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",
             "ontologyData": ontology_data

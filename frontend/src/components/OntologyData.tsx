@@ -60,9 +60,27 @@ const OntologyData: React.FC<{}> = () => {
     if (isMapping && type !== "object_property") {
       setOntoElementSelected({ type: type, ontoElement: element });
     } else if (isMapping && type === "object_property") {
-      setRangeList([...rangeList, element.range]);
-      setObjectPropertyElement(element);
-      setModalIsOpen(true);
+      const OntoElementToSelect = { 
+        type: type, 
+        ontoElement: {
+          name: element.name,
+          iri: element.iri,
+          range: [],
+        }
+      }
+      console.log("Element selected: ", OntoElementToSelect);
+      setOntoElementSelected(OntoElementToSelect);
+        
+        // es necesario mapear el rango de la propiedad de objeto
+
+      // if(//chequear si el jsonElementSelected _value está en mapping){
+
+      // }
+      // else{
+      //   setRangeList([...rangeList, element.range]);
+      //   setObjectPropertyElement(element);
+      //   setModalIsOpen(true);
+      //   }
     }
   };
 

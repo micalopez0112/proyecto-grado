@@ -26,6 +26,7 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
     for jsonMappedKey, ontoValue in mappignItemsOrdered:
         okRule3 = False
         okRule2 = False
+        print("## Processing key:", jsonMappedKey, "value:", ontoValue, "##")
         # en principio tomo como el mapeo es uno solo pero si es una lista seria recorer los elementos e ir aplicando la regla
         try :
             if isJSONValue(jsonMappedKey):
@@ -73,6 +74,7 @@ def process_mapping(mapping, ontology, jsonschema: JsonSchema):
 # Aparentemente esta validación estaría funcionando ok
 # validateRule1 checks if the mappedTo iri is in the ontology classes and append the mapped class Iri to the mappedClasses dict
 def validateRule1(key, ontoValuesMappedTo, ontoClasses):
+    print("Enters Validate Rule 1")
     mappedIris = []
     for ontoElem in ontoValuesMappedTo:
         ontologyClassIri = ontoElem['iri']
@@ -286,9 +288,11 @@ def isDataPropertyMapping(str):
 # con esto nos dice si el mapping es una dataproperty o no
 # destion-accomodation_key#string
 def getJsonSchemaPropertieType(str):
+    print("## Getting JSON Schema Property Type ##")
     splittedMappingKey = str.split("_")
     keyPart = splittedMappingKey[1]
     hashTag = keyPart.split("#")
+    print("hashTag", hashTag)
     if len(hashTag) > 1:
         return hashTag[1]
     return ""
