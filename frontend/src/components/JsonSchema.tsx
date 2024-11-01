@@ -11,6 +11,7 @@ const Json: React.FC = () => {
     e: React.MouseEvent<HTMLDivElement>,
     element: string
   ) => {
+    e.stopPropagation();
     console.log("Element parameter: ", element);
     setJsonElementSelected(element);
   };
@@ -20,6 +21,7 @@ const Json: React.FC = () => {
     element: string,
     type: string
   ) => {
+    e.stopPropagation();
     setJsonElementSelected(element + "_key#" + type);
     console.log("element: " + element);
   };
@@ -28,6 +30,7 @@ const Json: React.FC = () => {
     e: React.MouseEvent<HTMLDivElement>,
     element: string
   ) => {
+    e.stopPropagation();
     setJsonElementSelected(element + "_key#array");
     console.log("element: " + element);
   };
@@ -84,20 +87,19 @@ const Json: React.FC = () => {
                   JsonElementSelected === (parent ? parent + "-" + key : key )
                     ? "active"
                     : ""
-                }`}
-                  style={{marginLeft:'20px'}}
-                  onClick={(e) =>
-                    handleClickElement(e, parent ? parent + "-" + key + "_value" : key + "_value")
-                  }>
-                    <strong>object</strong>
+                  }`
+                  }
+                  style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
+                  >
+                      <strong>object</strong>
+                    <div className="object-properties">
+                      {renderProperties(
+                        value.properties,
+                        parent ? parent + "-" + key : key
+                      )}
+                    </div>
                 </div>
               }
-              <div className="object-properties">
-                {renderProperties(
-                  value.properties,
-                  parent ? parent + "-" + key : key
-                )}
-              </div>
             </div>
           );
         }
