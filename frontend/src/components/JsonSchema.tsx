@@ -12,7 +12,7 @@ const Json: React.FC = () => {
     element: string
   ) => {
     e.stopPropagation();
-    console.log("Element parameter: ", element);
+    console.log("Obj. elem. selected: ", element);
     setJsonElementSelected(element);
   };
 
@@ -23,8 +23,7 @@ const Json: React.FC = () => {
   ) => {
     e.stopPropagation();
     setJsonElementSelected(element + "_key#" + type);
-    console.log("setJsonElementSelected " + JsonElementSelected);
-    console.log("simple element: " + element);
+    console.log("Simp. elem. selected: " + element + "_key#" + type);
   };
 
   const handleClickArrayProperty = (
@@ -33,7 +32,7 @@ const Json: React.FC = () => {
   ) => {
     e.stopPropagation();
     setJsonElementSelected(element + "_key#array");
-    console.log("element: " + element);
+    console.log("Array elem. selected: " + element + "_key#array");
   };
 
   const renderProperties = (
@@ -88,7 +87,9 @@ const Json: React.FC = () => {
                   JsonElementSelected === (parent ? parent + "-" + key : key )
                     ? "active"
                     : ""
-                  }`
+                  }`}
+                  onClick={(e)=>
+                    handleClickElement(e, parent ? parent + "-" + key + "_value" : key + "_value")
                   }
                   style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
                   >
@@ -146,8 +147,22 @@ const Json: React.FC = () => {
     if (items.type === "object" && items.properties) {
       return (
         <>
-          <div className="object-properties">
-            {renderProperties(items.properties, parent)}
+          <div 
+          key={parent + '_value'} className={`json-elem ${
+            JsonElementSelected === (parent ? parent + "_value" : parent + "_value" )
+              ? "active"
+              : ""
+            }`}
+            onClick={(e)=>
+              handleClickElement(e, parent ? parent + "_value" : parent + "_value" )
+            }
+            style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
+            >
+            <strong>object</strong>
+
+              <div className="object-properties">
+                {renderProperties(items.properties, parent)}
+              </div>
           </div>
         </>
       );
