@@ -5,9 +5,10 @@ from owlready2 import get_ontology
 
 from app.domain.mapping.service import getJsonSchemaPropertieType
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
-from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest
+from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest, MappingsByJSONResponse
 from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
+from app.services.mapping_service import get_mappings_by_json_schema
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase
@@ -367,3 +368,17 @@ async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] 
             return response
         
     driver.close()
+
+@router.get("/schemas/{schema_id}")
+async def get_mappings_by_schema_id(schema_id: str):
+    return get_mappings_by_json_schema(schema_id)
+    # cursor = mapping_process_collection.find({'jsonSchemaId': schema_id})
+    # mapping_process_docs = await cursor.to_list(length=None)
+    # mappingJsons = []
+    # # TODO revisar cuales son todos los valores que necesitamos
+    # for mapping_process_doc in mapping_process_docs:
+    #     print("## Mapping process doc: ##", mapping_process_doc)
+    #     mappingByJSON = MappingsByJSONResponse(id=str(mapping_process_doc['_id']), name=mapping_process_doc['name'], jsonSchemaId=mapping_process_doc['jsonSchemaId'], mapping=mapping_process_doc['mapping'])
+    #     mappingJsons.append(mappingByJSON)
+
+    # return mappingJsons
