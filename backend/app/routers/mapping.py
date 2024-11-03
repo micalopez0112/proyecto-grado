@@ -4,7 +4,6 @@ from bson import ObjectId
 from owlready2 import get_ontology
 
 from app.domain.mapping.service import getJsonSchemaPropertieType
-from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest, MappingsByJSONResponse
 from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
