@@ -1,9 +1,9 @@
 from datetime import date, datetime
 from app.database import mapping_process_collection, onto_collection
 from bson import ObjectId
-from app.domain.mapping.models import MappingProcess, MappingProcessDocument,OntologyDocument
-from app.domain.dataquality.mocks import get_hardcoded_test_documents
-from app.domain.mapping.service import getOntoPropertyByIri, getJsonSchemaPropertieType
+from backend.app.rules_validation.models import MappingProcess, MappingProcessDocument,OntologyDocument
+from backend.app.dq_evaluation.mocks import get_hardcoded_test_documents
+from backend.app.rules_validation.service import getOntoPropertyByIri, getJsonSchemaPropertieType
 from owlready2 import get_ontology
 from typing import Dict, Any
 from typing import Dict, Any

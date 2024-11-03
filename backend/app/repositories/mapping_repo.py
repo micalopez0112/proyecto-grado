@@ -1,5 +1,5 @@
 from ..database import  mapping_process_collection
-from app.domain.mapping.models import EditMappingRequest, MappingProcessDocument
+from backend.app.rules_validation.models import EditMappingRequest, MappingProcessDocument
 from bson import ObjectId
 
 

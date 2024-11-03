@@ -1,11 +1,11 @@
 
 
 from ..database import  mapping_process_collection
-from app.domain.mapping.models import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest
+from backend.app.rules_validation.models import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest
 from app.repositories import mapping_repo, schema_repo, ontology_repo
-from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, PutMappingRequest
+from backend.app.rules_validation.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, PutMappingRequest
 
-from app.domain.mapping.service import process_mapping, getJsonSchemaPropertieType
+from backend.app.rules_validation.service import process_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
 from bson import ObjectId
