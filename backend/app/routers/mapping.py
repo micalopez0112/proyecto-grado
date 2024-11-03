@@ -86,58 +86,15 @@ async def generate_schema(request: List[UploadFile] = File(...)):
 # >>> builder.add_schema(seed_schema)
 
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
-async def save_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
+async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
                        request: MappingRequest = Body(...)):
     try:
-        print("Mapping_process_id: ", mapping_proccess_id)
-        # Validate the mapping field
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code=400, detail="Invalid mapping body")
-        # esto se va para lógica
-        ontology = await onto_service.get_ontology_by_id(ontology_id)
-        if ontology is None:
-            raise HTTPException(status_code=404, detail="Ontology not found")
         
-        if (mapping_proccess_id is not None):
-            #case when updating a mapping process
-            print("about to EDIT!!")
-            result = await service.validate_and_update_mapping_process(request, ontology, mapping_proccess_id)
-   
-            return MappingResponse(message="Mapping saved and validated successfully",
-                                    status="success",mapping_id=mapping_proccess_id)
-            #catch any more exception ?
-        else:
-            #case when saving a mapping process for the first time
-            # saving json schema
-            schema_dict = request.jsonSchema
-            schema_result = await jsonschemas_collection.insert_one(schema_dict)
-            schema_id = schema_result.inserted_id
+        mapping_inserted_id = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
 
-            # saving whole mapping process
-            mapping = request.mapping
-            name = request.name
-            mapping_process_docu = MappingProcessDocument(name=name, mapping=mapping,
-                                                           ontologyId=ontology_id,
-                                                           jsonSchemaId=str(schema_id),
-                                                           mapping_suscc_validated=False)
-            mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
-
-             # here we validate if the mapping is correct
-            status = process_mapping(request.mapping, ontology, request.jsonSchema)
-
-            #updates the inserted mapping_process with the validation status
-            mapping_id = str(mapping_pr_id.inserted_id)
-            mapping_pr_id = ObjectId(mapping_pr_id.inserted_id)
-            update_data = {'mapping_suscc_validated': True}
-
-            queryTOUpdate = {'_id': mapping_pr_id}
-            tryUpdate =  {'$set': update_data}
-            result = await mapping_process_collection.update_one(
-                queryTOUpdate,
-                tryUpdate
-            )
-            #print("validation OK")
-            return MappingResponse(message="Mapped successfully", status="success",mapping_id=mapping_id)
+        return MappingResponse(message="Mapped successfully", status="success",mapping_id=mapping_inserted_id) 
     except ValueError as e:
         msg = str(e)
         status = "error"

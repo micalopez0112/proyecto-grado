@@ -1,5 +1,5 @@
 from ..database import  mapping_process_collection
-from app.domain.mapping.models import EditMappingRequest
+from app.domain.mapping.models import EditMappingRequest, MappingProcessDocument
 from bson import ObjectId
 
 # find_mappings_by_schema gets all the mapping processes that use a specific JSON schema
@@ -16,21 +16,26 @@ async def find_mapping_process_by_id(mapping_pr_id: str):
     
     return mapping_process_docu
 
-async def update_mapping_process(edit_mapping_request: EditMappingRequest, mapping_proccess_id: str, mapping_validated: bool):
+async def insert_mapping_process(mapping_process_docu: MappingProcessDocument):
+    mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
+
+    return mapping_pr_id.inserted_id
+
+async def update_mapping_process(data_to_update: dict, mapping_proccess_id: str, mapping_validated: bool):
     try:
         update_data = {'mapping_suscc_validated': mapping_validated}
-        for key, value in edit_mapping_request:
-            print("value", value)
-            if value is not None and value != "" and value != {} and value != "string":
-                update_data[key] = value
+        data_to_update.update(update_data)
 
-        query_to_update = {'_id': mapping_proccess_id}
-        try_update =  {'$set': update_data}
+        mapping_objectId = ObjectId(mapping_proccess_id)
+        query_to_update = {'_id': mapping_objectId}
+        try_update =  {'$set': data_to_update}
+
         result = await mapping_process_collection.update_one(
             query_to_update,
             try_update
         )
+        return result
     except Exception as e:
         print("Error in updating mapping process", e)
     
-    return result
+    return None
