@@ -29,7 +29,8 @@ export const Mapping = () => {
     setMappings,
     setJsonSchemaContext,
     removeMapping,
-    collectionPath
+    collectionPath,
+    resetMappingState,
   } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
@@ -62,7 +63,6 @@ export const Mapping = () => {
         setLoading(true);
         try {
           const response = await getMapping(mappingId);
-          //console.log("Response de getMapping: ", response);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
             setMappings(mapping);
@@ -90,40 +90,47 @@ export const Mapping = () => {
             ontology_id: "",
             name: mappingName,
             mapping: mappings,
-            jsonSchema: {},
+            jsonSchema: {},//null because it is not updated in the collection
             mapping_proccess_id: mappingId,
+            //documentStoragePath: collectionPath
           };
           const response = await saveMapping(body);
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message, mapping_id } = response.data;
             //navigate('/Result', {state:{mapping_process:mapping_id}});
-            alert("Mapping guardado con éxito");
+            if(status === "success"){
+              resetMappingState();
+              alert(`Process Mapping saved successfully`);
+              navigate("/")
+            }
+            else{
+              alert(`Error saving Mapping Process`);
+            }
           }
         } else {
           //new mapping
           if (currentOntologyId) {
-            console.log("Flujo donde no existe mappingId");
-            console.log("JSON SCHEMAAA: ", jsonSchemaContext);
-            const jsonschema = jsonSchemaContext;
             const body = {
               ontology_id: currentOntologyId,
               name: mappingName,
               mapping: mappings,
               jsonSchema: jsonSchemaContext,
               mapping_proccess_id: mappingId,
+              //documentStoragePath: collectionPath
             };
             const response = await saveMapping(body);
             console.log("Response al guardar mappings: ", response);
-            if (response && response.status === 200) {
-              console.log(response.data);
+            if (response ) {
               alert("Mappings enviados con exito");
               const { status, message, mapping_id } = response.data;
-              if (mapping_id) {
+              if (status === "success") {
                 //navigate('/Result', {state:{mapping_process:mapping_id}});
-                alert("Mapping modificado con éxito");
+                resetMappingState();
+                alert("Process Mapping saved successfully");
+                navigate("/")
               } else {
-                alert("No se pudo obtener el id del mapeo");
+                alert("Error saving Mapping Process");
               }
             }
           } else {
@@ -131,7 +138,7 @@ export const Mapping = () => {
           }
         }
       } else {
-        alert("No hay mappings para enviar");
+        alert("Mappings must not be empty");
       }
     } catch (error) {
       console.error("error en apiCall", error);
@@ -150,6 +157,7 @@ export const Mapping = () => {
             mapping: mappings,
             jsonSchema: jsonSchemaContext,
             mapping_proccess_id: mappingId,
+            //documentStoragePath: collectionPath
           };
           const response = await saveAndValidateMappings(
             currentOntologyId!,
@@ -160,18 +168,25 @@ export const Mapping = () => {
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message, mapping_id } = response.data;
-            navigate("/Result", { state: { mapping_process: mapping_id } });
+            if(status === 200){
+              resetMappingState();
+              alert("Mapping procces successfully validated and saved");
+              navigate("/");
+            }
+            else{
+              alert("Error validating mapping, please check: " + message);
+            }
+            //navigate("/Result", { state: { mapping_process: mapping_id } });
           }
         } else {
           //new mapping
           if (currentOntologyId) {
-            console.log("Flujo donde no existe mappingId");
-            console.log("JSON SCHEMAAA: ", jsonSchemaContext);
             const jsonschema = jsonSchemaContext;
             const body = {
               name: mappingName,
               mapping: mappings,
               jsonSchema: jsonschema,
+              //documentStoragePath: collectionPath
             };
             const response = await saveAndValidateMappings(
               currentOntologyId,
@@ -179,14 +194,15 @@ export const Mapping = () => {
               body
             );
             console.log("Response al guardar mappings: ", response);
-            if (response && response.status === 200) {
-              console.log(response.data);
-              alert("Mappings enviados con exito");
+            if (response) {
               const { status, message, mapping_id } = response.data;
-              if (mapping_id) {
-                navigate("/Result", { state: { mapping_process: mapping_id } });
-              } else {
-                alert("No se pudo obtener el id del mapeo");
+              if(status === 200){
+                resetMappingState();
+                alert("Mapping procces successfully validated and saved");
+                navigate("/");
+              }
+              else{
+                alert("Error validating mapping, please check: " + message);
               }
             }
           } else {
@@ -194,7 +210,7 @@ export const Mapping = () => {
           }
         }
       } else {
-        alert("No hay mappings para enviar");
+        alert("Mappings must not be empty");
       }
     } catch (error) {
       console.error("error en apiCall", error);
@@ -246,21 +262,13 @@ export const Mapping = () => {
       ) : (
         <div className="App">
           <div className="mapping-name">
-            <label>Nombre del mapeo</label>
+            <label>Mapping Process Name</label>
             <input
               type="text"
               value={mappingName}
               onChange={(e) => setMappingName(e.target.value)}
             ></input>
           </div>
-          {/* <input
-        className="file-upload-label"
-        type="file"
-        onChange={handleFileChange}
-      ></input>
-      <button className="button" onClick={handleFileSubmit}>
-        Submit archivo
-      </button> */}
           <div className="content-container">
             <div className="content-box">
               <Json></Json>
@@ -275,10 +283,10 @@ export const Mapping = () => {
                 </div>
                 <div className="add-clean-buttons">
                   <button className="button" onClick={addNewMapping}>
-                    Agregar mapping
+                    Add mapping
                   </button>
                   <button className="button" onClick={clearMappings}>
-                    Limpiar mappings
+                    Clean mappings
                   </button>
                 </div>
                 <MappingList isResult={false} />
@@ -287,13 +295,13 @@ export const Mapping = () => {
                     className="button success"
                     onClick={validateAndSaveMappingsApiCall}
                   >
-                    Guardar y Validar mappings
+                    Validate & Save
                   </button>
                   <button
                     className="button success"
                     onClick={saveMappingsApiCall}
                   >
-                    Guardar mappings
+                    Save
                   </button>
                 </div>
               </div>

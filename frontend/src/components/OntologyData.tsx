@@ -227,7 +227,7 @@ const OntologyData: React.FC<{}> = () => {
       </Modal>
 
       <div className="title-wrapper">
-        <h1 className="title">Elementos de la ontología</h1>
+        <h1 className="title">Ontology Elements</h1>
       </div>
       {/* {OntoElementSelected.type && (
         <strong style={{ fontFamily: "cursive" }}>
@@ -324,7 +324,7 @@ const OntologyData: React.FC<{}> = () => {
                 className="button"
                 onClick={() => openModal()}
               >
-                Visualizar Ontología
+                Visualize Ontology
               </button>
             </div>
           ))}

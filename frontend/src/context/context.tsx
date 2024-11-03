@@ -35,6 +35,7 @@ interface JsonSchemaContextProps {
     elementToRemove: { name: string; iri: string }
   ) => void;
   clearMappings: () => void;
+  resetMappingState: () => void;
 }
 
 const Context = createContext<JsonSchemaContextProps>({
@@ -55,6 +56,7 @@ const Context = createContext<JsonSchemaContextProps>({
   removeMapping: () => {},
   clearMappings: () => {},
   setCollectionPath: () => {},
+  resetMappingState: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -226,6 +228,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
               "Entradas de la key después de eliminar: ",
               updatedMappings[key.slice(0, key.length - 4) + "_value"]
             );
+            if(updatedMappings[key.slice(0, key.length - 4) + "_value"].length === 0){
+              //delete Object Property key if it has no elements
+              delete updatedMappings[key.slice(0, key.length - 4) + "_value"];
+            }
             }
           } else {
             //handle not range, POSSIBLE??
@@ -238,6 +244,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           delete updatedMappings[key];
         }
       }
+      console.log("Updated mappings: ", updatedMappings);
       return updatedMappings;
     });
   };
@@ -273,6 +280,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setJsonElementSelected("");
   };
 
+  const resetMappingState = () => {
+    clearMappings();
+    setJsonSchemaContext(null);
+    setCollectionPath("");
+  }
+
   return (
     <Context.Provider
       value={{
@@ -292,7 +305,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         removeMapping,
         clearMappings,
         collectionPath,
-        setCollectionPath
+        setCollectionPath,
+        resetMappingState,
       }}
     >
       {children}
