@@ -2,6 +2,7 @@ from ..database import  mapping_process_collection
 from app.domain.mapping.models import EditMappingRequest, MappingProcessDocument
 from bson import ObjectId
 
+
 # find_mappings_by_schema gets all the mapping processes that use a specific JSON schema
 async def find_mappings_by_schema(json_schema_id: str):
     cursor = mapping_process_collection.find({'jsonSchemaId': json_schema_id})
@@ -16,6 +17,12 @@ async def find_mapping_process_by_id(mapping_pr_id: str):
     
     mapping_docu = MappingProcessDocument(**mapping_process_docu)
     return mapping_docu
+
+# find_mappings_by_field finds a list of mappings that match a query
+async def find_mappings_by_query(query):
+    mapping_docus =  mapping_process_collection.find(query)
+    mapping_docus_list = await mapping_docus.to_list(length=None)  
+    return mapping_docus_list
 
 async def insert_mapping_process(mapping_process_docu: MappingProcessDocument):
     mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
