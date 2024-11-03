@@ -125,6 +125,11 @@ class MappingsByJSONResponse(BaseModel):
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
     jsonSchemaId: Optional[str]= None
+
+class JSONSchemaResponse(BaseModel):
+    _id : Optional[str] = None
+    collection_name : str = None
+    
 ## esto se reemplaza luego con persistencia
 def set_mapping_process(key, value):
     global mappingProcessInMemory
