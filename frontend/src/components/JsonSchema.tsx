@@ -158,7 +158,7 @@ const Json: React.FC = () => {
             }
             style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
             >
-            <strong>object</strong>
+            <strong>array items: object</strong>
 
               <div className="object-properties">
                 {renderProperties(items.properties, parent)}

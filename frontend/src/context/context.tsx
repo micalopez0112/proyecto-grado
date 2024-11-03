@@ -182,20 +182,23 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappings((prevMappings) => {
       const updatedMappings = { ...prevMappings };
       if (updatedMappings[key]) {
-        //TODO:check if it is an object property mapping with _key
-        //if so, remove the _key and _value mappings{
-
+        // TODO: check if it is an object property mapping with _key
+        // if so, remove the _key and _value mappings
+  
         updatedMappings[key] = updatedMappings[key].filter(
           (element) =>
             element.name !== elementToRemove.name ||
             element.iri !== elementToRemove.iri
         );
-        if (key.endsWith("_key") || key.endsWith("_key#array")) {
-          //obtener el rango de la object property
+  
+        const updatedKey = getUpdatedKey(key);
+        if (updatedKey) {
+          // obtener el rango de la object property
           const objectPropertyRange = getRangeByObjectPropertyName(
             ontologyDataContext,
             elementToRemove.name
           );
+  
           if (objectPropertyRange && objectPropertyRange.length > 0) {
             const objectPropertyRangeNames = objectPropertyRange.map(
               (rangeItem) => rangeItem.name
@@ -214,30 +217,32 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
             );
             console.log(
               "Entradas de la key que se quiere eliminar: ",
-              updatedMappings[key.slice(0, key.length - 4) + "_value"]
+              updatedMappings[updatedKey]
             );
-            if (updatedMappings[key.slice(0, key.length - 4) + "_value"] != undefined){
-              updatedMappings[key.slice(0, key.length - 4) + "_value"] =
-              updatedMappings[key.slice(0, key.length - 4) + "_value"].filter(
-                //fix needed to work with arrays and multiple values in range
+  
+            if (updatedMappings[updatedKey] != undefined) {
+              updatedMappings[updatedKey] = updatedMappings[updatedKey].filter(
+                // fix needed to work with arrays and multiple values in range
                 (element) =>
                   element.name !== objectPropertyRange[0].name ||
                   element.iri !== objectPropertyRange[0].iri
               );
-            console.log(
-              "Entradas de la key después de eliminar: ",
-              updatedMappings[key.slice(0, key.length - 4) + "_value"]
-            );
-            if(updatedMappings[key.slice(0, key.length - 4) + "_value"].length === 0){
-              //delete Object Property key if it has no elements
-              delete updatedMappings[key.slice(0, key.length - 4) + "_value"];
-            }
+              console.log(
+                "Entradas de la key después de eliminar: ",
+                updatedMappings[updatedKey]
+              );
+  
+              if (updatedMappings[updatedKey].length === 0) {
+                // delete Object Property key if it has no elements
+                delete updatedMappings[updatedKey];
+              }
             }
           } else {
-            //handle not range, POSSIBLE??
+            // handle not range, POSSIBLE??
           }
-          //falta caso de array sería con slice -10
+          // falta caso de array sería con slice -10
         }
+  
         // Delete key if it has no elements
         // necessary?
         if (updatedMappings[key].length === 0) {
@@ -247,6 +252,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Updated mappings: ", updatedMappings);
       return updatedMappings;
     });
+  };
+
+  const getUpdatedKey = (key: string): string | null => {
+    if (key.endsWith("_key")) {
+      return key.slice(0, key.length - 4) + "_value";
+    } else if (key.endsWith("_key#array")) {
+      return key.slice(0, key.length - 10) + "_value";
+    }
+    return null; 
   };
 
   const getRangeByObjectPropertyName = (
