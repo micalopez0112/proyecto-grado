@@ -5,7 +5,6 @@ from owlready2 import get_ontology
 
 from app.domain.mapping.service import getJsonSchemaPropertieType
 from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest, MappingsByJSONResponse
-from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
 from app.services import mapping_service as service
 from app.services import ontology_service as onto_service
@@ -81,9 +80,6 @@ async def generate_schema(request: List[UploadFile] = File(...)):
         return schema
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-#  seed_schema = {'type': 'array', 'items': []}
-# >>> builder.add_schema(seed_schema)
 
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
 async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
@@ -177,63 +173,9 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
 @router.get("/{mapping_process_id}")
 async def get_mapping(mapping_process_id: str, filter_dp: Optional[bool] = None):
     try:
-        mapping_pr_id = ObjectId(mapping_process_id)
-        mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
-        mappingProcessDocu = MappingProcessDocument(**mapping_process_docu)
-        print("mappingProcessDocu", mappingProcessDocu)
-        
-        if(filter_dp is not None and filter_dp == True):
-            # Filter mapping_process to retrieve only data properties components
-            mapping = mappingProcessDocu.mapping
-            mapping = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != '') }#not v.get('isDataProperty')}
-            print("Ver si funcionó el mapping", mapping)
-            #getJsonSchemaPropertieType
-            ##mappingProcessDocu.mapping = mapping
-        # TERMINAR ##
-        else:
-            mapping = mappingProcessDocu.mapping
-
-        onto_id = mappingProcessDocu.ontologyId
-        ontology_id = ObjectId(onto_id)
-        ontology = await onto_collection.find_one({'_id': ontology_id})
-        if ontology.get('type') == "FILE":
-            ontology_path = ontology.get('file')
-            print("ontology_path", ontology_path)
-            # Mover esto para un lugar más adecuado
-            ontology = get_ontology(ontology_path).load()
-        else:
-            ontology_uri = ontology.get('uri')
-            print("ontology_uri", ontology_uri)
-            ontology = get_ontology(str(ontology_uri)).load()
-        classes = list(ontology.classes())
-        object_properties = list(ontology.object_properties())
-        data_properties = list(ontology.data_properties())
-        ontology_data = {
-            "ontology_id":onto_id,
-            "ontoData": [{
-                "data": [{
-                    "classes": [{"name": cls.name, "iri": cls.iri} for cls in classes],
-                    "object_properties": [{"name": prop.name, "iri": prop.iri,"range":{"name":range.name,"iri":range.iri}} for prop in object_properties for range in prop.range],
-                    "data_properties": [{"name": prop.name, "iri": prop.iri} for prop in data_properties]
-                }]
-            }]
-        }
-        # Recuperar la información del schema asociado
-        sh_id = mappingProcessDocu.jsonSchemaId
-        schema_id = ObjectId(sh_id)
-        schemaDocum = await jsonschemas_collection.find_one({'_id': schema_id})
-        JSONSchema = JsonSchema(**schemaDocum)
-
-        # AJUSTAR
-        complete_mapping = {
-            'ontology': ontology_data,
-            'schema': JSONSchema,
-            'mapping': mapping,
-            'mapping_name': mappingProcessDocu.name
-        }
-
-        #print("complete_mapping", complete_mapping)
+        complete_mapping = await service.get_mapping_process_by_id(mapping_process_id, filter_dp)
         return complete_mapping
+        
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")

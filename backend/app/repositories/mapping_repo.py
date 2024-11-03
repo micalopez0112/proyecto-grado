@@ -14,7 +14,8 @@ async def find_mapping_process_by_id(mapping_pr_id: str):
     mapping_obj_id = ObjectId(mapping_pr_id)
     mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_obj_id})
     
-    return mapping_process_docu
+    mapping_docu = MappingProcessDocument(**mapping_process_docu)
+    return mapping_docu
 
 async def insert_mapping_process(mapping_process_docu: MappingProcessDocument):
     mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
