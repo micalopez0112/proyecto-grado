@@ -8,6 +8,7 @@ from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest
 from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
 from app.services import mapping_service as service
+from app.services import ontology_service as onto_service
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase
@@ -89,60 +90,19 @@ async def save_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = No
                        request: MappingRequest = Body(...)):
     try:
         print("Mapping_process_id: ", mapping_proccess_id)
-        # print("#REQUEST#: ", request);
-        onto_id = ObjectId(ontology_id)
-        ontology_docu = await onto_collection.find_one({'_id': onto_id})
-        
-        if ontology_docu is None:
-            raise HTTPException(status_code=404, detail="Ontology not found")
-        
         # Validate the mapping field
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code=400, detail="Invalid mapping body")
+        # esto se va para lógica
+        ontology = await onto_service.get_ontology_by_id(ontology_id)
+        if ontology is None:
+            raise HTTPException(status_code=404, detail="Ontology not found")
         
-        ontology_docu['id'] = str(ontology_docu['_id'])
-        ontology_document = OntologyDocument(**ontology_docu)
-        if ontology_document.type == "FILE":
-            ontology_path = ontology_document.file
-            ontology = get_ontology(ontology_path).load()
-        else:
-            ontology = get_ontology(str(ontology_document.uri)).load()
-            
         if (mapping_proccess_id is not None):
             #case when updating a mapping process
-            editRequest = EditMappingRequest(name=request.name, mapping=request.mapping)
-            mapping_pr_id = ObjectId(mapping_proccess_id)
-            mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_pr_id})
-            if not mapping_process_docu:
-                return MappingResponse(message="Mapping process not found", status="error")
-            
-            #saving(editing) mapping process
-            update_data = {'mapping_suscc_validated': False}
-            for key, value in editRequest:#request.model_dump().items():
-                print("value", value)
-                if value is not None and value != "" and value != {} and value != "string":
-                    update_data[key] = value
-        
-            queryTOUpdate = {'_id': mapping_pr_id}
-            tryUpdate =  {'$set': update_data}
-            result = await mapping_process_collection.update_one(
-                queryTOUpdate,
-                tryUpdate
-            )
-            
-            # here we validate if the mapping is correct
-            status = process_mapping(request.mapping, ontology, request.jsonSchema)
-            print("Validation OK")
-
-            print("Update mapping proccess to be valid:", mapping_proccess_id)
-            #updates the inserted mapping_process with the validation status
-            
-            update_data = {'mapping_suscc_validated': True}
-            tryUpdate =  {'$set': update_data}
-            result = await mapping_process_collection.update_one(
-                queryTOUpdate,
-                tryUpdate
-            )
+            print("about to EDIT!!")
+            result = await service.validate_and_update_mapping_process(request, ontology, mapping_proccess_id)
+   
             return MappingResponse(message="Mapping saved and validated successfully",
                                     status="success",mapping_id=mapping_proccess_id)
             #catch any more exception ?
