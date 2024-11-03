@@ -33,3 +33,5 @@ class Neo4jConnection:
 
 # Instancia única de conexión
 neo4j_conn = Neo4jConnection(uri=NEO_URI, user=NEO_USER, password=NEO_PASS)
+neo4j_driver = neo4j_conn.get_driver()
+#neo4j_driver = GraphDatabase.driver(Config.NEO4J_URI, auth=(Config.NEO4J_USERNAME, Config.NEO4J_PASSWORD))

@@ -133,3 +133,9 @@ def delete_mapping_process(key):
     global mappingProcessInMemory
     if key in mappingProcessInMemory:
         del mappingProcessInMemory[key]
+
+class MappingsByJSONResponse(BaseModel):
+    _id : Optional[str] = None
+    name : str = None
+    mapping :Optional[Dict[str, Any]]= None
+    jsonSchemaId: Optional[str]= None

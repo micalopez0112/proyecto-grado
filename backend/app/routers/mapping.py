@@ -5,7 +5,7 @@ from owlready2 import get_ontology
 
 from app.domain.mapping.service import getJsonSchemaPropertieType
 from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
-from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest
+from app.domain.mapping.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, JsonSchema, PutMappingRequest, MappingsByJSONResponse
 from app.domain.mapping.service import process_mapping
 from app.domain.dataquality.evaluation import StrategyContext
 from ..database import onto_collection, mapping_process_collection, jsonschemas_collection
@@ -357,3 +357,4 @@ async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] 
             return response
         
     driver.close()
+
