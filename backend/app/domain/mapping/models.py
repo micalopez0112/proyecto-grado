@@ -121,10 +121,10 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 class MappingsByJSONResponse(BaseModel):
+    _id : Optional[str] = None
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
     jsonSchemaId: Optional[str]= None
-
 ## esto se reemplaza luego con persistencia
 def set_mapping_process(key, value):
     global mappingProcessInMemory
