@@ -119,6 +119,16 @@ class PyObjectId(ObjectId):
     @classmethod
     def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
+
+class MappingsByJSONResponse(BaseModel):
+    _id : Optional[str] = None
+    name : str = None
+    mapping :Optional[Dict[str, Any]]= None
+    jsonSchemaId: Optional[str]= None
+
+class JSONSchemaResponse(BaseModel):
+    _id : Optional[str] = None
+    collection_name : str = None
     
 ## esto se reemplaza luego con persistencia
 def set_mapping_process(key, value):
@@ -133,3 +143,5 @@ def delete_mapping_process(key):
     global mappingProcessInMemory
     if key in mappingProcessInMemory:
         del mappingProcessInMemory[key]
+
+    
