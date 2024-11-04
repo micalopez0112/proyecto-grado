@@ -38,9 +38,10 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
     if (mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
     else : 
-        schema_id = await schema_repo.insert_schema(request.jsonSchema)
+        schema_id = await schema_service.insert_schema(request.jsonSchema)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
+                                                        document_storage_path = request.documentStoragePath,
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
         
@@ -97,11 +98,15 @@ def build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping
 
 async def update_whole_mapping_process(put_request: PutMappingRequest):
     if(put_request.mapping_proccess_id is None or put_request.mapping_proccess_id == ""):
+        print("aa")
         json_schema_id = await schema_service.insert_schema(put_request.jsonSchema)
+        print("json_schema_id en update WHOLE", json_schema_id)
         mapping_process_docu = MappingProcessDocument(name=put_request.name, mapping=put_request.mapping,
                                                             ontologyId=put_request.ontology_id,
                                                             jsonSchemaId=str(json_schema_id),
+                                                            document_storage_path = put_request.documentStoragePath,
                                                             mapping_suscc_validated=False)
+        print("Previo al insert: ", mapping_process_docu)
         mapping_pr_id = await mapping_process_collection.insert_one(mapping_process_docu.dict(exclude_unset=True))
         return mapping_pr_id.inserted_id
     else:

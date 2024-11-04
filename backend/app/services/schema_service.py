@@ -21,4 +21,4 @@ async def get_schema_by_id(schema_id: str):
 
 async def insert_schema(json_schema: dict):
     schema_id = await schema_repo.insert_schema(json_schema)
-    return schema_id.inserted_id
+    return schema_id
