@@ -1,13 +1,14 @@
-import os
+
 from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 from owlready2 import get_ontology
-from typing import Optional, List
-from app.domain.mapping.models import MappingProcessDocument, OntologyDocument
+from typing import Optional, List, Any
+
 from ..database import onto_collection
-from typing import Dict, Any
-from app.domain.mapping.utils import get_ontology_info_from_pid, graph_generator
+from app.models.ontology import OntologyDocument
+from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
+
+import os
 
 router = APIRouter()
 
