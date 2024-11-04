@@ -15,7 +15,6 @@ async def find_all_schemas():
 async def insert_schema(json_schema: Dict[str, Any]):
     # ver error sumar excpetion
     schema_result = await jsonschemas_collection.insert_one(json_schema)
-    
     schema_id = schema_result.inserted_id
     return schema_id
 

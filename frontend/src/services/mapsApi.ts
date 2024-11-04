@@ -7,23 +7,31 @@ export const saveAndValidateMappings = async (
 ) => {
   try {
     const body = data;
-    let options = {};
-    if (mapping_pid !== "") {
-      options = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        params: {
-          mapping_proccess_id: mapping_pid,
-        },
-      };
-    } else {
-      options = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-    }
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        mapping_proccess_id: mapping_pid,
+      },
+    };
+    // if (mapping_pid !== "") {
+    //   options = {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     params: {
+    //       mapping_proccess_id: mapping_pid,
+    //     },
+    //   };
+    // } else {
+    //   options = {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   };
+    // }
+
     const response = await apiClient.post(
       `/mapping/ontology_id/${ontologyId}`,
       body,

@@ -30,6 +30,7 @@ class PutMappingRequest(BaseModel):
     mapping: Dict[str, Any] = Field(default=None) 
     jsonSchema: Dict[str, Any] = Field(default=None)
     ontology_id:str = Field(default=None)
+    documentStoragePath : str = Field(default=None)
 
 class EditMappingRequest(BaseModel):
     name: str = Field()

@@ -80,7 +80,6 @@ async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optio
     try:
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code=400, detail="Invalid mapping body")
-        
         mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
     except ValueError as e:
@@ -97,8 +96,7 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
     try:
         print("REQUEST DEL PUT: ", request)
         mapping_id = await service.update_whole_mapping_process(request)
-
-        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_id)
+        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = str(mapping_id))
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
