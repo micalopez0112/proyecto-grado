@@ -1,6 +1,5 @@
 from pydantic import BaseModel,Field,HttpUrl
 from typing import Dict, Any, Optional, List
-from pymongo import MongoClient
 from bson import ObjectId
 
 # temporary memory storage

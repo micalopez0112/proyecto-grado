@@ -1,4 +1,4 @@
-from backend.app.rules_validation.models import JsonSchema
+from app.rules_validation.models import JsonSchema
 
 VALUE = "value"
 KEY = "key"

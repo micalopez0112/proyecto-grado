@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
 import json
 
-from backend.app.rules_validation.models import  MappingRequest, MappingResponse, PutMappingRequest
-from backend.app.dq_evaluation.evaluation import StrategyContext
+from app.rules_validation.models import  MappingRequest, MappingResponse, PutMappingRequest
+from app.dq_evaluation.evaluation import StrategyContext
 from app.services import mapping_service as service
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase

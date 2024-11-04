@@ -4,7 +4,7 @@
 from ..database import  jsonschemas_collection
 from typing import Dict, Any
 from bson import ObjectId
-from backend.app.rules_validation.models import  JsonSchema
+from app.rules_validation.models import  JsonSchema
 
 async def find_all_schemas():
     cursor = jsonschemas_collection.find({})

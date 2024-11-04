@@ -4,10 +4,10 @@ from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from owlready2 import get_ontology
 from typing import Optional, List
-from backend.app.rules_validation.models import MappingProcessDocument, OntologyDocument
+from app.rules_validation.models import MappingProcessDocument, OntologyDocument
 from ..database import onto_collection
 from typing import Dict, Any
-from backend.app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
+from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
 
 router = APIRouter()
 

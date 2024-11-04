@@ -1,5 +1,5 @@
 from ..database import  onto_collection
-from backend.app.rules_validation.models import  OntologyDocument
+from app.rules_validation.models import  OntologyDocument
 from bson import ObjectId
 
 async def find_ontology_by_id(ontology_id: str):
