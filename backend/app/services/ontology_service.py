@@ -17,7 +17,7 @@ def build_ontology_response(ontology, onto_id):
     classes = list(ontology.classes())
     object_properties = list(ontology.object_properties())
     data_properties = list(ontology.data_properties())
-    ontology_data = {
+    return {
         "ontology_id": onto_id,
         "ontoData": [{
             "data": [{
