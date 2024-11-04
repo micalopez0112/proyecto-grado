@@ -80,7 +80,6 @@ async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optio
     try:
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code=400, detail="Invalid mapping body")
-        
         mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
     except ValueError as e:
