@@ -1,7 +1,7 @@
 from owlready2 import *
 from bson import ObjectId
-from app.rules_validation.models import MappingProcess, get_mapping_process, MappingRequest, MappingResponse, OntologyDocument
-from app.rules_validation.mapping_rules import process_mapping
+from app.models.ontology import  OntologyDocument
+from app.rules_validation.mapping_rules import validate_mapping
 
 from app.database import onto_collection, mapping_process_collection, jsonschemas_collection
 import random

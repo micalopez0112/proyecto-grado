@@ -1,17 +1,16 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
-import json
-
-from app.rules_validation.models import  MappingRequest, MappingResponse, PutMappingRequest
-from app.dq_evaluation.evaluation import StrategyContext
-from app.services import mapping_service as service
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase
-
 from genson import SchemaBuilder
 from pydantic import BaseModel
-from app.Coleccion_Películas.governance import cleanJsonSchema
-import os
 
+from app.services import mapping_service as service
+from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
+from app.dq_evaluation.evaluation import StrategyContext
+from app.Coleccion_Películas.governance import cleanJsonSchema
+
+import os
+import json
 zone_path = os.getenv("ZONE_PATH")
 
 URI = "bolt://localhost:7687"
@@ -82,9 +81,8 @@ async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optio
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code=400, detail="Invalid mapping body")
         
-        mapping_inserted_id = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
-
-        return MappingResponse(message="Mapped successfully", status="success",mapping_id=mapping_inserted_id) 
+        mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
+        return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
     except ValueError as e:
         msg = str(e)
         status = "error"

@@ -1,14 +1,11 @@
 
 
 from ..database import  mapping_process_collection
-from app.rules_validation.models import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest
-from app.repositories import mapping_repo, schema_repo, ontology_repo
-from app.rules_validation.models import MappingProcessDocument, EditMappingRequest, MappingRequest, MappingResponse, OntologyDocument, PutMappingRequest
-
-from app.rules_validation.mapping_rules import process_mapping, getJsonSchemaPropertieType
+from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
+from app.repositories import mapping_repo, schema_repo
+from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
-from bson import ObjectId
 
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
@@ -46,11 +43,10 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
                                                         jsonSchemaId=str(schema_id),
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
-  
-    status = process_mapping(request.mapping, ontology, request.jsonSchema)
+        
+    status = validate_mapping(request.mapping, ontology, request.jsonSchema)
     print("status", status)
     updated_result = await mapping_repo.update_mapping_process({}, str(mapping_process_id_inserted), True)
-
     return mapping_process_id_inserted
 
 async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = None):

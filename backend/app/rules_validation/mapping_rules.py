@@ -1,4 +1,4 @@
-from app.rules_validation.models import JsonSchema
+from app.models.schema import JsonSchema
 
 VALUE = "value"
 KEY = "key"
@@ -8,7 +8,7 @@ simpleTypes = ["string", "int", "bool", "float"]
 # se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db
 # ojo ver si este tipado funciona
-def process_mapping(mapping, ontology, jsonschema: JsonSchema):
+def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
     # guardar el proceso de mapeo en la base de datos (sea cual fuere)
     print("## Starting mapping process:", ontology, "##")
     ontoClasses = list(ontology.classes())

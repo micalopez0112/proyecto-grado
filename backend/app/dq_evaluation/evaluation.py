@@ -1,15 +1,16 @@
-from datetime import date, datetime
-from app.database import mapping_process_collection, onto_collection
-from bson import ObjectId
-from app.rules_validation.models import MappingProcess, MappingProcessDocument,OntologyDocument
-from app.dq_evaluation.mocks import get_hardcoded_test_documents
-from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
 from owlready2 import get_ontology
-from typing import Dict, Any
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from datetime import datetime
 from neo4j import GraphDatabase
+from datetime import  datetime
+from bson import ObjectId
+
+from app.database import mapping_process_collection, onto_collection
+from app.dq_evaluation.mocks import get_hardcoded_test_documents
+from app.models.mapping import MappingProcessDocument
+from app.models.ontology import OntologyDocument
+from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
 
 SYNTCTATIC_ACCURACY = "syntactic_accuracy"
 QUALITY_RULES = [SYNTCTATIC_ACCURACY]

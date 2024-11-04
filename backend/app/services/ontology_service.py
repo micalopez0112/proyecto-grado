@@ -1,5 +1,6 @@
-from app.repositories import ontology_repo
 from owlready2 import get_ontology
+from app.repositories import ontology_repo
+
 
 async def get_ontology_by_id(ontology_id: str):
     ontology = await ontology_repo.find_ontology_by_id(ontology_id)

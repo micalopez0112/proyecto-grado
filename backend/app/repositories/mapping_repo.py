@@ -1,7 +1,6 @@
 from ..database import  mapping_process_collection
-from app.rules_validation.models import EditMappingRequest, MappingProcessDocument
+from app.models.mapping import MappingProcessDocument
 from bson import ObjectId
-
 
 # find_mappings_by_schema gets all the mapping processes that use a specific JSON schema
 async def find_mappings_by_schema(json_schema_id: str):

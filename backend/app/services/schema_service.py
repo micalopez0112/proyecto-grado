@@ -2,7 +2,7 @@
 
 
 from app.repositories import schema_repo
-from app.rules_validation.models import JSONSchemaResponse
+from app.models.schema import JSONSchemaResponse
 
 async def get_all_schemas():
     schemas = await schema_repo.find_all_schemas()
