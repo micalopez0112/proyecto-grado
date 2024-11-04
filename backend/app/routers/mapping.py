@@ -98,7 +98,7 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
         print("REQUEST DEL PUT: ", request)
         mapping_id = await service.update_whole_mapping_process(request)
 
-        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_process_id)
+        return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = mapping_id)
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
