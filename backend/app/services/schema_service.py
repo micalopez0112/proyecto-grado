@@ -1,6 +1,6 @@
 
 
-
+from typing import Dict, Any
 from app.repositories import schema_repo
 from app.models.schema import JSONSchemaResponse
 
@@ -22,3 +22,20 @@ async def get_schema_by_id(schema_id: str):
 async def insert_schema(json_schema: dict):
     schema_id = await schema_repo.insert_schema(json_schema)
     return schema_id.inserted_id
+
+async def find_schema_by_collection_name(collection_name : str):
+    schema = await schema_repo.find_one_schema_by_query({'collection_name': collection_name})
+    return schema
+
+async def get_or_create_schema(json_schema: Dict[str, Any]):
+    collection_name=json_schema['collection_name']
+    existent_schema = await find_schema_by_collection_name(collection_name)
+    if existent_schema is None:
+        print("#####inserting json schema #####")
+        inserted_id = await insert_schema(json_schema)
+        print("##### inserted_id #####", inserted_id)
+        return inserted_id
+    
+    print("##### returning existent schema #####")
+    print("##### existent_schema #####", existent_schema.id)
+    return existent_schema.id

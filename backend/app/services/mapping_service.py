@@ -2,7 +2,7 @@
 
 from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
-from app.repositories import mapping_repo, schema_repo
+from app.repositories import mapping_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
@@ -38,7 +38,15 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
     if (mapping_proccess_id is not None):
         result = await update_mapping_process(request, ontology, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
     else : 
-        schema_id = await schema_repo.insert_schema(request.jsonSchema)
+        # collection_name=request.jsonSchema['collection_name']
+        # existent_schema = await schema_service.find_schema_by_collection_name(collection_name)
+        # if existent_schema is None:
+        #     schema_id = await schema_service.insert_schema(request.jsonSchema)
+        # else:
+        #     schema_id = existent_schema.id
+        print("##### ABOUT TO SAVE JSON ####")
+        schema_id = await schema_service.get_or_create_schema(request.jsonSchema)
+        print("##### SCHEMA ID #####", schema_id)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
                                                         mapping_suscc_validated=False)

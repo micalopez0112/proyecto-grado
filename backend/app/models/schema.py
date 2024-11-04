@@ -5,12 +5,17 @@ from typing import Dict, Any, Optional, List
 from bson import ObjectId
 
 class JsonSchema(BaseModel):
+    id : Optional[str] = None
+    collection_name : str = None
     schema: str = Field(alias="$schema")
     type: str 
     properties: Dict[str, Any]
     # { "destinp": { "type": "object", "properties": {}} }
     required: Optional[List[str]] = None
     # property_name = 
+    def get_id(self):
+        return str(self._id)
+    
     def findPropertyInJsonSchema(self, property_name: str)-> Optional[Dict[str, Any]]:
         properties = property_name.split("_")[0]
         properties_names = properties.split("-")
