@@ -43,5 +43,6 @@ class JsonSchema(BaseModel):
         return current_level
     
 class JSONSchemaResponse(BaseModel):
-    _id : Optional[str] = None
+    id : Optional[str] = None
     collection_name : str = None
+    properties : Optional[Dict[str, Any]] = None
