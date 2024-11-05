@@ -59,7 +59,6 @@ const OntologySelectScreen = () => {
       setLoading(true);
       if (selectedMethod && selectedMethod === "file" && selectedFile) {
         const response = await uploadOntology("FILE", selectedFile, "");
-        console.log("Ontologia desde el back", response);
         const ontologyData: OntologyDataType = response?.data.ontologyData;
         const ontologyId = response?.data.ontologyData.ontology_id;
         setcurrentOntologyId(ontologyId);
@@ -173,25 +172,6 @@ const OntologySelectScreen = () => {
               </div>
             </div>
           </div>
-          {/* {ontologies &&
-            <div>
-                <p style={{fontSize:'16px'}}>
-                O se puede seleccionar una de las siguientes ontologías:
-                </p>
-                <div style={styles.dashboard}>
-                    {ontologies.map(ontology =>{
-                        return(
-                            <OntologyCard
-                            id={ontology.id}
-                            name={ontology.file}
-                            style={styles.ontologyCard}
-                            onClickCallback={()=>handleSelectOntology(ontology.id)}
-                                />
-                        )
-                    })}
-                </div>
-            </div>
-            } */}
         </div>
       )}
     </>

@@ -60,9 +60,27 @@ const OntologyData: React.FC<{}> = () => {
     if (isMapping && type !== "object_property") {
       setOntoElementSelected({ type: type, ontoElement: element });
     } else if (isMapping && type === "object_property") {
-      setRangeList([...rangeList, element.range]);
-      setObjectPropertyElement(element);
-      setModalIsOpen(true);
+      const OntoElementToSelect = { 
+        type: type, 
+        ontoElement: {
+          name: element.name,
+          iri: element.iri,
+          range: [],
+        }
+      }
+      console.log("Element selected: ", OntoElementToSelect);
+      setOntoElementSelected(OntoElementToSelect);
+        
+        // es necesario mapear el rango de la propiedad de objeto
+
+      // if(//chequear si el jsonElementSelected _value está en mapping){
+
+      // }
+      // else{
+      //   setRangeList([...rangeList, element.range]);
+      //   setObjectPropertyElement(element);
+      //   setModalIsOpen(true);
+      //   }
     }
   };
 
@@ -209,7 +227,7 @@ const OntologyData: React.FC<{}> = () => {
       </Modal>
 
       <div className="title-wrapper">
-        <h1 className="title">Elementos de la ontología</h1>
+        <h1 className="title">Ontology Elements</h1>
       </div>
       {/* {OntoElementSelected.type && (
         <strong style={{ fontFamily: "cursive" }}>
@@ -306,7 +324,7 @@ const OntologyData: React.FC<{}> = () => {
                 className="button"
                 onClick={() => openModal()}
               >
-                Visualizar Ontología
+                Visualize Ontology
               </button>
             </div>
           ))}
