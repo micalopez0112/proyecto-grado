@@ -51,20 +51,17 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
 
 async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = None):
     mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
+    mapping = mapping_process_docu.mapping
     if(filter_dp is not None and filter_dp == True):
         # Filter mapping_process to retrieve only data properties components
-        mapping = mapping_process_docu.mapping
-        mapping = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != '') }#not v.get('isDataProperty')}
-        print("Ver si funcionó el mapping", mapping)
-        ##mappingProcessDocu.mapping = mapping
-        # TERMINAR ## ?
-    else:
-        mapping = mapping_process_docu.mapping
-        onto_id = mapping_process_docu.ontologyId
-        ontology = await onto_service.get_ontology_by_id(onto_id)
-        ontology_data = onto_service.build_ontology_response(ontology, onto_id)
-        JSON_schema = await schema_service.get_schema_by_id(mapping_process_docu.jsonSchemaId)
-        complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
+        filered_by_dp = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != "" ) }
+        mapping = filered_by_dp
+    
+    onto_id = mapping_process_docu.ontologyId
+    ontology = await onto_service.get_ontology_by_id(onto_id)
+    ontology_data = onto_service.build_ontology_response(ontology, onto_id)
+    JSON_schema = await schema_service.get_schema_by_id(mapping_process_docu.jsonSchemaId)
+    complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
 
     return complete_mapping
 

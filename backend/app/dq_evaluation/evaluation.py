@@ -19,7 +19,6 @@ class QualityMetric(ABC) :
     async def evaluation(self, driver: GraphDatabase.driver) -> None :
         print("## QualityMetric: evaluation ##")
         data = self.get_data_to_evaluate()
-        print("## QualityMetric: data ##", data)
         result = await self.execute_measure(data, driver)
         await self.save_result(result) # esto capaz se mueve para execute_measure y se guarda enseguida que se calcula
         return result
