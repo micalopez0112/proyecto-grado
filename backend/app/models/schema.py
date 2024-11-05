@@ -5,17 +5,24 @@ from typing import Dict, Any, Optional, List
 from bson import ObjectId
 
 class JsonSchema(BaseModel):
-    id : Optional[str] = None
+    id : Optional[ObjectId] = Field(alias="_id") 
     collection_name : str = None
     schema: str = Field(alias="$schema")
     type: str 
     properties: Dict[str, Any]
     # { "destinp": { "type": "object", "properties": {}} }
     required: Optional[List[str]] = None
+
+    def __init__(self, **data):
+        super().__init__(**data) 
     # property_name = 
-    def get_id(self):
-        return str(self._id)
-    
+
+    class Config:
+        arbitrary_types_allowed = True  # Permitir tipos arbitrarios como ObjectId
+        json_encoders = {
+            ObjectId: str  # Convertir ObjectId a string al serializar
+        }
+
     def findPropertyInJsonSchema(self, property_name: str)-> Optional[Dict[str, Any]]:
         properties = property_name.split("_")[0]
         properties_names = properties.split("-")

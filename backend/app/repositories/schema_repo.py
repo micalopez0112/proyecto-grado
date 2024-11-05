@@ -29,10 +29,14 @@ async def find_schema_by_id(schema_id: str):
 
 async def find_one_schema_by_query(query : str):
     schemaDocum = await jsonschemas_collection.find_one(query)
+    print("found schema", schemaDocum)
     if schemaDocum is None:
         return None
     
-    #JSONSchema = JsonSchema(**schemaDocum)
-    jsonSchema = JsonSchema(id=str(schemaDocum['_id']), collection_name=schemaDocum['collection_name'], properties=schemaDocum['properties'])
-    print("##### JSONSchema #####", jsonSchema.id)
-    return jsonSchema
+    JSONSchema = JsonSchema(**schemaDocum)
+    print("HASTA ACA BIEN")
+    #jsonSchema = JsonSchema(id=str(schemaDocum['_id']), collection_name=schemaDocum['collection_name'], properties=schemaDocum['properties'])
+    #print("EXPLOTE")
+    print("##### JSONSchema converted #####", JSONSchema)
+    print("##### Colecction id  #####", JSONSchema.id)
+    return JSONSchema

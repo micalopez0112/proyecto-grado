@@ -35,18 +35,17 @@ async def update_mapping_process(request: MappingRequest, mapping_proccess_id: s
 async def validate_and_save_mapping_process(request: MappingRequest, mapping_proccess_id: str, ontology_id: str):
     ontology = await onto_service.get_ontology_by_id(ontology_id)
     # return ontology not found
-    if (mapping_proccess_id != ""):
+    if (mapping_proccess_id is not None and mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
     else : 
-        schema_id = await schema_service.insert_schema(request.jsonSchema)
+        schema_id = await schema_service.get_or_create_schema(request.jsonSchema)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
                                                         document_storage_path = request.documentStoragePath,
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
-        
+        return mapping_process_id_inserted
     status = validate_mapping(request.mapping, ontology, request.jsonSchema)
-    print("status", status)
     updated_result = await mapping_repo.update_mapping_process({}, str(mapping_process_id_inserted), True)
     return mapping_process_id_inserted
 
