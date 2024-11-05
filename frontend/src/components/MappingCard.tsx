@@ -1,24 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "react-modal";
+import { getMapping } from "../services/mapsApi.ts";
+import { useDataContext } from "../context/context.tsx";
+import MappingList from "./MappingList.tsx";
+import { Spinner } from "./Spinner/Spinner.tsx";
 
 const MappingCard = ({
   id,
   name,
   style,
   onClickCallback = () => null,
+  includeMappingInfo = false,
 }: {
   id: string;
   name: string;
-  style: any;
+  style: React.CSSProperties;
   onClickCallback?: (id: string) => void;
+  includeMappingInfo?: boolean;
+  mappingDetails?: {
+    mapping_name: string;
+    mapping: string;
+    schema: string;
+    ontology: string;
+  } | null;
 }) => {
+  const { setMappings } = useDataContext();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const closeModal = () => setModalIsOpen(false);
+
+  const handeOpenModal = async () => {
+    if (id) {
+      setLoading(true);
+      setModalIsOpen(true);
+      try {
+        const response = await getMapping(id);
+        console.log({ response });
+        const { mapping } = response?.data;
+        setMappings(mapping);
+      } catch (error) {
+        console.error("Error fetching mapping details:", error);
+      }
+      setLoading(false);
+    }
+  };
+
   return (
-    <div style={style} onClick={() => onClickCallback(id)}>
-      <div>{name}</div>
-      <div>
-        <strong>Mapping ID:</strong> {id}
+    <>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        shouldCloseOnOverlayClick={false}
+        style={ModalOntoStyles}
+      >
+        <div style={ModalOntoStyles.modalContent}>
+          {loading ? <Spinner /> : <MappingList isResult={true} />}
+          <button className="button" onClick={closeModal}>
+            Close
+          </button>
+        </div>
+      </Modal>
+      <div style={style} onClick={() => onClickCallback(id)}>
+        <div>{name}</div>
+        <div>
+          <strong>Mapping ID:</strong> {id}
+        </div>
+        {includeMappingInfo && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handeOpenModal();
+            }}
+          >
+            Info
+          </button>
+        )}
       </div>
-    </div>
+    </>
   );
+};
+
+const ModalOntoStyles: { [key: string]: React.CSSProperties } = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+  modalContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "1200px",
+    height: "600px",
+    padding: "20px",
+  },
 };
 
 export default MappingCard;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchMappings } from "../../../services/mapsApi.ts";
+import { fetchMappings, getMapping } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
@@ -16,6 +16,12 @@ const DataQualityScreen = () => {
     Array<{ id: string; name: string }>
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [mappingDetails, setMappingDetails] = useState<null | {
+    mapping_name: string;
+    mapping: string;
+    schema: string;
+    ontology: string;
+  }>(null);
 
   useEffect(() => {
     const retrieveMappings = async () => {
@@ -27,10 +33,7 @@ const DataQualityScreen = () => {
     };
     retrieveMappings();
 
-    setDataQualityRules([
-      { id: "1", name: "Accuracy" },
-      { id: "2", name: "Accuracy 2" },
-    ]);
+    setDataQualityRules([{ id: "1", name: "Accuracy" }]);
   }, []);
 
   const onClickMappingCard = (id: string) => {
@@ -65,6 +68,7 @@ const DataQualityScreen = () => {
                           selectedMappingId === mapping.id ? "#f39c12" : "#fff",
                       }}
                       onClickCallback={() => onClickMappingCard(mapping.id)}
+                      includeMappingInfo={true}
                     />
                   ))}
                 </div>
@@ -100,10 +104,29 @@ const DataQualityScreen = () => {
                 state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
               })
             }
-            disabled={!selectedMappingId || !selectedRuleId} // Disable if not both are selected
+            disabled={!selectedMappingId || !selectedRuleId}
           >
             Seleccionar
           </button>
+
+          {mappingDetails && (
+            <div className="mapping-details-modal">
+              <h3>Mapping Details</h3>
+              <p>
+                <strong>Name:</strong> {mappingDetails.mapping_name}
+              </p>
+              <p>
+                <strong>Mapping:</strong> {mappingDetails.mapping}
+              </p>
+              <p>
+                <strong>Schema:</strong> {mappingDetails.schema}
+              </p>
+              <p>
+                <strong>Ontology:</strong> {mappingDetails.ontology}
+              </p>
+              <button onClick={() => setMappingDetails(null)}>Close</button>
+            </div>
+          )}
         </div>
       )}
     </>

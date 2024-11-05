@@ -38,17 +38,17 @@ const MappingsScreen = () => {
       ) : (
         <div style={styles.container}>
           <div style={styles.mappingsTitleContainer}>
-            <h1 style={styles.title}>Mappings</h1>
+            <h1 style={styles.title}>Set of Mappings</h1>
             <button
               onClick={() => navigate("/OntologySelect")}
               style={styles.button}
             >
-              Nuevo Mapping
+              New Set of Mapping
             </button>
           </div>
           <input
             type="text"
-            placeholder="Search Mappings..."
+            placeholder="Search Set of Mappings..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={styles.searchInput}
