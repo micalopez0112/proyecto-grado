@@ -1,7 +1,6 @@
 from owlready2 import get_ontology
 from typing import Dict, Any
 from abc import ABC, abstractmethod
-from datetime import datetime
 from neo4j import GraphDatabase
 from datetime import  datetime
 from bson import ObjectId
@@ -62,7 +61,6 @@ class SyntanticAccuracy(QualityMetric) :
         print("## SyntanticAccuracy: execute_measure ##")
         ontology = await get_onto(self.mapping_process.ontologyId)
         jsonSchemaId = self.mapping_process.jsonSchemaId
-        print("## Got ontology correctly ##", list(ontology.individuals()))
         print("## SyntanticAccuracy: mapping elements ##") #self.mapping_elements)
         results_dicc = {}
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
