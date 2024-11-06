@@ -39,33 +39,27 @@ const Json: React.FC = () => {
     properties: Record<string, JsonSchemaProperty>,
     parent: string
   ) => {
-    if(parent === ""){
+    if (parent === "") {
       return (
         <div>
           <div className="property-box" key={"rootObject"}>
             <div
               className={`json-elem ${
-                JsonElementSelected === parent
-                  ? "active"
-                  : ""
+                JsonElementSelected === parent ? "active" : ""
               }`}
-              onClick={(e) =>
-                handleClickElement(e, "rootObject_value") //se tiene que mapear a class
+              onClick={
+                (e) => handleClickElement(e, "rootObject_value") //se tiene que mapear a class
               }
             >
-              <strong>rootObject:</strong> 
+              <strong>rootObject:</strong>
             </div>
             <div className="object-properties">
-              {renderProperties(
-                properties,
-                "rootObject"
-              )}
+              {renderProperties(properties, "rootObject")}
             </div>
           </div>
         </div>
-      )
-    }
-    else{
+      );
+    } else {
       return Object.entries(properties).map(([key, value]) => {
         if (value.type === "object" && value.properties) {
           return (
@@ -77,29 +71,42 @@ const Json: React.FC = () => {
                     : ""
                 }`}
                 onClick={(e) =>
-                  handleClickElement(e, parent ? parent + "-" + key+ "_key"  : key+ "_key")
+                  handleClickElement(
+                    e,
+                    parent ? parent + "-" + key + "_key" : key + "_key"
+                  )
                 }
               >
-                <strong>{key}:</strong> 
+                <strong>{key}:</strong>
               </div>
               {
-                <div key={key + '_value'} className={`json-elem ${
-                  JsonElementSelected === (parent ? parent + "-" + key : key )
-                    ? "active"
-                    : ""
+                <div
+                  key={key + "_value"}
+                  className={`json-elem ${
+                    JsonElementSelected === (parent ? parent + "-" + key : key)
+                      ? "active"
+                      : ""
                   }`}
-                  onClick={(e)=>
-                    handleClickElement(e, parent ? parent + "-" + key + "_value" : key + "_value")
+                  onClick={(e) =>
+                    handleClickElement(
+                      e,
+                      parent ? parent + "-" + key + "_value" : key + "_value"
+                    )
                   }
-                  style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
-                  >
-                      <strong>object</strong>
-                    <div className="object-properties">
-                      {renderProperties(
-                        value.properties,
-                        parent ? parent + "-" + key : key
-                      )}
-                    </div>
+                  style={{
+                    marginLeft: "20px",
+                    backgroundColor: "#e3fae3",
+                    borderColor: "#67cb6f",
+                    border: "1px solid",
+                  }}
+                >
+                  <strong>object</strong>
+                  <div className="object-properties">
+                    {renderProperties(
+                      value.properties,
+                      parent ? parent + "-" + key : key
+                    )}
+                  </div>
                 </div>
               }
             </div>
@@ -125,7 +132,7 @@ const Json: React.FC = () => {
           );
         }
         return (
-          <div className="property-box" key={key}>
+          <div className="object-property-box" key={key}>
             <div
               className={`json-elem ${
                 JsonElementSelected === (parent ? parent + "-" + key : key)
@@ -140,29 +147,40 @@ const Json: React.FC = () => {
             </div>
           </div>
         );
-      });}
+      });
+    }
   };
 
   const renderArrayItems = (items: JsonSchemaProperty, parent: string) => {
     if (items.type === "object" && items.properties) {
       return (
         <>
-          <div 
-          key={parent + '_value'} className={`json-elem ${
-            JsonElementSelected === (parent ? parent + "_value" : parent + "_value" )
-              ? "active"
-              : ""
+          <div
+            key={parent + "_value"}
+            className={`json-elem ${
+              JsonElementSelected ===
+              (parent ? parent + "_value" : parent + "_value")
+                ? "active"
+                : ""
             }`}
-            onClick={(e)=>
-              handleClickElement(e, parent ? parent + "_value" : parent + "_value" )
+            onClick={(e) =>
+              handleClickElement(
+                e,
+                parent ? parent + "_value" : parent + "_value"
+              )
             }
-            style={{marginLeft:'20px', backgroundColor: '#e3fae3', borderColor: '#67cb6f', border:'1px solid'}}
-            >
+            style={{
+              marginLeft: "20px",
+              backgroundColor: "#e3fae3",
+              borderColor: "#67cb6f",
+              border: "1px solid",
+            }}
+          >
             <strong>array items: object</strong>
 
-              <div className="object-properties">
-                {renderProperties(items.properties, parent)}
-              </div>
+            <div className="object-properties">
+              {renderProperties(items.properties, parent)}
+            </div>
           </div>
         </>
       );

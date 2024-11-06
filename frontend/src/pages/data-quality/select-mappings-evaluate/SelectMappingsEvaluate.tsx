@@ -5,13 +5,21 @@ import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
+import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 
 const SYNTCTATIC_ACCURACY = "syntactic_accuracy";
 const QUALITY_RULES = [SYNTCTATIC_ACCURACY];
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
-  const { mappings, setMappings } = useDataContext();
+  const {
+    mappings,
+    setcurrentOntologyId,
+    setontologyDataContext,
+    setMappings,
+    setJsonSchemaContext,
+    jsonSchemaContext,
+  } = useDataContext();
 
   const location = useLocation();
   const mappingId = location.state?.mappingId;
@@ -22,21 +30,33 @@ const SelectMappingsEvaluate = () => {
     {}
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const [allSelected, setAllSelected] = useState<boolean>(false); // New state for tracking if all mappings are selected
+  const [allSelected, setAllSelected] = useState<boolean>(false);
+
+  const getSimpleMappings = () => {
+    return Object.keys(mappings).filter(
+      (key) =>
+        key.endsWith("#string") ||
+        key.endsWith("#number") ||
+        key.endsWith("#boolean")
+    );
+  };
 
   useEffect(() => {
     const getMappingData = async () => {
       if (mappingId) {
         setLoading(true);
         try {
-          const response = await getMapping(mappingId, true);
+          const response = await getMapping(mappingId);
           if (response) {
-            const { mapping_name, mapping } = response.data;
+            const { mapping_name, mapping, schema, ontology } = response.data;
             setMappings(mapping);
+            setJsonSchemaContext(schema);
+            setcurrentOntologyId(ontology.ontology_id);
+            setontologyDataContext(ontology);
             setMappingName(mapping_name);
           }
         } catch (error) {
-          console.error("Error fetching mapping data:", error);
+          console.error("Error in getMappingData", error);
         }
         setLoading(false);
       }
@@ -44,7 +64,20 @@ const SelectMappingsEvaluate = () => {
     getMappingData();
   }, [mappingId]);
 
-  const handleToggleMapping = (key: string, mappingElement: any) => {
+  useEffect(() => {
+    const simpleMappings = getSimpleMappings();
+    const allSimpleSelected = simpleMappings.every((key) =>
+      selectedMappings.hasOwnProperty(key)
+    );
+    setAllSelected(allSimpleSelected);
+  }, [selectedMappings, mappings]);
+
+  const handleToggleMapping = (
+    key: string,
+    mappingElement: any,
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    e.stopPropagation();
     setSelectedMappings((prev) => {
       const updated = { ...prev };
       if (updated[key]) {
@@ -56,22 +89,17 @@ const SelectMappingsEvaluate = () => {
     });
   };
 
-  useEffect(() => {
-    console.log("Selected mappings updated: ", selectedMappings);
-  }, [selectedMappings]);
-
-  // New function to handle selecting/deselecting all mappings
   const handleSelectAllMappings = () => {
     if (!allSelected) {
+      const simpleMappings = getSimpleMappings();
       const allMappings: Record<string, any> = {};
-      Object.keys(mappings).forEach((key) => {
+      simpleMappings.forEach((key) => {
         allMappings[key] = mappings[key];
       });
       setSelectedMappings(allMappings);
     } else {
       setSelectedMappings({});
     }
-    setAllSelected(!allSelected); // Toggle between selecting and deselecting all
   };
 
   const handleEvaluateSelectedMappings = async () => {
@@ -80,12 +108,165 @@ const SelectMappingsEvaluate = () => {
       mappingId,
       selectedMappings
     );
-
     navigate("/EvaluateMappings", {
       state: {
-        selectedMappings: selectedMappings,
-        ruleId: ruleId,
+        selectedMappings,
+        ruleId,
       },
+    });
+  };
+
+  const renderProperties = (
+    properties: Record<string, JsonSchemaProperty>,
+    parent: string
+  ) => {
+    return Object.entries(properties).map(([key, value]) => {
+      let elementKey = parent ? `${parent}-${key}` : key;
+
+      const fullKey = `${elementKey}_key#${value.type}`;
+
+      const isMapped = !!mappings[fullKey];
+      console.log(isMapped);
+      console.log(fullKey);
+      console.log({ mappings });
+      const mappingInfo = isMapped ? mappings[fullKey] : null;
+      const isActive = !!selectedMappings[fullKey];
+
+      if (parent === "") {
+        return (
+          <div>
+            <div className="property-box" key={"rootObject"}>
+              <div className={`json-elem disabled`}>
+                <strong>rootObject:</strong>
+              </div>
+              <div className="object-properties">
+                {renderProperties(properties, "rootObject")}
+              </div>
+            </div>
+          </div>
+        );
+      }
+      if (value.type === "object" && value.properties) {
+        const elementValue = elementKey + "_value";
+        console.log("elementValue: " + elementValue);
+        const isMappedObjectValue = !!mappings[elementKey + "_value"];
+        console.log("isMappedObjectValue " + isMappedObjectValue);
+        const mappingInfoValue = isMappedObjectValue
+          ? mappings[elementValue]
+          : null;
+        const isActiveValue = !!selectedMappings[elementValue];
+        return (
+          <>
+            <div className={`property-box`} key={key}>
+              <div className={`json-elem disabled`}>
+                <strong>{key}:</strong> object
+              </div>
+
+              {
+                <div
+                  key={key + "_value"}
+                  className={`json-elem disabled`}
+                  style={{
+                    marginLeft: "20px",
+                    backgroundColor: "#e3fae3",
+                    borderColor: "#67cb6f",
+                    border: "1px solid",
+                  }}
+                >
+                  <div className="mapping-box">
+                    <strong>object</strong>
+                    {isMappedObjectValue && (
+                      <>
+                        <FaArrowRightLong />
+                        <span className="mapping-info">
+                          {mappingInfoValue?.map((map, index) => (
+                            <span key={index} title={map.iri}>
+                              {map.name}
+                            </span>
+                          ))}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <div className="object-properties">
+                    {renderProperties(
+                      value.properties,
+                      parent ? parent + "-" + key : key
+                    )}
+                  </div>
+                </div>
+              }
+
+              {isMapped && (
+                <>
+                  <FaArrowRightLong />
+                  <span className="mapping-info">
+                    {mappingInfo?.map((map, index) => (
+                      <span key={index} title={map.iri}>
+                        {map.name}
+                      </span>
+                    ))}
+                  </span>
+                </>
+              )}
+            </div>
+          </>
+        );
+      }
+
+      // Handling for "array" type
+      if (value.type === "array" && value.items) {
+        return (
+          <div className="property-box" key={key}>
+            <div
+              className={`json-elem ${isMapped ? "clickable" : "disabled"} ${
+                isActive ? "active" : ""
+              }`}
+              onClick={(e) =>
+                isMapped && handleToggleMapping(fullKey, mappingInfo, e)
+              }
+            >
+              <strong>{key}:</strong> array
+            </div>
+            {isMapped && (
+              <span className="mapping-info">
+                {mappingInfo?.map((map, index) => (
+                  <span key={index} title={map.iri}>
+                    {map.name}
+                  </span>
+                ))}
+              </span>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div className="property-box mapping-box" key={key}>
+          <div
+            className={`json-elem ${isMapped ? "clickable" : "disabled"} ${
+              isActive ? "active" : ""
+            }`}
+            onClick={(e) =>
+              isMapped && handleToggleMapping(fullKey, mappingInfo, e)
+            }
+          >
+            <strong>{key}:</strong> {value.type}
+          </div>
+          {isMapped && (
+            <>
+              <FaArrowRightLong />
+              <span className="mapping-info">
+                {mappingInfo?.map((map, index) => (
+                  <span key={index} title={map.iri}>
+                    {map.name}
+                  </span>
+                ))}
+              </span>
+            </>
+          )}
+        </div>
+      );
     });
   };
 
@@ -95,55 +276,28 @@ const SelectMappingsEvaluate = () => {
         <Spinner />
       ) : (
         <div className="container">
-          <h1 className="title-section">Select Mappings to Evaluate</h1>
+          <h1 className="title-section">
+            Select schema values to evaluate data
+          </h1>
 
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
-                {/* Add the Select All button */}
                 <button
                   className="button select-all"
                   onClick={handleSelectAllMappings}
                 >
                   {allSelected ? "Deselect All" : "Select All"}
                 </button>
-
-                {Object.keys(mappings).map((key) => (
-                  <div className="mapping" key={key}>
-                    <ul className="list-container">
-                      {mappings[key].map((element, index) => (
-                        <li key={index} className="list-elem-evaluate">
-                          <div className="value-wrapper-evaluation">
-                            <div className="key-title">JSON schema value</div>
-                            <div className="key-text" title={key}>
-                              {key}
-                            </div>
-                          </div>
-
-                          <FaArrowRightLong className="arrow-icon" />
-
-                          <div className="value-wrapper-evaluation">
-                            <div className="element-title">
-                              Ontology element
-                            </div>
-                            <div className="element-name" title={element.name}>
-                              {element.name}
-                            </div>
-                          </div>
-
-                          <input
-                            type="checkbox"
-                            checked={!!selectedMappings[key]} // Update to reflect selected mappings
-                            onChange={() =>
-                              handleToggleMapping(key, mappings[key])
-                            }
-                          />
-                        </li>
-                      ))}
-                    </ul>
+                {jsonSchemaContext && (
+                  <div className="json-schema-container">
+                    <div className="json-schema">
+                      {jsonSchemaContext
+                        ? renderProperties(jsonSchemaContext.properties, "")
+                        : null}
+                    </div>
                   </div>
-                ))}
-
+                )}
                 <button
                   className="button success"
                   onClick={handleEvaluateSelectedMappings}
