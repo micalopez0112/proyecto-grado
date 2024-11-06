@@ -106,7 +106,7 @@ const DataQualityScreen = () => {
             }
             disabled={!selectedMappingId || !selectedRuleId}
           >
-            Seleccionar
+            Select
           </button>
 
           {mappingDetails && (

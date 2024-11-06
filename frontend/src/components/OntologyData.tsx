@@ -227,7 +227,6 @@ const OntologyData: React.FC<{}> = () => {
       </Modal>
 
       <div className="title-wrapper">
-        <h1 className="title">Ontology elements</h1>
         <h1 className="title">Ontology Elements</h1>
       </div>
       {/* {OntoElementSelected.type && (

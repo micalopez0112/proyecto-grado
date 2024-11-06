@@ -32,6 +32,15 @@ const SelectMappingsEvaluate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [allSelected, setAllSelected] = useState<boolean>(false);
 
+  const getSimpleMappings = () => {
+    return Object.keys(mappings).filter(
+      (key) =>
+        key.endsWith("#string") ||
+        key.endsWith("#number") ||
+        key.endsWith("#boolean")
+    );
+  };
+
   useEffect(() => {
     const getMappingData = async () => {
       if (mappingId) {
@@ -55,6 +64,14 @@ const SelectMappingsEvaluate = () => {
     getMappingData();
   }, [mappingId]);
 
+  useEffect(() => {
+    const simpleMappings = getSimpleMappings();
+    const allSimpleSelected = simpleMappings.every((key) =>
+      selectedMappings.hasOwnProperty(key)
+    );
+    setAllSelected(allSimpleSelected);
+  }, [selectedMappings, mappings]);
+
   const handleToggleMapping = (
     key: string,
     mappingElement: any,
@@ -68,22 +85,21 @@ const SelectMappingsEvaluate = () => {
       } else {
         updated[key] = mappingElement;
       }
-      console.log("updated:", { updated });
       return updated;
     });
   };
 
   const handleSelectAllMappings = () => {
     if (!allSelected) {
+      const simpleMappings = getSimpleMappings();
       const allMappings: Record<string, any> = {};
-      Object.keys(mappings).forEach((key) => {
+      simpleMappings.forEach((key) => {
         allMappings[key] = mappings[key];
       });
       setSelectedMappings(allMappings);
     } else {
       setSelectedMappings({});
     }
-    setAllSelected(!allSelected);
   };
 
   const handleEvaluateSelectedMappings = async () => {
@@ -106,11 +122,9 @@ const SelectMappingsEvaluate = () => {
   ) => {
     return Object.entries(properties).map(([key, value]) => {
       let elementKey = parent ? `${parent}-${key}` : key;
-      elementKey = elementKey.replace(/^rootObject-/, "");
 
       const fullKey = `${elementKey}_key#${value.type}`;
 
-      // Check if this property has a mapping
       const isMapped = !!mappings[fullKey];
       console.log(isMapped);
       console.log(fullKey);
@@ -122,7 +136,7 @@ const SelectMappingsEvaluate = () => {
         return (
           <div>
             <div className="property-box" key={"rootObject"}>
-              <div className={`json-elem`}>
+              <div className={`json-elem disabled`}>
                 <strong>rootObject:</strong>
               </div>
               <div className="object-properties">
@@ -143,7 +157,7 @@ const SelectMappingsEvaluate = () => {
         const isActiveValue = !!selectedMappings[elementValue];
         return (
           <>
-            <div className={`property-box disabled`} key={key}>
+            <div className={`property-box`} key={key}>
               <div className={`json-elem disabled`}>
                 <strong>{key}:</strong> object
               </div>
@@ -151,7 +165,7 @@ const SelectMappingsEvaluate = () => {
               {
                 <div
                   key={key + "_value"}
-                  className={`json-elem `}
+                  className={`json-elem disabled`}
                   style={{
                     marginLeft: "20px",
                     backgroundColor: "#e3fae3",

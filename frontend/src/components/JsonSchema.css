@@ -30,11 +30,11 @@
   padding: 2px 10px;
   border-radius: 5px;
   margin: 10px 5px 10px 10px;
+  cursor: pointer;
 }
 .json-elem:hover,
 .json-object-elem:hover {
   background-color: #9eafdb;
-  cursor: pointer;
 }
 
 .json-arrayItem-elem {

@@ -8,6 +8,10 @@
   justify-content: center;
 }
 
+.info-button:hover {
+  opacity: 0.5;
+}
+
 .info-button:focus {
   outline: none;
 }
