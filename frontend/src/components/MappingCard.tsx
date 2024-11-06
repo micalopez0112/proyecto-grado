@@ -4,6 +4,8 @@ import { getMapping } from "../services/mapsApi.ts";
 import { useDataContext } from "../context/context.tsx";
 import MappingList from "./MappingList.tsx";
 import { Spinner } from "./Spinner/Spinner.tsx";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import "./MappingCard.css";
 
 const MappingCard = ({
   id,
@@ -63,17 +65,16 @@ const MappingCard = ({
       </Modal>
       <div style={style} onClick={() => onClickCallback(id)}>
         <div>{name}</div>
-        <div>
-          <strong>Mapping ID:</strong> {id}
-        </div>
+
         {includeMappingInfo && (
           <button
             onClick={(e) => {
               e.stopPropagation();
               handeOpenModal();
             }}
+            className="info-button"
           >
-            Info
+            <FaMagnifyingGlass size={20} />{" "}
           </button>
         )}
       </div>

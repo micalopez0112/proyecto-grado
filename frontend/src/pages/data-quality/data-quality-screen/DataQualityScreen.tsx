@@ -135,11 +135,12 @@ const DataQualityScreen = () => {
 
 const styles: { [key: string]: React.CSSProperties } = {
   mappingCard: {
-    display: "grid",
-    gridTemplateColumns: "1fr 2fr",
+    display: "flex",
     padding: 10,
     cursor: "pointer",
     borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 };
 
