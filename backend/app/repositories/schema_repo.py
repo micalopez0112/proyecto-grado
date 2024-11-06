@@ -4,7 +4,7 @@
 from ..database import  jsonschemas_collection
 from typing import Dict, Any
 from bson import ObjectId
-from app.models.schema import  JsonSchema
+from app.models.schema import  JsonSchema, JSONSchemaResponse
 
 async def find_all_schemas():
     cursor = jsonschemas_collection.find({})
@@ -21,6 +21,22 @@ async def insert_schema(json_schema: Dict[str, Any]):
 async def find_schema_by_id(schema_id: str):
     schema_id = ObjectId(schema_id)
     schemaDocum = await jsonschemas_collection.find_one({'_id': schema_id})
+    if schemaDocum is None:
+        return None
     
     JSONSchema = JsonSchema(**schemaDocum)
+    return JSONSchema
+
+async def find_one_schema_by_query(query : str):
+    schemaDocum = await jsonschemas_collection.find_one(query)
+    print("found schema", schemaDocum)
+    if schemaDocum is None:
+        return None
+    
+    JSONSchema = JsonSchema(**schemaDocum)
+    print("HASTA ACA BIEN")
+    #jsonSchema = JsonSchema(id=str(schemaDocum['_id']), collection_name=schemaDocum['collection_name'], properties=schemaDocum['properties'])
+    #print("EXPLOTE")
+    print("##### JSONSchema converted #####", JSONSchema)
+    print("##### Colecction id  #####", JSONSchema.id)
     return JSONSchema

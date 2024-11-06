@@ -2,7 +2,7 @@
 
 from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
-from app.repositories import mapping_repo, schema_repo
+from app.repositories import mapping_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
@@ -35,37 +35,35 @@ async def update_mapping_process(request: MappingRequest, mapping_proccess_id: s
 async def validate_and_save_mapping_process(request: MappingRequest, mapping_proccess_id: str, ontology_id: str):
     ontology = await onto_service.get_ontology_by_id(ontology_id)
     # return ontology not found
-    if (mapping_proccess_id != ""):
+    if (mapping_proccess_id is not None and mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
+        mapping_id = mapping_proccess_id
     else : 
-        schema_id = await schema_service.insert_schema(request.jsonSchema)
+        schema_id = await schema_service.get_or_create_schema(request.jsonSchema)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
                                                         document_storage_path = request.documentStoragePath,
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
-        
+        mapping_id = mapping_process_id_inserted
+
     status = validate_mapping(request.mapping, ontology, request.jsonSchema)
-    print("status", status)
-    updated_result = await mapping_repo.update_mapping_process({}, str(mapping_process_id_inserted), True)
-    return mapping_process_id_inserted
+    updated_result = await mapping_repo.update_mapping_process({}, str(mapping_id), True)
+    return mapping_id
 
 async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = None):
     mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
+    mapping = mapping_process_docu.mapping
     if(filter_dp is not None and filter_dp == True):
         # Filter mapping_process to retrieve only data properties components
-        mapping = mapping_process_docu.mapping
-        mapping = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != '') }#not v.get('isDataProperty')}
-        print("Ver si funcionó el mapping", mapping)
-        ##mappingProcessDocu.mapping = mapping
-        # TERMINAR ## ?
-    else:
-        mapping = mapping_process_docu.mapping
-        onto_id = mapping_process_docu.ontologyId
-        ontology = await onto_service.get_ontology_by_id(onto_id)
-        ontology_data = onto_service.build_ontology_response(ontology, onto_id)
-        JSON_schema = await schema_service.get_schema_by_id(mapping_process_docu.jsonSchemaId)
-        complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
+        filered_by_dp = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != "" ) }
+        mapping = filered_by_dp
+    
+    onto_id = mapping_process_docu.ontologyId
+    ontology = await onto_service.get_ontology_by_id(onto_id)
+    ontology_data = onto_service.build_ontology_response(ontology, onto_id)
+    JSON_schema = await schema_service.get_schema_by_id(mapping_process_docu.jsonSchemaId)
+    complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
 
     return complete_mapping
 
