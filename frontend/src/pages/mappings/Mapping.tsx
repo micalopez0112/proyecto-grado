@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
 import { useEffect, useState } from "react";
 import {
@@ -111,14 +111,18 @@ export const Mapping = () => {
         } else {
           //new mapping
           if (currentOntologyId) {
+            const schemaAndCollectionName = jsonSchemaContext;
+            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
+
             const body = {
               ontology_id: currentOntologyId,
               name: mappingName,
               mapping: mappings,
-              jsonSchema: jsonSchemaContext,
+              jsonSchema: schemaAndCollectionName,
               mapping_proccess_id: mappingId,
               documentStoragePath: collectionPath
             };
+            
             const response = await saveMapping(body);
             console.log("Response al guardar mappings (save): ", response);
             if (response ) {
@@ -180,13 +184,16 @@ export const Mapping = () => {
         } else {
           //new mapping
           if (currentOntologyId) {
-            const jsonschema = jsonSchemaContext;
+            
+            const schemaAndCollectionName = jsonSchemaContext;
+            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
             const body = {
               name: mappingName,
               mapping: mappings,
-              jsonSchema: jsonschema,
+              jsonSchema: schemaAndCollectionName,
               documentStoragePath: collectionPath
             };
+            
             const response = await saveAndValidateMappings(
               currentOntologyId,
               "",

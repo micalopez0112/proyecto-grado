@@ -29,7 +29,7 @@ def generate_metadata_from_collection_V2(collection_path:str):
 def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
     today_date = date.today()
     ## Asumimos que los metadatos están disponibles para ser creados en la Ingestion Zone => date = today
-    collection_name = collection_path.split('/')[-1]
+    collection_name = schema.get("collection_name")
     collection_query = get_collection_query()
     params = {
         'collection_name': collection_name,
@@ -42,9 +42,9 @@ def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
     collection_node = collection_insert_result[0]
     collection_node_id = collection_node['collectionElementId']
     print(f'El elementId con el que se insertó la colección es: {collection_node_id}')
-
+    schema_properties = schema.get("properties")
     ##Creamos los fields del schema
-    for field_key, field_value in schema.items():
+    for field_key, field_value in schema_properties.items():
         try:
             generate_fields_metadata(collection_node_id, "schema", field_key, field_value)  
         except Exception as e:
