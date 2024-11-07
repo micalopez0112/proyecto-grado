@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
 import { useEffect, useState } from "react";
 import {
@@ -90,7 +90,7 @@ export const Mapping = () => {
             ontology_id: "",
             name: mappingName,
             mapping: mappings,
-            jsonSchema: {},//null because it is not updated in the collection
+            jsonSchema: {}, //null because it is not updated in the collection
             mapping_proccess_id: mappingId,
             // documentStoragePath: collectionPath
           };
@@ -99,35 +99,38 @@ export const Mapping = () => {
           if (response) {
             const { status, message, mapping_id } = response.data;
             //navigate('/Result', {state:{mapping_process:mapping_id}});
-            if(status === "success"){
+            if (status === "success") {
               resetMappingState();
               alert(`Process Mapping saved successfully`);
-              navigate("/")
-            }
-            else{
+              navigate("/");
+            } else {
               alert(`Error saving Mapping Process`);
             }
           }
         } else {
           //new mapping
           if (currentOntologyId) {
+            const schemaAndCollectionName = jsonSchemaContext;
+            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
+
             const body = {
               ontology_id: currentOntologyId,
               name: mappingName,
               mapping: mappings,
-              jsonSchema: jsonSchemaContext,
+              jsonSchema: schemaAndCollectionName,
               mapping_proccess_id: mappingId,
-              documentStoragePath: collectionPath
+              documentStoragePath: collectionPath,
             };
+            
             const response = await saveMapping(body);
             console.log("Response al guardar mappings (save): ", response);
-            if (response ) {
+            if (response) {
               const { status, message, mapping_id } = response.data;
               if (status === "success") {
                 //navigate('/Result', {state:{mapping_process:mapping_id}});
                 resetMappingState();
                 alert("Process Mapping saved successfully");
-                navigate("/")
+                navigate("/");
               } else {
                 alert("Error saving Mapping Process");
               }
@@ -167,12 +170,11 @@ export const Mapping = () => {
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message, mapping_id } = response.data;
-            if(status === "success"){
+            if (status === "success") {
               resetMappingState();
               alert("Mapping procces successfully validated and saved");
               navigate("/");
-            }
-            else{
+            } else {
               alert("Error validating mapping, please check: " + message);
             }
             //navigate("/Result", { state: { mapping_process: mapping_id } });
@@ -180,13 +182,16 @@ export const Mapping = () => {
         } else {
           //new mapping
           if (currentOntologyId) {
-            const jsonschema = jsonSchemaContext;
+            
+            const schemaAndCollectionName = jsonSchemaContext;
+            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
             const body = {
               name: mappingName,
               mapping: mappings,
-              jsonSchema: jsonschema,
+              jsonSchema: schemaAndCollectionName,
               documentStoragePath: collectionPath
             };
+            
             const response = await saveAndValidateMappings(
               currentOntologyId,
               "",
@@ -195,12 +200,11 @@ export const Mapping = () => {
             console.log("Response al guardar mappings (validate): ", response);
             if (response) {
               const { status, message, mapping_id } = response.data;
-              if(status === "success"){
+              if (status === "success") {
                 resetMappingState();
                 alert("Mapping procces successfully validated and saved");
                 navigate("/");
-              }
-              else{
+              } else {
                 alert("Error validating mapping, please check: " + message);
               }
             }
@@ -270,7 +274,7 @@ export const Mapping = () => {
           </div>
           <div className="content-container">
             <div className="content-box">
-              <Json></Json>
+              <Json />
             </div>
             <div className="content-box">
               <OntologyData />

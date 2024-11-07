@@ -8,10 +8,8 @@ from app.services import mapping_service as service
 from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
 from app.dq_evaluation.evaluation import StrategyContext
 from app.Coleccion_Películas.governance import cleanJsonSchema
-
-import os
+from ..database import DLzone
 import json
-zone_path = os.getenv("ZONE_PATH")
 
 URI = "bolt://localhost:7687"
 AUTH = ("neo4j","tesis2024")
@@ -24,7 +22,7 @@ class JsonRequest(BaseModel):
 @router.post("/generate-schema/")
 async def get_schema_from_path(collectionFilePath: str):
     try:
-        realPath = zone_path + collectionFilePath
+        realPath = DLzone + collectionFilePath
         with open (realPath,"r",encoding='utf-8') as file:
             builder = SchemaBuilder()
             # data = await file.read()
@@ -79,7 +77,7 @@ async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optio
                        request: MappingRequest = Body(...)):
     try:
         if not isinstance(request.mapping, dict):
-            raise HTTPException(status_code=400, detail="Invalid mapping body")
+            raise HTTPException(status_code= 400, detail="Invalid mapping body")
         mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
     except ValueError as e:

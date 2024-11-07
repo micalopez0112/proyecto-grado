@@ -1,11 +1,14 @@
 
 
-from ..database import  mapping_process_collection
+from ..database import  mapping_process_collection, DLzone
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
 from app.repositories import mapping_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
+
+
+
 
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
@@ -39,10 +42,11 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
         mapping_id = mapping_proccess_id
     else : 
-        schema_id = await schema_service.get_or_create_schema(request.jsonSchema)
+        full_collection_path = DLzone + request.documentStoragePath
+        schema_id = await schema_service.get_or_create_schema(full_collection_path,request.jsonSchema)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
-                                                        document_storage_path = request.documentStoragePath,
+                                                        document_storage_path = full_collection_path,
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
         mapping_id = mapping_process_id_inserted
@@ -96,8 +100,9 @@ def build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping
 
 async def update_whole_mapping_process(put_request: PutMappingRequest):
     if(put_request.mapping_proccess_id is None or put_request.mapping_proccess_id == ""):
-        print("aa")
-        json_schema_id = await schema_service.insert_schema(put_request.jsonSchema)
+        #json_schema_id = await schema_service.insert_schema(put_request.jsonSchema)
+        full_collection_path = DLzone + put_request.documentStoragePath
+        json_schema_id = await schema_service.get_or_create_schema(full_collection_path,put_request.jsonSchema)
         print("json_schema_id en update WHOLE", json_schema_id)
         mapping_process_docu = MappingProcessDocument(name=put_request.name, mapping=put_request.mapping,
                                                             ontologyId=put_request.ontology_id,
