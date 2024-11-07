@@ -9,10 +9,10 @@ const MappingList = ({ isResult }) => {
 
   console.log("mappings", { mappings });
   return (
-    <div className="mappings">
+    <div className={`mappings ${isResult ? "mappings-width" : ""}`}>
       {Object.keys(mappings).map((key) => {
         return (
-          <div className="mapping">
+          <div className="mapping" key={key}>
             <ul className="list-container">
               {mappings[key].map((element, index) => (
                 <li key={index} className="list-elem">

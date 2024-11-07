@@ -96,9 +96,8 @@ const ModalOntoStyles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "1200px",
-    height: "600px",
-    padding: "20px",
+    width: "1000px",
+    height: "500px",
   },
 };
 
