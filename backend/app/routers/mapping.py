@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase
-from genson import SchemaBuilder
 from pydantic import BaseModel
 
 from app.services import mapping_service as service
@@ -9,6 +8,7 @@ from app.models.mapping import  MappingRequest, MappingResponse, PutMappingReque
 from app.dq_evaluation.evaluation import StrategyContext
 from app.Coleccion_Películas.governance import cleanJsonSchema
 from ..database import DLzone
+from genson import SchemaBuilder
 import json
 
 URI = "bolt://localhost:7687"
@@ -45,32 +45,6 @@ async def get_schema_from_path(collectionFilePath: str):
 
 class JsonRequestList(BaseModel):
     jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
-
-
-@router.post("/generate-schemaList/")
-async def generate_schema(request: JsonRequestList):
-    try:
-        builder = SchemaBuilder()
-        for json_obj in request.jsonInstances:
-            builder.add_object(json_obj)
-        schema = builder.to_schema()
-        return schema
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-        
-@router.post("/generate-schemaListFromFiles/")
-async def generate_schema(request: List[UploadFile] = File(...)):
-    try:
-        builder = SchemaBuilder()
-        for file in request:
-            content = await file.read() 
-            json_data = json.loads(content)
-            builder.add_object(json_data) 
-        schema = builder.to_schema()
-        return schema
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
 async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 

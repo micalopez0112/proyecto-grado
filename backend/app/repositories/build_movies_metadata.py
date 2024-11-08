@@ -7,24 +7,6 @@ import json
 
 ZONE = "trusted"
 
-def get_collection_from_file(collection_path:str):
-    with open(collection_path,'r') as collectionFile:
-            collection_content = json.load(collectionFile)
-    return collection_content
-
-def generate_metadata_from_collection_V2(collection_path:str):
-    try:
-        ## Se obtiene el JSON Schema desde un file
-        ## En el flujo se va a ejecutar generateMetadataFromSchema 
-        ## al llamar el endpoint de generar el schema
-        collection_content = get_collection_from_file(collection_path)
-        json_properties = collection_content.get("properties")
-        generate_metadata_from_schema(collection_path,
-                                    json_properties);
-    except Exception as e:
-            print("Error connecting to governanceDB: ", e)
-
-
     
 def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
     today_date = date.today()

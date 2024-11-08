@@ -191,7 +191,6 @@ export const Mapping = () => {
               jsonSchema: schemaAndCollectionName,
               documentStoragePath: collectionPath
             };
-            
             const response = await saveAndValidateMappings(
               currentOntologyId,
               "",

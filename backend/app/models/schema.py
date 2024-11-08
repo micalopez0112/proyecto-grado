@@ -16,7 +16,6 @@ class JsonSchema(BaseModel):
     def __init__(self, **data):
         super().__init__(**data) 
     # property_name = 
-
     class Config:
         arbitrary_types_allowed = True  # Permitir tipos arbitrarios como ObjectId
         json_encoders = {
@@ -58,3 +57,6 @@ class JSONSchemaResponse(BaseModel):
     id : Optional[str] = None
     collection_name : str = None
     properties : Optional[Dict[str, Any]] = None
+
+class JsonRequestList(BaseModel):
+    jsonInstances: List[dict] 
