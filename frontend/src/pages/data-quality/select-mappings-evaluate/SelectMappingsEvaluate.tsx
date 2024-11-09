@@ -165,15 +165,14 @@ const SelectMappingsEvaluate = () => {
               {
                 <div
                   key={key + "_value"}
-                  className={`json-elem disabled`}
+                  className={`json-elem`}
                   style={{
                     marginLeft: "20px",
                     backgroundColor: "#e3fae3",
-                    borderColor: "#67cb6f",
-                    border: "1px solid",
+                    border: "6px solid #54c45e",
                   }}
                 >
-                  <div className="mapping-box">
+                  <div className="mapping-box disabled">
                     <strong>object</strong>
                     {isMappedObjectValue && (
                       <>
