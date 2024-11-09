@@ -145,6 +145,15 @@ export const fetchOntologies = async () => {
   }
 };
 
+export const fetchDatasets = async () => {
+  try {
+    const response = await apiClient.get("/schemas");
+    return response;
+  } catch (error) {
+    console.error("Error fetching ontologies", error);
+  }
+};
+
 export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
   try {
     const queryParam = `?collectionFileName=${jsonFilePath}`;

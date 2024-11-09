@@ -32,7 +32,7 @@ const MappingCard = ({
 
   const closeModal = () => setModalIsOpen(false);
 
-  const handeOpenModal = async () => {
+  const handleOpenModal = async () => {
     if (id) {
       setLoading(true);
       setModalIsOpen(true);
@@ -70,7 +70,7 @@ const MappingCard = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handeOpenModal();
+              handleOpenModal();
             }}
             className="info-button"
           >

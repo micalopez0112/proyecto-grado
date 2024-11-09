@@ -14,7 +14,7 @@ const Navbar = () => {
           <Link to="/MappingsScreen">Mappings</Link>
         </li>
         <li className="navbar-elem">
-          <Link to="/DataQualityScreen">Data Quality</Link>
+          <Link to="/DatasetsScreen">Data Quality</Link>
         </li>
       </ul>
     </nav>

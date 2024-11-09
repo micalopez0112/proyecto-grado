@@ -15,7 +15,7 @@ const HomeScreen = () => {
       </button>
       <button
         className="quality-button"
-        onClick={() => navigate("/DataQualityScreen")}
+        onClick={() => navigate("/DatasetsScreen")}
       >
         Data Quality
       </button>

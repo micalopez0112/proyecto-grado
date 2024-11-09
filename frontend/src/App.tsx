@@ -12,6 +12,7 @@ import SelectMappingsValidate from "./pages/data-quality/select-mappings-evaluat
 import OntologyData from "./components/OntologyData.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import EvaluateMappings from "./pages/data-quality/evaluate-mappings/EvaluateMappings.tsx";
+import DatasetsScreen  from "./pages/data-quality/datasets-screen/DatasetsScreen.tsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/Mapping" element={<Mapping />} />
         <Route path="/Ontology" element={<OntologyData />} />
         <Route path="/Result" element={<MappingResult />} />
+        <Route path="/DatasetsScreen" element={<DatasetsScreen />} />
         <Route
           path="/SelectMappingsValidate"
           element={<SelectMappingsValidate />}

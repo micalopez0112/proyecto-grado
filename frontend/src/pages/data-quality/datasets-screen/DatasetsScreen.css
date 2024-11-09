@@ -1,0 +1,17 @@
+  
+  .dataset-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 65vh;
+    margin: 15px;
+    background: #0d245b;
+    width: 45%;
+    border-radius: 5px;
+  }
+.dataset-list-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+  }
