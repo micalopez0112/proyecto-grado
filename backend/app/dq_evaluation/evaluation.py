@@ -161,6 +161,11 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     # algo temporal
     index = 1
     field_measures = []
+    
+    json_keys = find_json_keys(mapping_entrance)
+    print(f'jsone keys: {json_keys}')
+    delete_existing_field_value_measures(json_keys, jsonSchemaId)
+    
     # estas son las instancias de los jsons
     for json_instance in json_instances :
         print(f'json_instance {json_instance}')
@@ -176,7 +181,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         # NODO_INSTANCIA = get_nodo_from_collection(json_instances.id)
         ## TODO: evaluar si obtener el nodo FIELD aca adentro!!!
         
-        element, json_keys = find_element_in_JSON_instance(json_instance, mapping_entrance)
+        element = find_element_in_JSON_instance(json_instance, mapping_entrance)
         print("### Found element: ", element)
         if element is None:
             value = 0
@@ -213,6 +218,25 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
 
     return results_dicc
 
+def delete_existing_field_value_measures(json_keys, jsonSchemaId):
+    first_key = json_keys[0]
+    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
+
+    latest_item = json_keys[-1]
+
+    delete_existing_measures = f"""
+    {graph_path}
+    MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
+    DETACH DELETE m
+    """
+    
+    print(f"delete_existing_measures: {delete_existing_measures}")
+    
+    neo4j_driver.execute_query(delete_existing_measures)
 
 def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSchemaId):
     first_key = json_keys[0]
@@ -225,22 +249,13 @@ def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSche
     latest_item = json_keys[-1]
     current_datetime = datetime.now()
 
-    delete_existing_measures = f"""
-    {graph_path}
-    MATCH (f{latest_item})-[r:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
-    DETACH DELETE m
-    """
-
     insert_measure = f"""
     {graph_path}
-    CREATE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
+    MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
     SET m.measure = {value}, m.date = '{current_datetime}'
     """
     
-    print(f"delete_existing_measures: {delete_existing_measures}")
     print(f"insert_measure: {insert_measure}")
-    
-    neo4j_driver.execute_query(delete_existing_measures)
     neo4j_driver.execute_query(insert_measure)
 
 
@@ -285,9 +300,21 @@ def find_element_in_JSON_instance(json_document, path) :
     try:
         for key in json_keys:
             element = element[key]
-        return element, json_keys
+        return element
     except (KeyError, TypeError):
         return None
+    
+def find_json_keys(path) :
+    print(f'path ${path}') #contacto-city_key#string
+    keys = path.replace('-', '_').split('_')
+    for key in keys:
+        print(key)
+    print(f'keys ${keys}')
+
+    # json_keys = ['contacto', 'city']
+    json_keys = keys[:-1] 
+    json_keys.remove('rootObject')
+    return json_keys
 
 def compare_onto_with_json_value(onto_prop_value, json_value) :
     # ver como hacer esto
