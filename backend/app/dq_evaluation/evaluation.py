@@ -205,8 +205,8 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         # setValorField(field, value)
         field_measures.append(value)
 
-        #si ya hay FielValueMeasures pisa los resultados anteriores, asi solo almacenamos la ultima corrida de FielValueMeasures
-        insert_or_update_field_value_measure(json_keys, value, json_instance['id'], jsonSchemaId)
+        #inserta los field value measures
+        insert_field_value_measures(json_keys, value, json_instance['id'], jsonSchemaId)
         results_dicc[result_key] = value
 
         
@@ -214,7 +214,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     # Aggregate all field measures and insert the result
     if field_measures:
         aggregated_measure_value = sum(field_measures) / len(field_measures)
-        insert_field_measure(json_keys, aggregated_measure_value, jsonSchemaId)
+        insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
 
     return results_dicc
 
@@ -238,7 +238,7 @@ def delete_existing_field_value_measures(json_keys, jsonSchemaId):
     
     neo4j_driver.execute_query(delete_existing_measures)
 
-def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSchemaId):
+def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
     first_key = json_keys[0]
     graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
@@ -259,7 +259,7 @@ def insert_or_update_field_value_measure(json_keys, value, id_document, jsonSche
     neo4j_driver.execute_query(insert_measure)
 
 
-def insert_field_measure(json_keys, value, jsonSchemaId):
+def insert_field_measures(json_keys, value, jsonSchemaId):
     first_key = json_keys[0]
     graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
