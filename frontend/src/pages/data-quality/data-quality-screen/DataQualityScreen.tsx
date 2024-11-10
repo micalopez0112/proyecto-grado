@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchMappings, getMapping } from "../../../services/mapsApi.ts";
+import { fetchMappings, getMapping, getDatasetMappings } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
+import { useParams } from "react-router-dom";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
-  const [mappings, setMappings] = useState<Array<{ id: string; name: string }>>(
+  const { idDataset } = useParams<{ idDataset: string }>();
+  const [mappings, setMappings] = useState<Array<{ idMapping: string; name: string }>>(
     []
   );
   const [selectedMappingId, setSelectedMappingId] = useState("");
@@ -24,16 +26,21 @@ const DataQualityScreen = () => {
   }>(null);
 
   useEffect(() => {
-    const retrieveMappings = async () => {
-      setLoading(true);
-      const mappings = await fetchMappings(true);
-      console.log("Mappings: ", mappings);
-      if (mappings) setMappings(mappings.data);
-      setLoading(false);
-    };
-    retrieveMappings();
-
-    setDataQualityRules([{ id: "1", name: "Accuracy" }]);
+    if(idDataset && mappings.length === 0){
+      const retrieveMappings = async () => {
+        setLoading(true);
+        const mappings = await getDatasetMappings(idDataset);
+        console.log(`Mappings del idSchema ${idDataset}: `, mappings);
+        if (mappings) setMappings(mappings.data);
+        setLoading(false);
+      };
+      retrieveMappings();
+  
+      setDataQualityRules([{ id: "1", name: "Accuracy" }]);
+    }
+    else{
+      //show no mappings available
+    }
   }, []);
 
   const onClickMappingCard = (id: string) => {
@@ -59,15 +66,15 @@ const DataQualityScreen = () => {
                 <div className="quality-list-container">
                   {mappings.map((mapping) => (
                     <MappingCard
-                      key={mapping.id}
-                      id={mapping.id}
+                      key={mapping.idMapping}
+                      id={mapping.idMapping}
                       name={mapping.name}
                       style={{
                         ...styles.mappingCard,
                         backgroundColor:
-                          selectedMappingId === mapping.id ? "#f39c12" : "#fff",
+                          selectedMappingId === mapping.idMapping ? "#f39c12" : "#fff",
                       }}
-                      onClickCallback={() => onClickMappingCard(mapping.id)}
+                      onClickCallback={() => onClickMappingCard(mapping.idMapping)}
                       includeMappingInfo={true}
                     />
                   ))}

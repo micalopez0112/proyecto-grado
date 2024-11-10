@@ -109,6 +109,15 @@ export const fetchMappings = async (filter_validated_mappings?: boolean) => {
   }
 };
 
+export const getDatasetMappings = async (datasetId: string) => {
+  try {
+    const response = await apiClient.get(`/mapping/schemas/${datasetId}`);
+    return response;
+  } catch (error) {
+    console.log("Error fetching mappings for dataset: ", error);
+  }
+};
+
 export const getMapping = async (mappingId: string, filter_dp?: boolean) => {
   try {
     let params = {};

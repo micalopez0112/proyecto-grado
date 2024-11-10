@@ -67,7 +67,7 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 class MappingsByJSONResponse(BaseModel):
-    _id : Optional[str] = None
+    idMapping : Optional[str] = None
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
     jsonSchemaId: Optional[str]= None

@@ -3,6 +3,7 @@ import { useDataContext } from '../../../context/context.tsx';
 import { useNavigate } from "react-router-dom";
 import { Spinner } from '../../../components/Spinner/Spinner.tsx';
 import { fetchDatasets } from '../../../services/mapsApi.ts';
+import MappingCard from '../../../components/MappingCard.tsx';
 
 import "./DatasetsScreen.css";
 
@@ -10,8 +11,9 @@ const DatasetsScreen = () => {
 
     
     const [loading, setLoading] = useState<boolean>(false);
-    const [datasets, setDatasets] = useState<Array<{ id: string; name: string; properties}>>([]);
-
+    const [datasets, setDatasets] = useState<Array<{ id: string; collection_name: string; properties}>>([]);
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const retrieveDatasets = async () => {
             try{
@@ -31,6 +33,9 @@ const DatasetsScreen = () => {
         retrieveDatasets();
     },[]);
     
+    const selectDataset = (id:string) =>{
+        navigate(`/DataQualityScreen/${id}`);
+    }
 
     return (
         <>
@@ -39,18 +44,18 @@ const DatasetsScreen = () => {
          (<>
          <div className='container'>
             <h1 className="title-section">Available Datasets</h1>
+            <p className="subtitle">Select a dataset to evaluate its attributes quality</p>
             <div className='dataset-container'>
                 <div className='dataset-list-container'>
                     {datasets.map((dataset) => (
-                        <div className='dataset-card'>
-                            {/* <h2 className='sub-title'>{dataset.name}</h2>
-                            <p>{dataset.properties}</p> */}
-                        </div>
+                        <MappingCard
+                            key={dataset.id}
+                            id={dataset.id}
+                            name={dataset.collection_name}
+                            onClickCallback={() => selectDataset(dataset.id)}
+                            style= {styles.datasetMappingCard}
+                            />
                     ))}
-                    <div className='dataset-card'>
-                            <h2 className='sub-title'>name</h2>
-                            <p>properties</p>
-                        </div>
                 </div>
             </div>
          </div>
@@ -59,5 +64,17 @@ const DatasetsScreen = () => {
         </>
     );
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+    datasetMappingCard: {
+      display: "flex",
+      padding: 10,
+      cursor: "pointer",
+      borderRadius: 5,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#fff",
+    },
+  };
 
 export default DatasetsScreen;

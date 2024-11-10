@@ -93,9 +93,9 @@ const OntologySelectScreen = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1>Seleccione la ontología de contexto</h1>
+          <h1>Select the domain ontology</h1>
           <button className="button" onClick={handleSubmit}>
-            Confirmar selección
+            Confirm Selection
           </button>
           <div style={styles.selectHeader}>
             <p
@@ -105,11 +105,11 @@ const OntologySelectScreen = () => {
                 fontSize: "18px",
               }}
             >
-              Cargar la ontología:
+              Upload the Ontology:
             </p>
 
             <div style={styles.checkboxContainer}>
-              <p style={{ fontSize: "16px" }}>Método de carga:</p>
+              <p style={{ fontSize: "16px" }}>Upload method:</p>
               <div
                 style={{
                   display: "flex",
@@ -124,7 +124,7 @@ const OntologySelectScreen = () => {
                     checked={selectedMethod === "file"}
                     onChange={handleOptionChange}
                   />
-                  Archivo
+                  File
                 </label>
                 <label>
                   <input

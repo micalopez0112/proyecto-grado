@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/MappingsScreen" element={<MappingsScreen />} />
-        <Route path="/DataQualityScreen" element={<DataQualityScreen />} />
+        <Route path="/DataQualityScreen/:idDataset" element={<DataQualityScreen />} />
         <Route path="/OntologySelect" element={<OntologySelectScreen />} />
         <Route path="/SchemaSelect" element={<SchemaSelect />} />
         <Route path="/Mapping" element={<Mapping />} />
