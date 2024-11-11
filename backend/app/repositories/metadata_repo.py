@@ -71,3 +71,26 @@ def delete_existing_field_value_measures_2(json_keys, jsonSchemaId):
     print(f"delete_existing_measures: {delete_existing_measures}")
     
     execute_neo4j_query_by_driver(delete_existing_measures)
+
+# TODO : terminar
+def get_evaluation_results(json_keys, jsonSchemaId, limit):
+    first_key = json_keys[0]
+    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
+
+    latest_item = json_keys[-1]
+    get_evaluation = f"""
+     
+    """
+    # get_evaluation_results = f"""
+    # {graph_path}
+    # MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
+    # RETURN m.measure as measure, m.date as date
+    # """
+    
+    print(f"get_evaluation_results: {get_evaluation_results}")
+    
+    execute_neo4j_query_by_driver(get_evaluation_results)
