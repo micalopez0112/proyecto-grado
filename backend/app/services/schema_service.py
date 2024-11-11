@@ -45,7 +45,8 @@ async def get_or_create_schema(collectionPath:str,json_schema: Dict[str, Any]):
     if existent_schema is None:
         inserted_id = await insert_schema(json_schema)
         ## generate schema metadata
-        generate_metadata_from_schema(collectionPath, json_schema)
+        print("INSERTED ID #####:", inserted_id)
+        generate_metadata_from_schema(collectionPath, json_schema, str(inserted_id))
         return inserted_id
     
     return existent_schema.id
