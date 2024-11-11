@@ -96,8 +96,7 @@ const Json: React.FC = () => {
                   style={{
                     marginLeft: "20px",
                     backgroundColor: "#e3fae3",
-                    borderColor: "#67cb6f",
-                    border: "1px solid",
+                    border: "6px solid #54c45e",
                   }}
                 >
                   <strong>object</strong>
