@@ -1,7 +1,6 @@
 from owlready2 import get_ontology
 from typing import Dict, Any
 from abc import ABC, abstractmethod
-from datetime import datetime
 from neo4j import GraphDatabase
 from datetime import  datetime
 from bson import ObjectId
@@ -11,8 +10,8 @@ from app.dq_evaluation.mocks import get_hardcoded_test_documents
 from app.models.mapping import MappingProcessDocument
 from app.models.ontology import OntologyDocument
 from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
+from app.repositories.metadata_repo import delete_existing_field_value_measures, insert_field_value_measures, insert_field_measures
 from ..database import  neo4j_driver
-
 
 SYNTCTATIC_ACCURACY = "syntactic_accuracy"
 QUALITY_RULES = [SYNTCTATIC_ACCURACY]
@@ -64,7 +63,6 @@ class SyntanticAccuracy(QualityMetric) :
         print("## SyntanticAccuracy: execute_measure ##")
         ontology = await get_onto(self.mapping_process.ontologyId)
         jsonSchemaId = self.mapping_process.jsonSchemaId
-        print("## Got ontology correctly ##", list(ontology.individuals()))
         print("## SyntanticAccuracy: mapping elements ##") #self.mapping_elements)
         results_dicc = {}
         for json_mapped_key, onto_mapped_to_value in self.mapping_elements.items():
@@ -184,7 +182,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         if element is None:
             value = 0
         # por cada ontología a la cual se haya mapeado
-        # ver como guardar aca según la ongología a la que mapeo
+        # ver como guardar aca según la ongología a la que mapeo 
         # si esta OK en alguna de los ontologias se toma como que es válido
         for onto_mapped_to in onto_mapped_to_value:
             print("## Onto value: ", onto_mapped_to['iri'])
@@ -214,69 +212,8 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         aggregated_measure_value = sum(field_measures) / len(field_measures)
         insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
 
-    return results_dicc
-
-def delete_existing_field_value_measures(json_keys, jsonSchemaId):
-    first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
-
-    for key in json_keys[1:]:
-        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-        graph_path += node_path
-
-    latest_item = json_keys[-1]
-
-    delete_existing_measures = f"""
-    {graph_path}
-    MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
-    DETACH DELETE m
-    """
-    
-    print(f"delete_existing_measures: {delete_existing_measures}")
-    
-    neo4j_driver.execute_query(delete_existing_measures)
-
-def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
-    first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
-
-    for key in json_keys[1:]:
-        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-        graph_path += node_path
-
-    latest_item = json_keys[-1]
-    current_datetime = datetime.now()
-
-    insert_measure = f"""
-    {graph_path}
-    MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
-    SET m.measure = {value}, m.date = '{current_datetime}'
-    """
-    
-    print(f"insert_measure: {insert_measure}")
-    neo4j_driver.execute_query(insert_measure)
-
-
-def insert_field_measures(json_keys, value, jsonSchemaId):
-    first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
-
-    for key in json_keys[1:]:
-        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-        graph_path += node_path
-
-    latest_item = json_keys[-1]
-    current_datetime = datetime.now()
-
-    insert_measure = f"""
-    CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
-    """
-
-    query = graph_path + insert_measure
-    print(f"query: {query}")
-
-    neo4j_driver.execute_query(query)
-
+    # ver: pero de alguna forma devolver solo el resultado agregado
+    return aggregated_measure_value
 
 # esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
 # destination-accomodation-name
