@@ -147,9 +147,9 @@ export const fetchOntologies = async () => {
 
 export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
   try {
-    const queryParam = `?collectionFilePath=${jsonFilePath}`;
-    const response = await apiClient.post(
-      `/mapping/generate-schema/${queryParam}`
+    const queryParam = `?collectionFileName=${jsonFilePath}`;
+    const response = await apiClient.get(
+      `/schemas/generateSchema${queryParam}`
     );
     console.log("Response from generating schema: ", response);
     return response;

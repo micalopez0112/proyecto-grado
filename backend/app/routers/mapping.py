@@ -1,17 +1,15 @@
 from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
 from typing import List,Optional, Dict, Any
 from neo4j import GraphDatabase
-from genson import SchemaBuilder
 from pydantic import BaseModel
 
 from app.services import mapping_service as service
 from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
 from app.dq_evaluation.evaluation import StrategyContext
 from app.Coleccion_Películas.governance import cleanJsonSchema
-
-import os
+from ..database import DLzone
+from genson import SchemaBuilder
 import json
-zone_path = os.getenv("ZONE_PATH")
 
 URI = "bolt://localhost:7687"
 AUTH = ("neo4j","tesis2024")
@@ -24,7 +22,7 @@ class JsonRequest(BaseModel):
 @router.post("/generate-schema/")
 async def get_schema_from_path(collectionFilePath: str):
     try:
-        realPath = zone_path + collectionFilePath
+        realPath = DLzone + collectionFilePath
         with open (realPath,"r",encoding='utf-8') as file:
             builder = SchemaBuilder()
             # data = await file.read()
@@ -48,38 +46,12 @@ async def get_schema_from_path(collectionFilePath: str):
 class JsonRequestList(BaseModel):
     jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
 
-
-@router.post("/generate-schemaList/")
-async def generate_schema(request: JsonRequestList):
-    try:
-        builder = SchemaBuilder()
-        for json_obj in request.jsonInstances:
-            builder.add_object(json_obj)
-        schema = builder.to_schema()
-        return schema
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-        
-@router.post("/generate-schemaListFromFiles/")
-async def generate_schema(request: List[UploadFile] = File(...)):
-    try:
-        builder = SchemaBuilder()
-        for file in request:
-            content = await file.read() 
-            json_data = json.loads(content)
-            builder.add_object(json_data) 
-        schema = builder.to_schema()
-        return schema
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
 async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
                        request: MappingRequest = Body(...)):
     try:
         if not isinstance(request.mapping, dict):
-            raise HTTPException(status_code=400, detail="Invalid mapping body")
+            raise HTTPException(status_code= 400, detail="Invalid mapping body")
         mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
     
@@ -133,21 +105,18 @@ async def get_mappings(validated_mappings: Optional[bool] = None) :
 # /evaluate/syntactic_accuracy?mapping_process_id=123
 @router.post("/evaluate/{quality_rule}")
 async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
-    with GraphDatabase.driver(URI, auth=AUTH) as driver:
+    print(f'request_mapping_body: {request_mapping_body}')
+    try :
+        context = StrategyContext()
+        context.select_strategy(quality_rule)
         
-        print(f'request_mapping_body: {request_mapping_body}')
-        try :
-            context = StrategyContext()
-            context.select_strategy(quality_rule)
-            
-            result = await context.evaluate_quality(mapping_process_id, request_mapping_body, driver)
-            return result
-        except Exception as e:
-            msg = str(e)
-            response = MappingResponse(message=msg, status="error")
-            return response
+        result = await context.evaluate_quality(mapping_process_id, request_mapping_body)
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
         
-    driver.close()
 
 @router.get("/schemas/{schema_id}")
 async def get_mappings_by_schema_id(schema_id: str):

@@ -1,0 +1,17 @@
+.info-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-button:hover {
+  opacity: 0.5;
+}
+
+.info-button:focus {
+  outline: none;
+}

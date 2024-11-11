@@ -7,29 +7,11 @@ import json
 
 ZONE = "trusted"
 
-def get_collection_from_file(collection_path:str):
-    with open(collection_path,'r') as collectionFile:
-            collection_content = json.load(collectionFile)
-    return collection_content
-
-def generate_metadata_from_collection_V2(collection_path:str):
-    try:
-        ## Se obtiene el JSON Schema desde un file
-        ## En el flujo se va a ejecutar generateMetadataFromSchema 
-        ## al llamar el endpoint de generar el schema
-        collection_content = get_collection_from_file(collection_path)
-        json_properties = collection_content.get("properties")
-        generate_metadata_from_schema(collection_path,
-                                    json_properties);
-    except Exception as e:
-            print("Error connecting to governanceDB: ", e)
-
-
     
 def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
     today_date = date.today()
     ## Asumimos que los metadatos están disponibles para ser creados en la Ingestion Zone => date = today
-    collection_name = collection_path.split('/')[-1]
+    collection_name = schema.get("collection_name")
     collection_query = get_collection_query()
     params = {
         'collection_name': collection_name,
@@ -42,9 +24,9 @@ def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
     collection_node = collection_insert_result[0]
     collection_node_id = collection_node['collectionElementId']
     print(f'El elementId con el que se insertó la colección es: {collection_node_id}')
-
+    schema_properties = schema.get("properties")
     ##Creamos los fields del schema
-    for field_key, field_value in schema.items():
+    for field_key, field_value in schema_properties.items():
         try:
             generate_fields_metadata(collection_node_id, "schema", field_key, field_value)  
         except Exception as e:
