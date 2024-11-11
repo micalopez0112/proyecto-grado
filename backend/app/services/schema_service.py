@@ -21,7 +21,7 @@ async def get_all_schemas():
         collection_name = schema.get('collection_name')
         if collection_name is None:
             collection_name = "some_collection"
-        jsonSchema = JSONSchemaResponse(id=str(schema['_id']), collection_name=collection_name, properties=schema['properties'])
+        jsonSchema = JSONSchemaResponse(id=str(schema['_id']), collection_name=collection_name)
         result.append(jsonSchema)
         
     # TODO ajustar tipo de retorno

@@ -3,8 +3,12 @@ from app.models.mapping import MappingProcessDocument
 from bson import ObjectId
 
 # find_mappings_by_schema gets all the mapping processes that use a specific JSON schema
-async def find_mappings_by_schema(json_schema_id: str):
-    cursor = mapping_process_collection.find({'jsonSchemaId': json_schema_id})
+async def find_mappings_by_schema(json_schema_id: str, validated_mappings: bool = None):
+    query = {'jsonSchemaId': json_schema_id}
+    if(validated_mappings is not None):
+        query['mapping_suscc_validated'] = validated_mappings
+        
+    cursor = mapping_process_collection.find(query)
     mapping_process_docs = await cursor.to_list(length=None)
     
     return mapping_process_docs

@@ -13,7 +13,6 @@ async def get_schemas():
 @router.get("/generateSchema")
 async def get_schema_from_path(collectionFileName: str):
     try:
-        print("o")
         schema = service.generate_schema_from_collection(collectionFileName)
         print(f'## SCHEMA al retornar en generateSchema ##: {schema}')
         return schema

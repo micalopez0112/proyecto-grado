@@ -12,10 +12,10 @@ from app.services import schema_service as schema_service
 
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
-    mapping_prosses_list = await mapping_repo.find_mappings_by_schema(json_schema_id)
+    mapping_prosses_list = await mapping_repo.find_mappings_by_schema(json_schema_id, True)
     # TODO revisar cuales son todos los valores que necesitamos
     for mapping_process_doc in mapping_prosses_list:
-        mappingByJSON = MappingsByJSONResponse(idMapping=str(mapping_process_doc['_id']), name=mapping_process_doc['name'], jsonSchemaId=mapping_process_doc['jsonSchemaId'], mapping=mapping_process_doc['mapping'])
+        mappingByJSON = MappingsByJSONResponse(idMapping=str(mapping_process_doc['_id']), name=mapping_process_doc['name'], jsonSchemaId=mapping_process_doc['jsonSchemaId'])
         mappingJsons.append(mappingByJSON)
     
     return mappingJsons
