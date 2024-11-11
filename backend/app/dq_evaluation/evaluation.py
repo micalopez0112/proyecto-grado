@@ -152,8 +152,6 @@ def get_documents_from_storage(path : str) :
 # onto_values puede ser una lista si mapeo a mas de una cosa
 def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
     print(f'jsonSchemaId: {jsonSchemaId}')
-    #TODO: delete hardcoded jsonSchemaId
-    jsonSchemaId = 1
     print("## SyntanticAccuracy evaluating mapping:", mapping_entrance, "###")
     print("## SyntanticAccuracy about to evaluate:", len(json_instances))
 
@@ -220,7 +218,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
 
 def delete_existing_field_value_measures(json_keys, jsonSchemaId):
     first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
     for key in json_keys[1:]:
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
@@ -240,7 +238,7 @@ def delete_existing_field_value_measures(json_keys, jsonSchemaId):
 
 def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
     first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
     for key in json_keys[1:]:
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
@@ -261,7 +259,7 @@ def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
 
 def insert_field_measures(json_keys, value, jsonSchemaId):
     first_key = json_keys[0]
-    graph_path = f"MATCH (c:Collection {{id_dataset: {jsonSchemaId}}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
+    graph_path = f"MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})"
 
     for key in json_keys[1:]:
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
