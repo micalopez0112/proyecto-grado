@@ -8,7 +8,7 @@ import json
 ZONE = "trusted"
 
     
-def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
+def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any], id_dataset: str):
     today_date = date.today()
     ## Asumimos que los metadatos están disponibles para ser creados en la Ingestion Zone => date = today
     collection_name = schema.get("collection_name")
@@ -17,7 +17,8 @@ def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
         'collection_name': collection_name,
         'ingestion_date': today_date,
         'collection_path': collection_path,
-        'zoneName': ZONE
+        'zoneName': ZONE,
+        'id_dataset' : id_dataset
     }
     collection_insert_result = execute_neo4j_query(collection_query, params)
 
@@ -39,12 +40,18 @@ def generate_metadata_from_schema(collection_path:str,schema: Dict[str, Any]):
 def generate_fields_metadata(parent_node_Id:str, parent_type:str, field:str, field_value: Dict[str, Any]):
     try:
         field_type = field_value.get("type")
-        field_query = get_field_query()
+        belongs_to = "belongsToField"
+        if parent_type == "schema":
+            belongs_to = "belongsToSchema"
+        print("PARENT TYPE: ", parent_type)
+        print("BELONGS TO: ", belongs_to)
+        field_query = get_field_query(belongs_to)
         params = {
             'parentNodeId': parent_node_Id,
             'fieldName': field,
             'fieldType': field_type,
-            'parentType': parent_type.capitalize()  # Capitalizamos aquí para la relación
+            'parentType': parent_type.capitalize(),  # Capitalizamos aquí para la relación
+            'belongsTo': belongs_to
         }
       
         field_insert_result = execute_neo4j_query(field_query, params)
@@ -64,19 +71,31 @@ def generate_fields_metadata(parent_node_Id:str, parent_type:str, field:str, fie
     except Exception as e:
         print(f"Error al crear el NODO para field {field}: {e}")
 
-def get_field_query():
-    return """
+# def get_field_query():
+#     return """
+#             MATCH (parent) WHERE elementId(parent) = $parentNodeId
+#             CREATE (field:Field {
+#                 id_field: "idfield",
+#                 name: $fieldName,
+#                 type: $fieldType
+#             })
+#             CREATE (field)-[:$belongsTo]->(parent)
+#             SET field += { parentType: $parentType }
+#             RETURN elementId(field) AS fieldElementId
+#         """
+
+def get_field_query(belongs_to):
+    return f"""
             MATCH (parent) WHERE elementId(parent) = $parentNodeId
-            CREATE (field:Fields {
+            CREATE (field:Field {{
                 id_field: "idfield",
                 name: $fieldName,
                 type: $fieldType
-            })
-            CREATE (field)-[:belongsTo]->(parent)
-            SET field += { parentType: $parentType }
+            }})
+            CREATE (field)-[:{belongs_to}]->(parent)
+            SET field += {{ parentType: $parentType }}
             RETURN elementId(field) AS fieldElementId
         """
-
 def get_collection_query():
     return """
         MERGE (zone:Zone { name: $zoneName })
@@ -85,7 +104,8 @@ def get_collection_query():
             description: "Colección que contiene información sobre varias películas",
             ingestion_date: $ingestion_date,
             ingestion_info: $collection_path,
-            type: "json file"
+            type: "json file",
+            id_dataset: $id_dataset
         })
         WITH collection, zone
         CREATE (collection)-[:STOREDIN]->(zone)
