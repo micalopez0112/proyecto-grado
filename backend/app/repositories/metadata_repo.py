@@ -71,10 +71,10 @@ def insert_field_measures(json_keys, value, jsonSchemaId):
     query = graph_path + insert_measure
     neo4j_driver.execute_query(query)
 
-def get_evaluation_results(jsonSchemaId, json_keys, limit, page_number):
+def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     first_key = json_keys[0]
     graph_path = f""" 
-        MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:

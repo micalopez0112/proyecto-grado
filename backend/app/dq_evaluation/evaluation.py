@@ -119,12 +119,6 @@ class StrategyContext():
         return result
 
 
-# async def get_mapping_process(mapping_processID: str) -> MappingProcessDocument:
-#     mapping_processID = ObjectId(mapping_processID)
-#     mapping_process_document = await mapping_process_collection.find_one({'_id': mapping_processID})
-#     mapping_process_docu = MappingProcessDocument(**mapping_process_document)
-    
-#     return mapping_process_docu
 
 # mover para otro lado
 async def get_onto(ontology_id: str) :
