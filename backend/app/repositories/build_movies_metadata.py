@@ -43,8 +43,7 @@ def generate_fields_metadata(parent_node_Id:str, parent_type:str, field:str, fie
         belongs_to = "belongsToField"
         if parent_type == "schema":
             belongs_to = "belongsToSchema"
-        print("PARENT TYPE: ", parent_type)
-        print("BELONGS TO: ", belongs_to)
+
         field_query = get_field_query(belongs_to)
         params = {
             'parentNodeId': parent_node_Id,
@@ -71,19 +70,6 @@ def generate_fields_metadata(parent_node_Id:str, parent_type:str, field:str, fie
     except Exception as e:
         print(f"Error al crear el NODO para field {field}: {e}")
 
-# def get_field_query():
-#     return """
-#             MATCH (parent) WHERE elementId(parent) = $parentNodeId
-#             CREATE (field:Field {
-#                 id_field: "idfield",
-#                 name: $fieldName,
-#                 type: $fieldType
-#             })
-#             CREATE (field)-[:$belongsTo]->(parent)
-#             SET field += { parentType: $parentType }
-#             RETURN elementId(field) AS fieldElementId
-#         """
-
 def get_field_query(belongs_to):
     return f"""
             MATCH (parent) WHERE elementId(parent) = $parentNodeId
@@ -96,6 +82,7 @@ def get_field_query(belongs_to):
             SET field += {{ parentType: $parentType }}
             RETURN elementId(field) AS fieldElementId
         """
+
 def get_collection_query():
     return """
         MERGE (zone:Zone { name: $zoneName })

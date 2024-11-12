@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, Query, Body, UploadFile, File
+from fastapi import APIRouter, HTTPException, Query, Body
 from typing import List,Optional, Dict, Any
-from neo4j import GraphDatabase
 from pydantic import BaseModel
 
 from app.services import mapping_service as service
@@ -126,3 +125,17 @@ async def get_mappings_by_schema_id(schema_id: str):
         raise HTTPException(status_code=500, detail=str(e))
     
     return result
+
+@router.get("/dataquality/results")
+async def get_quality_results(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), 
+                              json_key: Optional[str] = Query(None, description="Json key to get quality results"), 
+                              limit: Optional[int] = 100, offset: Optional[int] = 0):
+    print(f'request_mapping_body: {mapping_process_id}')
+    try :
+        result = await service.get_evaluation_results_by_json(mapping_process_id, json_key, limit, offset)
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+        
