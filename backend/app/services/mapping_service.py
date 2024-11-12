@@ -2,13 +2,13 @@
 
 from ..database import  mapping_process_collection, DLzone
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
-from app.repositories import mapping_repo
+from app.repositories import mapping_repo, metadata_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
+from app.dq_evaluation.evaluation import find_json_keys
 
-
-
+from bson import ObjectId
 
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
@@ -119,3 +119,13 @@ async def update_whole_mapping_process(put_request: PutMappingRequest):
         map_request = MappingRequest(name=put_request.name, mapping=put_request.mapping)
         mapping_updated = await update_mapping_process(map_request, put_request.mapping_proccess_id, False)
         return mapping_updated.acknowledged
+    
+async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str, limit: int, offset:int):
+    mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_process_id))
+    schema_id = mapping_process.jsonSchemaId
+    keys_list = find_json_keys(json_key)
+    results = metadata_repo.get_evaluation_results(str(schema_id), keys_list, limit, offset)
+    # if json_key not in json_schema_properties_keys:
+    #     raise ValueError(f"Invalid JSON key: {json_key}")
+    return results
+ 

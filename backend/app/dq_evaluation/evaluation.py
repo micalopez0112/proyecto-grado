@@ -1,8 +1,6 @@
 from owlready2 import get_ontology
 from typing import Dict, Any
 from abc import ABC, abstractmethod
-from neo4j import GraphDatabase
-from datetime import  datetime
 from bson import ObjectId
 
 from app.database import mapping_process_collection, onto_collection
@@ -10,7 +8,7 @@ from app.dq_evaluation.mocks import get_hardcoded_test_documents
 from app.models.mapping import MappingProcessDocument
 from app.models.ontology import OntologyDocument
 from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
-from app.repositories.metadata_repo import delete_existing_field_value_measures, insert_field_value_measures, insert_field_measures
+from app.repositories import mapping_repo, metadata_repo
 from ..database import  neo4j_driver
 
 SYNTCTATIC_ACCURACY = "syntactic_accuracy"
@@ -51,7 +49,7 @@ class SyntanticAccuracy(QualityMetric) :
     
     async def set_mapping_process(self, mapping_process_id: str) -> None:
         print("## Iniciating SyntaticAccuracy with mp id : ", mapping_process_id + " ##")
-        mapping_process = await get_mapping_process(mapping_process_id)
+        mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_process_id))
         self.mapping_process = mapping_process
     
     def set_mapping_elements(self, mapping_elems:  Dict[str, Any]) -> None:
@@ -121,12 +119,6 @@ class StrategyContext():
         return result
 
 
-async def get_mapping_process(mapping_processID: str) -> MappingProcessDocument:
-    mapping_processID = ObjectId(mapping_processID)
-    mapping_process_document = await mapping_process_collection.find_one({'_id': mapping_processID})
-    mapping_process_docu = MappingProcessDocument(**mapping_process_document)
-    
-    return mapping_process_docu
 
 # mover para otro lado
 async def get_onto(ontology_id: str) :
@@ -160,7 +152,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     
     json_keys = find_json_keys(mapping_entrance)
     print(f'jsone keys: {json_keys}')
-    delete_existing_field_value_measures(json_keys, jsonSchemaId)
+    metadata_repo.delete_existing_field_value_measures(json_keys, jsonSchemaId)
     
     # estas son las instancias de los jsons
     for json_instance in json_instances :
@@ -202,7 +194,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
         field_measures.append(value)
 
         #inserta los field value measures
-        insert_field_value_measures(json_keys, value, json_instance['id'], jsonSchemaId)
+        metadata_repo.insert_field_value_measures(json_keys, value, json_instance['id'], jsonSchemaId)
         results_dicc[result_key] = value
 
         
@@ -210,7 +202,7 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
     # Aggregate all field measures and insert the result
     if field_measures:
         aggregated_measure_value = sum(field_measures) / len(field_measures)
-        insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
+        metadata_repo.insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
 
     # ver: pero de alguna forma devolver solo el resultado agregado
     return aggregated_measure_value

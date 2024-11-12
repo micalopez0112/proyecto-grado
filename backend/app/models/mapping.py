@@ -71,3 +71,9 @@ class MappingsByJSONResponse(BaseModel):
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
     jsonSchemaId: Optional[str]= None
+
+class DqResult(BaseModel):
+    name : str
+    id_document : int
+    date : str
+    measure : float
