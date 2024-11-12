@@ -54,27 +54,24 @@ const OntologySelectScreen = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("a");
     try {
       setLoading(true);
+      let response;
       if (selectedMethod && selectedMethod === "file" && selectedFile) {
-        const response = await uploadOntology("FILE", selectedFile, "");
-        const ontologyData: OntologyDataType = response?.data.ontologyData;
-        const ontologyId = response?.data.ontologyData.ontology_id;
-        setcurrentOntologyId(ontologyId);
-        setontologyDataContext(ontologyData);
+        response = await uploadOntology("FILE", selectedFile, "");
       } else if (selectedMethod && selectedMethod === "uri" && uriValue) {
-        //get ontology via URI
-        //get ontology data from backend
-        //setcurrentOntologyId(idSelectedOnto);
-        const response = await uploadOntology("URI", undefined, uriValue);
-        console.log("Ontologia desde el back", response);
-        const ontologyData: OntologyDataType = response?.data.ontologyData;
-        const ontologyId = response?.data.ontologyData.ontology_id;
-        setcurrentOntologyId(ontologyId);
-        setontologyDataContext(ontologyData);
+        response = await uploadOntology("URI", undefined, uriValue);
+        console.log("Ontologia desde el back", response); 
       }
-      setLoading(false);
+      else{
+        alert("Please select an ontology");
+        setLoading(false);
+        return;
+      }
+      const ontologyData: OntologyDataType = response?.data.ontologyData;
+      const ontologyId = response?.data.ontologyData.ontology_id;
+      setcurrentOntologyId(ontologyId);
+      setontologyDataContext(ontologyData);
       navigate("/SchemaSelect");
     } catch (error) {
       console.log("error en handleSubmit: ", error);

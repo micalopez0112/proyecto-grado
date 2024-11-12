@@ -94,7 +94,9 @@ export const Mapping = () => {
             mapping_proccess_id: mappingId,
             // documentStoragePath: collectionPath
           };
+          setLoading(true);
           const response = await saveMapping(body);
+          setLoading(false);
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message, mapping_id } = response.data;
@@ -161,11 +163,13 @@ export const Mapping = () => {
             mapping_proccess_id: mappingId,
             // documentStoragePath: collectionPath
           };
+          setLoading(true);
           const response = await saveAndValidateMappings(
             currentOntologyId!,
             mappingId,
             body
           );
+          setLoading(false);
           //capaz chequear que si currentOntologyId es undefined no se haga el post
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
@@ -191,11 +195,13 @@ export const Mapping = () => {
               jsonSchema: schemaAndCollectionName,
               documentStoragePath: collectionPath
             };
+            setLoading(true);
             const response = await saveAndValidateMappings(
               currentOntologyId,
               "",
               body
             );
+            setLoading(false);
             console.log("Response al guardar mappings (validate): ", response);
             if (response) {
               const { status, message, mapping_id } = response.data;
