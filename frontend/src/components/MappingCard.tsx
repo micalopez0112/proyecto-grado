@@ -74,7 +74,7 @@ const MappingCard = ({
             }}
             className="info-button"
           >
-            <FaMagnifyingGlass size={20} />{" "}
+            <FaMagnifyingGlass size={20} />
           </button>
         )}
       </div>

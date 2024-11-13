@@ -179,20 +179,46 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
 
 export const evaluateMapping = async (
   qualityRuleId: string,
-  mapping_pid: string | null, // make it optional since the backend allows it
+  mapping_pid: string | null,
   body: any
 ) => {
   try {
-    // Prepare the query string for the optional mapping_pid
     const query = mapping_pid ? `?mapping_process_id=${mapping_pid}` : "";
 
     const response = await apiClient.post(
-      `/mapping/evaluate/${qualityRuleId}${query}`, // Append query to the URL
-      body // Send the body as-is
+      `/mapping/evaluate/${qualityRuleId}${query}`,
+      body
     );
 
     return response;
   } catch (error) {
     console.error("Error in call of evaluating mapping: ", error);
+  }
+};
+
+export const fetchDetailedResults = async (
+  mappingProcessId: string,
+  mappingName: string
+) => {
+  if (!mappingProcessId) {
+    throw new Error("Mapping process ID is not available.");
+  }
+
+  try {
+    const response = await apiClient.get("/mapping/dataquality/results", {
+      params: {
+        mapping_process_id: mappingProcessId,
+        json_key: mappingName,
+      },
+    });
+
+    if (response.data?.status === "error") {
+      throw new Error(response.data.message);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching detailed results:", error);
+    throw new Error("Failed to fetch detailed results.");
   }
 };
