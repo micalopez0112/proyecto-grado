@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from app.routers.mapping import router as mapping_router
 from app.routers.ontology import router as ontology_router
 from app.routers.schema import router as schema_router
+from app.routers.dataquality import router as dataquality_router
 
 import uvicorn
 
@@ -22,6 +23,7 @@ app.add_middleware(
 app.include_router(mapping_router, prefix="/mapping", tags=["mappings"])
 app.include_router(ontology_router, prefix="/ontologies", tags=["ontologies"])
 app.include_router(schema_router, prefix="/schemas", tags=["schemas"])
+app.include_router(dataquality_router, prefix="/data-quality", tags=["data-quality"])
 
 
 if __name__ == "__main__":
