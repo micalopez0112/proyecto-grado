@@ -1,43 +1,65 @@
 import React, { useEffect, useState } from "react";
+import Modal from "react-modal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { useDataContext } from "../../../context/context.tsx";
+import { fetchDetailedResults } from "../../../services/mapsApi.ts";
+import "./EvaluateMappings.css";
 
 const EvaluateMappings = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { mappingProcessId } = useDataContext();
 
-  // Get selected mappings and ruleId from location.state
-  const selectedMappings = location.state?.selectedMappings || [];
-  const ruleId = location.state?.ruleId || "";
+  const initialResults = location.state?.validationResults || {};
 
   const [validationResults, setValidationResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [detailedResults, setDetailedResults] = useState<any[]>([]);
+  const [selectedMapping, setSelectedMapping] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  // Validate selected mappings when component mounts
   useEffect(() => {
-    const validateSelectedMappings = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        // const response = await validateMappings(selectedMappings, ruleId);
-        // setValidationResults(response.data);
-      } catch (err) {
-        console.error("Error validating mappings:", err);
-        setError("An error occurred while validating the mappings.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (selectedMappings.length > 0) {
-      validateSelectedMappings();
+    if (Object.keys(initialResults).length > 0) {
+      const transformedResults = Object.entries(initialResults).map(
+        ([mappingName, score]) => ({
+          mappingName,
+          score,
+        })
+      );
+      setValidationResults(transformedResults);
     } else {
-      setError("No mappings selected for validation.");
+      setError("No mappings selected for validation or no results found.");
+    }
+  }, [initialResults]);
+
+  const handleFetchDetailedResults = async (mappingName: string) => {
+    if (!mappingProcessId) {
+      setError("Mapping process ID is not available.");
+      return;
+    }
+
+    setLoading(true);
+    setSelectedMapping(mappingName);
+    setError("");
+    try {
+      const data = await fetchDetailedResults(mappingProcessId, mappingName);
+      setDetailedResults(data);
+      setModalIsOpen(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
       setLoading(false);
     }
-  }, [selectedMappings, ruleId]);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedMapping(null);
+    setDetailedResults([]);
+  };
 
   return (
     <div className="container">
@@ -56,15 +78,17 @@ const EvaluateMappings = () => {
                   <div className="result-mapping">
                     <strong>Mapping:</strong> {result.mappingName}
                   </div>
-                  <div className="result-status">
-                    <strong>Status:</strong>{" "}
-                    {result.isValid ? "Valid" : "Invalid"}
+                  <div className="result-score">
+                    <strong>Score:</strong> {result.score}
                   </div>
-                  {result.errorMessage && (
-                    <div className="result-error">
-                      <strong>Error:</strong> {result.errorMessage}
-                    </div>
-                  )}
+                  <button
+                    className="info-button"
+                    onClick={() =>
+                      handleFetchDetailedResults(result.mappingName)
+                    }
+                  >
+                    <FaMagnifyingGlass size={20} />
+                  </button>
                 </li>
               ))}
             </ul>
@@ -74,11 +98,59 @@ const EvaluateMappings = () => {
         </div>
       )}
 
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={modalStyles}
+        ariaHideApp={false}
+      >
+        <div style={modalStyles.modalContent}>
+          <h2>Detailed Results for: {selectedMapping}</h2>
+          {loading && <Spinner />}
+          {!loading && detailedResults.length > 0 ? (
+            <ul>
+              {detailedResults.map((detail, idx) => (
+                <li key={idx}>
+                  <strong>Detail:</strong> {JSON.stringify(detail)}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No detailed results available.</p>
+          )}
+          <button className="button" onClick={closeModal}>
+            Close
+          </button>
+        </div>
+      </Modal>
+
       <button className="back-button" onClick={() => navigate(-1)}>
         Back to Selection
       </button>
     </div>
   );
+};
+
+const modalStyles: { [key: string]: React.CSSProperties } = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    transform: "translate(-50%, -50%)",
+    width: "600px",
+    height: "400px",
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalContent: {
+    width: "100%",
+    height: "100%",
+    overflow: "auto",
+  },
 };
 
 export default EvaluateMappings;
