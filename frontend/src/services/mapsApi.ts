@@ -186,7 +186,7 @@ export const evaluateMapping = async (
     const query = mapping_pid ? `?mapping_process_id=${mapping_pid}` : "";
 
     const response = await apiClient.post(
-      `/mapping/evaluate/${qualityRuleId}${query}`,
+      `/data-quality/evaluate/${qualityRuleId}${query}`,
       body
     );
 
@@ -205,7 +205,7 @@ export const fetchDetailedResults = async (
   }
 
   try {
-    const response = await apiClient.get("/mapping/dataquality/results", {
+    const response = await apiClient.get("/data-quality/results", {
       params: {
         mapping_process_id: mappingProcessId,
         json_key: mappingName,

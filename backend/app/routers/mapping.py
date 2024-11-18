@@ -97,25 +97,6 @@ async def get_mappings(validated_mappings: Optional[bool] = None) :
         response = MappingResponse(message=msg, status="error")
         return response
 
-# @router.get("/evaluate/{mapping_process_id}" )
-# async def evaluate_dq(mapping_process_id: str) : 
-#     await evaluate_data_quality("path", mapping_process_id)
-
-# /evaluate/syntactic_accuracy?mapping_process_id=123
-@router.post("/evaluate/{quality_rule}")
-async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
-    print(f'request_mapping_body: {request_mapping_body}')
-    try :
-        context = StrategyContext()
-        context.select_strategy(quality_rule)
-        
-        result = await context.evaluate_quality(mapping_process_id, request_mapping_body)
-        return result
-    except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
-        
 
 @router.get("/schemas/{schema_id}")
 async def get_mappings_by_schema_id(schema_id: str):
@@ -125,17 +106,3 @@ async def get_mappings_by_schema_id(schema_id: str):
         raise HTTPException(status_code=500, detail=str(e))
     
     return result
-
-@router.get("/dataquality/results")
-async def get_quality_results(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), 
-                              json_key: Optional[str] = Query(None, description="Json key to get quality results"), 
-                              limit: Optional[int] = 100, offset: Optional[int] = 0):
-    print(f'request_mapping_body: {mapping_process_id}')
-    try :
-        result = await service.get_evaluation_results_by_json(mapping_process_id, json_key, limit, offset)
-        return result
-    except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
-        
