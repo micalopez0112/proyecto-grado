@@ -3,7 +3,7 @@ from app.models.schema import JsonSchema
 VALUE = "value"
 KEY = "key"
 
-simpleTypes = ["string", "int", "bool", "float"]
+simpleTypes = ["string", "integer", "bool", "number"]
 # TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
 # se asume que todos los mapeos de clases vienen primero.!!
 # ahora toma el mappingProcess por parámetro pero estaría guardado en una db

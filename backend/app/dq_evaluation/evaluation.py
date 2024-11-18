@@ -2,6 +2,7 @@ from owlready2 import get_ontology
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from bson import ObjectId
+import json
 
 from app.database import mapping_process_collection, onto_collection
 from app.dq_evaluation.mocks import get_hardcoded_test_documents
@@ -135,7 +136,12 @@ async def get_onto(ontology_id: str) :
 # this function will access the storage and get the documents
 # we need to define the storage service or how we will access it
 def get_documents_from_storage(path : str) :
-    data = get_hardcoded_test_documents()
+    print(f"Document storage path received {path}")
+    print(f"Getting documents from storage")
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        print(f"Data loaded from storage successfully")
+    #data = get_hardcoded_test_documents()
     return data
 
 # return evaluation result

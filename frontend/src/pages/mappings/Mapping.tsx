@@ -83,64 +83,69 @@ export const Mapping = () => {
   const saveMappingsApiCall = async () => {
     try {
       if (Object.keys(mappings).length > 0) {
-        if (mappingId) {
-          //invocar put
-          console.log("Flujo donde existe mappingId: ", mappingId);
-          const body = {
-            ontology_id: "",
-            name: mappingName,
-            mapping: mappings,
-            jsonSchema: {}, //null because it is not updated in the collection
-            mapping_proccess_id: mappingId,
-            // documentStoragePath: collectionPath
-          };
-          setLoading(true);
-          const response = await saveMapping(body);
-          setLoading(false);
-          console.log("Respuesta al editar mapping: ", response);
-          if (response) {
-            const { status, message, mapping_id } = response.data;
-            //navigate('/Result', {state:{mapping_process:mapping_id}});
-            if (status === "success") {
-              resetMappingState();
-              alert(`Process Mapping saved successfully`);
-              navigate("/");
-            } else {
-              alert(`Error saving Mapping Process`);
-            }
-          }
-        } else {
-          //new mapping
-          if (currentOntologyId) {
-            const schemaAndCollectionName = jsonSchemaContext;
-            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
-
+        if(mappingName !== "") {
+          if (mappingId) {
+            //invocar put
+            console.log("Flujo donde existe mappingId: ", mappingId);
             const body = {
-              ontology_id: currentOntologyId,
+              ontology_id: "",
               name: mappingName,
               mapping: mappings,
-              jsonSchema: schemaAndCollectionName,
+              jsonSchema: {}, //null because it is not updated in the collection
               mapping_proccess_id: mappingId,
-              documentStoragePath: collectionPath,
+              // documentStoragePath: collectionPath
             };
-            
+            setLoading(true);
             const response = await saveMapping(body);
-            console.log("Response al guardar mappings (save): ", response);
+            setLoading(false);
+            console.log("Respuesta al editar mapping: ", response);
             if (response) {
               const { status, message, mapping_id } = response.data;
+              //navigate('/Result', {state:{mapping_process:mapping_id}});
               if (status === "success") {
-                //navigate('/Result', {state:{mapping_process:mapping_id}});
                 resetMappingState();
-                alert("Process Mapping saved successfully");
+                alert(`Process Mapping saved successfully`);
                 navigate("/");
               } else {
-                alert("Error saving Mapping Process");
+                alert(`Error saving Mapping Process`);
               }
             }
           } else {
-            console.error("#ERROR#: No hay ontologyId al editar");
+            //new mapping
+            if (currentOntologyId) {
+              const schemaAndCollectionName = jsonSchemaContext;
+              schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
+
+              const body = {
+                ontology_id: currentOntologyId,
+                name: mappingName,
+                mapping: mappings,
+                jsonSchema: schemaAndCollectionName,
+                mapping_proccess_id: mappingId,
+                documentStoragePath: collectionPath,
+              };
+              
+              const response = await saveMapping(body);
+              console.log("Response al guardar mappings (save): ", response);
+              if (response) {
+                const { status, message, mapping_id } = response.data;
+                if (status === "success") {
+                  //navigate('/Result', {state:{mapping_process:mapping_id}});
+                  resetMappingState();
+                  alert("Process Mapping saved successfully");
+                  navigate("/");
+                } else {
+                  alert("Error saving Mapping Process");
+                }
+              }
+            } else {
+              console.error("#ERROR#: No hay ontologyId al editar");
+            }
           }
-        }
+      }
+      else{
+        alert("Mapping name must not be empty");
+      }
       } else {
         alert("Mappings must not be empty");
       }
