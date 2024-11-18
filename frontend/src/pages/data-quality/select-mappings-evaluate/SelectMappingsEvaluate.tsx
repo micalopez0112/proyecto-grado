@@ -19,6 +19,8 @@ const SelectMappingsEvaluate = () => {
     setMappings,
     setJsonSchemaContext,
     jsonSchemaContext,
+    setMappingProcessId,
+    mappingProcessId,
   } = useDataContext();
 
   const location = useLocation();
@@ -49,6 +51,8 @@ const SelectMappingsEvaluate = () => {
           const response = await getMapping(mappingId);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
+            setMappingProcessId(mappingId);
+            console.log("mappingProcessId: ", mappingProcessId);
             setMappings(mapping);
             setJsonSchemaContext(schema);
             setcurrentOntologyId(ontology.ontology_id);
@@ -103,17 +107,31 @@ const SelectMappingsEvaluate = () => {
   };
 
   const handleEvaluateSelectedMappings = async () => {
-    const response = await evaluateMapping(
-      SYNTCTATIC_ACCURACY,
-      mappingId,
-      selectedMappings
-    );
-    navigate("/EvaluateMappings", {
-      state: {
-        selectedMappings,
-        ruleId,
-      },
-    });
+    setLoading(true);
+    try {
+      // Perform the evaluation and store the response
+      const response = await evaluateMapping(
+        SYNTCTATIC_ACCURACY,
+        mappingId,
+        selectedMappings
+      );
+
+      // Check if response is successful
+      if (response) {
+        // Navigate to the results page, passing the response data
+        navigate("/EvaluateMappings", {
+          state: {
+            selectedMappings,
+            ruleId,
+            validationResults: response.data, // Pass evaluation results
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error evaluating mappings:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderProperties = (
@@ -126,9 +144,9 @@ const SelectMappingsEvaluate = () => {
       const fullKey = `${elementKey}_key#${value.type}`;
 
       const isMapped = !!mappings[fullKey];
-      console.log(isMapped);
-      console.log(fullKey);
-      console.log({ mappings });
+      // console.log(isMapped);
+      // console.log(fullKey);
+      // console.log({ mappings });
       const mappingInfo = isMapped ? mappings[fullKey] : null;
       const isActive = !!selectedMappings[fullKey];
 
@@ -148,9 +166,9 @@ const SelectMappingsEvaluate = () => {
       }
       if (value.type === "object" && value.properties) {
         const elementValue = elementKey + "_value";
-        console.log("elementValue: " + elementValue);
+        // console.log("elementValue: " + elementValue);
         const isMappedObjectValue = !!mappings[elementKey + "_value"];
-        console.log("isMappedObjectValue " + isMappedObjectValue);
+        // console.log("isMappedObjectValue " + isMappedObjectValue);
         const mappingInfoValue = isMappedObjectValue
           ? mappings[elementValue]
           : null;

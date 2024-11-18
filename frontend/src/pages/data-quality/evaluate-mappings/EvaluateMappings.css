@@ -1,0 +1,10 @@
+.validation-result-item {
+  display: flex;
+  gap: 50px;
+}
+
+.validation-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
