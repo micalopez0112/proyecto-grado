@@ -6,6 +6,7 @@ from typing import Optional, List, Any
 
 from ..database import onto_collection
 from app.models.ontology import OntologyDocument
+from app.services import ontology_service as onto_service
 from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
 
 import os
@@ -31,6 +32,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
             #check if the file already exists (search by completePath)
 
             ontology = get_ontology(completePath).load()
+            ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
             if not onto_in_collection:    
                 print("onto not in collection")
                 ontoDocu = OntologyDocument(type=type, file=completePath)
@@ -61,6 +63,10 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
+        for dp in data_properties:
+            print("### DP NAME: ###", dp.name)
+            print("### DP DOMAIN: ###", dp.domain)
+
         print("Object Propertie", object_properties[0])
         ontology_data = {
             "ontology_id": str(ontology_id),
@@ -106,4 +112,16 @@ async def get_ontologies():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener ontologías: {e}")
     
-
+#Retrieves the graph structure of an ontology
+@router.get("/{ontology_id}", response_model = Any)
+async def get_ontology_by_id(ontology_id: str):
+    try:
+        ontology = await onto_service.get_ontology_by_id(ontology_id)
+        ontology_data = onto_service.build_ontology_response(ontology, ontology_id)
+    
+        return ontology_data
+    except Exception as e:
+        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
+    
+    return graph
+   

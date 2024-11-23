@@ -40,7 +40,7 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
                 JSPropertyType = getJsonSchemaPropertieType(jsonMappedKey)
                 if JSPropertyType != "" and (JSPropertyType in simpleTypes):
                     print("is data property mapping")
-                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, None)
+                    okRule2, possibleRule2Errors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, None, ontoClasses)
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
                         raise ValueError(f"Possible errors: {possibleErrors}")
@@ -163,15 +163,17 @@ def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperti
 # validateRule2And4 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
 # 1. checks if the ontology value is an existent data property
 # 2. checks if the domain of the data property is already correctly mapped (by checking if it is in the mappedClasses dict)
-def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType, jsonschema: JsonSchema):
+def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties, JSONPropertyType, jsonschema: JsonSchema, ontoClasses):
     print("### Validating rule 2: ", key, "##", ontoValuesMappedTo, "###")
     possibleErrors = []
     isRangeOk = True
     for ontoElem in ontoValuesMappedTo:
         ontologyPropertyIri = ontoElem["iri"]
+        # movie-name-string
         domainName = getParentProperty(key)
-        print("DOMAIN NAME: ", domainName)
+        # domain name = movie
 
+        print("Domain name: ", domainName) # Thing
         domainIrisList = mappedClasses.get(domainName, None)
         print("DOMAIN IRIS LIST: ", domainIrisList)
         if domainIrisList is None:
@@ -179,16 +181,30 @@ def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties
             return False, possibleErrors
         
         dataProperty = getOntoPropertyByIri(ontologyPropertyIri, ontoDataProperties)
+        # rdf:label, domain: Thing
         if dataProperty is None:
             possibleErrors.append(f"Element {ontologyPropertyIri} not found in ontology data properties")
             return False, possibleErrors
 
         for domainIri in domainIrisList:
-            isDomainOk = isIriInOntologyElem(domainIri, dataProperty.domain)
+            # Aca tendriamos:
+            # domainIri = movie iri movie
+            # dataProperty.domain = Thing
+            print("DATA PROPERTY: ", dataProperty)
+            domainMappedClass = getOntoPropertyByIri(domainIri, ontoClasses)
+            print("DOMAIN MAPPED CLASS: ", domainMappedClass)
+            isDomainOk = isIriInOntologyElem(domainIri, dataProperty.domain)         
             if isDomainOk:
                 break
-    
+        
         if not isDomainOk:
+            print("ABOUT TO CHECK ANCESTORS of domain: ", dataProperty.domain)
+            isDomainAnAncestor = checkAncestors(domainMappedClass, dataProperty.domain)
+            if not isDomainAnAncestor:
+                possibleErrors.append(f"Element {domainIri} is not an ancestor of {dataProperty.domain}")
+                return False, possibleErrors
+            
+        if not isDomainOk and not isDomainAnAncestor:
             possibleErrors.append(f"Element {domainIri} not found in data property domain")
             return False, possibleErrors
         
@@ -207,6 +223,18 @@ def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties
 
 # mover esta función
 
+def checkAncestors(domainMappedClass, wantedAncestorClasses):
+    # movie.ancestors() -> [onto.Movie, owl.Thing, owl.CreativeWork]
+    print("ancestorClasses: ", wantedAncestorClasses)
+    for wantedAncestorClass in wantedAncestorClasses:
+        print("WANTED ANCESTOR CLASS: ", wantedAncestorClass)
+        print("ANCESOTRS: ", domainMappedClass.ancestors())
+        for ancestor in domainMappedClass.ancestors():
+            # thing
+            print("ANCESTOR: ", ancestor)
+            if ancestor.iri == wantedAncestorClass.iri:
+                return True
+    return False
 
 
 def checkAllJsonaSchemaTypes( jsonSchema: JsonSchema, key, propType):
@@ -238,7 +266,7 @@ def isIriInOntologyElem(iri, ontoElems):
 def getOntoPropertyByIri(iri, ontoProperties):
     # se copia en una variable, porque si no se modifica el original
     for obj_prop in ontoProperties:
-        print("## Object property: ", obj_prop, "##")
+        print("## Onto property: ", obj_prop, "##")
         if obj_prop.iri == iri:
             return obj_prop
 

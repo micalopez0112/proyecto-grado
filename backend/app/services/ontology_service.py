@@ -10,7 +10,8 @@ async def get_ontology_by_id(ontology_id: str):
             ontology = get_ontology(ontology_path).load()
         else:
             ontology = get_ontology(str(ontology.uri)).load()
-   
+    ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
+
     return ontology
 
 def build_ontology_response(ontology, onto_id):
