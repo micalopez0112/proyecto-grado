@@ -190,9 +190,7 @@ def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties
             # Aca tendriamos:
             # domainIri = movie iri movie
             # dataProperty.domain = Thing
-            print("DATA PROPERTY: ", dataProperty)
             domainMappedClass = getOntoPropertyByIri(domainIri, ontoClasses)
-            print("DOMAIN MAPPED CLASS: ", domainMappedClass)
             isDomainOk = isIriInOntologyElem(domainIri, dataProperty.domain)         
             if isDomainOk:
                 break
@@ -224,15 +222,11 @@ def validateRule2And4(key, ontoValuesMappedTo, mappedClasses, ontoDataProperties
 # mover esta función
 
 def checkAncestors(domainMappedClass, wantedAncestorClasses):
-    # movie.ancestors() -> [onto.Movie, owl.Thing, owl.CreativeWork]
-    print("ancestorClasses: ", wantedAncestorClasses)
     for wantedAncestorClass in wantedAncestorClasses:
-        print("WANTED ANCESTOR CLASS: ", wantedAncestorClass)
-        print("ANCESOTRS: ", domainMappedClass.ancestors())
         for ancestor in domainMappedClass.ancestors():
-            # thing
             print("ANCESTOR: ", ancestor)
             if ancestor.iri == wantedAncestorClass.iri:
+                print("FOUND ANCESTOR: ", ancestor)
                 return True
     return False
 
