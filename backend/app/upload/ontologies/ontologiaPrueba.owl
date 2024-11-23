@@ -1,0 +1,142 @@
+@prefix sc: <http://purl.org/science/owl/sciencecommons/> .
+@prefix schema: <http://schema.org/> .
+@prefix yago: <http://yago-knowledge.org/resource/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
+@prefix fn: <http://www.w3.org/2005/xpath-functions#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix hint: <http://www.bigdata.com/queryHints#> .
+@prefix bd: <http://www.bigdata.com/rdf#> .
+@prefix bds: <http://www.bigdata.com/rdf/search#> .
+
+schema:Thing a rdfs:Class .
+
+schema:Place owl:disjointWith schema:CreativeWork ;
+	a rdfs:Class ;
+	rdfs:subClassOf schema:Thing .
+
+schema:Country a owl:Class ;
+	rdfs:subClassOf schema:Place .
+
+schema:CreativeWork a rdfs:Class ;
+	rdfs:subClassOf schema:Thing .
+
+schema:Movie a owl:Class ;
+	rdfs:subClassOf schema:CreativeWork .
+
+schema:Organization owl:disjointWith schema:CreativeWork ;
+	a rdfs:Class ;
+	rdfs:subClassOf schema:Thing .
+
+schema:duration a owl:DatatypeProperty ;
+	rdfs:domain schema:Movie .
+
+schema:dateCreated a owl:DatatypeProperty ;
+	rdfs:domain schema:CreativeWork .
+
+schema:sameAs a owl:DatatypeProperty ;
+	rdfs:domain schema:Thing .
+
+schema:name a owl:DatatypeProperty ;
+	rdfs:domain schema:Thing .
+
+schema:productionCompany a owl:ObjectProperty ;
+	rdfs:domain schema:Movie .
+
+schema:locationCreated a owl:ObjectProperty ;
+	rdfs:domain schema:Movie .
+
+yago:From_the_Big_Bang_to_Tuesday_Morning a schema:Movie ;
+	schema:duration 5.0 ;
+	schema:sameAs "tt0266560" ;
+	schema:name "From the Big Bang to Tuesday Morning"@en ;
+	schema:locationCreated yago:Canada ;
+	schema:dateCreated "2010-01-01" .
+
+yago:Canada a schema:Country ;
+	rdfs:label "Canada"@en .
+
+yago:Only_Five_Minutes a schema:Movie ;
+	schema:duration 5.0 ;
+	schema:sameAs "tt7369138" ;
+	schema:name "Only Five Minutes"@en ;
+	schema:locationCreated yago:Iran ;
+	schema:dateCreated "2016-10-29" .
+
+yago:Iran a schema:Country ;
+	rdfs:label "Iran"@en .
+
+yago:Life_and_Death_of_Pushkin a schema:Movie ;
+	schema:duration 5.0 ;
+	schema:sameAs "tt0202158" ;
+	schema:name "Life and Death of Pushkin"@en ;
+	schema:locationCreated yago:Russian_Empire ;
+	schema:dateCreated "1910-01-01" .
+
+yago:Russian_Empire a schema:Country ;
+	rdfs:label "Russian Empire"@en .
+
+yago:Summoning_the_Spirits a schema:Movie ;
+	schema:duration 1.0 ;
+	schema:sameAs "tt0000264" ;
+	schema:name "Summoning the Spirits"@en ;
+	schema:locationCreated yago:France ;
+	schema:dateCreated "1899-01-01" .
+
+yago:France a schema:Country ;
+	rdfs:label "France"@en .
+
+yago:William_Tell__u0028_1903_film_u0029_ a schema:Movie ;
+	schema:duration 5.0 ;
+	schema:sameAs "tt0457927" ;
+	schema:name "William Tell"@en ;
+	schema:locationCreated yago:France ;
+	schema:dateCreated "1903-01-01" .
+
+yago:Machuca a schema:Movie ;
+	schema:duration 1.0 ;
+	schema:sameAs "tt0378284" ;
+	schema:name "Machuca"@en ;
+	schema:locationCreated yago:Chile ;
+	schema:dateCreated "2004-01-01" .
+
+yago:Chile a schema:Country ;
+	rdfs:label "Chile"@en .
+
+yago:Thaïs__u0028_1917_Italian_film_u0029_ a schema:Movie ;
+	schema:duration 1.0 ;
+	schema:sameAs "tt0007439" ;
+	schema:name "Thaïs"@en ;
+	schema:locationCreated yago:Italy ;
+	schema:dateCreated "1917-01-01" .
+
+yago:Italy a schema:Country ;
+	rdfs:label "Italy"@en .
+
+yago:Farewell_Ceremony_for_His_Majesty_Emir_of_Bukhara_on__u0022_Velikiy_Kniaz_Alexei_u0022__Steamboat a schema:Movie ;
+	schema:duration 1.0 ;
+	schema:sameAs "tt1441236" ;
+	schema:name "Farewell Ceremony for His Magesty Emir of Bukhara on 'Velikiy Kniaz Alexei' Steamboat"@en ;
+	schema:locationCreated yago:Russian_Empire ;
+	schema:dateCreated "1898-01-01" .
+
+yago:The_Marriage_of_Krechinsky a schema:Movie ;
+	schema:duration 5.0 ;
+	schema:sameAs "tt0165383" ;
+	schema:name "The Marriage of Krechinsky"@en ;
+	schema:locationCreated yago:Russian_Empire ;
+	schema:dateCreated "1908-01-01" .
+
+yago:Haven__u0028_Star_Trek_u003A__The_Next_Generation_u0029_ a schema:Movie ;
+	schema:duration 1.0 ;
+	schema:sameAs "tt0708725" ;
+	schema:name "Haven"@en ;
+	schema:locationCreated yago:United_States ;
+	schema:dateCreated "1987-11-30" .
+
+yago:United_States a schema:Country ;
+	rdfs:label "United States of America"@en .
