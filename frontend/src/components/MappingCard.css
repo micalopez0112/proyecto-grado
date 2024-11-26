@@ -15,3 +15,7 @@
 .info-button:focus {
   outline: none;
 }
+
+.mapping-card:hover {
+  opacity: 0.8;
+}

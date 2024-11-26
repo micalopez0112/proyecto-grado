@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchMappings } from "../../services/mapsApi.ts";
 import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
+import "./MappingsScreen.css";
 
 const MappingsScreen = () => {
   const navigate = useNavigate();
@@ -36,25 +37,27 @@ const MappingsScreen = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <div style={styles.container}>
-          <div style={styles.mappingsTitleContainer}>
-            <h1 style={styles.title}>Set of Mappings</h1>
+        <div className="mappings-list-container">
+          <div className="mappings-title-container">
+            <h1 className="mappings-list-title">Set of Mappings</h1>
+          </div>
+          <div className="input-button-container">
+            <input
+              type="text"
+              placeholder="Search Set of Mappings..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
             <button
               onClick={() => navigate("/OntologySelect")}
-              style={styles.button}
+              className="button"
             >
               New Set of Mapping
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="Search Set of Mappings..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={styles.searchInput}
-          />
           {filteredMappings.length > 0 ? (
-            <div style={styles.dashboard}>
+            <div className="dashboard">
               {filteredMappings.map((mapping) => (
                 <MappingCard
                   key={mapping.id}
@@ -75,48 +78,6 @@ const MappingsScreen = () => {
 };
 
 const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px",
-    backgroundColor: "#fff",
-    minHeight: "100vh",
-  },
-  title: {
-    fontSize: "2em",
-    color: "#000",
-    marginBottom: "20px",
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "1em",
-    color: "#fff",
-    backgroundColor: "#000",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    marginBottom: "20px",
-    position: "absolute",
-    right: "282px",
-    top: 100,
-  },
-  searchInput: {
-    width: "100%",
-    maxWidth: "400px",
-    padding: "10px",
-    fontSize: "1em",
-    marginBottom: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  dashboard: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: "10px",
-    width: "100%",
-    maxWidth: "1000px",
-  },
   mappingCard: {
     backgroundColor: "rgb(239 239 239)",
     padding: "15px",
@@ -127,9 +88,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: "background-color 0.3s ease",
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-  },
-  mappingsTitleContainer: {
-    display: "flex",
   },
 };
 

@@ -6,9 +6,10 @@ import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SYNTCTATIC_ACCURACY = "syntactic_accuracy";
-const QUALITY_RULES = [SYNTCTATIC_ACCURACY];
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -107,27 +108,32 @@ const SelectMappingsEvaluate = () => {
   };
 
   const handleEvaluateSelectedMappings = async () => {
-    setLoading(true);
-    try {
-      const response = await evaluateMapping(
-        SYNTCTATIC_ACCURACY,
-        mappingId,
-        selectedMappings
-      );
+    console.log(selectedMappings);
+    if (Object.keys(selectedMappings).length === 0) {
+      toast.error("Please select at least one mapping to evaluate.");
+    } else {
+      setLoading(true);
+      try {
+        const response = await evaluateMapping(
+          SYNTCTATIC_ACCURACY,
+          mappingId,
+          selectedMappings
+        );
 
-      if (response) {
-        navigate("/EvaluateMappings", {
-          state: {
-            selectedMappings,
-            ruleId,
-            validationResults: response.data,
-          },
-        });
+        if (response) {
+          navigate("/EvaluateMappings", {
+            state: {
+              selectedMappings,
+              ruleId,
+              validationResults: response.data,
+            },
+          });
+        }
+      } catch (error) {
+        console.error("Error evaluating mappings:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error evaluating mappings:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -328,7 +334,6 @@ const SelectMappingsEvaluate = () => {
                 <button
                   className="button success"
                   onClick={handleEvaluateSelectedMappings}
-                  disabled={Object.keys(selectedMappings).length === 0}
                 >
                   Evaluate Selected Mappings
                 </button>
@@ -337,6 +342,7 @@ const SelectMappingsEvaluate = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </>
   );
 };

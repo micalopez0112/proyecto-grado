@@ -1,24 +1,23 @@
-  
-  .dataset-container {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    height: 65vh;
-    margin: 10px;
-    background: #0d245b;
-    width: 30%;
-    border-radius: 5px;
-  }
+.dataset-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 65vh;
+  margin: 10px;
+  background: #0d245b;
+  width: 40%;
+  border-radius: 5px;
+}
 .dataset-list-container {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    flex-direction: column;
-  }
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  flex-direction: column;
+}
 
 .subtitle {
-    margin: 10px;
-    display: flex;
-    align-items: flex-start;
-    font-size: 1em;
+  margin: 10px;
+  display: flex;
+  align-items: flex-start;
+  font-size: 1em;
 }

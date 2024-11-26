@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 70vh;
+  width: 90%;
 }
 
 .data-quality-container {
