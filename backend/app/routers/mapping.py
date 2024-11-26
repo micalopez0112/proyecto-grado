@@ -17,31 +17,6 @@ router = APIRouter()
 
 class JsonRequest(BaseModel):
     jsonInstances: dict
-
-@router.post("/generate-schema/")
-async def get_schema_from_path(collectionFilePath: str):
-    try:
-        realPath = DLzone + collectionFilePath
-        with open (realPath,"r",encoding='utf-8') as file:
-            builder = SchemaBuilder()
-            # data = await file.read()
-            file_content = json.load(file)
-            json_data = JsonRequestList(jsonInstances=file_content)
-            for json_obj in json_data.jsonInstances:
-                builder.add_object(json_obj)
-            schema = builder.to_schema()
-            print(f'## RAW SCHEMA ##: {schema}')
-            print("###################################")
-            ##add method to clean nulls
-            modified_schema = cleanJsonSchema(schema)
-            print("## Modified schema ##: ", modified_schema)
-            return schema
-    except OSError as fileError:
-        print("Error en la lectura del archivo de la colección", fileError)
-        raise HTTPException(status_code=400, detail=str(fileError))
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
 class JsonRequestList(BaseModel):
     jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
 

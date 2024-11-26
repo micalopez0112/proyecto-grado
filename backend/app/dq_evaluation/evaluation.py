@@ -1,4 +1,4 @@
-from owlready2 import get_ontology
+from owlready2 import get_ontology, locstr
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from bson import ObjectId
@@ -191,6 +191,8 @@ def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_val
             ## instancias de las clases de la ontología
             for inst in instances:
                 dp_value = inst[1]
+                if(isinstance(dp_value, locstr)):
+                    dp_value = str(dp_value)
                 value = compare_onto_with_json_value(dp_value, element)
                 print("## Evaluation result: ", value, " ##")
                 if value == 1:
