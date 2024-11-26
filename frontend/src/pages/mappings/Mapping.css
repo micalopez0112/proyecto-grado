@@ -54,6 +54,7 @@
   display: flex;
   gap: 5px;
   flex-direction: column;
+  width: 100%;
 }
 
 .mappings-width {
@@ -62,7 +63,7 @@
 
 .content-box {
   overflow-y: auto;
-  height: 80vh;
+  height: 70vh;
   margin: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;

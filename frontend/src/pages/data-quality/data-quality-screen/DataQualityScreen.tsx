@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchMappings, getMapping, getDatasetMappings } from "../../../services/mapsApi.ts";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getDatasetMappings } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
-import { useParams } from "react-router-dom";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
   const { idDataset } = useParams<{ idDataset: string }>();
-  const [mappings, setMappings] = useState<Array<{ idMapping: string; name: string }>>(
-    []
-  );
+  const [mappings, setMappings] = useState<
+    Array<{ idMapping: string; name: string }>
+  >([]);
   const [selectedMappingId, setSelectedMappingId] = useState("");
   const [selectedRuleId, setSelectedRuleId] = useState("");
   const [dataQualityRules, setDataQualityRules] = useState<
@@ -26,22 +27,19 @@ const DataQualityScreen = () => {
   }>(null);
 
   useEffect(() => {
-    if(idDataset && mappings.length === 0){
+    if (idDataset && mappings.length === 0) {
       const retrieveMappings = async () => {
         setLoading(true);
         const mappings = await getDatasetMappings(idDataset);
-        console.log(`Mappings del idSchema ${idDataset}: `, mappings);
+        console.log(`Mappings for schema ID ${idDataset}: `, mappings);
         if (mappings) setMappings(mappings.data);
         setLoading(false);
       };
       retrieveMappings();
-  
+
       setDataQualityRules([{ id: "1", name: "Accuracy" }]);
     }
-    else{
-      //show no mappings available
-    }
-  }, []);
+  }, [idDataset, mappings.length]);
 
   const onClickMappingCard = (id: string) => {
     setSelectedMappingId(id);
@@ -49,6 +47,16 @@ const DataQualityScreen = () => {
 
   const onClickRule = (id: string) => {
     setSelectedRuleId(id);
+  };
+
+  const handleSelectClick = () => {
+    if (!selectedMappingId || !selectedRuleId) {
+      toast.error("Please select a set of mappings and a quality rule.");
+      return;
+    }
+    navigate("/SelectMappingsValidate", {
+      state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
+    });
   };
 
   return (
@@ -62,7 +70,7 @@ const DataQualityScreen = () => {
           <div className="quality-container">
             <div className="container">
               <div className="data-quality-container">
-                <h2 className="sub-title">Mappings</h2>
+                <h2 className="sub-title">Set of Mappings</h2>
                 <div className="quality-list-container">
                   {mappings.map((mapping) => (
                     <MappingCard
@@ -72,9 +80,13 @@ const DataQualityScreen = () => {
                       style={{
                         ...styles.mappingCard,
                         backgroundColor:
-                          selectedMappingId === mapping.idMapping ? "#f39c12" : "#fff",
+                          selectedMappingId === mapping.idMapping
+                            ? "#ffdc92"
+                            : "#fff",
                       }}
-                      onClickCallback={() => onClickMappingCard(mapping.idMapping)}
+                      onClickCallback={() =>
+                        onClickMappingCard(mapping.idMapping)
+                      }
                       includeMappingInfo={true}
                     />
                   ))}
@@ -93,7 +105,7 @@ const DataQualityScreen = () => {
                       style={{
                         ...styles.mappingCard,
                         backgroundColor:
-                          selectedRuleId === rule.id ? "#f39c12" : "#fff",
+                          selectedRuleId === rule.id ? "#ffdc92" : "#fff",
                       }}
                     >
                       {rule.name}
@@ -104,15 +116,7 @@ const DataQualityScreen = () => {
             </div>
           </div>
 
-          <button
-            className="select-button"
-            onClick={() =>
-              navigate("/SelectMappingsValidate", {
-                state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
-              })
-            }
-            disabled={!selectedMappingId || !selectedRuleId}
-          >
+          <button className="select-button" onClick={handleSelectClick}>
             Select
           </button>
 
@@ -136,6 +140,7 @@ const DataQualityScreen = () => {
           )}
         </div>
       )}
+      <ToastContainer />
     </>
   );
 };

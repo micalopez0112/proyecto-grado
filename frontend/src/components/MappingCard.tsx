@@ -63,7 +63,11 @@ const MappingCard = ({
           </button>
         </div>
       </Modal>
-      <div style={style} onClick={() => onClickCallback(id)}>
+      <div
+        className="mapping-card"
+        style={style}
+        onClick={() => onClickCallback(id)}
+      >
         <div>{name}</div>
 
         {includeMappingInfo && (
