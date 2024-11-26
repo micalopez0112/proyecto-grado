@@ -33,11 +33,6 @@
   border: 5px solid #5372d0;
 }
 
-.json-elem:hover,
-.json-object-elem:hover {
-  background-color: #9eafdb;
-}
-
 .json-arrayItem-elem {
   background-color: #cbd5ef;
   width: fit-content;
@@ -60,14 +55,6 @@
   cursor: pointer;
 }
 
-.json-key-value:hover {
-  background-color: red;
-}
-
-/* .json-elem:hover {
-  background-color: #a5b8e1;
-} */
-
 .container {
   display: flex;
   flex-direction: column;
@@ -80,7 +67,13 @@
   flex-direction: row;
 }
 
-.json-elem.active,
-.json-object-elem.active {
-  background-color: #f39c12;
+.object-box {
+  margin-left: 40px;
+  background-color: #e3fae3;
+  border: 6px solid #54c45e;
+}
+.array-box {
+  margin-left: 40px;
+  background-color: #e3fae3;
+  border: 6px solid #54c45e;
 }
