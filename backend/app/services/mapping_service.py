@@ -170,7 +170,7 @@ async def delete_mapping_by_id(mapping_process_id: str) -> str:
         if not mapping_deleted:
             return "Failed to delete mapping process"
 
-        success_message = f"Mapping process {mapping_process_id} and associated resources deleted successfully"
+        success_message = f"Mapping process with id:{mapping_process_id} deleted successfully"
         print(success_message)
         return success_message
 
