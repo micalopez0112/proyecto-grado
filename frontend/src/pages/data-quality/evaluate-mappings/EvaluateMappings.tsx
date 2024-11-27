@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { useDataContext } from "../../../context/context.tsx";
-import { fetchDetailedResults } from "../../../services/mapsApi.ts";
+import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
 
 const EvaluateMappings = () => {
@@ -45,7 +45,10 @@ const EvaluateMappings = () => {
     setSelectedMapping(mappingName);
     setError("");
     try {
-      const data = await fetchDetailedResults(mappingProcessId, mappingName);
+      const data = await fetchDetailedEvaluationResults(
+        mappingProcessId,
+        mappingName
+      );
       setDetailedResults(data);
       setModalIsOpen(true);
     } catch (err: any) {

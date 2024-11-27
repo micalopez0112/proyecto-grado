@@ -12,3 +12,9 @@ async def find_ontology_by_id(ontology_id: str):
 
         return ontology_document
     return None
+
+async def delete_ontology_by_id(ontology_id: str) -> bool:
+    ontology_object_id = ObjectId(ontology_id)
+    result = await onto_collection.delete_one({"_id": ontology_object_id})
+    return result
+   

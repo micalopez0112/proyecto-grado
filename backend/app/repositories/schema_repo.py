@@ -40,3 +40,9 @@ async def find_one_schema_by_query(query : str):
     print("##### JSONSchema converted #####", JSONSchema)
     print("##### Colecction id  #####", JSONSchema.id)
     return JSONSchema
+
+async def delete_schema_by_id(schema_id: str) -> bool:
+    schema_object_id = ObjectId(schema_id)
+    result = await jsonschemas_collection.delete_one({"_id": schema_object_id})
+    return result
+

@@ -28,6 +28,12 @@ const MappingsScreen = () => {
     navigate("/Mapping", { state: { mappingId: id } });
   };
 
+  const handleDeleteMapping = (id: string) => {
+    setMappings((prevMappings) =>
+      prevMappings.filter((mapping) => mapping.id !== id)
+    );
+  };
+
   const filteredMappings = mappings.filter((mapping) =>
     mapping.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -64,7 +70,9 @@ const MappingsScreen = () => {
                   id={mapping.id}
                   name={mapping.name}
                   onClickCallback={onClickMappingCard}
+                  onDeleteCallback={handleDeleteMapping}
                   style={styles.mappingCard}
+                  includeTrash={true}
                 />
               ))}
             </div>
@@ -85,9 +93,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     color: "#000",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
+    display: "flex",
+    justifyContent: "space-between",
   },
 };
 

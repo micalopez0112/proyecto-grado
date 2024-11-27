@@ -116,3 +116,7 @@ def cleanJsonSchema (jsonSchema:Dict[str,Any])->Dict[str,Any]:
     except Exception as e:
         print(f"Error al limpiar el schema: {e}")
         return None
+    
+async def delete_schema_by_id(schema_id: str) -> bool:
+    result = schema_repo.delete_schema_by_id(schema_id)
+    return result

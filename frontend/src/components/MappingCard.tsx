@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { getMapping } from "../services/mapsApi.ts";
+import { deleteMapping, getMapping } from "../services/mapsApi.ts";
 import { useDataContext } from "../context/context.tsx";
 import MappingList from "./MappingList.tsx";
 import { Spinner } from "./Spinner/Spinner.tsx";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaTrash } from "react-icons/fa6";
 import "./MappingCard.css";
 
 const MappingCard = ({
@@ -12,13 +12,17 @@ const MappingCard = ({
   name,
   style,
   onClickCallback = () => null,
+  onDeleteCallback = () => null,
   includeMappingInfo = false,
+  includeTrash = false,
 }: {
   id: string;
   name: string;
   style: React.CSSProperties;
   onClickCallback?: (id: string) => void;
+  onDeleteCallback?: (id: string) => void;
   includeMappingInfo?: boolean;
+  includeTrash?: boolean;
   mappingDetails?: {
     mapping_name: string;
     mapping: string;
@@ -45,6 +49,28 @@ const MappingCard = ({
         console.error("Error fetching mapping details:", error);
       }
       setLoading(false);
+    }
+  };
+
+  const handleDeleteMapping = async () => {
+    if (!id) return;
+
+    const userConfirmed = window.confirm(
+      `Are you sure you want to delete the mapping "${name}"? This action cannot be undone.`
+    );
+    if (!userConfirmed) return;
+
+    try {
+      const response = await deleteMapping(id);
+
+      if (response && response.status === 200) {
+        onDeleteCallback(id);
+        alert(`Mapping "${name}" deleted successfully.`);
+      } else {
+        alert(`Failed to delete mapping "${name}".`);
+      }
+    } catch (error) {
+      alert(`Error deleting mapping: ${error.message || "Unknown error"}`);
     }
   };
 
@@ -79,6 +105,18 @@ const MappingCard = ({
             className="info-button"
           >
             <FaMagnifyingGlass size={20} />
+          </button>
+        )}
+        {includeTrash && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteMapping();
+            }}
+            className="trash-icon"
+            disabled={loading}
+          >
+            {loading ? "Deleting..." : <FaTrash />}
           </button>
         )}
       </div>

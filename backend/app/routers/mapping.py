@@ -81,3 +81,12 @@ async def get_mappings_by_schema_id(schema_id: str):
         raise HTTPException(status_code=500, detail=str(e))
     
     return result
+
+@router.delete("/{mapping_process_id}")
+async def delete_mapping_by_schema_id(mapping_process_id: str):
+    print(f'mapping_process_id: {mapping_process_id}')
+    try:
+        result = await service.delete_mapping_by_id(mapping_process_id)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

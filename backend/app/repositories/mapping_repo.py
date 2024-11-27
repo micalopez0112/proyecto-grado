@@ -50,3 +50,10 @@ async def update_mapping_process(data_to_update: dict, mapping_proccess_id: str,
         print("Error in updating mapping process", e)
     
     return None
+
+async def delete_mapping_process_by_id(mapping_process_id: str) -> bool:
+    mapping_object_id = ObjectId(mapping_process_id)
+    result = await mapping_process_collection.delete_one({"_id": mapping_object_id})
+    return result
+  
+
