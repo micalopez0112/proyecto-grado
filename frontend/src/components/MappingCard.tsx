@@ -12,6 +12,7 @@ const MappingCard = ({
   name,
   style,
   onClickCallback = () => null,
+  onDeleteCallback = () => null,
   includeMappingInfo = false,
   includeTrash = false,
 }: {
@@ -19,6 +20,7 @@ const MappingCard = ({
   name: string;
   style: React.CSSProperties;
   onClickCallback?: (id: string) => void;
+  onDeleteCallback?: (id: string) => void;
   includeMappingInfo?: boolean;
   includeTrash?: boolean;
   mappingDetails?: {
@@ -58,28 +60,17 @@ const MappingCard = ({
     );
     if (!userConfirmed) return;
 
-    setLoading(true); // Show loading spinner
     try {
-      console.log(`Attempting to delete mapping with ID: ${id}`);
       const response = await deleteMapping(id);
 
       if (response && response.status === 200) {
-        console.log(`Mapping ${id} deleted successfully.`);
-        // Update mappings context or state
-        // setMappings((prevMappings: any[]) =>
-        //   prevMappings.filter((mapping) => mapping.id !== id)
-        // );
+        onDeleteCallback(id);
         alert(`Mapping "${name}" deleted successfully.`);
       } else {
-        console.error("Failed to delete mapping:", response);
         alert(`Failed to delete mapping "${name}".`);
       }
     } catch (error) {
-      console.error("Error deleting mapping:", error);
       alert(`Error deleting mapping: ${error.message || "Unknown error"}`);
-    } finally {
-      setLoading(false); // Hide loading spinner
-      setModalIsOpen(false); // Close modal if it’s open
     }
   };
 
@@ -123,8 +114,9 @@ const MappingCard = ({
               handleDeleteMapping();
             }}
             className="trash-icon"
+            disabled={loading}
           >
-            <FaTrash />
+            {loading ? "Deleting..." : <FaTrash />}
           </button>
         )}
       </div>

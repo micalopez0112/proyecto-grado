@@ -28,6 +28,12 @@ const MappingsScreen = () => {
     navigate("/Mapping", { state: { mappingId: id } });
   };
 
+  const handleDeleteMapping = (id: string) => {
+    setMappings((prevMappings) =>
+      prevMappings.filter((mapping) => mapping.id !== id)
+    );
+  };
+
   const filteredMappings = mappings.filter((mapping) =>
     mapping.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -64,6 +70,7 @@ const MappingsScreen = () => {
                   id={mapping.id}
                   name={mapping.name}
                   onClickCallback={onClickMappingCard}
+                  onDeleteCallback={handleDeleteMapping}
                   style={styles.mappingCard}
                   includeTrash={true}
                 />

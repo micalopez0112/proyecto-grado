@@ -14,9 +14,7 @@ async def find_ontology_by_id(ontology_id: str):
     return None
 
 async def delete_ontology_by_id(ontology_id: str) -> bool:
-    try:
-        ontology_object_id = ObjectId(ontology_id)
-        result = await onto_collection.delete_one({"_id": ontology_object_id})
-        return result.deleted_count > 0
-    except Exception as e:
-        raise Exception(f"Error deleting ontology: {str(e)}")
+    ontology_object_id = ObjectId(ontology_id)
+    result = await onto_collection.delete_one({"_id": ontology_object_id})
+    return result
+   
