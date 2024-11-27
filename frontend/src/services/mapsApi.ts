@@ -133,6 +133,15 @@ export const getMapping = async (mappingId: string, filter_dp?: boolean) => {
   }
 };
 
+export const deleteMapping = async (mappingId: string) => {
+  try {
+    const response = await apiClient.delete(`/mapping/${mappingId}`);
+    return response;
+  } catch (error) {
+    console.error(`Error getting mapping with id ${mappingId}: `, error);
+  }
+};
+
 export const saveMapping = async (data: any) => {
   try {
     //Tal vez agregar mapping_id como query parameter por prolijidad
@@ -196,7 +205,7 @@ export const evaluateMapping = async (
   }
 };
 
-export const fetchDetailedResults = async (
+export const fetchDetailedEvaluationResults = async (
   mappingProcessId: string,
   mappingName: string
 ) => {

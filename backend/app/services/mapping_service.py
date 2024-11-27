@@ -128,4 +128,55 @@ async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str,
     # if json_key not in json_schema_properties_keys:
     #     raise ValueError(f"Invalid JSON key: {json_key}")
     return results
- 
+
+async def delete_mapping_by_id(mapping_process_id: str) -> str:
+    try:
+        print(f"Starting deletion process for mapping ID: {mapping_process_id}")
+        
+        mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
+        if not mapping_process_docu:
+            raise Exception("Mapping process not found")
+        
+        print(f"Fetched mapping process: {mapping_process_docu}")
+
+        ontology_id = mapping_process_docu.ontologyId
+        schema_id = mapping_process_docu.jsonSchemaId
+        print(f"Ontology ID: {ontology_id}, Schema ID: {schema_id}")
+
+        schema_references = await mapping_repo.find_mappings_by_query(
+            {"jsonSchemaId": schema_id, "_id": {"$ne": ObjectId(mapping_process_id)}}
+        )
+        print(f"Other mappings referencing schema {schema_id}: {schema_references}")
+
+        if not schema_references: 
+            schema_deleted = await schema_service.delete_schema_by_id(schema_id)
+            print(f"Schema {schema_id} deleted: {schema_deleted}")
+            if not schema_deleted:
+                raise Exception(f"Failed to delete schema with ID {schema_id}")
+
+        # ontology_references = await mapping_repo.find_mappings_by_query(
+        #     {"ontologyId": ontology_id, "_id": {"$ne": ObjectId(mapping_process_id)}}
+        # )
+        # print(f"Other mappings referencing ontology {ontology_id}: {ontology_references}")
+
+        # if not ontology_references:  # If no other mappings use this ontology
+        #     ontology_deleted = await onto_service.delete_ontology_by_id(ontology_id)
+        #     print(f"Ontology {ontology_id} deleted: {ontology_deleted}")
+        #     if not ontology_deleted:
+        #         raise Exception(f"Failed to delete ontology with ID {ontology_id}")
+
+        mapping_deleted = await mapping_repo.delete_mapping_process_by_id(mapping_process_id)
+        print(f"Mapping process {mapping_process_id} deleted: {mapping_deleted}")
+        if not mapping_deleted:
+            raise Exception("Failed to delete mapping process")
+
+        success_message = f"Mapping process {mapping_process_id} and associated resources deleted successfully"
+        print(success_message)
+        return success_message
+
+    except Exception as e:
+        error_message = f"Error deleting mapping: {str(e)}"
+        print(error_message)
+        raise Exception(error_message)
+
+

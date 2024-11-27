@@ -342,7 +342,6 @@ const SelectMappingsEvaluate = () => {
           </div>
         </div>
       )}
-      <ToastContainer />
     </>
   );
 };

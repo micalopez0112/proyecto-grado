@@ -28,3 +28,11 @@ def build_ontology_response(ontology, onto_id):
             }]
         }]
     }
+    
+    
+async def delete_ontology_by_id(ontology_id: str) -> bool:
+    try:
+        result = ontology_repo.delete_ontology_by_id(ontology_id)
+        return result
+    except Exception as e:
+        raise Exception(f"Error deleting ontology: {str(e)}")

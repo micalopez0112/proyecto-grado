@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import HomeScreen from "./pages/home/HomeScreen.tsx";
 import DataQualityScreen from "./pages/data-quality/data-quality-screen/DataQualityScreen.tsx";
 import OntologySelectScreen from "./pages/mappings/OntologySelect.tsx";
@@ -12,16 +13,20 @@ import SelectMappingsValidate from "./pages/data-quality/select-mappings-evaluat
 import OntologyData from "./components/OntologyData.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import EvaluateMappings from "./pages/data-quality/evaluate-mappings/EvaluateMappings.tsx";
-import DatasetsScreen  from "./pages/data-quality/datasets-screen/DatasetsScreen.tsx";
+import DatasetsScreen from "./pages/data-quality/datasets-screen/DatasetsScreen.tsx";
 
 function App() {
   return (
     <Router>
-      <Navbar /> {/* Add the Navbar here */}
+      <Navbar />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/MappingsScreen" element={<MappingsScreen />} />
-        <Route path="/DataQualityScreen/:idDataset" element={<DataQualityScreen />} />
+        <Route
+          path="/DataQualityScreen/:idDataset"
+          element={<DataQualityScreen />}
+        />
         <Route path="/OntologySelect" element={<OntologySelectScreen />} />
         <Route path="/SchemaSelect" element={<SchemaSelect />} />
         <Route path="/Mapping" element={<Mapping />} />

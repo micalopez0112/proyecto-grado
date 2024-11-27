@@ -65,6 +65,7 @@ const MappingsScreen = () => {
                   name={mapping.name}
                   onClickCallback={onClickMappingCard}
                   style={styles.mappingCard}
+                  includeTrash={true}
                 />
               ))}
             </div>
@@ -85,9 +86,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     color: "#000",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
+    display: "flex",
+    justifyContent: "space-between",
   },
 };
 
