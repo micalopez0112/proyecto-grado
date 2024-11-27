@@ -32,7 +32,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
             #check if the file already exists (search by completePath)
 
             ontology = get_ontology(completePath).load()
-            ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
+            # ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
             if not onto_in_collection:    
                 print("onto not in collection")
                 ontoDocu = OntologyDocument(type=type, file=completePath)
@@ -63,6 +63,7 @@ async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadF
         classes = list(ontology.classes())
         object_properties = list(ontology.object_properties())
         data_properties = list(ontology.data_properties())
+
         for dp in data_properties:
             print("### DP NAME: ###", dp.name)
             print("### DP DOMAIN: ###", dp.domain)
