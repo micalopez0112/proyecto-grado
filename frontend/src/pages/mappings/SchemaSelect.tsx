@@ -6,7 +6,7 @@ import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 
 const SchemaSelect = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [filePath, setFilePath] = useState<string>("");
   const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
   const { setJsonSchemaContext, setCollectionPath } = useDataContext();
@@ -29,20 +29,23 @@ const SchemaSelect = () => {
 
   const handleGenerateSchema = async () => {
     try {
-      if(file !== null){
-        console.log("##File name: ", file?.name);
+      if(filePath !== ""){
+        //CHECK FILEPATH SIZE > 0
+        console.log("##File path: ", filePath);
         setLoading(true);
-        const response = await getJsonSchema(file?.name);
+        //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
+        const response = await getJsonSchema(filePath);//filepath
+        //handle error al abrir el archivo
         const schema = response?.data;
         setJsonSchema(schema);
         console.log("##GENERATED SCHEMA##", schema);
         setJsonSchemaContext(schema);
-        setCollectionPath(file?.name);
+        setCollectionPath(filePath); //Check que se pase bien esto
         navigate("/Mapping");
         setLoading(false);
       }
     } catch (error) {
-      setFile(null);
+      setFilePath("");
       console.error("Invalid JSON input");
       setJsonSchema(null);
       alert("Something went wrong uploading the collection file");
@@ -81,8 +84,23 @@ const SchemaSelect = () => {
           onChange={handleFileChange}
         >
         </input>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "8px",
+          }}
+        >
+          <label style={{ fontSize: "16px" }}>URI:</label>
+          <input
+            style={{}}
+            type="text"
+            value={filePath}
+            onChange={(e) => setFilePath(e.target.value)}
+          ></input>
+        </div>
         <button className="button" onClick={handleGenerateSchema}
-          disabled={file === null} >
+          disabled={filePath === ""} >
           Confirm Dataset and Generate Schema
         </button>
         </div>

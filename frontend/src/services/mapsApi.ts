@@ -174,13 +174,14 @@ export const fetchDatasets = async () => {
 
 export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
   try {
-    const queryParam = `?collectionFileName=${jsonFilePath}`;
+    const queryParam = `?collectionPath=${jsonFilePath}`;
     const response = await apiClient.get(
       `/schemas/generateSchema${queryParam}`
     );
     console.log("Response from generating schema: ", response);
     return response;
   } catch (error) {
+    //handle error al no poder levantar el schema
     console.error("Error fetching JsonSchema", error);
     throw error;
   }

@@ -53,22 +53,25 @@ async def get_or_create_schema(collectionPath:str,json_schema: Dict[str, Any]):
 
 def generate_schema_from_collection (collectionFilePath: str):
     try:
-        
-        realPath = DLzone + collectionFilePath
-        with open (realPath ,"r" ,encoding='utf-8') as file:
+        if not collectionFilePath.endswith('.json'):
+            print("El archivo no tiene la extensión .json")
+            return None
+        with open (collectionFilePath ,"r" ,encoding='utf-8') as file:
             builder = SchemaBuilder()
-            # data = await file.read()
             file_content = json.load(file)
             json_data = JsonRequestList(jsonInstances=file_content)
             for json_obj in json_data.jsonInstances:
                 builder.add_object(json_obj)
             schema = builder.to_schema()
-            ##add method to clean nulls
             modified_schema = cleanJsonSchema(schema)
             return modified_schema
     except OSError as fileError:
         print("Error en la lectura del archivo de la colección", fileError)
-        raise Exception("Error en la lectura del archivo de la colección")
+        # raise Exception("Error en la lectura del archivo de la colección")
+    except json.JSONDecodeError as jsonError:
+        print("Error al decodificar el archivo JSON:", jsonError)
+    
+    return None
 
 def cleanJsonSchema (jsonSchema:Dict[str,Any])->Dict[str,Any]:
     try:
@@ -86,13 +89,13 @@ def cleanJsonSchema (jsonSchema:Dict[str,Any])->Dict[str,Any]:
            
             elif entry_type is None and field_value.get("anyOf") != None:
                 anyOf = field_value.get("anyOf")
-                print(f"El campo {field_key} tiene anyOf y es: {anyOf}")
+                # print(f"El campo {field_key} tiene anyOf y es: {anyOf}")
                 entry_type = [item for item in anyOf if item.get("type") != "null"]
                 if entry_type:
-                    print(f"El type que se debe agregar es: {entry_type[0]}")
+                    # print(f"El type que se debe agregar es: {entry_type[0]}")
                     properties[field_key] = entry_type[0]
                     #field_value = entry_type[0]
-                    print(f"El field_value es: {field_value}")
+                    # print(f"El field_value es: {field_value}")
                     # Llamar a cleanJsonSchema si el tipo resultante es un objeto o array
                     if entry_type[0].get("type") == "object":
                         cleanJsonSchema(entry_type[0])
