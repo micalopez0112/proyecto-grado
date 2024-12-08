@@ -1,6 +1,6 @@
 
 
-from ..database import  mapping_process_collection, DLzone
+from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
 from app.repositories import mapping_repo, metadata_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
@@ -42,7 +42,7 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
         mapping_id = mapping_proccess_id
     else : 
-        full_collection_path = DLzone + request.documentStoragePath
+        full_collection_path = request.documentStoragePath
         schema_id = await schema_service.get_or_create_schema(full_collection_path,request.jsonSchema)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),
@@ -101,7 +101,7 @@ def build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping
 async def update_whole_mapping_process(put_request: PutMappingRequest):
     if(put_request.mapping_proccess_id is None or put_request.mapping_proccess_id == ""):
         #json_schema_id = await schema_service.insert_schema(put_request.jsonSchema)
-        full_collection_path = DLzone + put_request.documentStoragePath
+        full_collection_path = put_request.documentStoragePath
         json_schema_id = await schema_service.get_or_create_schema(full_collection_path,put_request.jsonSchema)
         print("json_schema_id en update WHOLE", json_schema_id)
         mapping_process_docu = MappingProcessDocument(name=put_request.name, mapping=put_request.mapping,

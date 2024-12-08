@@ -4,6 +4,7 @@ import { useDataContext } from "../../context/context.tsx";
 import { useNavigate } from "react-router-dom";
 import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
+import { toast, ToastContainer } from "react-toastify";
 
 const SchemaSelect = () => {
   const [filePath, setFilePath] = useState<string>("");
@@ -14,18 +15,18 @@ const SchemaSelect = () => {
 
   const navigate = useNavigate();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const fileExtension = files[0].name.split(".").pop()?.toLowerCase();
-      if (fileExtension === "json") {
-        setFile(files[0]);
-      } else {
-        alert("The Collection File must be of type .json");
-        return;
-      }
-    }
-  }
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+  //   if (files) {
+  //     const fileExtension = files[0].name.split(".").pop()?.toLowerCase();
+  //     if (fileExtension === "json") {
+  //       setFile(files[0]);
+  //     } else {
+  //       alert("The Collection File must be of type .json");
+  //       return;
+  //     }
+  //   }
+  // }
 
   const handleGenerateSchema = async () => {
     try {
@@ -44,11 +45,16 @@ const SchemaSelect = () => {
         navigate("/Mapping");
         setLoading(false);
       }
+      else{
+        toast.error("Please introduce a valid path to load the dataset");
+        setLoading(false);
+        return
+      }
     } catch (error) {
       setFilePath("");
       console.error("Invalid JSON input");
+      toast.error("Invalid path, please introduce a valid one to load the dataset");
       setJsonSchema(null);
-      alert("Something went wrong uploading the collection file");
       setLoading(false);
     }
   };
@@ -59,15 +65,15 @@ const SchemaSelect = () => {
       <Spinner />
     ):(
     <div style={styles.container}>
-      <h1>Select Dataset</h1>
+      <h1 style={{ margin: "0" }}>Select Dataset</h1>
       <div style={styles.selectHeader}>
       <p style={{
-                margin: "10px",
+                marginBottom: "8px",
                 display: "flex",
                 alignItems: "flex-start",
                 fontSize: "18px",
               }}>
-        Upload the dataset from file system:
+        Provide a local path to load the dataset from:
       </p>
       <div
       style={{
@@ -78,20 +84,15 @@ const SchemaSelect = () => {
         padding: "10px",
         
       }}>
-        <input
-          style={{ fontSize: "16px", paddingBottom: "10px" }}
-          type="file"
-          onChange={handleFileChange}
-        >
-        </input>
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "8px",
+            justifyContent:"center",
+            gap: "12px",
           }}
         >
-          <label style={{ fontSize: "16px" }}>URI:</label>
+          <label style={{ fontSize: "18px" }}>Path:</label>
           <input
             style={{}}
             type="text"

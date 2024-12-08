@@ -27,7 +27,7 @@ function App() {
           path="/DataQualityScreen/:idDataset"
           element={<DataQualityScreen />}
         />
-        <Route path="/OntologySelect" element={<OntologySelectScreen />} />
+        <Route path="/OntologySelect/:collection_name?" element={<OntologySelectScreen />} />
         <Route path="/SchemaSelect" element={<SchemaSelect />} />
         <Route path="/Mapping" element={<Mapping />} />
         <Route path="/Ontology" element={<OntologyData />} />

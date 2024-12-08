@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDataContext } from "../../context/context.tsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { OntologyDataType } from "../../types";
 import { uploadOntology } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
@@ -18,6 +18,7 @@ const OntologySelectScreen = () => {
   const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [uriValue, setUriValue] = useState<string>("");
+  const { collection_name } = useParams<{ collection_name?: string }>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { mappings, clearMappings } = useDataContext();
@@ -25,10 +26,21 @@ const OntologySelectScreen = () => {
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedMethod(event.target.value);
   };
-
   useEffect(() => {
     //limpiar contexto de mappings
     clearMappings();
+    if (collection_name) {
+      //
+      //Para codificar el path y pasarlo como parametro
+      // const filePath = "C:/collections/dataset.json";
+      // const encodedPath = encodeURIComponent(filePath);
+      // navigate(`/OntologySelect/${encodedPath}`);
+
+      //Para decodificar el path y obtener el nombre de la colección
+      // const decodedPath = decodeURIComponent(collection_name);
+      // console.log("Decoded path:", decodedPath);
+      console.log("##Collection name from path##: ", collection_name);
+    }
     // const retrieveOntologies = async () =>{
     //     const ontologies = await fetchOntologies();
     //     if(ontologies){
