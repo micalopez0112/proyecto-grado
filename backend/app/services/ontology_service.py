@@ -1,6 +1,55 @@
+from fastapi import File, UploadFile, HTTPException, Form
+from typing import Optional, List, Any
+from app.models.ontology import OntologyDocument
 from owlready2 import get_ontology
 from app.repositories import ontology_repo
-
+import os
+toDirectory = "upload/ontologies"
+async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
+    try:
+        ontology_id = ''
+        ontology_data = {}
+        if ontology_file and type == "FILE":
+            if not os.path.exists(toDirectory):
+                os.makedirs(toDirectory)
+            completePath = os.path.join(toDirectory, ontology_file.filename)
+            print("onto path", completePath)
+            onto_in_collection = await ontology_repo.find_ontology_by_file_path(completePath)
+            #check if the file already exists (search by completePath)
+            # ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
+            if not onto_in_collection:
+                with open(completePath, "wb") as f:
+                    ontology_content = await ontology_file.read()
+                    f.write(ontology_content)
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, file=completePath)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
+            ontology = get_ontology(completePath).load()
+        elif uri and type == "URI":
+         # Manejo de la URI
+            print("onto uri", uri)
+            #check if the file already exists (search by uri)
+            onto_in_collection = await ontology_repo.find_ontology_by_uri(uri)
+            if not onto_in_collection:
+                print("onto not in collection")
+                ontoDocu = OntologyDocument(type=type, uri=uri)
+            else:
+                ontology_id = str(onto_in_collection['_id'])
+            ontology = get_ontology(str(uri)).load()
+        else:
+            raise HTTPException(status_code=400, detail="No ontology FILE or URI provided")
+        if(ontology_id == ''):
+            inserted_id = await ontology_repo.insert_ontology(ontoDocu)
+            ontology_id = inserted_id
+            print("Inserted correctly - Ontology ID:", ontology_id)
+        else:
+            print("Ontology already exists - Ontology ID:", ontology_id)
+        ontology_data = build_ontology_response(ontology, ontology_id)
+        return ontology_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        
 
 async def get_ontology_by_id(ontology_id: str):
     ontology = await ontology_repo.find_ontology_by_id(ontology_id)
