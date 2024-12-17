@@ -43,6 +43,7 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
             inserted_id = await ontology_repo.insert_ontology(ontoDocu)
             ontology_id = inserted_id
             print("Inserted correctly - Ontology ID:", ontology_id)
+            ##--> insertar metadata de la ontologia (contexto con id == ontology_id)
         else:
             print("Ontology already exists - Ontology ID:", ontology_id)
         ontology_data = build_ontology_response(ontology, ontology_id)

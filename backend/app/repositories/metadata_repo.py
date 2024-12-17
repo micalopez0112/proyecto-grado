@@ -4,6 +4,8 @@ from datetime import  datetime
 from ..database  import neo4j_driver 
 from app.models.mapping import DqResult
 
+
+
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     with neo4j_driver.session() as session:
         result = session.run(query=query, parameters=params)
@@ -103,4 +105,29 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
         results.append(dq)
 
     return results
+
+def init_governance_zone():
+    ## Hardcoded specific dimension, factor and metric for this project
+    print("Going to init governance zone")
+    ##Need to save 2 metrics one for each granularity level
+    query = """
+        MERGE (d:Dimension {id:'D1', name:'Accuracy'})
+        WITH d
+        MERGE (d)<-[:HAS_DIMENSION]-(f:Factor {id:'D1F1', name:'Syntactic Accuracy'})
+        WITH f
+        MERGE (f)<-[:HAS_FACTOR]-(m1:Metric {id:'D1F1M1', name:'Attribute Syntax', granularity:'Field Value',
+             description:'The attribute value in the document collection is compared against its corresponding value in the domain ontology', method:'def compare_onto_with_json_value(onto_prop_value, json_value) :\n
+                    if onto_prop_value == json_value:\n
+                        return 1\n
+                    else:\n
+                        return 0 '})
+        MERGE (f)<-[:HAS_FACTOR]-(m2:Metric {id:'D1F1M2', name:'Attribute Syntax', granularity:'Field',
+          description:'',
+          method:''})
+    """
+    with neo4j_driver.session() as session:
+        result = session.run(query=query)
+        return result.data()
+    
+
 
