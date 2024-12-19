@@ -13,19 +13,23 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
             if not os.path.exists(toDirectory):
                 os.makedirs(toDirectory)
             completePath = os.path.join(toDirectory, ontology_file.filename)
+            completePath.replace(os.sep, '/')
             print("onto path", completePath)
             onto_in_collection = await ontology_repo.find_ontology_by_file_path(completePath)
             #check if the file already exists (search by completePath)
             # ontology.imported_ontologies.append(get_ontology("http://www.w3.org/2000/01/rdf-schema"))
             if not onto_in_collection:
+                print("onto not in collection")
                 with open(completePath, "wb") as f:
                     ontology_content = await ontology_file.read()
                     f.write(ontology_content)
                 print("onto not in collection")
                 ontoDocu = OntologyDocument(type=type, file=completePath)
             else:
-                ontology_id = str(onto_in_collection['_id'])
+                print("onto in collection")
+                ontology_id = str(onto_in_collection.id)
             ontology = get_ontology(completePath).load()
+            print("Onto loaded")
         elif uri and type == "URI":
          # Manejo de la URI
             print("onto uri", uri)
@@ -35,7 +39,7 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
                 print("onto not in collection")
                 ontoDocu = OntologyDocument(type=type, uri=uri)
             else:
-                ontology_id = str(onto_in_collection['_id'])
+                ontology_id = str(onto_in_collection.id)
             ontology = get_ontology(str(uri)).load()
         else:
             raise HTTPException(status_code=400, detail="No ontology FILE or URI provided")
