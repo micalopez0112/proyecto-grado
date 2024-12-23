@@ -13,7 +13,8 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
             if not os.path.exists(toDirectory):
                 os.makedirs(toDirectory)
             completePath = os.path.join(toDirectory, ontology_file.filename)
-            completePath.replace(os.sep, '/')
+            print("os sep: ", os.sep)
+            completePath = completePath.replace(os.sep, '/')
             print("onto path", completePath)
             onto_in_collection = await ontology_repo.find_ontology_by_file_path(completePath)
             #check if the file already exists (search by completePath)
