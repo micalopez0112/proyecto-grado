@@ -129,5 +129,5 @@ def init_governance_zone():
         result = session.run(query=query)
         return result.data()
     
-
-
+def create_dq_model(ontology_id: str, dataset_id: str, request_mapping_body: Dict[str, Any]):
+    print("hola")

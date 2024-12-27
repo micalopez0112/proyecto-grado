@@ -120,15 +120,6 @@ async def update_whole_mapping_process(put_request: PutMappingRequest):
         mapping_updated = await update_mapping_process(map_request, put_request.mapping_proccess_id, False)
         return mapping_updated.acknowledged
     
-async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str, limit: int, offset:int):
-    mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_process_id))
-    schema_id = mapping_process.jsonSchemaId
-    keys_list = find_json_keys(json_key)
-    results = metadata_repo.get_evaluation_results(str(schema_id), keys_list, limit, offset)
-    # if json_key not in json_schema_properties_keys:
-    #     raise ValueError(f"Invalid JSON key: {json_key}")
-    return results
-
 async def delete_mapping_by_id(mapping_process_id: str) -> str:
     print(f"Starting deletion process for mapping ID: {mapping_process_id}")
     
