@@ -1,6 +1,7 @@
 from ..database import  onto_collection
 from app.models.ontology import  OntologyDocument
 from bson import ObjectId
+from app.repositories.metadata_repo import insert_context_metadata
 
 async def find_ontology_by_id(ontology_id: str):
     onto_id = ObjectId(ontology_id)
@@ -32,7 +33,9 @@ async def find_ontology_by_uri(uri: str):
 
 async def insert_ontology(ontology_document: OntologyDocument):
     result = await onto_collection.insert_one(ontology_document.model_dump())
-    return str(result.inserted_id)
+    inserted_onto_id = str(result.inserted_id)
+    insert_context_metadata(inserted_onto_id, "Ontology name")
+    return inserted_onto_id
 
 async def delete_ontology_by_id(ontology_id: str) -> bool:
     ontology_object_id = ObjectId(ontology_id)
