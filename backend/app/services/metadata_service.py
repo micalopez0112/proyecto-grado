@@ -17,6 +17,9 @@ async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str,
     return results
 
 
-async def create_dq_model(mapping_process_id: str, request_mapping_body: Dict[str, Any]):
+async def create_dq_model(mapping_process_id: str, mapped_entries: Dict[str, Any]):
     mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
+
     # la ontología ya va a etsar creada y creo que el dataset tambien
+    # creo que el contexto a esta altura ya esta creado
+    result = metadata_repo.save_data_quality_modedl(mapping_process_docu, mapped_entries)

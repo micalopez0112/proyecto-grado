@@ -26,7 +26,7 @@ async def evaluate_quality(quality_rule: str, mapping_process_id: Optional[str] 
 
 @router.get("/results")
 async def get_quality_results(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), 
-                              json_key: Optional[str] = Query(None, description="Json key to get quality results"), 
+                              json_key: Optional[str] = Query(None, description="Json key to get quality results, its the mapping key"), 
                               limit: Optional[int] = 100, offset: Optional[int] = 0):
     print(f'request_mapping_body: {mapping_process_id}')
     try :
