@@ -1,8 +1,10 @@
 from typing import Dict, Any
 from datetime import  datetime
+import uuid
 
 from ..database  import neo4j_driver 
 from app.models.mapping import DqResult
+from app.dq_evaluation.evaluation import find_json_keys
 
 import pandas as pd
 from pathlib import Path
@@ -11,7 +13,7 @@ from unidecode import unidecode
 import os
 
 current_directory = Path(__file__).resolve().parent
-
+methodONEKey = "D1F1M1MD1"
 
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     with neo4j_driver.session() as session:
@@ -91,7 +93,10 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     graph_path = f""" 
         MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
-
+    #MATCH (:Movie {title: 'Wall Street'})<-[:ACTED_IN]-(actor:Person)
+    #RETURN actor.name AS actor
+    #  MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f:Field{{name: '{first_key}'}})
+    
     for key in json_keys[1:]:
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
         graph_path += node_path
@@ -147,8 +152,6 @@ def init_governance_zone():
     #     result = session.run(query=query)
     #     print("Finished init governance zone")
     #     return result.data()
-    
-
 
 
 def save_quality_dimension():
@@ -303,4 +306,66 @@ def save_quality_methods():
     with neo4j_driver.session() as session:
         result = session.run(query=query)
 
+
+
+def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, json_keys):
+    first_key = json_keys[0]
+    graph_path = f""" 
+        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+    """
+    last_node = ""
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
+        last_node = "f"+ key
+        print("last key:",key)
+
+    applied_dq_name = "applied_dq_" + last_node
+    # TODO: ver si la relacion entre applied method y method queda hacia este lado o hacia el otro
+    # quizas aca todo el app_dq_method: ... lo puedo cambiar por app_dq_method
+    # (app_dq_method:AppliedDQMethod  {{name: '{applied_dq_name}'}}
+    create_dq_method_q = f"""WITH {last_node}
+        MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method:AppliedDQMethod 
+        {{name: '{applied_dq_name}'}})
+        MERGE (dq_method:Method {{id: '{methodONEKey}'}})<-[:APPLIES_METHOD]-(app_dq_method)
+        MERGE (dq_model:DQModel {{id: '{dq_model_id}'}})-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
+    """
+
+    graph_path += create_dq_method_q
+    print("builded query: ", graph_path)
+    return graph_path
+
+# TODO: ver de cambiar el nombre de Collection a Dataset quizas
+# CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
+# {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
+def save_data_quality_modedl(mapping_process_docu, mapped_entries: Dict[str, Any]):
+    ontology_id = mapping_process_docu.ontologyId
+    json_schema_id = mapping_process_docu.jsonSchemaId
+    dq_model_id = str(uuid.uuid4())
+
+    query = f""" 
+        MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
+        MERGE (collection:Collection {{name: '{mapping_process_docu.collection_name}', id: '{json_schema_id}'}})
+        MERGE (dq_model:DQModel  {{name: 'dq_model_1', id: '{dq_model_id}'}})
+        MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
+        MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
+    """
+    print("hola")
+    # ver si agrego nombres
+    # en mapped_entries tengo:
+    #{rootObject-imdbId_key#string: [{name: "sameAs", iri: "http://schema.org/sameAs"}]}
+    attributes_mapped = mapped_entries.keys()
+    for attribute in attributes_mapped:
+        json_keys = find_json_keys(attribute)
+        add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id, json_keys)
+        query += add_applied_method_query
+        # ['rootObject', 'imdbId']    
+   
+    print(query)
+    try:
+        neo4j_driver.execute_query(query)
+    except Exception as e:
+        print("error in executing query: ", e)
+        return None
+    # necesito recorrer las mapped entries y crear un applied dq method y
 

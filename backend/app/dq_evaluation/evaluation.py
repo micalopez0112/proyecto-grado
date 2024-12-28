@@ -238,7 +238,9 @@ def find_element_in_JSON_instance(json_document, path) :
         return element
     except (KeyError, TypeError):
         return None
-    
+
+# find_json_keys gets the key of a mapping structure for example "#contacto-city_key#string", and returns 
+# a lis of the json keys of that entry: ['contacto','city'], this means that 'city' its an attribute inside 'contacto'
 def find_json_keys(path) :
     print(f'path ${path}') #contacto-city_key#string
     keys = path.replace('-', '_').split('_')
