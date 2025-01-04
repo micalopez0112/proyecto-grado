@@ -378,20 +378,6 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
         print("error in executing query: ", e)
         return None
     # necesito recorrer las mapped entries y crear un applied dq method y
-
-
-def get_dq_models():
-    query = "MATCH (dq_model:DQModel) return dq_model"
-    try:
-        records, _, _ = neo4j_driver.execute_query(query)
-        results = []
-        for record in records:
-            dq_model = {"id": record[0]['id'], "name": record[0]['name']}
-            results.append(dq_model)
-        return results
-    except Exception as e:
-        print("error in executing query: ", e)
-        return e
     
 def get_applied_methods_by_dq_model(dq_model_id):
     query = f"""

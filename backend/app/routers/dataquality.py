@@ -49,12 +49,6 @@ async def create_dq_model(mapping_process_id: Optional[str] = Query(None, descri
         response = MappingResponse(message=msg, status="error")
         return response
 
-# @router.get("/")
-# async def get_dq_models():
-#     try :
-#         result = await metadata_service.get_dq_models()
-    
-
 @router.get("/models")
 async def get_dq_models(mapping_process_id: str = Query(None, description="ID for mapping"), quality_rule_id: str = Query(None, description="ID for quality rule")):
     try :

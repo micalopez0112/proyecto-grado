@@ -27,10 +27,6 @@ async def create_dq_model(mapping_process_id: str, mapped_entries: Dict[str, Any
     print("### Got mapping proccess document ###", mapping_process_docu)
     result = metadata_repo.save_data_quality_modedl(mapping_process_docu, mapped_entries.keys())
 
-async def get_dq_models():
-    result = metadata_repo.get_dq_models()
-    return result
-
 async def get_applied_methods_by_dq_model(dq_model_id: str):
     dq_methods = metadata_repo.get_applied_methods_by_dq_model(dq_model_id)
     # if json_key not in json_schema_properties_keys:
