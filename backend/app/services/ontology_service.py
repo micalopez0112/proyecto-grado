@@ -24,7 +24,6 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
                 with open(completePath, "wb") as f:
                     ontology_content = await ontology_file.read()
                     f.write(ontology_content)
-                print("onto not in collection")
                 ontoDocu = OntologyDocument(type=type, file=completePath)
             else:
                 print("onto in collection")

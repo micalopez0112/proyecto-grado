@@ -17,7 +17,8 @@ toDirectory = "upload/ontologies"
 @router.post("/")
 async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        print("Ontology file:", ontology_file.filename)
+        # print("Ontology file:", ontology_file.filename)
+        print("Antes de hacer el onto_service.save_ontology")
         ontology_data = await onto_service.save_ontology(type, ontology_file, uri)
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",

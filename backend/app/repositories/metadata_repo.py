@@ -273,7 +273,7 @@ def save_quality_methods():
     
     query_template = """        
         MERGE ({method_var_name}: Method {{id:'{method_id}',name:'{method_name}', description: '{method_description}', algorithm: '{method_algorithm}'}})
-        MERGE ({method_var_name})-[:HAS_Method]->(metric)
+        MERGE ({method_var_name})-[:HAS_METHOD]->(metric)
     """
 
     query = ''
@@ -419,3 +419,33 @@ def get_applied_methods_by_dq_model(dq_model_id):
     except Exception as e:
         print("error in executing query: ", e)
         return e
+
+def get_dq_models(onto_id, dataset_id, method_id):
+    query = f"""
+        MATCH (ctx:Context {{id: '{onto_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id: '{dataset_id}'}})
+        WITH dq_model
+        MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method {{id: '{method_id}'}})
+        WITH dq_model, app_dq_method, method
+        MATCH (att:Field)-[:APPLIED_TO]->(app_dq_method)
+        RETURN dq_model.id, dq_model.name, app_dq_method.name, method.name, att.name
+    """
+    with neo4j_driver.session() as session:
+        result = session.run(query=query)
+        result_data = result.data() 
+        return_info = {}
+        if(result_data):
+            for record in result_data:
+                dq_model_id = record.get('dq_model.id')
+                att_name = record.get('att.name')
+                if (dq_model_id and att_name):
+                    if dq_model_id not in return_info:
+                        return_info[dq_model_id] = []
+                    return_info[dq_model_id].append(att_name)
+                else:
+                    print("No dq model id or attribute name")
+        else:
+            print("No data found")
+        print("Return info: ", return_info)
+        return return_info
+
+
