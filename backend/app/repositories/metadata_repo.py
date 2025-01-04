@@ -14,6 +14,8 @@ import os
 
 current_directory = Path(__file__).resolve().parent
 methodONEKey = "D1F1M1MD1"
+methodName = "Method1"
+
 
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     with neo4j_driver.session() as session:
@@ -324,10 +326,11 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
     # TODO: ver si la relacion entre applied method y method queda hacia este lado o hacia el otro
     # quizas aca todo el app_dq_method: ... lo puedo cambiar por app_dq_method
     # (app_dq_method:AppliedDQMethod  {{name: '{applied_dq_name}'}}
-    create_dq_method_q = f"""WITH {last_node}
+    create_dq_method_q = f""" 
+        WITH collection, {last_node}, dq_model, dq_method
         MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method:AppliedDQMethod 
         {{name: '{applied_dq_name}'}})
-        MERGE (dq_method:Method {{id: '{methodONEKey}'}})<-[:APPLIES_METHOD]-(app_dq_method)
+        MERGE (dq_method)<-[:APPLIES_METHOD]-(app_dq_method)
         MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
     """
 
@@ -345,12 +348,12 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
 
     query = f""" 
+        MATCH (dq_method:Method {{name: '{methodName}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
         MERGE (dq_model:DQModel  {{name: 'dq_model_1', id: '{dq_model_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
-        WITH collection, dq_model
     """
     
     # ver si agrego nombres
@@ -358,7 +361,10 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
     #{rootObject-imdbId_key#string: [{name: "sameAs", iri: "http://schema.org/sameAs"}]}
     attributes_mapped = mapped_entries
     for attribute in attributes_mapped:
+        print("attribute mapped: ", attribute)
         json_keys = find_json_keys(attribute)
+        print("json keys: ", json_keys)
+        query += " WITH collection, dq_model, dq_method"
         add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id,dq_model_id, json_keys)
         query += add_applied_method_query
         # ['rootObject', 'imdbId']    

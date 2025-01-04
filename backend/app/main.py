@@ -27,7 +27,6 @@ app.include_router(schema_router, prefix="/schemas", tags=["schemas"])
 app.include_router(dataquality_router, prefix="/data-quality", tags=["data-quality"])
 
 init_governance_zone()
-collectionPath = './Coleccion_Películas/schema_MoviesCollection_100000_sinNulls.json'
-generateMetadata(collectionPath)
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
