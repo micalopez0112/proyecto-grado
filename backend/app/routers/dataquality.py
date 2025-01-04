@@ -48,3 +48,24 @@ async def create_dq_model(mapping_process_id: Optional[str] = Query(None, descri
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
         return response
+
+@router.get("/")
+async def get_dq_models():
+    try :
+        result = await metadata_service.get_dq_models()
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+        
+@router.get("/applied_methods")
+async def get_quality_results(dq_model_id: str = Query(None, description="DQ Model id")):
+    try :
+        result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
+        

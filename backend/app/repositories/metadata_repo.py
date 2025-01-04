@@ -1,6 +1,7 @@
 from typing import Dict, Any, List
 from datetime import  datetime
 import uuid
+import time
 
 from ..database  import neo4j_driver 
 from app.models.mapping import DqResult
@@ -308,8 +309,6 @@ def save_quality_methods():
     with neo4j_driver.session() as session:
         result = session.run(query=query)
 
-
-
 def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, json_keys):
     first_key = json_keys[0]
     graph_path = f""" 
@@ -346,12 +345,15 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
     ontology_id = mapping_process_docu.ontologyId
     json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
-
+    timestamp_milliseconds = int(time.time() * 1000)
+    dq_model_name = "dq_model_" + timestamp_milliseconds
+    # cambiar nombre de dq model
+    # TODO cambiar dq_method por ID y no por nombre
     query = f""" 
         MATCH (dq_method:Method {{name: '{methodName}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-        MERGE (dq_model:DQModel  {{name: 'dq_model_1', id: '{dq_model_id}'}})
+        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
     """
@@ -377,3 +379,43 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
         return None
     # necesito recorrer las mapped entries y crear un applied dq method y
 
+
+def get_dq_models():
+    query = "MATCH (dq_model:DQModel) return dq_model"
+    try:
+        records, _, _ = neo4j_driver.execute_query(query)
+        results = []
+        for record in records:
+            dq_model = {"id": record[0]['id'], "name": record[0]['name']}
+            results.append(dq_model)
+        return results
+    except Exception as e:
+        print("error in executing query: ", e)
+        return e
+    
+def get_applied_methods_by_dq_model(dq_model_id):
+    query = f"""
+        MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
+        -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
+        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*]->(endNode) 
+        RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
+    """
+
+    try:
+        print("query ", query)
+        records, _, _ = neo4j_driver.execute_query(query)
+        results = []
+        for record in records:
+            nodes = record[0]
+            attribute_path_list = []
+            for node in nodes[1:]: # se skipea el primero porque es el applied_dq
+                print("NODE: ",node['name'])
+                attribute_path_list.insert(0, node['name'])
+
+            attribute_path = "-".join(attribute_path_list)
+            attribute = {"name": attribute_path, "type": nodes[1]['type']} 
+            results.append(attribute)
+        return results
+    except Exception as e:
+        print("error in executing query: ", e)
+        return e
