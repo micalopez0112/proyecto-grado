@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Generated schema for Root",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "contacto": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city",
+            "street",
+            "email"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "contacto"
+      ]
+    }
+  }

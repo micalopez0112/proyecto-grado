@@ -4,7 +4,7 @@ from typing import Dict, Any
 import os
 import json
 URI = "bolt://localhost:7687"
-AUTH = ("neo4j","tesis2024")
+AUTH = ("neo4j","proyecto-grado123")
 ZONE = "trusted"
 
 def generateMetadata(CollectionPath:str):
@@ -17,7 +17,9 @@ def generateMetadata(CollectionPath:str):
                 with open(CollectionPath,'r') as collectionFile:
                     contentAsJson = json.load(collectionFile)
                 driver.verify_connectivity()
+                print("aca paso 1")
                 json_properties = contentAsJson.get("properties")
+                print("aca paso 2")
                 generateMetadataFromSchema(CollectionPath,
                                          json_properties,
                                          driver);
@@ -76,6 +78,9 @@ def generateMetadataFromSchema(CollectionPath:str,schema: Dict[str, Any], driver
 
 ##parentType = "schema" | "field" 
 ##Si no vamos a generar el schema se tendría que usar la relación belongs to Collection
+## TODO:
+## VER: que ids le ponemos al dq_model o que nombres para encontrarlos
+##
 def generateFieldsMetadataV2(driver:GraphDatabase.driver, parentNodeId:str, parentType:str, field:str, field_value: Dict[str, Any]):
     try:
         field_type = field_value.get("type")

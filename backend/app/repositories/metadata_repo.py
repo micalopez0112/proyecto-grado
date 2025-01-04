@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 from datetime import  datetime
 import uuid
 
@@ -311,7 +311,7 @@ def save_quality_methods():
 def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, json_keys):
     first_key = json_keys[0]
     graph_path = f""" 
-        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (collection)<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
     last_node = ""
     for key in json_keys[1:]:
@@ -328,7 +328,7 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
         MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method:AppliedDQMethod 
         {{name: '{applied_dq_name}'}})
         MERGE (dq_method:Method {{id: '{methodONEKey}'}})<-[:APPLIES_METHOD]-(app_dq_method)
-        MERGE (dq_model:DQModel {{id: '{dq_model_id}'}})-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
+        MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
     """
 
     graph_path += create_dq_method_q
@@ -338,30 +338,32 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
 # CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
 # {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
-def save_data_quality_modedl(mapping_process_docu, mapped_entries: Dict[str, Any]):
+def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
+    print("### Starting save data quality model process in neo4j ###")
     ontology_id = mapping_process_docu.ontologyId
     json_schema_id = mapping_process_docu.jsonSchemaId
-    dq_model_id = str(uuid.uuid4())
+    dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
 
     query = f""" 
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
-        MERGE (collection:Collection {{name: '{mapping_process_docu.collection_name}', id: '{json_schema_id}'}})
+        MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
         MERGE (dq_model:DQModel  {{name: 'dq_model_1', id: '{dq_model_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
+        WITH collection, dq_model
     """
-    print("hola")
+    
     # ver si agrego nombres
     # en mapped_entries tengo:
     #{rootObject-imdbId_key#string: [{name: "sameAs", iri: "http://schema.org/sameAs"}]}
-    attributes_mapped = mapped_entries.keys()
+    attributes_mapped = mapped_entries
     for attribute in attributes_mapped:
         json_keys = find_json_keys(attribute)
-        add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id, json_keys)
+        add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id,dq_model_id, json_keys)
         query += add_applied_method_query
         # ['rootObject', 'imdbId']    
    
-    print(query)
+    print("### Query for creating dq model ###", query)
     try:
         neo4j_driver.execute_query(query)
     except Exception as e:
