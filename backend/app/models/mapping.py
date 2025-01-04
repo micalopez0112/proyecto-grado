@@ -47,7 +47,7 @@ class MappingProcessDocument(BaseModel):
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
     ontologyId: Optional[str]= None
-    jsonSchemaId: Optional[str]= None
+    jsonSchemaId: Optional[str]= None # TODO cambiar este nombre 
     document_storage_path : Optional[str]= None
     mapping_suscc_validated : Optional[bool] = None
 
