@@ -32,7 +32,10 @@ async def find_ontology_by_uri(uri: str):
     return None
 
 async def insert_ontology(ontology_document: OntologyDocument):
-    result = await onto_collection.insert_one(ontology_document.model_dump())
+    onto_model_data = ontology_document.model_dump()
+    if(onto_model_data.get('uri')):
+        onto_model_data['uri'] = str(onto_model_data['uri'])
+    result = await onto_collection.insert_one(onto_model_data)
     inserted_onto_id = str(result.inserted_id)
     insert_context_metadata(inserted_onto_id, "Ontology name")
     return inserted_onto_id
