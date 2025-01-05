@@ -35,9 +35,12 @@ async def insert_ontology(ontology_document: OntologyDocument):
     onto_model_data = ontology_document.model_dump()
     if(onto_model_data.get('uri')):
         onto_model_data['uri'] = str(onto_model_data['uri'])
+        onto_name = onto_model_data['uri']
+    else:
+        onto_name = onto_model_data['file'].split('/')[-1]
     result = await onto_collection.insert_one(onto_model_data)
     inserted_onto_id = str(result.inserted_id)
-    insert_context_metadata(inserted_onto_id, "Ontology name")
+    insert_context_metadata(inserted_onto_id, onto_name)
     return inserted_onto_id
 
 async def delete_ontology_by_id(ontology_id: str) -> bool:

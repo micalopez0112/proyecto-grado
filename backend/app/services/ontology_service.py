@@ -47,10 +47,10 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
             inserted_id = await ontology_repo.insert_ontology(ontoDocu)
             ontology_id = inserted_id
             print("Inserted correctly - Ontology ID:", ontology_id)
-            ##--> insertar metadata de la ontologia (contexto con id == ontology_id)
         else:
             print("Ontology already exists - Ontology ID:", ontology_id)
         ontology_data = build_ontology_response(ontology, ontology_id)
+        print("##return de la ontologia al hacer el upload (ver si hay object properties repetidas)##", ontology_data)
         return ontology_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -72,6 +72,9 @@ def build_ontology_response(ontology, onto_id):
     classes = list(ontology.classes())
     object_properties = list(ontology.object_properties())
     data_properties = list(ontology.data_properties())
+    print("Ontology object properties:", object_properties)
+    for prop in object_properties:
+        print("Object property ("+prop.name+") range: "+ str(prop.range))
     return {
         "ontology_id": onto_id,
         "ontoData": [{
