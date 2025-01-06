@@ -4,7 +4,7 @@ import uuid
 import time
 
 from ..database  import neo4j_driver 
-from app.models.mapping import DqResult
+from app.models.mapping import DqResult, FieldNode
 from app.dq_evaluation.evaluation import find_json_keys
 
 import pandas as pd
@@ -23,10 +23,10 @@ def execute_neo4j_query(query:str, params:Dict[str, Any]):
         result = session.run(query=query, parameters=params)
         return result.data()
 
-def delete_existing_field_value_measures(json_keys, jsonSchemaId):
+def delete_existing_field_value_measures(json_keys, json_schema_id):
     first_key = json_keys[0]
     graph_path = f"""
-        MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:
@@ -43,10 +43,10 @@ def delete_existing_field_value_measures(json_keys, jsonSchemaId):
     neo4j_driver.execute_query(delete_existing_measures)
 
 
-def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
+def insert_field_value_measures(json_keys, value, id_document, json_schema_id):
     first_key = json_keys[0]
     graph_path = f"""
-        MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:
@@ -64,11 +64,24 @@ def insert_field_value_measures(json_keys, value, id_document, jsonSchemaId):
     
     neo4j_driver.execute_query(insert_measure)
 
+# query to create the measure node with its value and corresponding related nodes: AppliedDqMethod and Field
+def insert_field_value_measures_v2(field: FieldNode, value, id_document):
+    current_datetime = datetime.now()
+    insert_measure_query = f"""
+        MATCH (fieldNode) 
+        WHERE elementId(fieldNode) = '{field.element_id}' 
+        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod)
+        CREATE (m:Measure)<-[:FieldValueMeasure {{id_document: {id_document}}}]-(fieldNode)
+        CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
+        SET m.measure = {value}, m.date= '{current_datetime}'
+    """
+    print("## Evaluacion 4.6.1 - query:", insert_measure_query, " ##")
+    neo4j_driver.execute_query(insert_measure_query)
 
-def insert_field_measures(json_keys, value, jsonSchemaId):
+def insert_field_measures(json_keys, value, json_schema_id):
     first_key = json_keys[0]
     graph_path = f""" 
-        MATCH (c:Collection {{id_dataset: '{jsonSchemaId}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:
@@ -340,10 +353,10 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
 # CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
 # {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
-def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
+def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_entries: List[str]):
     print("### Starting save data quality model process in neo4j ###")
     ontology_id = mapping_process_docu.ontologyId
-    json_schema_id = mapping_process_docu.jsonSchemaId
+    json_schema_id = mapping_process_docu.json_schema_id
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
     dq_model_name = "dq_model_" + timestamp_milliseconds
@@ -353,7 +366,7 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
         MATCH (dq_method:Method {{name: '{methodName}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}'}})
+        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}', mapping_id: '{mapping_process_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
     """
@@ -379,7 +392,7 @@ def save_data_quality_modedl(mapping_process_docu, mapped_entries: List[str]):
         return None
     # necesito recorrer las mapped entries y crear un applied dq method y
     
-def get_applied_methods_by_dq_model(dq_model_id):
+def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     query = f"""
         MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
         -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
@@ -388,19 +401,19 @@ def get_applied_methods_by_dq_model(dq_model_id):
     """
 
     try:
-        print("query ", query)
         records, _, _ = neo4j_driver.execute_query(query)
         results = []
         for record in records:
             nodes = record[0]
             attribute_path_list = []
+            # esto recorre todo el camino de nodos anidados para armar el string de atributos
+            # donde se encuantra anidado
             for node in nodes[1:]: # se skipea el primero porque es el applied_dq
-                print("NODE: ",node['name'])
                 attribute_path_list.insert(0, node['name'])
-
+        
             attribute_path = "-".join(attribute_path_list)
-            attribute = {"name": attribute_path, "type": nodes[1]['type']} 
-            results.append(attribute)
+            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
+            results.append(fieldNode)
         return results
     except Exception as e:
         print("error in executing query: ", e)
@@ -419,6 +432,7 @@ def get_dq_models(onto_id, dataset_id, method_id):
         result = session.run(query=query)
         result_data = result.data() 
         return_info = {}
+        
         if(result_data):
             for record in result_data:
                 dq_model_id = record.get('dq_model.id')
@@ -434,4 +448,22 @@ def get_dq_models(onto_id, dataset_id, method_id):
         print("Return info: ", return_info)
         return return_info
 
+def get_node_by_element_id(element_id: str):
+    match_query = f"""
+        MATCH (n) 
+        WHERE elementId(n) = '{element_id}' 
+        RETURN n
+    """
 
+    records, _, _ = neo4j_driver.execute_query(match_query)
+    print("RESULT: ",records)
+    return records
+
+def get_mapping_id_by_dq_model(dq_model_id: str):
+    match_query = f"""
+        MATCH (dq:DQModel  {{id: '{dq_model_id}'}}) 
+        return dq.mapping_process_id as mapping_process_id
+    """
+    result, _, _ = neo4j_driver.execute_query(match_query)
+    print("RESULT: ",result[0]['mapping_process_id'])
+    return result[0]['mapping_process_id']

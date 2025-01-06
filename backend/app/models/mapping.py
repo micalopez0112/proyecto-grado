@@ -51,6 +51,16 @@ class MappingProcessDocument(BaseModel):
     document_storage_path : Optional[str]= None
     mapping_suscc_validated : Optional[bool] = None
 
+# si lo dejo mover para otro file
+class DQModel(BaseModel):
+    id : Optional[str] = None
+
+# Represents a field node (a field is an attribute from a json document) in neo4j
+class FieldNode(BaseModel):
+    element_id : str = None
+    name : str = None
+    type : str = None
+    
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
@@ -70,7 +80,7 @@ class MappingsByJSONResponse(BaseModel):
     idMapping : Optional[str] = None
     name : str = None
     mapping :Optional[Dict[str, Any]]= None
-    jsonSchemaId: Optional[str]= None
+    json_schema_id: Optional[str]= None
 
 class DqResult(BaseModel):
     name : str
