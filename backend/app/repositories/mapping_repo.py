@@ -15,11 +15,15 @@ async def find_mappings_by_schema(json_schema_id: str, validated_mappings: bool 
 
 # find_mapping_process_by_id gets a mapping process by its ID
 async def find_mapping_process_by_id(mapping_pr_id: str):
-    mapping_obj_id = ObjectId(mapping_pr_id)
-    mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_obj_id})
-    
-    mapping_docu = MappingProcessDocument(**mapping_process_docu)
-    return mapping_docu
+    try:
+        mapping_obj_id = ObjectId(mapping_pr_id)
+        mapping_process_docu = await mapping_process_collection.find_one({'_id': mapping_obj_id})
+        
+        mapping_docu = MappingProcessDocument(**mapping_process_docu)
+        print("Got mapping process document: ", mapping_docu)
+        return mapping_docu
+    except Exception as e:
+        print("Error in updating mapping process", e)
 
 # find_mappings_by_field finds a list of mappings that match a query
 async def find_mappings_by_query(query):
