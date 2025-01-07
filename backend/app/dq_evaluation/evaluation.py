@@ -113,7 +113,7 @@ class SyntanticAccuracy(QualityMetric) :
             
 
             print("## Evaluacion 4.5 - onto mapped to", onto_mapped_to_value)
-            results_for_mapped_entrance = evaluate_json_instances(data_to_evaluate, field_to_evaluate, json_mapped_key, onto_mapped_to_value, ontology, jsonSchemaId)
+            results_for_mapped_entrance = evaluate_json_instances(dq_model_id, data_to_evaluate, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId)
             results_dicc[json_mapped_key] = results_for_mapped_entrance
             # TODO: ver pero creo que aca ya no es mas necesario ver si el mapping es una
 
@@ -210,8 +210,8 @@ def get_documents_from_storage(path : str) :
 
 # return evaluation result
 # onto_values puede ser una lista si mapeo a mas de una cosa
-# def evaluate_json_instances(json_instances, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
-def evaluate_json_instances(json_instances, field_to_evaluate, mapping_entrance, onto_mapped_to_value, ontology, jsonSchemaId) :
+# def evaluate_json_instances(json_instances, onto_mapped_to_value, ontology, jsonSchemaId) :
+def evaluate_json_instances(dq_model_id, json_instances, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId) :
     json_mapped_key = build_mapping_entrance(field_to_evaluate)
     # ver de donde sale mapping elements
 
@@ -271,7 +271,7 @@ def evaluate_json_instances(json_instances, field_to_evaluate, mapping_entrance,
 
         #inserta los field value measures
         print("## Evaluacion 4.6 - insert value in neo4j", value, " ##")
-        metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'])
+        metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id)
         results_dicc[result_key] = value
 
         

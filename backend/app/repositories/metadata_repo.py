@@ -65,12 +65,12 @@ def insert_field_value_measures(json_keys, value, id_document, json_schema_id):
     neo4j_driver.execute_query(insert_measure)
 
 # query to create the measure node with its value and corresponding related nodes: AppliedDqMethod and Field
-def insert_field_value_measures_v2(field: FieldNode, value, id_document):
+def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_model_id):
     current_datetime = datetime.now()
     insert_measure_query = f"""
         MATCH (fieldNode) 
         WHERE elementId(fieldNode) = '{field.element_id}' 
-        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod)
+        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod)<-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
         CREATE (m:Measure)<-[:FieldValueMeasure {{id_document: {id_document}}}]-(fieldNode)
         CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
         SET m.measure = {value}, m.date= '{current_datetime}'
@@ -366,7 +366,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
         MATCH (dq_method:Method {{name: '{methodName}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}', mapping_id: '{mapping_process_id}'}})
+        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}', mapping_process_id: '{mapping_process_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
     """
@@ -376,6 +376,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
     #{rootObject-imdbId_key#string: [{name: "sameAs", iri: "http://schema.org/sameAs"}]}
     attributes_mapped = mapped_entries
     for attribute in attributes_mapped:
+        # contacto-street
         print("attribute mapped: ", attribute)
         json_keys = find_json_keys(attribute)
         print("json keys: ", json_keys)
