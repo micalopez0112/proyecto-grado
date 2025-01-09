@@ -3,7 +3,7 @@ from datetime import  datetime
 import uuid
 import time
 
-from ..database  import neo4j_driver 
+from ..database  import neo4j_driver, neo4j_conn
 from app.models.mapping import DqResult, FieldNode
 from app.dq_evaluation.evaluation import find_json_keys
 
@@ -17,6 +17,10 @@ current_directory = Path(__file__).resolve().parent
 methodONEKey = "D1F1M1MD1"
 methodName = "Method1"
 
+def execute_test_query():
+    query = "CREATE (n:Test {name: 'Test', id:'testid'}) RETURN n"
+    with neo4j_conn.get_driver() as driver:
+        driver.execute_query(query)
 
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     with neo4j_driver.session() as session:
@@ -102,7 +106,8 @@ def insert_context_metadata(ontology_id, onto_name):
     query = f"""
         MERGE (ctx:Context {{name:'{onto_name}',id: '{ontology_id}'}})
     """
-    neo4j_driver.execute_query(query)
+    with neo4j_conn.get_driver() as driver:
+        driver.execute_query(query)
 
 def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     first_key = json_keys[0]

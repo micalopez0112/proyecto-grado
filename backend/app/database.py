@@ -23,8 +23,15 @@ NEO_PASS = os.getenv("NEO4J_PASSWORD")
 ## Neo4j database
 class Neo4jConnection:
     def __init__(self, uri, user, password):
-        self._driver = GraphDatabase.driver(uri, auth=(user, password))
+        self._driver = None
+        self.connect(uri, user, password)
+        # self._driver = GraphDatabase.driver(uri, auth=(user, password))
 
+    def connect(self, uri, user, password):
+        if self._driver:
+            self._driver.close()
+        self._driver = GraphDatabase.driver(uri, auth=(user, password))
+        
     def close(self):
         self._driver.close()
 
