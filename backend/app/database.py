@@ -21,6 +21,17 @@ NEO_URI = os.getenv("NEO4J_URI")
 NEO_USER = os.getenv("NEO4J_USERNAME")
 NEO_PASS = os.getenv("NEO4J_PASSWORD")
 ## Neo4j database
+
+neo4j_driver = None
+
+def get_neo4j_driver():
+    global neo4j_driver
+    return neo4j_driver
+
+def update_neo4j_driver(new_driver):
+    global neo4j_driver
+    neo4j_driver = new_driver
+
 class Neo4jConnection:
     def __init__(self, uri, user, password):
         self._driver = None
@@ -31,6 +42,7 @@ class Neo4jConnection:
         if self._driver:
             self._driver.close()
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
+        update_neo4j_driver(self._driver)
         
     def close(self):
         self._driver.close()
@@ -40,7 +52,10 @@ class Neo4jConnection:
 
 # Instancia única de conexión
 neo4j_conn = Neo4jConnection(uri=NEO_URI, user=NEO_USER, password=NEO_PASS)
-neo4j_driver = neo4j_conn.get_driver()
+
+
+
+
 
 ##call init governance zone
 DLzone = os.getenv("ZONE_PATH")

@@ -3,9 +3,10 @@ from datetime import  datetime
 import uuid
 import time
 
-from ..database  import neo4j_driver, neo4j_conn
+from ..database  import neo4j_conn
 from app.models.mapping import DqResult, FieldNode
 from app.dq_evaluation.evaluation import find_json_keys
+from ..database import get_neo4j_driver
 
 import pandas as pd
 from pathlib import Path
@@ -16,13 +17,17 @@ import os
 current_directory = Path(__file__).resolve().parent
 methodONEKey = "D1F1M1MD1"
 methodName = "Method1"
+neo4j_driver = get_neo4j_driver()
 
 def execute_test_query():
     query = "CREATE (n:Test {name: 'Test', id:'testid'}) RETURN n"
-    with neo4j_conn.get_driver() as driver:
-        driver.execute_query(query)
+    # with neo4j_conn.get_driver() as driver:
+    #     driver.execute_query(query)
+    driver = get_neo4j_driver()
+    driver.execute_query(query)
 
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
+    neo4j_driver = get_neo4j_driver()
     with neo4j_driver.session() as session:
         result = session.run(query=query, parameters=params)
         return result.data()
