@@ -17,14 +17,13 @@ import os
 current_directory = Path(__file__).resolve().parent
 methodONEKey = "D1F1M1MD1"
 methodName = "Method1"
-neo4j_driver = get_neo4j_driver()
+
 
 def execute_test_query():
     query = "CREATE (n:Test {name: 'Test', id:'testid'}) RETURN n"
-    # with neo4j_conn.get_driver() as driver:
-    #     driver.execute_query(query)
-    driver = get_neo4j_driver()
-    driver.execute_query(query)
+    # driver = get_neo4j_driver()
+    # driver.execute_query(query)
+    get_neo4j_driver().execute_query(query)
 
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     neo4j_driver = get_neo4j_driver()
@@ -49,6 +48,7 @@ def delete_existing_field_value_measures(json_keys, json_schema_id):
         MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
         DETACH DELETE m
     """
+    neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(delete_existing_measures)
 
 
@@ -70,7 +70,7 @@ def insert_field_value_measures(json_keys, value, id_document, json_schema_id):
         MERGE (f{latest_item})-[:FieldValueMeasure {{id_document: {id_document}}}]->(m:Measure)
         SET m.measure = {value}, m.date = '{current_datetime}'
     """
-    
+    neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(insert_measure)
 
 # query to create the measure node with its value and corresponding related nodes: AppliedDqMethod and Field
@@ -85,6 +85,7 @@ def insert_field_value_measures_v2(field: FieldNode, value, id_document):
         SET m.measure = {value}, m.date= '{current_datetime}'
     """
     print("## Evaluacion 4.6.1 - query:", insert_measure_query, " ##")
+    neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(insert_measure_query)
 
 def insert_field_measures(json_keys, value, json_schema_id):
@@ -105,6 +106,7 @@ def insert_field_measures(json_keys, value, json_schema_id):
     """
 
     query = graph_path + insert_measure
+    neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(query)
 
 def insert_context_metadata(ontology_id, onto_name):
@@ -140,6 +142,7 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     """
     print("QUERY: ", select_measure)
     # returns record, summay, keys
+    neo4j_driver = get_neo4j_driver()
     records, _, _ = neo4j_driver.execute_query(select_measure)
     results = []
     for record in records:
@@ -197,8 +200,10 @@ def save_quality_dimension():
             dimension_name=row['name'],
             dimension_var_name=row['name'].lower(),
         )
-    with neo4j_driver.session() as session:
-        result = session.run(query=query)
+    neo4j_driver = get_neo4j_driver()
+    neo4j_driver.execute_query(query)
+    # with neo4j_driver.session() as session:
+    #     result = session.run(query=query)
         
     # print("Se ejecutó save_quality_dimension")
     
@@ -220,6 +225,7 @@ def save_quality_factor():
         if (row['dimension_id'] != previous_dimension):
             # no es la primera fila
             if (previous_dimension != ''):
+                neo4j_driver = get_neo4j_driver()
                 with neo4j_driver.session() as session:
                     result = session.run(query=query)
                     query = ''
@@ -241,12 +247,13 @@ def save_quality_factor():
         )
         
         previous_dimension = row['dimension_id']
-    
-    with neo4j_driver.session() as session:
-        result = session.run(query=query)
+    neo4j_driver = get_neo4j_driver()
+    neo4j_driver.execute_query(query)
+    # with neo4j_driver.session() as session:
+    #     result = session.run(query=query)
         
 def save_quality_metrics():
-    
+    neo4j_driver = get_neo4j_driver()
     metrics_file_path = current_directory / "dq_metrics.csv"
     metrics_ds = pd.read_csv(metrics_file_path);
     
@@ -264,8 +271,7 @@ def save_quality_metrics():
         if (row['factor_id'] != previous_factor):
             #no es la primera fila
             if (previous_factor != ''):
-                with neo4j_driver.session() as session:
-                    result = session.run(query=query)
+                neo4j_driver.execute_query(query)
                 query = ''
             
             query += """
@@ -285,12 +291,10 @@ def save_quality_metrics():
         )
         
         previous_factor = row['factor_id']
-
-    with neo4j_driver.session() as session:
-        result = session.run(query=query)
+    neo4j_driver.execute_query(query)
 
 def save_quality_methods():
-    
+    neo4j_driver = get_neo4j_driver()
     methods_file_path = current_directory / "dq_methods.csv"
     methods = pd.read_csv(methods_file_path);
     
@@ -306,8 +310,7 @@ def save_quality_methods():
         if (row['metric_id'] != previous_metric):
             #no es la primera fila
             if (previous_metric != ''):
-                with neo4j_driver.session() as session:
-                    result = session.run(query=query)
+                neo4j_driver.execute_query(query)
                 query = ''
             
             query += """
@@ -329,8 +332,7 @@ def save_quality_methods():
         
         previous_metric = row['metric_id']
 
-    with neo4j_driver.session() as session:
-        result = session.run(query=query)
+    neo4j_driver.execute_query(query)
 
 def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, json_keys):
     first_key = json_keys[0]
@@ -396,6 +398,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
    
     print("### Query for creating dq model ###", query)
     try:
+        neo4j_driver = get_neo4j_driver()
         neo4j_driver.execute_query(query)
     except Exception as e:
         print("error in executing query: ", e)
@@ -411,6 +414,7 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     """
 
     try:
+        neo4j_driver = get_neo4j_driver()
         records, _, _ = neo4j_driver.execute_query(query)
         results = []
         for record in records:
@@ -430,33 +434,38 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         return e
 
 def get_dq_models(onto_id, dataset_id, method_id):
+    onto_id = 'context_123'
+    dataset_id='dataset_789'
+    method_id='method_101'
     query = f"""
         MATCH (ctx:Context {{id: '{onto_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id: '{dataset_id}'}})
         WITH dq_model
         MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method {{id: '{method_id}'}})
-        WITH dq_model, app_dq_method, method
-        MATCH (att:Field)-[:APPLIED_TO]->(app_dq_method)
-        RETURN dq_model.id, dq_model.name, app_dq_method.name, method.name, att.name
+        RETURN dq_model.id, dq_model.name
     """
-    with neo4j_driver.session() as session:
-        result = session.run(query=query)
-        result_data = result.data() 
+    # WITH dq_model, app_dq_method, method
+    # MATCH (att:Field)-[:APPLIED_TO]->(app_dq_method)
+    neo4j_driver = get_neo4j_driver()
+    try:
+        records, _, _ = neo4j_driver.execute_query(query)
         return_info = {}
-        
-        if(result_data):
-            for record in result_data:
+        if(records.__len__() > 0):
+            for record in records:
                 dq_model_id = record.get('dq_model.id')
-                att_name = record.get('att.name')
-                if (dq_model_id and att_name):
-                    if dq_model_id not in return_info:
-                        return_info[dq_model_id] = []
-                    return_info[dq_model_id].append(att_name)
+                dq_model_name = record.get('dq_model.name')
+                if (dq_model_id and dq_model_name):
+                    # if dq_model_id not in return_info:
+                    #     return_info[dq_model_id] = []
+                    return_info[dq_model_id] = dq_model_name
                 else:
                     print("No dq model id or attribute name")
         else:
             print("No data found")
         print("Return info: ", return_info)
         return return_info
+    except Exception as e:
+        print("error in executing query: ", e)
+        return None
 
 def get_node_by_element_id(element_id: str):
     match_query = f"""
@@ -464,7 +473,7 @@ def get_node_by_element_id(element_id: str):
         WHERE elementId(n) = '{element_id}' 
         RETURN n
     """
-
+    neo4j_driver = get_neo4j_driver()
     records, _, _ = neo4j_driver.execute_query(match_query)
     print("RESULT: ",records)
     return records
@@ -474,6 +483,7 @@ def get_mapping_id_by_dq_model(dq_model_id: str):
         MATCH (dq:DQModel  {{id: '{dq_model_id}'}}) 
         return dq.mapping_process_id as mapping_process_id
     """
+    neo4j_driver = get_neo4j_driver()
     result, _, _ = neo4j_driver.execute_query(match_query)
     print("RESULT: ",result[0]['mapping_process_id'])
     return result[0]['mapping_process_id']
