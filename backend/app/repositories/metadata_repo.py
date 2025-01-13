@@ -368,10 +368,10 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
 def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_entries: List[str]):
     print("### Starting save data quality model process in neo4j ###")
     ontology_id = mapping_process_docu.ontologyId
-    json_schema_id = mapping_process_docu.json_schema_id
+    json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
-    dq_model_name = "dq_model_" + timestamp_milliseconds
+    dq_model_name = "dq_model_" + str(timestamp_milliseconds)
     # cambiar nombre de dq model
     # TODO cambiar dq_method por ID y no por nombre
     query = f""" 
@@ -405,40 +405,9 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
         return None
     # necesito recorrer las mapped entries y crear un applied dq method y
     
-def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
-    query = f"""
-        MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
-        -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
-        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*]->(endNode) 
-        RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
-    """
-
-    try:
-        neo4j_driver = get_neo4j_driver()
-        records, _, _ = neo4j_driver.execute_query(query)
-        results = []
-        for record in records:
-            nodes = record[0]
-            attribute_path_list = []
-            # esto recorre todo el camino de nodos anidados para armar el string de atributos
-            # donde se encuantra anidado
-            for node in nodes[1:]: # se skipea el primero porque es el applied_dq
-                attribute_path_list.insert(0, node['name'])
-        
-            attribute_path = "-".join(attribute_path_list)
-            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
-            results.append(fieldNode)
-        return results
-    except Exception as e:
-        print("error in executing query: ", e)
-        return e
-
 def get_dq_models(onto_id, dataset_id, method_id):
-    onto_id = 'context_123'
-    dataset_id='dataset_789'
-    method_id='method_101'
     query = f"""
-        MATCH (ctx:Context {{id: '{onto_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id: '{dataset_id}'}})
+        MATCH (ctx:Context {{id: '{onto_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{dataset_id}'}})
         WITH dq_model
         MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method {{id: '{method_id}'}})
         RETURN dq_model.id, dq_model.name
@@ -466,6 +435,35 @@ def get_dq_models(onto_id, dataset_id, method_id):
     except Exception as e:
         print("error in executing query: ", e)
         return None
+
+def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
+    query = f"""
+        MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
+        -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
+        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*]->(endNode) 
+        RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
+    """
+    try:
+        neo4j_driver = get_neo4j_driver()
+        records, _, _ = neo4j_driver.execute_query(query)
+        results = []
+        for record in records:
+            nodes = record[0]
+            attribute_path_list = []
+            # esto recorre todo el camino de nodos anidados para armar el string de atributos
+            # donde se encuantra anidado
+            for node in nodes[1:]: # se skipea el primero porque es el applied_dq
+                attribute_path_list.insert(0, node['name'])
+        
+            attribute_path = "-".join(attribute_path_list)
+            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
+            results.append(fieldNode)
+        return results
+    except Exception as e:
+        print("error in executing query: ", e)
+        return e
+
+
 
 def get_node_by_element_id(element_id: str):
     match_query = f"""

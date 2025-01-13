@@ -82,7 +82,7 @@ async def get_dq_models(mapping_process_id: str = Query(None, description="ID fo
 
 
 @router.get("/applied_methods")
-async def get_quality_results(dq_model_id: str = Query(None, description="DQ Model id")):
+async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Model id")):
     try :
         result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
         return result
