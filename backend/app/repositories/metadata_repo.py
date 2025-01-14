@@ -339,7 +339,8 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
     graph_path = f""" 
         MATCH (collection)<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
-    last_node = ""
+    last_node = "f"+ first_key
+    ##initialize last_node with first_key in case no nested fields
     for key in json_keys[1:]:
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
         graph_path += node_path
@@ -393,6 +394,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
         print("json keys: ", json_keys)
         query += " WITH collection, dq_model, dq_method"
         add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id,dq_model_id, json_keys)
+        print("add_applied_method_query: ", add_applied_method_query)
         query += add_applied_method_query
         # ['rootObject', 'imdbId']    
    
