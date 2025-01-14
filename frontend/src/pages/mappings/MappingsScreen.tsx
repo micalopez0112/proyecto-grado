@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchMappings } from "../../services/mapsApi.ts";
 import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
@@ -7,6 +7,13 @@ import "./MappingsScreen.css";
 
 const MappingsScreen = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // parameters from query string
+  const connectionString = searchParams.get("connection_string");
+  const collectionPath = searchParams.get("collection_path");
+  const idDataset = searchParams.get("id_dataset");
+
   const [mappings, setMappings] = useState<Array<{ id: string; name: string }>>(
     []
   );
@@ -14,6 +21,15 @@ const MappingsScreen = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
+
+    if(connectionString && collectionPath && idDataset){
+      console.log("Connection string: ", connectionString);
+      console.log("Collection path: ", collectionPath);
+      console.log("Id dataset: ", idDataset);
+      //call update neo4j connection
+      //set info in context for external app flow
+    }
+
     const retrieveMappings = async () => {
       setLoading(true);
       const mappings = await fetchMappings();

@@ -32,6 +32,14 @@ def update_neo4j_driver(new_driver):
     global neo4j_driver
     neo4j_driver = new_driver
 
+def build_connection_string(uri, user, password):
+    # Extraer host desde el URI proporcionado
+    protocol, host = uri.split("://")
+    return f"{protocol}://{user}:{password}@{host}"
+#En nuestro caso:
+# neo4j+s://{username}:{password}@5312230f.databases.neo4j.io
+
+
 class Neo4jConnection:
     def __init__(self, uri, user, password):
         self._driver = None
