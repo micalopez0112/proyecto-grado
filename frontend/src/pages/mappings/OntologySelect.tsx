@@ -9,7 +9,7 @@ const OntologySelectScreen = () => {
   const [ontologies, setOntologies] = useState<
     Array<{ id: string; type: string; file: string; uri: string }>
   >([]);
-  const { ontologyDataContext, setontologyDataContext, setcurrentOntologyId } =
+  const { ontologyDataContext, setontologyDataContext, setcurrentOntologyId,mappings, clearMappings } =
     useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [idSelectedOnto, setIdSelectedOnto] = useState<string>("");
@@ -20,8 +20,6 @@ const OntologySelectScreen = () => {
   const [uriValue, setUriValue] = useState<string>("");
   const { collection_name } = useParams<{ collection_name?: string }>();
   const [loading, setLoading] = useState<boolean>(false);
-
-  const { mappings, clearMappings } = useDataContext();
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedMethod(event.target.value);

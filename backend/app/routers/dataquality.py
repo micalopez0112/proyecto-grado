@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Query, Body, HTTPException
+from pydantic import BaseModel,Field
 from typing import List,Optional, Dict, Any
 
 from app.services import metadata_service
@@ -10,10 +11,18 @@ from app.repositories import metadata_repo
 
 router = APIRouter()
 
+class ConnectionCredentials(BaseModel):
+    uri: str
+    user: str
+    password: str
 
 @router.post("/update-neo4j-connection")
-async def update_neo4j_connection(uri: str, user: str, password: str):
+async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
+    # CAMBIAR PARAMETROS A BODY
     try:
+        uri = request.uri
+        user = request.user
+        password = request.password
         print("Credentials: " + uri + " " + user + " " + password)
         neo4j_conn.connect(uri, user, password)
         print("Neo4j connection updated successfully, just before execute_test_query")

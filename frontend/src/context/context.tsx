@@ -14,7 +14,13 @@ interface OntoSelect {
 interface Mapping {
   [jsonKey: string]: OntoElement[];
 }
-interface JsonSchemaContextProps {
+interface ContextProps {
+  // External flow
+  externalFlow: boolean;
+  setExternalFlow: (value: boolean) => void;
+  externalDatasetId: string;
+  setExternalDatasetId: (value: string) => void;
+  //
   currentOntologyId?: string;
   setcurrentOntologyId: (value: string | undefined) => void;
   jsonSchemaContext: any;
@@ -40,7 +46,9 @@ interface JsonSchemaContextProps {
   setMappingProcessId: (value: string) => void;
 }
 
-const Context = createContext<JsonSchemaContextProps>({
+const Context = createContext<ContextProps>({
+  externalFlow: false,
+  externalDatasetId: "",
   currentOntologyId: undefined,
   jsonSchemaContext: {},
   JsonElementSelected: {},
@@ -61,9 +69,13 @@ const Context = createContext<JsonSchemaContextProps>({
   setCollectionPath: () => {},
   resetMappingState: () => {},
   setMappingProcessId: () => {},
+  setExternalFlow: () => {},
+  setExternalDatasetId: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const [externalFlow, setExternalFlow] = useState<boolean>(false);
+  const [externalDatasetId, setExternalDatasetId] = useState<string>("");
   const [mappingProcessId, setMappingProcessId] = useState<string>("");
   const [JsonElementSelected, setJsonElementSelected] = useState<string>("");
   const [OntoElementSelected, setOntoElementSelected] = useState<OntoSelect>({
@@ -306,9 +318,17 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappingProcessId("");
   };
 
+  const outOfExternalFlow = () => {
+
+  }
+
   return (
     <Context.Provider
       value={{
+        externalFlow,
+        setExternalFlow,
+        externalDatasetId,
+        setExternalDatasetId,
         currentOntologyId,
         setcurrentOntologyId,
         jsonSchemaContext,

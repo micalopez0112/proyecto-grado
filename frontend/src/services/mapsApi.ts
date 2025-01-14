@@ -233,8 +233,16 @@ export const fetchDetailedEvaluationResults = async (
   }
 };
 
-const connectNeo4jDB = async (uri: string, user: string, password: string) => {
+export const connectNeo4jDB = async (
+  uri: string,
+  user: string,
+  password: string
+) => {
   try {
+    console.log("Connecting to Neo4j database");
+    console.log("URI: ", uri);
+    console.log("User: ", user);
+    console.log("Password: ", password);
     const response = await apiClient.post(
       "/data-quality/update-neo4j-connection",
       {
