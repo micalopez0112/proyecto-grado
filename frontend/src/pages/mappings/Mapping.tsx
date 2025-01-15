@@ -31,6 +31,8 @@ export const Mapping = () => {
     removeMapping,
     collectionPath,
     resetMappingState,
+    externalFlow,
+    externalDatasetId
   } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
@@ -166,6 +168,7 @@ export const Mapping = () => {
             mapping: mappings,
             jsonSchema: jsonSchemaContext,
             mapping_proccess_id: mappingId,
+            ...(externalFlow && { jsonSchemaId: externalDatasetId }),
             // documentStoragePath: collectionPath
           };
           setLoading(true);
@@ -198,7 +201,8 @@ export const Mapping = () => {
               name: mappingName,
               mapping: mappings,
               jsonSchema: schemaAndCollectionName,
-              documentStoragePath: collectionPath
+              documentStoragePath: collectionPath,
+              ...(externalFlow && { jsonSchemaId: externalDatasetId }),
             };
             setLoading(true);
             const response = await saveAndValidateMappings(

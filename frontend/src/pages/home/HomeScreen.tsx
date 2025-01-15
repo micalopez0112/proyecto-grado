@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import {toast} from "react-toastify";
 import { useDataContext } from "../../context/context.tsx";
 import { useNavigate } from "react-router-dom";
 import "./HomeScreen.css";
@@ -13,6 +13,7 @@ const HomeScreen = () => {
     if(externalFlow){
       console.log("External user is in")
       outOfExternalFlow();
+      toast.success("The internal flow has been restored");
       //navigate("/RedirectScreen");
     }
     //check if external user is in

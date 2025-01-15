@@ -31,20 +31,19 @@ async def get_schema_by_id(schema_id: str):
     schema = await schema_repo.find_schema_by_id(schema_id)
     return schema
 
-async def insert_schema(json_schema: dict):
-    schema_id = await schema_repo.insert_schema(json_schema)
-    return schema_id
+async def insert_schema(json_schema: dict, schema_id: str = None):
+    created_id = await schema_repo.insert_schema(json_schema, schema_id)
+    return created_id
 
 async def find_schema_by_collection_name(collection_name : str):
     schema = await schema_repo.find_one_schema_by_query({'collection_name': collection_name})
     return schema
 
-async def get_or_create_schema(collectionPath:str,json_schema: Dict[str, Any]):
+async def get_or_create_schema(collectionPath:str,json_schema: Dict[str, Any],external_schema_id:str):
     collection_name=json_schema['collection_name']
     existent_schema = await find_schema_by_collection_name(collection_name)
     if existent_schema is None:
-        inserted_id = await insert_schema(json_schema)
-        ## generate schema metadata
+        inserted_id = await insert_schema(json_schema,external_schema_id)
         print("INSERTED ID #####:", inserted_id)
         generate_metadata_from_schema(collectionPath, json_schema, str(inserted_id))
         return inserted_id
