@@ -44,6 +44,7 @@ interface ContextProps {
   resetMappingState: () => void;
   mappingProcessId: string;
   setMappingProcessId: (value: string) => void;
+  outOfExternalFlow: () => void;
 }
 
 const Context = createContext<ContextProps>({
@@ -71,6 +72,7 @@ const Context = createContext<ContextProps>({
   setMappingProcessId: () => {},
   setExternalFlow: () => {},
   setExternalDatasetId: () => {},
+  outOfExternalFlow: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -319,7 +321,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const outOfExternalFlow = () => {
-
+    setExternalDatasetId("");
+    setExternalFlow(false);
+    setCollectionPath("");
   }
 
   return (
@@ -329,6 +333,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setExternalFlow,
         externalDatasetId,
         setExternalDatasetId,
+        outOfExternalFlow,
         currentOntologyId,
         setcurrentOntologyId,
         jsonSchemaContext,

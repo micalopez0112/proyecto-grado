@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
-import { fetchMappings,connectNeo4jDB } from "../../services/mapsApi.ts";
+import { fetchMappings,connectNeo4jDB,getDatasetMappings} from "../../services/mapsApi.ts";
 import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import "./MappingsScreen.css";
@@ -20,11 +20,12 @@ const MappingsScreen = () => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const {setExternalFlow,setExternalDatasetId,setCollectionPath} =
+  const {externalFlow,setExternalFlow,externalDatasetId,setExternalDatasetId,setCollectionPath} =
   useDataContext();
 
 
   useEffect(() => {
+    console.log("Se ejecuta useEffect con dependencia");
     const checkFlow = async () => {
       console.log("Search params size: ", searchParams.size);
     if(searchParams.size > 0){
@@ -57,25 +58,52 @@ const MappingsScreen = () => {
         const password = credentials[2];
         const responseUpdateNeo4j = await connectNeo4jDB(uri,user,password);
         console.log("Response update neo4j en MappingsScreen.tsx: ",responseUpdateNeo4j);
+        if(idDataset){
+          const datasetMappings = await getDatasetMappings(idDataset);
+          console.log("Dataset mappings from idDataset: ", datasetMappings);
+          if (datasetMappings && idDataset){
+            setMappings(datasetMappings.data);
+          }
+        }
       }
     }
     else{
       console.log("FLUJO INTERNO")
+      retrieveMappings();
     }
     };
     checkFlow();
   },[searchParams]);
 
-  useEffect(() => {
-    const retrieveMappings = async () => {
-      setLoading(true);
-      const mappings = await fetchMappings();
-      console.log("Mappings: ", mappings);
-      if (mappings) setMappings(mappings.data);
-      setLoading(false);
-    };
-    retrieveMappings();
-  }, []);
+  // useEffect(() => {
+  //   console.log("Se ejecuta useEffect");
+  //   console.log("External flow: ", externalFlow);
+  //   console.log("External dataset id: ", externalDatasetId);
+    
+  //   retrieveMappings();
+  // }, [externalFlow, externalDatasetId]);
+
+  const retrieveMappings = async () => {
+    //if externalId flow specific mappings
+    // if(externalFlow && externalDatasetId){
+    //   const datasetMappings = await getDatasetMappings(externalDatasetId);
+    //   console.log("Dataset mappings from externalDatasetId: ", datasetMappings);
+    //   if (datasetMappings && externalDatasetId){
+    //     setMappings(datasetMappings.data);
+    //   }
+    // }
+    // else{
+      
+    setLoading(true);
+    console.log("Mappings antes de fetchMappings: ", mappings);
+    const datasetMappings = await fetchMappings();
+    console.log("Mappings: ", mappings);
+    if (datasetMappings && !externalDatasetId) 
+      setMappings(datasetMappings.data);
+    setLoading(false);
+    // }
+  };
+
 
   const onClickMappingCard = (id: string) => {
     navigate("/Mapping", { state: { mappingId: id } });

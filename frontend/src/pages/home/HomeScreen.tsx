@@ -1,13 +1,20 @@
 import React, { useEffect } from "react";
+
+import { useDataContext } from "../../context/context.tsx";
 import { useNavigate } from "react-router-dom";
 import "./HomeScreen.css";
 
 const HomeScreen = () => {
   const navigate = useNavigate();
-
+  const {outOfExternalFlow,externalFlow,setExternalFlow,externalDatasetId,setExternalDatasetId} = useDataContext();
   useEffect(() => {
     console.log("HomeScreen loaded");
     console.log("Check if external user is in")
+    if(externalFlow){
+      console.log("External user is in")
+      outOfExternalFlow();
+      //navigate("/RedirectScreen");
+    }
     //check if external user is in
     //if so, navigate to RedirectScreen
     //else, do nothing
