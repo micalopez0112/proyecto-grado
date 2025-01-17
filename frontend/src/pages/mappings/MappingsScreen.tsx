@@ -91,13 +91,22 @@ const MappingsScreen = () => {
       const datasetMappings = await getDatasetMappings(datasetId);
       console.log("Dataset mappings from idDataset: ", datasetMappings);
       if (datasetMappings && idDataset){
-        setMappings(datasetMappings.data);
+        console.log("Mapping data from dataset id: ", datasetMappings.data);
+        //Es necesario el map porque viene con distintos campos
+        const transformedMappings = datasetMappings.data.map((item: any) => ({
+          id: item.idMapping,  
+          name: item.name,     
+        }));
+        setMappings(transformedMappings);
       }
     }
     else{
       const datasetMappings = await fetchMappings();
-      if (datasetMappings && !externalDatasetId) 
+      if (datasetMappings && !externalDatasetId){
+        console.log("Mapping data from dataset id: ", datasetMappings.data);
         setMappings(datasetMappings.data);
+      } 
+        
     }
     console.log("Mappings: ", mappings);
     setLoading(false);

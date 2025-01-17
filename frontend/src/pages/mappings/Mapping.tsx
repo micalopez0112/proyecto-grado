@@ -185,7 +185,14 @@ export const Mapping = () => {
             if (status === "success") {
               resetMappingState();
               alert("Mapping procces successfully validated and saved");
-              navigate("/");
+              if(externalFlow && externalDatasetId){
+                //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+                //mappings y las métricas definidas
+                console.log("External flow: ", externalFlow)
+                navigate(`/DataQualityScreen/${externalDatasetId}`)
+              }
+              else
+                navigate("/");
             } else {
               alert("Error validating mapping, please check: " + message);
             }
@@ -217,7 +224,14 @@ export const Mapping = () => {
               if (status === "success") {
                 resetMappingState();
                 alert("Mapping procces successfully validated and saved");
-                navigate("/");
+                if(externalFlow && externalDatasetId){
+                  //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+                  //mappings y las métricas definidas
+                  console.log("External flow: ", externalFlow)
+                  navigate(`/DataQualityScreen/${externalDatasetId}`)
+                }
+                else
+                  navigate("/");
               } else {
                 alert("Error validating mapping, please check: " + message);
               }
