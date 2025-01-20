@@ -56,7 +56,8 @@ class JsonSchema(BaseModel):
 class JSONSchemaResponse(BaseModel):
     id : Optional[str] = None
     collection_name : str = None
-    properties : Optional[Dict[str, Any]] = None
+    properties : Optional [Dict[str, Any]] = None
+    is_external : Optional [bool] = None
 
 class JsonRequestList(BaseModel):
     jsonInstances: List[dict] 

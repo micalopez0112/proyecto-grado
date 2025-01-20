@@ -19,9 +19,13 @@ async def get_all_schemas():
     for schema in schemas:
         # TODO ajustar nombre de la colección
         collection_name = schema.get('collection_name')
+        is_external = schema.get('is_external')
         if collection_name is None:
             collection_name = "some_collection"
-        jsonSchema = JSONSchemaResponse(id=str(schema['_id']), collection_name=collection_name)
+        jsonSchema = JSONSchemaResponse(
+            id=str(schema['_id']),
+            collection_name=collection_name,
+            is_external = is_external)
         result.append(jsonSchema)
         
     # TODO ajustar tipo de retorno

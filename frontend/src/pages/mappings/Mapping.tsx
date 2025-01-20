@@ -328,12 +328,15 @@ export const Mapping = () => {
                   >
                     Validate & Save
                   </button>
-                  <button
+                  {!externalFlow ?
+                    <button
                     className="button success"
                     onClick={saveMappingsApiCall}
-                  >
-                    Save
-                  </button>
+                    >
+                      Save
+                    </button>
+                  : null
+                  }
                 </div>
               </div>
             </div>

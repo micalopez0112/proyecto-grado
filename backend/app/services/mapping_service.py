@@ -48,6 +48,7 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
         print("external_dataset_id en validate_and_save_mapping_process", external_dataset_id)
         if not(external_dataset_id is None or external_dataset_id == ""):
             external_json_schema_id = external_dataset_id
+            # add extra field to filter?
         schema_id = await schema_service.get_or_create_schema(full_collection_path,request.jsonSchema, external_json_schema_id)
         mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
                                                         jsonSchemaId=str(schema_id),

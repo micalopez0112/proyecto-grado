@@ -17,6 +17,9 @@ async def insert_schema(json_schema: Dict[str, Any], schema_id: str = None):
     print("Se va a insertar el esquema con el id: ", schema_id)
     if(schema_id is not None):
         json_schema['_id'] = ObjectId(schema_id)
+        json_schema['is_external'] = True
+    else:
+        json_schema['is_external'] = False
     schema_result = await jsonschemas_collection.insert_one(json_schema)
     schema_id = schema_result.inserted_id
     return schema_id
