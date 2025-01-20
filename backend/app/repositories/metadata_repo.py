@@ -79,6 +79,7 @@ def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_mode
     neo4j_driver.execute_query(insert_measure_query)
 
 def insert_field_measures(json_keys, value, json_schema_id):
+    # TODO: sumar method id como parametro y buscar el appliedDqMethod que este asociado a ese method id
     first_key = json_keys[0]
     graph_path = f""" 
         MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})

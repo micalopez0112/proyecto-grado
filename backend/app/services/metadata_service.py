@@ -62,3 +62,10 @@ async def get_dq_models(mapping_process_id: str, method_id: str):
     # result = metadata_repo.get_data_quality_models(mapping_process_docu)
     
     return result
+
+# TODO: posible pero no se si queda
+async def get_method_by_metric():
+    dq_methods = metadata_repo.get_applied_methods_by_dq_model()
+    # if json_key not in json_schema_properties_keys:
+    #     raise ValueError(f"Invalid JSON key: {json_key}")
+    return dq_methods

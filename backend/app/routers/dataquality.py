@@ -70,3 +70,13 @@ async def get_quality_results(dq_model_id: str = Query(None, description="DQ Mod
         response = MappingResponse(message=msg, status="error")
         return response
         
+# TODO: posible pero no se si quda aca
+@router.get("/metrics")
+async def get_metrics():
+    try :
+        result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response

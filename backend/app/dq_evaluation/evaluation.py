@@ -165,9 +165,19 @@ class StrategyContext():
 
     def select_strategy(self, strategy: str) -> None:
         if strategy == SYNTCTATIC_ACCURACY:
-            self._quality_strategy = SyntanticAccuracy()
+            # self.method_field_id = 1
+            # self.method_field_value_id = 2 # estos vendría por query param
+            self._quality_strategy = SyntanticAccuracy() #SyntaticAccuracy
             print("INSTANCIADA ")
-    
+            
+    # # TODO: posible
+    # async def evaluate_measure_aggregated(aggregation: str):
+    #     # aggregation == average
+    #     # aggregation == median 
+
+    #     # 
+    #     # 
+        
     # antes: evaluate_quality(self, dq_model_id: str, request_mapping_body: Dict[str, Any])
     async def evaluate_quality(self, dq_model_id: str) -> None:
         # no se si vamos a menter esto o mandamos el mapping id como parametro siempre VER
@@ -278,6 +288,7 @@ def evaluate_json_instances(dq_model_id, json_instances, field_to_evaluate, onto
     #almacena un FieldMeasure por corrida, asi manetemos el historicos del las corridas
     # Aggregate all field measures and insert the result
     if field_measures:
+        # evaluate_measure_field_granularity() ...
         aggregated_measure_value = sum(field_measures) / len(field_measures)
         metadata_repo.insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
 
