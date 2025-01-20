@@ -1,13 +1,43 @@
-from fastapi import APIRouter
-from fastapi import APIRouter, Query, Body
+from fastapi import APIRouter, Query, Body, HTTPException
+from pydantic import BaseModel,Field
 from typing import List,Optional, Dict, Any
 
 from app.services import metadata_service
 from app.models.mapping import  MappingResponse,  DQModel
 from app.dq_evaluation.evaluation import StrategyContext
+from ..database import neo4j_conn
+
+from app.repositories import metadata_repo
 
 router = APIRouter()
 
+class ConnectionCredentials(BaseModel):
+    uri: str
+    user: str
+    password: str
+
+@router.post("/update-neo4j-connection")
+async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
+    # CAMBIAR PARAMETROS A BODY
+    try:
+        uri = request.uri
+        user = request.user
+        password = request.password
+        print("Credentials: " + uri + " " + user + " " + password)
+        neo4j_conn.connect(uri, user, password)
+        print("Neo4j connection updated successfully, just before execute_test_query")
+        return {"message": "Neo4j connection updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update connection: {str(e)}")
+
+@router.post("/execute-test-query")
+async def execute_tq():
+    try:
+        result = metadata_repo.execute_test_query()
+        print("RESULT en ENDPOINT: ", result)
+        return {"message": "Test query executed successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to execute test query: {str(e)}")
 
 @router.post("/evaluate/{quality_rule}")
 async def evaluate_quality(quality_rule: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
@@ -50,9 +80,9 @@ async def create_dq_model(mapping_process_id: Optional[str] = Query(None, descri
         return response
 
 @router.get("/models")
-async def get_dq_models(mapping_process_id: str = Query(None, description="ID for mapping"), quality_rule_id: str = Query(None, description="ID for quality rule")):
+async def get_dq_models(mapping_process_id: str = Query(None, description="ID for mapping"), quality_method_id: str = Query(None, description="ID for quality rule")):
     try :
-        result = await metadata_service.get_dq_models(mapping_process_id,quality_rule_id)
+        result = await metadata_service.get_dq_models(mapping_process_id,quality_method_id)
         return result
     except Exception as e:
         msg = str(e)
@@ -61,7 +91,7 @@ async def get_dq_models(mapping_process_id: str = Query(None, description="ID fo
 
 
 @router.get("/applied_methods")
-async def get_quality_results(dq_model_id: str = Query(None, description="DQ Model id")):
+async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Model id")):
     try :
         result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
         return result

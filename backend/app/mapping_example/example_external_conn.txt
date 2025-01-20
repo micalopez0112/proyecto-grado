@@ -1,0 +1,5 @@
+URL:
+##El connection_string hay que pasarlo encoded, pero ese ya tiene las credenciales de la instancia remota
+http://localhost:3000/MappingsScreen?connection_string=neo4j%2Bs%3A%2F%2F5312230f.databases.neo4j.io%24neo4j%24NmQmFeKBVkBrYdEQqq8YC6XJuN6J6kGFIGO62KY8bU4&collection_path=C:\Users\fncastro\Desktop\mcaura1.json&id_dataset=1111aaaa11111111aaaa1111
+##el id_dataset tiene que ser una cadena de 24 dígitos hexas: (0-9 y a-f) para que lo tome MongoDB
+##como ObjectID válido

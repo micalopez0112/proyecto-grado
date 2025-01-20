@@ -43,7 +43,8 @@ async def get_ontology_info_from_pid(ontology_id):
         'name':i.label[0] if len(i.label) > 0 else i.name, 
         'iri': i.iri,
         'equivalent_to': [elem.iri for elem in i.equivalent_to if elem is not None and getattr(elem, 'iri', None)],
-        'is_a': [elem.iri for elem in i.is_a if (elem is not None and getattr(elem, 'name', None) and elem.name != 'Thing')],
+        'is_a': [elem.iri for elem in i.is_a if (elem is not None and getattr(elem, 'name', None))],
+        # 'is_a': [elem.iri for elem in i.is_a if (elem is not None and getattr(elem, 'name', None) and elem.name != 'Thing')],
       } for i in onto_classes if getattr(i, 'iri', None)
     ]
     obj_properties = [
@@ -67,6 +68,7 @@ async def get_ontology_info_from_pid(ontology_id):
         { "data_properties": data_properties}
     ]
     close_world(ontology)## The ontology must be closed to avoid inconsistencies
+    print("Información de la ontología a devolver: ", res)
     return res
 
 def graph_generator(ontology_elements, map_proccess):
@@ -92,7 +94,7 @@ def graph_generator(ontology_elements, map_proccess):
                         "to": to_iri,
                         "label": 'rdfs:subClassOf',
                         "dashes": True,
-                        "arrows": 'from',
+                        "arrows": 'to',
                     }
                     node_pair_key = from_iri+to_iri if from_iri <= to_iri else to_iri+from_iri
                     if not node_pair_key in current_edges_per_node:
@@ -151,7 +153,7 @@ def graph_generator(ontology_elements, map_proccess):
                 range = ""
                 for rangeType in edge['range'][0]:
                     range = range + rangeType
-                print("El rango es: ", range)
+                # print("El rango es: ", range)
 
                 node = { "id": id_node, "label": range, 'color': '#FFFF00', 'font': {'color': 'black'}}
                 nodes.append(node)
@@ -167,7 +169,7 @@ def graph_generator(ontology_elements, map_proccess):
                 edges.append(new_edge)
         graph['edges'] = edges
         graph['nodes'] = nodes
-        print("Graph to show generated successfully", graph)
+        # print("Graph to show generated successfully", graph)
     except Exception as e:
         print("Exception during map graph generation ", e)
     return graph

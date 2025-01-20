@@ -34,15 +34,18 @@ app.include_router(dataquality_router, prefix="/data-quality", tags=["data-quali
 
 
 
-def start_owl_server(port=9000, directory="./upload/ontologies"):
+def start_owl_server(port=8001, directory="./upload/ontologies"):
+
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
     class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=directory, **kwargs)
 
-    with socketserver.TCPServer(("", port), CustomHTTPRequestHandler) as httpd:
+    with ReusableTCPServer(("", port), CustomHTTPRequestHandler) as httpd:
         print(f"Se puede acceder a la ontología de dominio .owl bajo: http://127.0.0.1:{port}/nombre_ontologia.owl")
         httpd.serve_forever()
-        ##queda publica la ontología en http://127.0.0.1:9000/movie_ootest.owl
+        ##queda publica la ontología en http://127.0.0.1:8001/movie_ootest.owl
 #Se levanta server que publique la ontología para acceder a través de URI
 thread = threading.Thread(target=start_owl_server, daemon=True)
 thread.start()

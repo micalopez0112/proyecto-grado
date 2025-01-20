@@ -31,6 +31,8 @@ export const Mapping = () => {
     removeMapping,
     collectionPath,
     resetMappingState,
+    externalFlow,
+    externalDatasetId
   } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
@@ -166,6 +168,7 @@ export const Mapping = () => {
             mapping: mappings,
             jsonSchema: jsonSchemaContext,
             mapping_proccess_id: mappingId,
+            ...(externalFlow && { jsonSchemaId: externalDatasetId }),
             // documentStoragePath: collectionPath
           };
           setLoading(true);
@@ -182,7 +185,14 @@ export const Mapping = () => {
             if (status === "success") {
               resetMappingState();
               alert("Mapping procces successfully validated and saved");
-              navigate("/");
+              if(externalFlow && externalDatasetId){
+                //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+                //mappings y las métricas definidas
+                console.log("External flow: ", externalFlow)
+                navigate(`/DataQualityScreen/${externalDatasetId}`)
+              }
+              else
+                navigate("/");
             } else {
               alert("Error validating mapping, please check: " + message);
             }
@@ -198,7 +208,8 @@ export const Mapping = () => {
               name: mappingName,
               mapping: mappings,
               jsonSchema: schemaAndCollectionName,
-              documentStoragePath: collectionPath
+              documentStoragePath: collectionPath,
+              ...(externalFlow && { jsonSchemaId: externalDatasetId }),
             };
             setLoading(true);
             const response = await saveAndValidateMappings(
@@ -213,7 +224,14 @@ export const Mapping = () => {
               if (status === "success") {
                 resetMappingState();
                 alert("Mapping procces successfully validated and saved");
-                navigate("/");
+                if(externalFlow && externalDatasetId){
+                  //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+                  //mappings y las métricas definidas
+                  console.log("External flow: ", externalFlow)
+                  navigate(`/DataQualityScreen/${externalDatasetId}`)
+                }
+                else
+                  navigate("/");
               } else {
                 alert("Error validating mapping, please check: " + message);
               }
@@ -310,12 +328,15 @@ export const Mapping = () => {
                   >
                     Validate & Save
                   </button>
-                  <button
+                  {!externalFlow ?
+                    <button
                     className="button success"
                     onClick={saveMappingsApiCall}
-                  >
-                    Save
-                  </button>
+                    >
+                      Save
+                    </button>
+                  : null
+                  }
                 </div>
               </div>
             </div>

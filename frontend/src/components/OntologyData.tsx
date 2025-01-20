@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./OntologyData.css";
 import { useDataContext } from "../context/context.tsx";
 import { OntoElement } from "../context/context.tsx";
@@ -55,6 +55,10 @@ const OntologyData: React.FC<{}> = () => {
       },
     },
   };
+
+  useEffect(() => {
+    
+  },[]);
 
   const handleClickOntoElem = (element: any, type: string) => {
     if (isMapping && type !== "object_property") {
@@ -267,7 +271,7 @@ const OntologyData: React.FC<{}> = () => {
                 <div className="ontolo-elems-container">
                   <div className="onto-elem">Object Properties:</div>
                   <div className="columns-container">
-                    {x?.object_properties?.map((objectProperty, index) => (
+                    {x?.object_properties?.map((objectProperty) => (
                       <div
                         className={`column-name-container ${
                           isMapping ? "is-mapping" : ""
@@ -280,7 +284,7 @@ const OntologyData: React.FC<{}> = () => {
                         onClick={() =>
                           handleClickOntoElem(objectProperty, "object_property")
                         }
-                        key={`${objectProperty?.iri}-${index}`}
+                        key={objectProperty?.iri}
                       >
                         <div className="line">
                           <IoRemoveOutline size={20} />

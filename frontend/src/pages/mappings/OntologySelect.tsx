@@ -2,14 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDataContext } from "../../context/context.tsx";
 import { useNavigate,useParams } from "react-router-dom";
 import { OntologyDataType } from "../../types";
-import { uploadOntology } from "../../services/mapsApi.ts";
+import { uploadOntology,getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 
 const OntologySelectScreen = () => {
   const [ontologies, setOntologies] = useState<
     Array<{ id: string; type: string; file: string; uri: string }>
   >([]);
-  const { ontologyDataContext, setontologyDataContext, setcurrentOntologyId } =
+  const { collectionPath,externalFlow,externalDatasetId,ontologyDataContext,
+     setontologyDataContext, setcurrentOntologyId,mappings, clearMappings,
+     setJsonSchemaContext } =
     useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [idSelectedOnto, setIdSelectedOnto] = useState<string>("");
@@ -20,8 +22,6 @@ const OntologySelectScreen = () => {
   const [uriValue, setUriValue] = useState<string>("");
   const { collection_name } = useParams<{ collection_name?: string }>();
   const [loading, setLoading] = useState<boolean>(false);
-
-  const { mappings, clearMappings } = useDataContext();
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedMethod(event.target.value);
@@ -49,6 +49,13 @@ const OntologySelectScreen = () => {
     //     }
     // }
     // retrieveOntologies();
+
+    if(externalFlow){
+      console.log("#External Flow en OntologySelect.tsx#");
+      console.log("Collection path: ", collectionPath);
+      console.log("External dataset id: ", externalDatasetId);
+    }
+
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +91,22 @@ const OntologySelectScreen = () => {
       const ontologyId = response?.data.ontologyData.ontology_id;
       setcurrentOntologyId(ontologyId);
       setontologyDataContext(ontologyData);
-      navigate("/SchemaSelect");
+      if(externalFlow){
+        //cargar schema a partir del collection path y el externalIdDataset
+        //navegar a MappingSelect
+        setLoading(true);
+        //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
+        const response = await getJsonSchema(collectionPath);//filepath
+        const schema = response?.data;
+        //setJsonSchema(schema);
+        console.log("##GENERATED SCHEMA##", schema);
+        setJsonSchemaContext(schema);//Check que se pase bien esto
+        setLoading(false);
+        navigate("/Mapping");
+        
+      }
+      else
+        navigate("/SchemaSelect");
     } catch (error) {
       console.log("error en handleSubmit: ", error);
     }

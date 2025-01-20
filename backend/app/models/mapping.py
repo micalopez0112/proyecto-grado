@@ -23,6 +23,7 @@ class MappingRequest(BaseModel):
     jsonSchema: Dict[str, Any] = Field(default=None) 
     # ver como se supone que tendría que venir esto!!
     documentStoragePath : str = Field(default=None)
+    jsonSchemaId: Optional[str] = Field(default=None)
 
 class PutMappingRequest(BaseModel):
     mapping_proccess_id: str = Field(default=None)

@@ -14,7 +14,13 @@ interface OntoSelect {
 interface Mapping {
   [jsonKey: string]: OntoElement[];
 }
-interface JsonSchemaContextProps {
+interface ContextProps {
+  // External flow
+  externalFlow: boolean;
+  setExternalFlow: (value: boolean) => void;
+  externalDatasetId: string;
+  setExternalDatasetId: (value: string) => void;
+  //
   currentOntologyId?: string;
   setcurrentOntologyId: (value: string | undefined) => void;
   jsonSchemaContext: any;
@@ -38,9 +44,12 @@ interface JsonSchemaContextProps {
   resetMappingState: () => void;
   mappingProcessId: string;
   setMappingProcessId: (value: string) => void;
+  outOfExternalFlow: () => void;
 }
 
-const Context = createContext<JsonSchemaContextProps>({
+const Context = createContext<ContextProps>({
+  externalFlow: false,
+  externalDatasetId: "",
   currentOntologyId: undefined,
   jsonSchemaContext: {},
   JsonElementSelected: {},
@@ -61,9 +70,14 @@ const Context = createContext<JsonSchemaContextProps>({
   setCollectionPath: () => {},
   resetMappingState: () => {},
   setMappingProcessId: () => {},
+  setExternalFlow: () => {},
+  setExternalDatasetId: () => {},
+  outOfExternalFlow: () => {},
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const [externalFlow, setExternalFlow] = useState<boolean>(false);
+  const [externalDatasetId, setExternalDatasetId] = useState<string>("");
   const [mappingProcessId, setMappingProcessId] = useState<string>("");
   const [JsonElementSelected, setJsonElementSelected] = useState<string>("");
   const [OntoElementSelected, setOntoElementSelected] = useState<OntoSelect>({
@@ -306,9 +320,20 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappingProcessId("");
   };
 
+  const outOfExternalFlow = () => {
+    setExternalDatasetId("");
+    setExternalFlow(false);
+    setCollectionPath("");
+  }
+
   return (
     <Context.Provider
       value={{
+        externalFlow,
+        setExternalFlow,
+        externalDatasetId,
+        setExternalDatasetId,
+        outOfExternalFlow,
         currentOntologyId,
         setcurrentOntologyId,
         jsonSchemaContext,

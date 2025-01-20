@@ -10,8 +10,9 @@ from app.models.mapping import MappingProcessDocument,DQModel, FieldNode
 from app.models.ontology import OntologyDocument
 from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
 from app.repositories import mapping_repo, metadata_repo
-from ..database import  neo4j_driver
+from ..database import  get_neo4j_driver
 
+neo4j_driver = get_neo4j_driver()
 SYNTCTATIC_ACCURACY = "syntactic_accuracy"
 QUALITY_RULES = [SYNTCTATIC_ACCURACY]
 
