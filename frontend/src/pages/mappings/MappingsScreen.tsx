@@ -57,8 +57,11 @@ const MappingsScreen = () => {
         const uri = credentials[0];
         const user = credentials[1];
         const password = credentials[2];
+        
+        setLoading(true);
         const responseUpdateNeo4j = await connectNeo4jDB(uri,user,password);
         if(responseUpdateNeo4j?.status === 200){
+          setLoading(false);
           //capaz cambiar a que si recien acá da 200 OK guardar en contexto
           toast.success("The external connection has been established");
           console.log("Response update neo4j en MappingsScreen.tsx: ",responseUpdateNeo4j);

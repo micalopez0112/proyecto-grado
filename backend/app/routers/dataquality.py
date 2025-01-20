@@ -9,6 +9,7 @@ from ..database import neo4j_conn
 
 from app.repositories import metadata_repo
 
+
 router = APIRouter()
 
 class ConnectionCredentials(BaseModel):
@@ -25,19 +26,12 @@ async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
         password = request.password
         print("Credentials: " + uri + " " + user + " " + password)
         neo4j_conn.connect(uri, user, password)
-        print("Neo4j connection updated successfully, just before execute_test_query")
+        metadata_repo.init_governance_zone();
+        print("Neo4j connection updated successfully, and the governance_zone initialized")
         return {"message": "Neo4j connection updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to update connection: {str(e)}")
 
-@router.post("/execute-test-query")
-async def execute_tq():
-    try:
-        result = metadata_repo.execute_test_query()
-        print("RESULT en ENDPOINT: ", result)
-        return {"message": "Test query executed successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to execute test query: {str(e)}")
 
 @router.post("/evaluate/{quality_rule}")
 async def evaluate_quality(quality_rule: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):

@@ -161,26 +161,6 @@ def init_governance_zone():
     save_quality_metrics()
     save_quality_methods()
     print("Finished init governance zone")
-    ##Need to save 2 metrics one for each granularity level
-    # query = """
-    #     MERGE (d:Dimension {id:'D1', name:'Accuracy'})
-    #     WITH d
-    #     MERGE (d)<-[:HAS_DIMENSION]-(f:Factor {id:'D1F1', name:'Syntactic Accuracy'})
-    #     WITH f
-    #     MERGE (f)<-[:HAS_FACTOR]-(m1:Metric {id:'D1F1M1', name:'Attribute Syntax', granularity:'Field Value',
-    #          description:'The attribute value in the document collection is compared against its corresponding value in the domain ontology', method:'def compare_onto_with_json_value(onto_prop_value, json_value) :\n
-    #                 if onto_prop_value == json_value:\n
-    #                     return 1\n
-    #                 else:\n
-    #                     return 0 '})
-    #     MERGE (f)<-[:HAS_FACTOR]-(m2:Metric {id:'D1F1M2', name:'Attribute Syntax', granularity:'Field',
-    #       description:'',
-    #       method:''})
-    # """
-    # with neo4j_driver.session() as session:
-    #     result = session.run(query=query)
-    #     print("Finished init governance zone")
-    #     return result.data()
 
 
 def save_quality_dimension():
