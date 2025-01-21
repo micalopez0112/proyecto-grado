@@ -440,6 +440,7 @@ def get_dq_models(onto_id, dataset_id, method_id):
         print("error in executing query: ", e)
         return None
 
+# get_applied_methods_by_dq_model returns the nodes that say in witch fields the method will be applied (kinda)
 def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     query = f"""
         MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
