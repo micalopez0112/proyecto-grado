@@ -34,11 +34,11 @@ async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
 
 
 @router.post("/evaluate/{quality_rule}")
-async def evaluate_quality(quality_rule: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
+async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
     print(f'request_mapping_body: {request_mapping_body}')
     try :
         context = StrategyContext()
-        context.select_strategy(quality_rule)
+        context.select_strategy(quality_rule, aggregation)
         
         result = await context.evaluate_quality(dq_model_id)
         return result
@@ -94,3 +94,13 @@ async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Mod
         response = MappingResponse(message=msg, status="error")
         return response
         
+# TODO: posible pero no se si quda aca. Me parece que esto ya no
+# @router.get("/metrics")
+# async def get_metrics():
+#     try :
+#         result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
+#         return result
+#     except Exception as e:
+#         msg = str(e)
+#         response = MappingResponse(message=msg, status="error")
+#         return response

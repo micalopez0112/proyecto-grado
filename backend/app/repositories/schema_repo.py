@@ -15,10 +15,12 @@ async def find_all_schemas():
 async def insert_schema(json_schema: Dict[str, Any], schema_id: str = None):
     # ver error sumar excpetion
     print("Se va a insertar el esquema con el id: ", schema_id)
-    if(schema_id is not None):
+    if(schema_id is not None and schema_id != ''):
+        print("SCHEMA ID IS NOT NULL", schema_id)
         json_schema['_id'] = ObjectId(schema_id)
         json_schema['is_external'] = True
     else:
+        print("## SCHEMA ID IS NULL ##", schema_id)
         json_schema['is_external'] = False
     schema_result = await jsonschemas_collection.insert_one(json_schema)
     schema_id = schema_result.inserted_id
