@@ -25,8 +25,12 @@ async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
         user = request.user
         password = request.password
         print("Credentials: " + uri + " " + user + " " + password)
-        neo4j_conn.connect(uri, user, password)
-        metadata_repo.init_governance_zone();
+        if(uri == "" and user == "" and password == ""):
+            print("Credentials are empty")
+            neo4j_conn.re_connect_local();
+        else:
+            neo4j_conn.connect(uri, user, password)
+            metadata_repo.init_governance_zone();
         print("Neo4j connection updated successfully, and the governance_zone initialized")
         return {"message": "Neo4j connection updated successfully"}
     except Exception as e:

@@ -51,6 +51,13 @@ class Neo4jConnection:
             self._driver.close()
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
         update_neo4j_driver(self._driver)
+
+    def re_connect_local(self):
+        if self._driver:
+            self._driver.close()
+        self._driver = GraphDatabase.driver(NEO_URI, auth=(NEO_USER, NEO_PASS))
+        update_neo4j_driver(self._driver)
+        print("Neo4j re-connected to local instance")
         
     def close(self):
         self._driver.close()
