@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { evaluateMapping, getMapping } from "../../../services/mapsApi.ts";
+import {
+  createDQModel,
+  evaluateMapping,
+  getMapping,
+} from "../../../services/mapsApi.ts";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -24,6 +28,8 @@ const SelectMappingsEvaluate = () => {
     mappingProcessId,
   } = useDataContext();
 
+  console.log(mappings);
+
   const location = useLocation();
   const mappingId = location.state?.mappingId;
   const ruleId = location.state?.ruleId;
@@ -45,14 +51,14 @@ const SelectMappingsEvaluate = () => {
   };
 
   useEffect(() => {
+    console.log("aaa", mappingProcessId);
     const getMappingData = async () => {
-      if (mappingId) {
+      if (mappingProcessId) {
         setLoading(true);
         try {
-          const response = await getMapping(mappingId);
+          const response = await getMapping(mappingProcessId);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
-            setMappingProcessId(mappingId);
             console.log("mappingProcessId: ", mappingProcessId);
             setMappings(mapping);
             setJsonSchemaContext(schema);
@@ -107,33 +113,35 @@ const SelectMappingsEvaluate = () => {
     }
   };
 
-  const handleEvaluateSelectedMappings = async () => {
-    console.log(selectedMappings);
+  const handleCreateDQModel = async () => {
     if (Object.keys(selectedMappings).length === 0) {
       toast.error("Please select at least one mapping to evaluate.");
-    } else {
-      setLoading(true);
-      try {
-        const response = await evaluateMapping(
-          SYNTCTATIC_ACCURACY,
-          mappingId,
-          selectedMappings
-        );
+      return;
+    }
 
-        if (response) {
-          navigate("/EvaluateMappings", {
-            state: {
-              selectedMappings,
-              ruleId,
-              validationResults: response.data,
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Error evaluating mappings:", error);
-      } finally {
-        setLoading(false);
+    setLoading(true);
+
+    try {
+      console.log("selectedMappings", selectedMappings);
+      const response = await createDQModel(mappingProcessId, selectedMappings);
+
+      if (response.status === 200) {
+        toast.success("DQ Model created successfully!");
+        navigate("/EvaluateMappings", {
+          state: {
+            selectedMappings,
+            ruleId,
+            validationResults: response.data,
+          },
+        });
+      } else {
+        toast.error("Failed to create DQ Model. Please try again.");
       }
+    } catch (error) {
+      console.error("Error creating DQ Model:", error);
+      toast.error("An error occurred. Please check the console for details.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -333,9 +341,9 @@ const SelectMappingsEvaluate = () => {
                 )}
                 <button
                   className="button success"
-                  onClick={handleEvaluateSelectedMappings}
+                  onClick={handleCreateDQModel}
                 >
-                  Evaluate Selected Mappings
+                  Create New DQ Model
                 </button>
               </div>
             )}

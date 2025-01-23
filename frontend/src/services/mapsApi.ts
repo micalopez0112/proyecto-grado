@@ -233,6 +233,31 @@ export const fetchDetailedEvaluationResults = async (
   }
 };
 
+export const getDQModels = async (
+  mappingProcessId: string,
+  qualityRuleId: string
+) => {
+  const response = await apiClient.get("/data-quality/models", {
+    params: {
+      mapping_process_id: mappingProcessId,
+      quality_method_id: qualityRuleId,
+    },
+  });
+  return response;
+};
+
+export const createDQModel = async (
+  mappingProcessId: string | null,
+  requestMappingBody: Record<string, any>
+) => {
+  const params = mappingProcessId
+    ? { mapping_process_id: mappingProcessId }
+    : {};
+  return await apiClient.post("/data-quality/model", requestMappingBody, {
+    params,
+  });
+};
+
 export const connectNeo4jDB = async (
   uri: string,
   user: string,
