@@ -49,6 +49,13 @@ async def save_ontology(type: str = Form(...), ontology_file: Optional[UploadFil
             print("Inserted correctly - Ontology ID:", ontology_id)
         else:
             print("Ontology already exists - Ontology ID:", ontology_id)
+        print("##Ontology just before build_ontology_response##: ", ontology)
+        print("##")
+        object_properties = ontology.object_properties()
+        print("##OP##:", object_properties)
+        for prop in object_properties:
+            print("##Object property ("+prop.name+") range: "+ str(prop.range)+" ##")
+        print("##")
         ontology_data = build_ontology_response(ontology, ontology_id)
         print("##return de la ontologia al hacer el upload (ver si hay object properties repetidas)##", ontology_data)
         return ontology_data
