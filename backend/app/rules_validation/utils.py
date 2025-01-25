@@ -173,3 +173,36 @@ def graph_generator(ontology_elements, map_proccess):
     except Exception as e:
         print("Exception during map graph generation ", e)
     return graph
+
+def is_duplicate_ontology(temp_ontology_path_or_uri):
+    """
+    Compara una ontología temporal con las ontologías cargadas en el mundo global.
+    """
+    temp_world = World()  # Crear un mundo temporal aislado
+    temp_ontology = temp_world.get_ontology(temp_ontology_path_or_uri).load()
+
+    # Obtener las ontologías existentes en el default_world
+    for onto in default_world.ontologies.values():
+        # Comparar clases
+        existing_classes = set((cls.name, cls.iri) for cls in onto.classes())
+        new_classes = set((cls.name, cls.iri) for cls in temp_ontology.classes())
+        print("Existing classes: ", existing_classes)
+        print("New classes: ", new_classes)
+
+        # Comparar propiedades de objeto
+        existing_object_properties = set((prop.name, prop.iri) for prop in onto.object_properties())
+        new_object_properties = set((prop.name, prop.iri) for prop in temp_ontology.object_properties())
+        print ("Existing object properties: ", existing_object_properties)
+        print ("New object properties: ", new_object_properties)
+        # Comparar propiedades de datos
+        existing_data_properties = set((prop.name, prop.iri) for prop in onto.data_properties())
+        new_data_properties = set((prop.name, prop.iri) for prop in temp_ontology.data_properties())
+        print("Existing data properties: ", existing_data_properties)
+        print("New data properties: ", new_data_properties)
+        # Si todos los elementos coinciden, la ontología es duplicada
+        if (existing_classes == new_classes and
+            existing_object_properties == new_object_properties and
+            existing_data_properties == new_data_properties):
+            return onto  # Retorna la ontología duplicada existente
+
+    return None  # No se encontró una ontología duplicada
