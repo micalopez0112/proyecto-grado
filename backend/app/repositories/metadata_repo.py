@@ -16,7 +16,9 @@ import os
 
 current_directory = Path(__file__).resolve().parent
 methodONEKey = "D1F1M1MD1"
-methodName = "Method1"
+# TODO: ajustar estos nombres
+method_name = "Method1"
+method_name_columna = "Method2"
 
 
 def execute_test_query():
@@ -74,12 +76,15 @@ def insert_field_value_measures(json_keys, value, id_document, json_schema_id):
     neo4j_driver.execute_query(insert_measure)
 
 # query to create the measure node with its value and corresponding related nodes: AppliedDqMethod and Field
-def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_model_id):
+def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_model_id, node_name):
+    applied_dq_method_name = f"applied_dq_f{node_name}" 
+    print("APPLIED DQ METHOD: ", applied_dq_method_name)
     current_datetime = datetime.now()
+    # ver que esta pasando porque me crea doble los resultados de las medidas
     insert_measure_query = f"""
         MATCH (fieldNode) 
         WHERE elementId(fieldNode) = '{field.element_id}' 
-        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod)<-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
+        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod {{name: '{applied_dq_method_name}'}})<-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
         CREATE (m:Measure)<-[:FieldValueMeasure {{id_document: {id_document}}}]-(fieldNode)
         CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
         SET m.measure = {value}, m.date= '{current_datetime}'
@@ -88,27 +93,56 @@ def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_mode
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(insert_measure_query)
 
-def insert_field_measures(json_keys, value, json_schema_id):
+def insert_field_measures(field: FieldNode, node_name, value, dq_model_id):
     # TODO: sumar method id como parametro y buscar el appliedDqMethod que este asociado a ese method id
-    first_key = json_keys[0]
-    graph_path = f""" 
-        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
-    """
-
-    for key in json_keys[1:]:
-        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
-        graph_path += node_path
-
-    latest_item = json_keys[-1]
+    # TODO: REVISAR porque creo que esta sumando doble
+    print("LAST ITEM: ", node_name)
     current_datetime = datetime.now()
 
-    insert_measure = f"""
-        CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
+    applied_dq_method_name = f"applied_dq_f{node_name}col" 
+    print("searching for: ",applied_dq_method_name )
+
+    query = f""" 
+        MATCH (fieldNode) 
+        WHERE elementId(fieldNode) = '{field.element_id}' 
+        MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod {{name: '{applied_dq_method_name}'}})
+        <-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
+        CREATE (fieldNode)-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
+        CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
     """
 
-    query = graph_path + insert_measure
+    # for key in json_keys[1:]:
+    #     node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+    #     graph_path += node_path
+
+   
+
+    print("About to make query: " + query)
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(query)
+
+# vieja implementacion
+# def insert_field_measures(json_keys, value, json_schema_id):
+#     # TODO: sumar method id como parametro y buscar el appliedDqMethod que este asociado a ese method id
+#     first_key = json_keys[0]
+#     graph_path = f""" 
+#         MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+#     """
+
+#     for key in json_keys[1:]:
+#         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+#         graph_path += node_path
+
+#     latest_item = json_keys[-1]
+#     current_datetime = datetime.now()
+
+#     insert_measure = f"""
+#         CREATE (f{latest_item})-[:FieldMeasure]->(m:Measure {{measure: {value}, date: '{current_datetime}'}})
+#     """
+
+#     query = graph_path + insert_measure
+#     neo4j_driver = get_neo4j_driver()
+#     neo4j_driver.execute_query(query)
 
 def insert_context_metadata(ontology_id, onto_name):
     query = f"""
@@ -329,14 +363,19 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
         print("last key:",key)
 
     applied_dq_name = "applied_dq_" + last_node
+    applied_dq_name_col = "applied_dq_" + last_node + "col" # ver de cambiar nombre, col queda mas entendible
     # TODO: ver si la relacion entre applied method y method queda hacia este lado o hacia el otro
     # quizas aca todo el app_dq_method: ... lo puedo cambiar por app_dq_method
     # (app_dq_method:AppliedDQMethod  {{name: '{applied_dq_name}'}}
     create_dq_method_q = f""" 
-        WITH collection, {last_node}, dq_model, dq_method
+        WITH collection, {last_node}, dq_model, dq_method, dq_method_col
         MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method:AppliedDQMethod 
         {{name: '{applied_dq_name}'}})
+        MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method_col:AppliedDQMethod 
+        {{name: '{applied_dq_name_col}'}})
         MERGE (dq_method)<-[:APPLIES_METHOD]-(app_dq_method)
+        MERGE (dq_method_col)<-[:APPLIES_METHOD]-(app_dq_method_col)
+        MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method_col)
         MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
     """
 
@@ -354,10 +393,14 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
     dq_model_name = "dq_model_" + str(timestamp_milliseconds)
-    # cambiar nombre de dq model
+    # Aca empieza la query de construccion, se matchean todos los nodos principales
+    # dq_method, contexto, collection, dq_model (el que se va a crear)
+    # tenemos dos dq_method, el de granularidad celda y el de granularidad columna
     # TODO cambiar dq_method por ID y no por nombre
+    # TODO: ver de donde sacamos "correctamnete" el method_name :(, aca esta harcodeado
     query = f""" 
-        MATCH (dq_method:Method {{name: '{methodName}'}})
+        MATCH (dq_method:Method {{name: '{method_name}'}})
+        MATCH (dq_method_col:Method {{name: '{method_name_columna}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
         MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}', mapping_process_id: '{mapping_process_id}'}})
@@ -374,7 +417,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
         print("attribute mapped: ", attribute)
         json_keys = find_json_keys(attribute)
         print("json keys: ", json_keys)
-        query += " WITH collection, dq_model, dq_method"
+        query += " WITH collection, dq_model, dq_method, dq_method_col"
         add_applied_method_query = get_last_node_in_nested_fields_query(json_schema_id,dq_model_id, json_keys)
         print("add_applied_method_query: ", add_applied_method_query)
         query += add_applied_method_query
