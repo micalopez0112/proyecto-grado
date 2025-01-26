@@ -19,6 +19,7 @@ async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str,
     return results
 
 
+# TODO: ver si mandamos los nombres de los metodos agregados por aca, de momento va a estar hardcodeado
 async def create_dq_model(mapping_process_id: str, mapped_entries: Dict[str, Any]):
     print("### Create dq model in metadata service ###")
     mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
