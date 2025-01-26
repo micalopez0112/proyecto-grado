@@ -95,7 +95,7 @@ def insert_field_value_measures_v2(field: FieldNode, value, id_document, dq_mode
 
 def insert_field_measures(field: FieldNode, node_name, value, dq_model_id):
     # TODO: sumar method id como parametro y buscar el appliedDqMethod que este asociado a ese method id
-    
+    # TODO: REVISAR porque creo que esta sumando doble
     print("LAST ITEM: ", node_name)
     current_datetime = datetime.now()
 
