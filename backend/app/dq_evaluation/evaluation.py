@@ -75,6 +75,7 @@ class SyntanticAccuracy(QualityMetric) :
         dq_model_id = self.dq_model_id
         ontology = await get_onto(self.mapping_process.ontologyId)
         jsonSchemaId = self.mapping_process.jsonSchemaId
+        
         print("## Evaluacion 4.1 - jsonSchemaId: ", jsonSchemaId) #self.mapping_elements)
         applied_to_fields = metadata_repo.get_applied_methods_by_dq_model(dq_model_id)
         mapping_elements = self.mapping_process.mapping
@@ -104,6 +105,7 @@ class SyntanticAccuracy(QualityMetric) :
         index = 1   # algo temporal
         field_measures = []
         json_keys = find_json_keys(json_mapped_key)
+        latest_item_node_name = json_keys[-1]
         print("## Evaluacion 4.5.3 - json keys", json_keys)
 
         # TODO: retomar y arreglar implementación del delete
@@ -140,7 +142,7 @@ class SyntanticAccuracy(QualityMetric) :
             field_measures.append(value)
 
             print("## Evaluacion 4.6 - insert value in neo4j", value, " ##")
-            metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id)
+            metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
             results_dicc[result_key] = value
 
         #almacena un FieldMeasure por corrida, asi manetemos el historicos del las corridas
@@ -148,7 +150,7 @@ class SyntanticAccuracy(QualityMetric) :
         if field_measures:
             aggregated_measure_value = self.calculate_aggregated_measure(field_measures)
             print("Aggregated", aggregated_measure_value,)
-            metadata_repo.insert_field_measures(json_keys, aggregated_measure_value, jsonSchemaId)
+            metadata_repo.insert_field_measures(field_to_evaluate, latest_item_node_name, aggregated_measure_value, dq_model_id)
 
         # ver: pero de alguna forma devolver solo el resultado agregado
         return aggregated_measure_value
