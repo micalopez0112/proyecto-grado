@@ -189,20 +189,25 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
 
 export const evaluateMapping = async (
   qualityRuleId: string,
-  mapping_pid: string | null,
+  aggregation: string,
+  dqModelId: string | null,
   body: any
 ) => {
   try {
-    const query = mapping_pid ? `?mapping_process_id=${mapping_pid}` : "";
+    const query = new URLSearchParams({
+      aggregation,
+      ...(dqModelId ? { dq_model_id: dqModelId } : {}),
+    }).toString();
 
     const response = await apiClient.post(
-      `/data-quality/evaluate/${qualityRuleId}${query}`,
+      `/data-quality/evaluate/${qualityRuleId}?${query}`,
       body
     );
 
     return response;
   } catch (error) {
     console.error("Error in call of evaluating mapping: ", error);
+    throw error;
   }
 };
 

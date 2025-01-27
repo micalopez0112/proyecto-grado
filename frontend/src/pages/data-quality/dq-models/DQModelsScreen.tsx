@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getDQModels } from "../../../services/mapsApi.ts";
+import { evaluateMapping, getDQModels } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DQModelsScreen.css";
 import { useDataContext } from "../../../context/context.tsx";
+
+import { SYNTCTATIC_ACCURACY, AGG_AVERAGE } from "../../../types/constants.ts";
 
 const DQModelsScreen = () => {
   const navigate = useNavigate();
@@ -41,11 +43,41 @@ const DQModelsScreen = () => {
   }, [location.state, mappingProcessId]);
 
   const handleSelectClick = () => {
-    navigate("/EvaluateMappings", {
-      state: {
-        state: { mappingId: selectedDQModel, ruleId: "D1F1M1MD1" },
-      },
+    navigate("/SelectMappingsValidate", {
+      state: { mappingId: mappingProcessId, ruleId: "" },
     });
+  };
+
+  const handleEvaluateClick = async () => {
+    console.log("bbb: ", mappingProcessId);
+    try {
+      const response = await evaluateMapping(
+        SYNTCTATIC_ACCURACY,
+        AGG_AVERAGE,
+        selectedDQModel,
+        {}
+      );
+      console.log(mappingProcessId);
+      console.log(response);
+      if (response) {
+        navigate("/EvaluateMappings", {
+          state: {
+            state: { mappingId: mappingProcessId, ruleId: "D1F1M1MD1" },
+          },
+        });
+        navigate("/EvaluateMappings", {
+          state: {
+            mappingId: mappingProcessId,
+            ruleId: "D1F1M1MD1",
+            validationResults: response.data,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error evaluating mappings:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +113,7 @@ const DQModelsScreen = () => {
             </button>
             <button
               className="select-button"
-              onClick={handleSelectClick}
+              onClick={handleEvaluateClick}
               disabled={!selectedDQModel}
               style={{
                 backgroundColor: selectedDQModel ? "#007bff" : "#ccc",

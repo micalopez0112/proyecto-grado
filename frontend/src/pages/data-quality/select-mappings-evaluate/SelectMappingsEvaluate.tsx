@@ -127,13 +127,7 @@ const SelectMappingsEvaluate = () => {
 
       if (response.status === 200) {
         toast.success("DQ Model created successfully!");
-        navigate("/EvaluateMappings", {
-          state: {
-            selectedMappings,
-            ruleId,
-            validationResults: response.data,
-          },
-        });
+        navigate("/DQModelsScreen", {});
       } else {
         toast.error("Failed to create DQ Model. Please try again.");
       }
@@ -342,6 +336,11 @@ const SelectMappingsEvaluate = () => {
                 <button
                   className="button success"
                   onClick={handleCreateDQModel}
+                  disabled={!selectedMappings}
+                  style={{
+                    backgroundColor: selectedMappings ? "#007bff" : "#ccc",
+                    cursor: selectedMappings ? "pointer" : "not-allowed",
+                  }}
                 >
                   Create New DQ Model
                 </button>
