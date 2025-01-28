@@ -99,7 +99,7 @@ def insert_field_measures(field: FieldNode, node_name, value, dq_model_id):
     print("LAST ITEM: ", node_name)
     current_datetime = datetime.now()
 
-    applied_dq_method_name = f"applied_dq_f{node_name}col" 
+    applied_dq_method_name = f"applied_dq_f{node_name}col" # TODO: agregar _col / o cambiar a _aggregated 
     print("searching for: ",applied_dq_method_name )
 
     query = f""" 
@@ -468,7 +468,7 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     query = f"""
         MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
         -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
-        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*]->(endNode) 
+        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
         RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
     """
     try:
