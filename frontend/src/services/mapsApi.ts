@@ -286,3 +286,15 @@ export const connectNeo4jDB = async (
     console.error("Error connecting to Neo4j database", error);
   }
 };
+
+export const getAppliedMethods = async (dqModelId: string) => {
+  try {
+    const response = await apiClient.get(`/data-quality/applied_methods`, {
+      params: { dq_model_id: dqModelId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching applied methods:", error);
+    throw error;
+  }
+};

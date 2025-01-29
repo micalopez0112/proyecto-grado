@@ -9,6 +9,7 @@ import "./DQModelsScreen.css";
 import { useDataContext } from "../../../context/context.tsx";
 
 import { SYNTCTATIC_ACCURACY, AGG_AVERAGE } from "../../../types/constants.ts";
+import DQModelCard from "../../../components/DQModelCard/DQModelCard.tsx";
 
 const DQModelsScreen = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const DQModelsScreen = () => {
       try {
         const response = await getDQModels(mappingProcessId, "D1F1M1MD1");
         console.log("API Response: ", response.data);
-        setDQModels(response.data); // Assuming response.data is an array
+        setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");
         console.error("Error fetching DQ models:", error);
@@ -90,7 +91,7 @@ const DQModelsScreen = () => {
           <div className="dq-models-container">
             {Object.entries(dqModels).length > 0 ? (
               Object.entries(dqModels).map(([id, name]) => (
-                <MappingCard
+                <DQModelCard
                   key={id}
                   id={id}
                   name={name}
@@ -100,7 +101,6 @@ const DQModelsScreen = () => {
                       selectedDQModel === id ? "#ffdc92" : "#fff",
                   }}
                   onClickCallback={() => setSelectedDQModel(id)}
-                  includeMappingInfo={true}
                 />
               ))
             ) : (

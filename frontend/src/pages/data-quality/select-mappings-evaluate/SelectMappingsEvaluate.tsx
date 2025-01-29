@@ -312,18 +312,30 @@ const SelectMappingsEvaluate = () => {
       ) : (
         <div className="container">
           <h1 className="title-section">
-            Select schema values to evaluate data
+            Select Schema Values to Create DQ Model
           </h1>
 
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
-                <button
-                  className="button select-all"
-                  onClick={handleSelectAllMappings}
-                >
-                  {allSelected ? "Deselect All" : "Select All"}
-                </button>
+                <div className="name-select">
+                  <div className="dq-model-name">
+                    <label>DQ Model Name</label>
+                    <input
+                      type="text"
+                      value={mappingName}
+                      onChange={(e) => setMappingName(e.target.value)}
+                    ></input>
+                  </div>
+
+                  <button
+                    className="button select-all"
+                    onClick={handleSelectAllMappings}
+                  >
+                    {allSelected ? "Deselect All" : "Select All"}
+                  </button>
+                </div>
+
                 {jsonSchemaContext && (
                   <div className="json-schema-container">
                     <div className="json-schema">
