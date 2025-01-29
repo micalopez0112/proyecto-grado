@@ -12,8 +12,7 @@ import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const SYNTCTATIC_ACCURACY = "syntactic_accuracy";
+import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ const SelectMappingsEvaluate = () => {
     setMappings,
     setJsonSchemaContext,
     jsonSchemaContext,
-    setMappingProcessId,
     mappingProcessId,
   } = useDataContext();
 
@@ -32,8 +30,7 @@ const SelectMappingsEvaluate = () => {
 
   const location = useLocation();
   const mappingId = location.state?.mappingId;
-  const ruleId = location.state?.ruleId;
-
+  const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
   const [mappingName, setMappingName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
     {}
@@ -124,10 +121,27 @@ const SelectMappingsEvaluate = () => {
     try {
       console.log("selectedMappings", selectedMappings);
       const response = await createDQModel(mappingProcessId, selectedMappings);
+      toast.success("DQ Model created successfully!");
 
       if (response.status === 200) {
-        toast.success("DQ Model created successfully!");
-        navigate("/DQModelsScreen", {});
+        if (evaluateAndCreate) {
+          const evaluationResponse = await evaluateMapping(
+            SYNTCTATIC_ACCURACY,
+            AGG_AVERAGE,
+            response.data.id
+          );
+          if (evaluationResponse) {
+            navigate("/EvaluateMappings", {
+              state: {
+                mappingId: mappingProcessId,
+                ruleId: "D1F1M1MD1",
+                validationResults: evaluationResponse.data,
+              },
+            });
+          }
+        } else {
+          navigate("/DQModelsScreen");
+        }
       } else {
         toast.error("Failed to create DQ Model. Please try again.");
       }
@@ -137,6 +151,11 @@ const SelectMappingsEvaluate = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCheckboxChange = (e) => {
+    let newValue = e.target.checked;
+    setEvaluateAndCreate(newValue);
   };
 
   const renderProperties = (
@@ -345,17 +364,28 @@ const SelectMappingsEvaluate = () => {
                     </div>
                   </div>
                 )}
-                <button
-                  className="button success"
-                  onClick={handleCreateDQModel}
-                  disabled={!selectedMappings}
-                  style={{
-                    backgroundColor: selectedMappings ? "#007bff" : "#ccc",
-                    cursor: selectedMappings ? "pointer" : "not-allowed",
-                  }}
-                >
-                  Create New DQ Model
-                </button>
+                <div className="actions">
+                  <button
+                    className="button success"
+                    onClick={handleCreateDQModel}
+                    disabled={!selectedMappings}
+                    style={{
+                      backgroundColor: selectedMappings ? "#007bff" : "#ccc",
+                      cursor: selectedMappings ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    Create New DQ Model
+                  </button>
+
+                  <label className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={evaluateAndCreate}
+                      onChange={handleCheckboxChange}
+                    />
+                    Evaluate and Create
+                  </label>
+                </div>
               </div>
             )}
           </div>

@@ -55,17 +55,11 @@ const DQModelsScreen = () => {
       const response = await evaluateMapping(
         SYNTCTATIC_ACCURACY,
         AGG_AVERAGE,
-        selectedDQModel,
-        {}
+        selectedDQModel
       );
       console.log(mappingProcessId);
       console.log(response);
       if (response) {
-        navigate("/EvaluateMappings", {
-          state: {
-            state: { mappingId: mappingProcessId, ruleId: "D1F1M1MD1" },
-          },
-        });
         navigate("/EvaluateMappings", {
           state: {
             mappingId: mappingProcessId,

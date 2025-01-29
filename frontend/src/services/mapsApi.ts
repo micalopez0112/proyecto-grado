@@ -190,8 +190,7 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
 export const evaluateMapping = async (
   qualityRuleId: string,
   aggregation: string,
-  dqModelId: string | null,
-  body: any
+  dqModelId: string | null
 ) => {
   try {
     const query = new URLSearchParams({
@@ -200,8 +199,7 @@ export const evaluateMapping = async (
     }).toString();
 
     const response = await apiClient.post(
-      `/data-quality/evaluate/${qualityRuleId}?${query}`,
-      body
+      `/data-quality/evaluate/${qualityRuleId}?${query}`
     );
 
     return response;
