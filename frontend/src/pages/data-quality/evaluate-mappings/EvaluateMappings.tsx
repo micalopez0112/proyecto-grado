@@ -22,8 +22,6 @@ const EvaluateMappings = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("aaa");
-    console.log(initialResults);
     if (Object.keys(initialResults).length > 0) {
       const transformedResults = Object.entries(initialResults).map(
         ([mappingName, score]) => ({

@@ -10,7 +10,7 @@ import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 
@@ -26,12 +26,9 @@ const SelectMappingsEvaluate = () => {
     mappingProcessId,
   } = useDataContext();
 
-  console.log(mappings);
-
   const location = useLocation();
   const mappingId = location.state?.mappingId;
   const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
-  const [mappingName, setMappingName] = useState<string>("");
   const [dqModelName, setdqModelName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
     {}
@@ -49,7 +46,6 @@ const SelectMappingsEvaluate = () => {
   };
 
   useEffect(() => {
-    console.log("aaa", mappingProcessId);
     const getMappingData = async () => {
       if (mappingProcessId) {
         setLoading(true);
@@ -57,12 +53,10 @@ const SelectMappingsEvaluate = () => {
           const response = await getMapping(mappingProcessId);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
-            console.log("mappingProcessId: ", mappingProcessId);
             setMappings(mapping);
             setJsonSchemaContext(schema);
             setcurrentOntologyId(ontology.ontology_id);
             setontologyDataContext(ontology);
-            setMappingName(mapping_name);
           }
         } catch (error) {
           console.error("Error in getMappingData", error);
@@ -120,7 +114,6 @@ const SelectMappingsEvaluate = () => {
     setLoading(true);
 
     try {
-      console.log("selectedMappings", selectedMappings);
       const response = await createDQModel(
         mappingProcessId,
         dqModelName,

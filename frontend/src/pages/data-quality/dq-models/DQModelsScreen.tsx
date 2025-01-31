@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { evaluateMapping, getDQModels } from "../../../services/mapsApi.ts";
-import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DQModelsScreen.css";
 import { useDataContext } from "../../../context/context.tsx";
@@ -15,10 +14,8 @@ const DQModelsScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dqModels, setDQModels] = useState<Record<string, string>>({});
-
   const [selectedDQModel, setSelectedDQModel] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
   const { mappingProcessId } = useDataContext();
 
   useEffect(() => {
@@ -30,7 +27,6 @@ const DQModelsScreen = () => {
       setLoading(true);
       try {
         const response = await getDQModels(mappingProcessId, "D1F1M1MD1");
-        console.log("API Response: ", response.data);
         setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");
@@ -50,7 +46,6 @@ const DQModelsScreen = () => {
   };
 
   const handleEvaluateClick = async () => {
-    console.log("bbb: ", mappingProcessId);
     try {
       const response = await evaluateMapping(
         SYNTCTATIC_ACCURACY,
@@ -58,8 +53,6 @@ const DQModelsScreen = () => {
         selectedDQModel,
         {}
       );
-      console.log(mappingProcessId);
-      console.log(response);
       if (response) {
         navigate("/EvaluateMappings", {
           state: {
