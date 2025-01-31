@@ -32,6 +32,7 @@ const SelectMappingsEvaluate = () => {
   const mappingId = location.state?.mappingId;
   const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
   const [mappingName, setMappingName] = useState<string>("");
+  const [dqModelName, setdqModelName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
     {}
   );
@@ -120,7 +121,11 @@ const SelectMappingsEvaluate = () => {
 
     try {
       console.log("selectedMappings", selectedMappings);
-      const response = await createDQModel(mappingProcessId, selectedMappings);
+      const response = await createDQModel(
+        mappingProcessId,
+        dqModelName,
+        selectedMappings
+      );
       toast.success("DQ Model created successfully!");
 
       if (response.status === 200) {
@@ -128,7 +133,8 @@ const SelectMappingsEvaluate = () => {
           const evaluationResponse = await evaluateMapping(
             SYNTCTATIC_ACCURACY,
             AGG_AVERAGE,
-            response.data.id
+            response.data.id,
+            {}
           );
           if (evaluationResponse) {
             navigate("/EvaluateMappings", {
@@ -342,8 +348,8 @@ const SelectMappingsEvaluate = () => {
                     <label>DQ Model Name</label>
                     <input
                       type="text"
-                      value={mappingName}
-                      onChange={(e) => setMappingName(e.target.value)}
+                      value={dqModelName}
+                      onChange={(e) => setdqModelName(e.target.value)}
                     ></input>
                   </div>
 

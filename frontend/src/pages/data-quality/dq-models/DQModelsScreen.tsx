@@ -55,7 +55,8 @@ const DQModelsScreen = () => {
       const response = await evaluateMapping(
         SYNTCTATIC_ACCURACY,
         AGG_AVERAGE,
-        selectedDQModel
+        selectedDQModel,
+        {}
       );
       console.log(mappingProcessId);
       console.log(response);

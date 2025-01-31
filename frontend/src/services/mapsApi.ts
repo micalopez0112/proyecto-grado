@@ -190,7 +190,8 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
 export const evaluateMapping = async (
   qualityRuleId: string,
   aggregation: string,
-  dqModelId: string | null
+  dqModelId: string | null,
+  body: any
 ) => {
   try {
     const query = new URLSearchParams({
@@ -199,7 +200,8 @@ export const evaluateMapping = async (
     }).toString();
 
     const response = await apiClient.post(
-      `/data-quality/evaluate/${qualityRuleId}?${query}`
+      `/data-quality/evaluate/${qualityRuleId}?${query}`,
+      body
     );
 
     return response;
@@ -251,12 +253,13 @@ export const getDQModels = async (
 
 export const createDQModel = async (
   mappingProcessId: string | null,
-  requestMappingBody: Record<string, any>
+  dqModelName: string,
+  body: any
 ) => {
   const params = mappingProcessId
-    ? { mapping_process_id: mappingProcessId }
+    ? { mapping_process_id: mappingProcessId, dq_model_name: dqModelName }
     : {};
-  return await apiClient.post("/data-quality/model", requestMappingBody, {
+  return await apiClient.post("/data-quality/model", body, {
     params,
   });
 };
