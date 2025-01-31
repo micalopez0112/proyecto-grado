@@ -392,7 +392,7 @@ def save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_
     json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
-    dq_model_name = "dq_model_" + str(timestamp_milliseconds)
+    # dq_model_name = "dq_model_" + str(timestamp_milliseconds)
     # Aca empieza la query de construccion, se matchean todos los nodos principales
     # dq_method, contexto, collection, dq_model (el que se va a crear)
     # tenemos dos dq_method, el de granularidad celda y el de granularidad columna
