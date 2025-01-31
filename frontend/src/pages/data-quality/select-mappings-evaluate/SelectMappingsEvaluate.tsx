@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { evaluateMapping, getMapping } from "../../../services/mapsApi.ts";
+import {
+  createDQModel,
+  evaluateMapping,
+  getMapping,
+} from "../../../services/mapsApi.ts";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { useDataContext } from "../../../context/context.tsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const SYNTCTATIC_ACCURACY = "syntactic_accuracy";
+import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -20,15 +23,13 @@ const SelectMappingsEvaluate = () => {
     setMappings,
     setJsonSchemaContext,
     jsonSchemaContext,
-    setMappingProcessId,
     mappingProcessId,
   } = useDataContext();
 
   const location = useLocation();
   const mappingId = location.state?.mappingId;
-  const ruleId = location.state?.ruleId;
-
-  const [mappingName, setMappingName] = useState<string>("");
+  const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
+  const [dqModelName, setdqModelName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
     {}
   );
@@ -46,19 +47,16 @@ const SelectMappingsEvaluate = () => {
 
   useEffect(() => {
     const getMappingData = async () => {
-      if (mappingId) {
+      if (mappingProcessId) {
         setLoading(true);
         try {
-          const response = await getMapping(mappingId);
+          const response = await getMapping(mappingProcessId);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
-            setMappingProcessId(mappingId);
-            console.log("mappingProcessId: ", mappingProcessId);
             setMappings(mapping);
             setJsonSchemaContext(schema);
             setcurrentOntologyId(ontology.ontology_id);
             setontologyDataContext(ontology);
-            setMappingName(mapping_name);
           }
         } catch (error) {
           console.error("Error in getMappingData", error);
@@ -107,34 +105,56 @@ const SelectMappingsEvaluate = () => {
     }
   };
 
-  const handleEvaluateSelectedMappings = async () => {
-    console.log(selectedMappings);
+  const handleCreateDQModel = async () => {
     if (Object.keys(selectedMappings).length === 0) {
       toast.error("Please select at least one mapping to evaluate.");
-    } else {
-      setLoading(true);
-      try {
-        const response = await evaluateMapping(
-          SYNTCTATIC_ACCURACY,
-          mappingId,
-          selectedMappings
-        );
-
-        if (response) {
-          navigate("/EvaluateMappings", {
-            state: {
-              selectedMappings,
-              ruleId,
-              validationResults: response.data,
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Error evaluating mappings:", error);
-      } finally {
-        setLoading(false);
-      }
+      return;
     }
+
+    setLoading(true);
+
+    try {
+      const response = await createDQModel(
+        mappingProcessId,
+        dqModelName,
+        selectedMappings
+      );
+      toast.success("DQ Model created successfully!");
+
+      if (response.status === 200) {
+        if (evaluateAndCreate) {
+          const evaluationResponse = await evaluateMapping(
+            SYNTCTATIC_ACCURACY,
+            AGG_AVERAGE,
+            response.data.id,
+            {}
+          );
+          if (evaluationResponse) {
+            navigate("/EvaluateMappings", {
+              state: {
+                mappingId: mappingProcessId,
+                ruleId: "D1F1M1MD1",
+                validationResults: evaluationResponse.data,
+              },
+            });
+          }
+        } else {
+          navigate("/DQModelsScreen");
+        }
+      } else {
+        toast.error("Failed to create DQ Model. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating DQ Model:", error);
+      toast.error("An error occurred. Please check the console for details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckboxChange = (e) => {
+    let newValue = e.target.checked;
+    setEvaluateAndCreate(newValue);
   };
 
   const renderProperties = (
@@ -310,18 +330,30 @@ const SelectMappingsEvaluate = () => {
       ) : (
         <div className="container">
           <h1 className="title-section">
-            Select schema values to evaluate data
+            Select Schema Values to Create DQ Model
           </h1>
 
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
-                <button
-                  className="button select-all"
-                  onClick={handleSelectAllMappings}
-                >
-                  {allSelected ? "Deselect All" : "Select All"}
-                </button>
+                <div className="name-select">
+                  <div className="dq-model-name">
+                    <label>DQ Model Name</label>
+                    <input
+                      type="text"
+                      value={dqModelName}
+                      onChange={(e) => setdqModelName(e.target.value)}
+                    ></input>
+                  </div>
+
+                  <button
+                    className="button select-all"
+                    onClick={handleSelectAllMappings}
+                  >
+                    {allSelected ? "Deselect All" : "Select All"}
+                  </button>
+                </div>
+
                 {jsonSchemaContext && (
                   <div className="json-schema-container">
                     <div className="json-schema">
@@ -331,12 +363,28 @@ const SelectMappingsEvaluate = () => {
                     </div>
                   </div>
                 )}
-                <button
-                  className="button success"
-                  onClick={handleEvaluateSelectedMappings}
-                >
-                  Evaluate Selected Mappings
-                </button>
+                <div className="actions">
+                  <button
+                    className="button success"
+                    onClick={handleCreateDQModel}
+                    disabled={!selectedMappings}
+                    style={{
+                      backgroundColor: selectedMappings ? "#007bff" : "#ccc",
+                      cursor: selectedMappings ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    Create New DQ Model
+                  </button>
+
+                  <label className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={evaluateAndCreate}
+                      onChange={handleCheckboxChange}
+                    />
+                    Evaluate and Create
+                  </label>
+                </div>
               </div>
             )}
           </div>

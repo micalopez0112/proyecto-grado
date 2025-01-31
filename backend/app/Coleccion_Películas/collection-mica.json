@@ -1,0 +1,394 @@
+[
+    {
+        "adult":false,
+        "backdropPath":"/5yw0HzeRLnzY2FmqKsMPuhklgZS.jpg",
+        "belongsToCollection":"None",
+        "budget":1500000,
+        "genres":[
+           {
+              "id":18,
+              "name":"Drama"
+           }
+        ],
+        "homepage":"",
+        "id":12086,
+        "imdbId":"tt0378284",
+        "originalLanguage":"es",
+        "originalTitle":"Machuca",
+        "overview":"Santiago, capital of Chile during the Marxist government of elected, highly controversial president Salvador Allende. Father McEnroe supports his leftist views by introducing a program at the prestigious \"collegio\" (Catholic prep school) St. Patrick to allow free admission of some proletarian kids. One of them is Pedro Machuca, slum-raised son of the cleaning lady in Gonzalo Infante\\'s liberal-bourgeois home. Yet the new classmates become buddies, paradoxically protesting together as Gonzalo gets adopted by Pedro\\'s slum family and gang. But the adults spoil that too, not in the least when general Pinochet\\'s coup ousts Allende, and supporters such as McEnroe.",
+        "popularity":7.466,
+        "posterPath":"/oBDAEhTLWwflrqRZMsrOisqkVSb.jpg",
+        "productionCompanies":[
+           {
+              "id":302,
+              "logoPath":"None",
+              "name":"Ibermedia",
+              "originCountry":""
+           },
+           {
+              "id":7680,
+              "logoPath":"/uGcInOaHyvFZ337T5OeQKKVjSCJ.png",
+              "name":"Tornasol Films",
+              "originCountry":"ES"
+           },
+           {
+              "id":9335,
+              "logoPath":"None",
+              "name":"Canal+ España",
+              "originCountry":"ES"
+           },
+           {
+              "id":21545,
+              "logoPath":"None",
+              "name":"Wood Producciones",
+              "originCountry":"CL"
+           },
+           {
+              "id":981,
+              "logoPath":"/pkrdO9ykplO4Zc8edikoSX5APUN.png",
+              "name":"TVE",
+              "originCountry":"ES"
+           }
+        ],
+        "productionCountries":[
+           {
+              "iso31661":"CL",
+              "name":"Chile"
+           },
+           {
+              "iso31661":"FR",
+              "name":"France"
+           },
+           {
+              "iso31661":"ES",
+              "name":"Spain"
+           },
+           {
+              "iso31661":"GB",
+              "name":"United Kingdom"
+           }
+        ],
+        "releaseDate":"2004-02-24",
+        "revenue":3187700,
+        "runtime":116,
+        "spokenLanguages":[
+           {
+              "iso6391":"en",
+              "name":"English"
+           },
+           {
+              "iso6391":"es",
+              "name":"Español"
+           }
+        ],
+        "status":"Released",
+        "tagline":"Two boys observe a political coup in their native Chile.",
+        "title":"Machuca",
+        "video":false,
+        "voteAverage":7.7,
+        "voteCount":81
+     },
+     {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 14,
+                "name": "Fantasy"
+            },
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 878,
+                "name": "Science Fiction"
+            }
+        ],
+        "homepage": "",
+        "id": 196648,
+        "imdb_id": "tt1736271",
+        "original_language": "fr",
+        "original_title": "L'aspirateur",
+        "overview": "In this funny picture we see the vacuum cleaner, the modern dust eradicator, performing some very droll tricks. As soon as the fellow turns on the air then the fun begins. It is all accomplished through some clever trick photography. First we see two attendants start out to do a cleaning job, and while they stop to take some refreshments, two men, who happen to be passing, take the machine and start down the sheet to have some fun. They meet a woman with a dog on a leash, and at a turn of the wheel, the dog and its mistress are quickly drawn into the spout. Next a nursemaid comes sauntering down the street, and when they level the spout at her she meets the same fate. A girl and her lover are the next to disappear off the face of the earth, and still they go along, looking for more victims. (Moving Picture World)",
+        "popularity": 0.6,
+        "poster_path": null,
+        "production_companies": [
+            {
+                "id": 21594,
+                "logo_path": null,
+                "name": "Pathé Frères",
+                "origin_country": "FR"
+            }
+        ],
+        "production_countries": [
+            {
+                "iso_3166_1": "FR",
+                "name": "France"
+            }
+        ],
+        "release_date": "1908-01-01",
+        "revenue": 0,
+        "runtime": 4,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "The Vacuum Cleaner",
+        "video": false,
+        "vote_average": 4.0,
+        "vote_count": 3
+    },
+    {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 10749,
+                "name": "Romance"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            }
+        ],
+        "homepage": "",
+        "id": 190956,
+        "imdb_id": "tt0201578",
+        "original_language": "ru",
+        "original_title": "Драма в таборе подмосковных цыган",
+        "overview": "Two gypsy lovers sneak away from camp at night. The man proposes, the woman refuses. He then murders her with a knife. The body is immediately discovered. The distraught man then leaps off a cliff to the rocks below.",
+        "popularity": 0.6,
+        "poster_path": null,
+        "production_companies": [
+            {
+                "id": 24060,
+                "logo_path": null,
+                "name": "Khanzhonkov",
+                "origin_country": "RU"
+            }
+        ],
+        "production_countries": [
+            {
+                "iso_3166_1": "RU",
+                "name": "Russia"
+            }
+        ],
+        "release_date": "1908-12-20",
+        "revenue": 0,
+        "runtime": 2,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "Drama in a Gypsy Camp Near Moscow",
+        "video": false,
+        "vote_average": 5.5,
+        "vote_count": 2
+    },
+    {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 99,
+                "name": "Documentary"
+            }
+        ],
+        "homepage": "",
+        "id": 104378,
+        "imdb_id": "tt0124148",
+        "original_language": "en",
+        "original_title": "A Study in Choreography for Camera",
+        "overview": "Maya Deren’s shortest, two-minute A Study in Choreography for Camera seems like an exercise piece to capture a dancer’s movement on celluloid, which later on developed into her masterpieces such as Ritual in Transfigured Time and Meditation on Violence.",
+        "popularity": 2.943,
+        "poster_path": "/9T4zoT4QHTicz39EOiYccqnbMEo.jpg",
+        "production_companies": [],
+        "production_countries": [
+            {
+                "iso_3166_1": "US",
+                "name": "United States of America"
+            }
+        ],
+        "release_date": "1945-10-17",
+        "revenue": 0,
+        "runtime": 2,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "A Study in Choreography for Camera",
+        "video": false,
+        "vote_average": 5.7,
+        "vote_count": 33
+    },
+    {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 14,
+                "name": "Fantasy"
+            }
+        ],
+        "homepage": "",
+        "id": 195292,
+        "imdb_id": "tt0000264",
+        "original_language": "en",
+        "original_title": "Évocation spirite",
+        "overview": "A bearded man hangs up a wreath and, like any good magician, waves his hands inside of it and under it to show us it's only a wreath…",
+        "popularity": 1.503,
+        "poster_path": null,
+        "production_companies": [
+            {
+                "id": 7159,
+                "logo_path": null,
+                "name": "Star-Film",
+                "origin_country": ""
+            }
+        ],
+        "production_countries": [
+            {
+                "iso_3166_1": "FR",
+                "name": "France"
+            }
+        ],
+        "release_date": "1899-05-20",
+        "revenue": 0,
+        "runtime": 1,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "Summoning the Spirits",
+        "video": false,
+        "vote_average": 5.2,
+        "vote_count": 14
+    },
+    {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 36,
+                "name": "History"
+            }
+        ],
+        "homepage": "",
+        "id": 185220,
+        "imdb_id": "tt0258103",
+        "original_language": "fr",
+        "original_title": "La révolution en Russie",
+        "overview": "A dramatization of the uprising in Odessa, Russia in 1905: A ship's crew, tired of being mistreated, mutinies and takes over their ship. When they reach land, a sailor who died during the mutiny is made a martyr, inspiring an uprising in the city. Then the authorities decide to repress the revolt with a brutal show of force.",
+        "popularity": 1.663,
+        "poster_path": null,
+        "production_companies": [
+            {
+                "id": 21594,
+                "logo_path": null,
+                "name": "Pathé Frères",
+                "origin_country": "FR"
+            }
+        ],
+        "production_countries": [
+            {
+                "iso_3166_1": "FR",
+                "name": "France"
+            }
+        ],
+        "release_date": "1906-03-31",
+        "revenue": 0,
+        "runtime": 4,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "Revolution in Russia",
+        "video": false,
+        "vote_average": 5.2,
+        "vote_count": 6
+    },
+    {
+        "adult": false,
+        "backdrop_path": null,
+        "belongs_to_collection": null,
+        "budget": 0,
+        "genres": [
+            {
+                "id": 10402,
+                "name": "Music"
+            }
+        ],
+        "homepage": "",
+        "id": 215056,
+        "imdb_id": "tt2649086",
+        "original_language": "en",
+        "original_title": "Ensemble for Somnambulists",
+        "overview": "Ensemble for Somnambulists was a film Maya Deren made while teaching a workshop at the Toronto Film Society. It was never completed, and is officially \"unpublished,\" but this title has been restored and it screens occasionally along with her other films. It is sort of a preliminary sketch for The Very Eye of Night.  ~ David Lewis, Rovi",
+        "popularity": 0.6,
+        "poster_path": "/77OxmScj6KX9ue0ie3hT8fAM7VD.jpg",
+        "production_companies": [
+            {
+                "id": 16289,
+                "logo_path": null,
+                "name": "Toronto Film Society Workshop",
+                "origin_country": ""
+            }
+        ],
+        "production_countries": [
+            {
+                "iso_3166_1": "US",
+                "name": "United States of America"
+            }
+        ],
+        "release_date": "1951-01-01",
+        "revenue": 0,
+        "runtime": 6,
+        "spoken_languages": [
+            {
+                "iso_639_1": "xx",
+                "name": "No Language"
+            }
+        ],
+        "status": "Released",
+        "tagline": "",
+        "title": "Ensemble for Somnambulists",
+        "video": false,
+        "vote_average": 5.3,
+        "vote_count": 8
+    }
+]

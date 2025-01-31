@@ -6,6 +6,7 @@ import { getDatasetMappings } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
+import { useDataContext } from "../../../context/context.tsx";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ const DataQualityScreen = () => {
     schema: string;
     ontology: string;
   }>(null);
+
+  const { setMappingProcessId } = useDataContext();
 
   useEffect(() => {
     if (idDataset && mappings.length === 0) {
@@ -54,7 +57,8 @@ const DataQualityScreen = () => {
       toast.error("Please select a set of mappings and a quality rule.");
       return;
     }
-    navigate("/SelectMappingsValidate", {
+    setMappingProcessId(selectedMappingId);
+    navigate("/DQModelsScreen", {
       state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
     });
   };
