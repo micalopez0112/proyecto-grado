@@ -56,5 +56,24 @@
 
 .name-select {
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
+  width: 93%;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 20px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: #007bff;
 }

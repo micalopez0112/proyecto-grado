@@ -332,28 +332,27 @@ const SelectMappingsEvaluate = () => {
           <h1 className="title-section">
             Select Schema Values to Create DQ Model
           </h1>
+          <div className="name-select">
+            <div className="dq-model-name">
+              <label>DQ Model Name</label>
+              <input
+                type="text"
+                value={dqModelName}
+                onChange={(e) => setdqModelName(e.target.value)}
+              ></input>
+            </div>
+
+            <button
+              className="button select-all"
+              onClick={handleSelectAllMappings}
+            >
+              {allSelected ? "Deselect All" : "Select All"}
+            </button>
+          </div>
 
           <div className="select-mappings-container">
             {mappings && (
               <div className="mappings">
-                <div className="name-select">
-                  <div className="dq-model-name">
-                    <label>DQ Model Name</label>
-                    <input
-                      type="text"
-                      value={dqModelName}
-                      onChange={(e) => setdqModelName(e.target.value)}
-                    ></input>
-                  </div>
-
-                  <button
-                    className="button select-all"
-                    onClick={handleSelectAllMappings}
-                  >
-                    {allSelected ? "Deselect All" : "Select All"}
-                  </button>
-                </div>
-
                 {jsonSchemaContext && (
                   <div className="json-schema-container">
                     <div className="json-schema">
@@ -363,30 +362,40 @@ const SelectMappingsEvaluate = () => {
                     </div>
                   </div>
                 )}
-                <div className="actions">
-                  <button
-                    className="button success"
-                    onClick={handleCreateDQModel}
-                    disabled={!selectedMappings}
-                    style={{
-                      backgroundColor: selectedMappings ? "#007bff" : "#ccc",
-                      cursor: selectedMappings ? "pointer" : "not-allowed",
-                    }}
-                  >
-                    Create New DQ Model
-                  </button>
-
-                  <label className="checkbox-container">
-                    <input
-                      type="checkbox"
-                      checked={evaluateAndCreate}
-                      onChange={handleCheckboxChange}
-                    />
-                    Evaluate and Create
-                  </label>
-                </div>
               </div>
             )}
+          </div>
+          <div className="actions">
+            <button
+              className="button success"
+              onClick={handleCreateDQModel}
+              disabled={
+                !(
+                  dqModelName.trim() && Object.keys(selectedMappings).length > 0
+                )
+              }
+              style={{
+                backgroundColor:
+                  dqModelName.trim() && Object.keys(selectedMappings).length > 0
+                    ? "#007bff"
+                    : "#ccc",
+                cursor:
+                  dqModelName.trim() && Object.keys(selectedMappings).length > 0
+                    ? "pointer"
+                    : "not-allowed",
+              }}
+            >
+              Create New DQ Model
+            </button>
+
+            <label className="checkbox-container">
+              Evaluate and Create
+              <input
+                type="checkbox"
+                checked={evaluateAndCreate}
+                onChange={handleCheckboxChange}
+              />
+            </label>
           </div>
         </div>
       )}

@@ -99,7 +99,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
+
 .key-title {
   font-size: 12px;
   color: #979797;
@@ -109,6 +111,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 .element-title {
   font-size: 12px;
