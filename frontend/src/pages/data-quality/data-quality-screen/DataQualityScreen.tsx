@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { getDatasetMappings } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
@@ -142,6 +141,7 @@ const DataQualityScreen = () => {
               <button onClick={() => setMappingDetails(null)}>Close</button>
             </div>
           )}
+          <ToastContainer />
         </div>
       )}
     </>

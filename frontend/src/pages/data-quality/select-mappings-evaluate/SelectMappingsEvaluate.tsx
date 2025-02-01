@@ -11,7 +11,6 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 
 const SelectMappingsEvaluate = () => {
@@ -111,8 +110,6 @@ const SelectMappingsEvaluate = () => {
       return;
     }
 
-    console.log("evaluate value:", evaluateAndCreate);
-
     setLoading(true);
 
     try {
@@ -121,8 +118,6 @@ const SelectMappingsEvaluate = () => {
         dqModelName,
         selectedMappings
       );
-      console.log("response:", response.data);
-      toast.success("DQ Model created successfully!");
       if (response.status === 200) {
         if (evaluateAndCreate) {
           const evaluationResponse = await evaluateMapping(

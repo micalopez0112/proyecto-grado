@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { evaluateMapping, getDQModels } from "../../../services/mapsApi.ts";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DQModelsScreen.css";
@@ -47,6 +46,7 @@ const DQModelsScreen = () => {
 
   const handleEvaluateClick = async () => {
     try {
+      setLoading(true);
       const response = await evaluateMapping(
         SYNTCTATIC_ACCURACY,
         AGG_AVERAGE,
@@ -111,9 +111,9 @@ const DQModelsScreen = () => {
               Evaluate
             </button>
           </div>
+          <ToastContainer />
         </div>
       )}
-      <ToastContainer />
     </>
   );
 };
