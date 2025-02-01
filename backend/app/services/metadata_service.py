@@ -27,6 +27,7 @@ async def create_dq_model(mapping_process_id: str,dq_model_name:str, mapped_entr
     # creo que el contexto a esta altura ya esta creado
     print("### Got mapping proccess document ###", mapping_process_docu)
     result = metadata_repo.save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_docu, mapped_entries.keys())
+    return result
 
 async def get_applied_methods_by_dq_model(dq_model_id: str):
     dq_methods = metadata_repo.get_applied_methods_by_dq_model(dq_model_id)

@@ -111,6 +111,8 @@ const SelectMappingsEvaluate = () => {
       return;
     }
 
+    console.log("evaluate value:", evaluateAndCreate);
+
     setLoading(true);
 
     try {
@@ -119,14 +121,14 @@ const SelectMappingsEvaluate = () => {
         dqModelName,
         selectedMappings
       );
+      console.log("response:", response.data);
       toast.success("DQ Model created successfully!");
-
       if (response.status === 200) {
         if (evaluateAndCreate) {
           const evaluationResponse = await evaluateMapping(
             SYNTCTATIC_ACCURACY,
             AGG_AVERAGE,
-            response.data.id,
+            response.data,
             {}
           );
           if (evaluationResponse) {
@@ -152,9 +154,8 @@ const SelectMappingsEvaluate = () => {
     }
   };
 
-  const handleCheckboxChange = (e) => {
-    let newValue = e.target.checked;
-    setEvaluateAndCreate(newValue);
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEvaluateAndCreate(e.target.checked);
   };
 
   const renderProperties = (

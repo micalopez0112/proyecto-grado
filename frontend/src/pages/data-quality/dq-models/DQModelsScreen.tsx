@@ -14,7 +14,7 @@ const DQModelsScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dqModels, setDQModels] = useState<Record<string, string>>({});
-  const [selectedDQModel, setSelectedDQModel] = useState("");
+  const [selectedDQModelId, setSelectedDQModelId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const { mappingProcessId } = useDataContext();
 
@@ -50,7 +50,7 @@ const DQModelsScreen = () => {
       const response = await evaluateMapping(
         SYNTCTATIC_ACCURACY,
         AGG_AVERAGE,
-        selectedDQModel,
+        selectedDQModelId,
         {}
       );
       if (response) {
@@ -86,9 +86,9 @@ const DQModelsScreen = () => {
                   style={{
                     ...styles.mappingCard,
                     backgroundColor:
-                      selectedDQModel === id ? "#ffdc92" : "#fff",
+                      selectedDQModelId === id ? "#ffdc92" : "#fff",
                   }}
-                  onClickCallback={() => setSelectedDQModel(id)}
+                  onClickCallback={() => setSelectedDQModelId(id)}
                 />
               ))
             ) : (
@@ -102,10 +102,10 @@ const DQModelsScreen = () => {
             <button
               className="select-button"
               onClick={handleEvaluateClick}
-              disabled={!selectedDQModel}
+              disabled={!selectedDQModelId}
               style={{
-                backgroundColor: selectedDQModel ? "#007bff" : "#ccc",
-                cursor: selectedDQModel ? "pointer" : "not-allowed",
+                backgroundColor: selectedDQModelId ? "#007bff" : "#ccc",
+                cursor: selectedDQModelId ? "pointer" : "not-allowed",
               }}
             >
               Evaluate
