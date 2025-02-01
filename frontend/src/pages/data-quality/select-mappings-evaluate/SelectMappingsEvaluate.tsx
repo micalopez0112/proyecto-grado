@@ -378,7 +378,7 @@ const SelectMappingsEvaluate = () => {
               style={{
                 backgroundColor:
                   dqModelName.trim() && Object.keys(selectedMappings).length > 0
-                    ? "#007bff"
+                    ? "#41a339"
                     : "#ccc",
                 cursor:
                   dqModelName.trim() && Object.keys(selectedMappings).length > 0

@@ -104,7 +104,7 @@ const DQModelsScreen = () => {
               onClick={handleEvaluateClick}
               disabled={!selectedDQModelId}
               style={{
-                backgroundColor: selectedDQModelId ? "#007bff" : "#ccc",
+                backgroundColor: selectedDQModelId ? "#41a339" : "#ccc",
                 cursor: selectedDQModelId ? "pointer" : "not-allowed",
               }}
             >
