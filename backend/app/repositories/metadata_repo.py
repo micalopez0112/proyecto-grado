@@ -427,6 +427,7 @@ def save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_
     try:
         neo4j_driver = get_neo4j_driver()
         neo4j_driver.execute_query(query)
+        return dq_model_id
     except Exception as e:
         print("error in executing query: ", e)
         return None
