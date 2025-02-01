@@ -390,7 +390,7 @@ const SelectMappingsEvaluate = () => {
             </button>
 
             <label className="checkbox-container">
-              Evaluate and Create
+              Evaluate
               <input
                 type="checkbox"
                 checked={evaluateAndCreate}
