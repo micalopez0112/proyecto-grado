@@ -16,6 +16,8 @@ import Navbar from "./components/Navbar/Navbar.tsx";
 import EvaluateMappings from "./pages/data-quality/evaluate-mappings/EvaluateMappings.tsx";
 import DatasetsScreen from "./pages/data-quality/datasets-screen/DatasetsScreen.tsx";
 import DQModelsScreen from "./pages/data-quality/dq-models/DQModelsScreen.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRouteComponent.tsx";
+import UnauthorizedPage from "./components/ProtectedRoute/Unauthorized.tsx";
 
 function App() {
   return (
@@ -23,7 +25,13 @@ function App() {
       <Navbar />
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<HomeScreen />} />
+
+        <Route path="/Unauthorized" element={<UnauthorizedPage />} />
+
+        <Route path="/" element={<ProtectedRoute fallbackRoute="/Unauthorized" />}>
+          <Route path="" element={<HomeScreen />} />
+        </Route>
+        
         <Route path="/MappingsScreen" element={<MappingsScreen />} />
         <Route
           path="/DataQualityScreen/:idDataset"
