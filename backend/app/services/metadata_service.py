@@ -1,9 +1,11 @@
 
 
 from app.repositories import mapping_repo, metadata_repo
-from app.services import schema_service, mapping_service
+
+from app.repositories.metadata_repo import ParamRepoCrateDQModel 
 from app.dq_evaluation.evaluation import find_json_keys
 
+from pydantic import BaseModel
 from bson import ObjectId
 from typing import Dict, Any
 
@@ -18,15 +20,25 @@ async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str,
     #     raise ValueError(f"Invalid JSON key: {json_key}")
     return results
 
+class ParamCrateDQModel(BaseModel):
+    mapping_process_id : str = None
+    dq_model_name : str = None
+    dq_method_id : str = None
+    dq_aggregated_method_id : str = None
 
 # TODO: ver si mandamos los nombres de los metodos agregados por aca, de momento va a estar hardcodeado
-async def create_dq_model(mapping_process_id: str,dq_model_name:str, mapped_entries: Dict[str, Any]):
+# create_dq_model(mapping_process_id: str,dq_model_name:str, mapped_entries: Dict[str, Any]):
+async def create_dq_model(create_dq_params: ParamCrateDQModel, mapped_entries: Dict[str, Any]):
     print("### Create dq model in metadata service ###")
-    mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
+    mapping_process_docu = await mapping_repo.find_mapping_process_by_id(create_dq_params.mapping_process_id)
     # la ontología ya va a etsar creada y creo que el dataset tambien
     # creo que el contexto a esta altura ya esta creado
     print("### Got mapping proccess document ###", mapping_process_docu)
-    result = metadata_repo.save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_docu, mapped_entries.keys())
+    save_dq_model_params = ParamRepoCrateDQModel(mapping_process_id=create_dq_params.mapping_process_id, dq_model_name=create_dq_params.dq_model_name, 
+                                                dq_method_id=create_dq_params.dq_method_id, mapping_process_docu=mapping_process_docu, 
+                                                dq_aggregated_method_id=create_dq_params.dq_aggregated_method_id, 
+                                                mapped_entries=mapped_entries.keys())
+    result = metadata_repo.save_data_quality_modedl(save_dq_model_params)
     return result
 
 async def get_applied_methods_by_dq_model(dq_model_id: str):

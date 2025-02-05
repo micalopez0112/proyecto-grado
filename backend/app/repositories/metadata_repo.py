@@ -4,10 +4,11 @@ import uuid
 import time
 
 from ..database  import neo4j_conn
-from app.models.mapping import DqResult, FieldNode
+from app.models.mapping import DqResult, FieldNode,MappingProcessDocument
 from app.dq_evaluation.evaluation import find_json_keys
 from ..database import get_neo4j_driver
 
+from pydantic import BaseModel
 import pandas as pd
 from pathlib import Path
 from unidecode import unidecode
@@ -383,11 +384,23 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
     print("builded query: ", graph_path)
     return graph_path
 
+class ParamRepoCrateDQModel(BaseModel):
+    mapping_process_id : str = None
+    dq_model_name : str = None
+    dq_method_id : str = None
+    mapping_process_docu: MappingProcessDocument # ver si funciona
+    dq_aggregated_method_id : str = None
+    mapped_entries: List[str]
+    
+
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
 # CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
 # {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
-def save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_docu, mapped_entries: List[str]):
+# save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_docu, mapped_entries: List[str]):
+def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
     print("### Starting save data quality model process in neo4j ###")
+    print("### Model dq entries : ###", save_dq_params.mapped_entries)
+    mapping_process_docu = save_dq_params.mapping_process_docu
     ontology_id = mapping_process_docu.ontologyId
     json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
@@ -398,22 +411,23 @@ def save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_
     # tenemos dos dq_method, el de granularidad celda y el de granularidad columna
     # TODO cambiar dq_method por ID y no por nombre
     # TODO: ver de donde sacamos "correctamnete" el method_name :(, aca esta harcodeado
+    # ver si cambiamos el method_name por el id?
+    print(" ## METHOD ID: ", save_dq_params.dq_method_id)
+    print(" ## METHOD ID AGG: ", save_dq_params.dq_aggregated_method_id)
     query = f""" 
-        MATCH (dq_method:Method {{name: '{method_name}'}})
-        MATCH (dq_method_col:Method {{name: '{method_name_columna}'}})
+        MATCH (dq_method:Method {{id: '{save_dq_params.dq_method_id}'}})
+        MATCH (dq_method_col:Method {{id: '{save_dq_params.dq_aggregated_method_id}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-        MERGE (dq_model:DQModel  {{name: '{dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{mapping_process_id}'}})
+        MERGE (dq_model:DQModel  {{name: '{save_dq_params.dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{save_dq_params.mapping_process_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
     """
     
-    # ver si agrego nombres
     # en mapped_entries tengo:
     #{rootObject-imdbId_key#string: [{name: "sameAs", iri: "http://schema.org/sameAs"}]}
-    attributes_mapped = mapped_entries
+    attributes_mapped = save_dq_params.mapped_entries
     for attribute in attributes_mapped:
-        # contacto-street
         print("attribute mapped: ", attribute)
         json_keys = find_json_keys(attribute)
         print("json keys: ", json_keys)
