@@ -386,13 +386,13 @@ def get_last_node_in_nested_fields_query(json_schema_id: str, dq_model_id: str, 
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
 # CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
 # {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
-def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_entries: List[str]):
+def save_data_quality_modedl(mapping_process_id, dq_model_name, mapping_process_docu, mapped_entries: List[str]):
     print("### Starting save data quality model process in neo4j ###")
     ontology_id = mapping_process_docu.ontologyId
     json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
-    dq_model_name = "dq_model_" + str(timestamp_milliseconds)
+    # dq_model_name = "dq_model_" + str(timestamp_milliseconds)
     # Aca empieza la query de construccion, se matchean todos los nodos principales
     # dq_method, contexto, collection, dq_model (el que se va a crear)
     # tenemos dos dq_method, el de granularidad celda y el de granularidad columna
@@ -403,7 +403,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
         MATCH (dq_method_col:Method {{name: '{method_name_columna}'}})
         MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
         MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-        MERGE (dq_model:DQModel  {{name: '{timestamp_milliseconds}', id: '{dq_model_id}', mapping_process_id: '{mapping_process_id}'}})
+        MERGE (dq_model:DQModel  {{name: '{dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{mapping_process_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
     """
@@ -427,6 +427,7 @@ def save_data_quality_modedl(mapping_process_id, mapping_process_docu, mapped_en
     try:
         neo4j_driver = get_neo4j_driver()
         neo4j_driver.execute_query(query)
+        return dq_model_id
     except Exception as e:
         print("error in executing query: ", e)
         return None
@@ -471,6 +472,7 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
         RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
     """
+    print(f"## {query}")
     try:
         neo4j_driver = get_neo4j_driver()
         records, _, _ = neo4j_driver.execute_query(query)

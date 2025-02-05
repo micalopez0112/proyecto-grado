@@ -189,20 +189,25 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
 
 export const evaluateMapping = async (
   qualityRuleId: string,
-  mapping_pid: string | null,
+  aggregation: string,
+  dqModelId: string | null,
   body: any
 ) => {
   try {
-    const query = mapping_pid ? `?mapping_process_id=${mapping_pid}` : "";
+    const query = new URLSearchParams({
+      aggregation,
+      ...(dqModelId ? { dq_model_id: dqModelId } : {}),
+    }).toString();
 
     const response = await apiClient.post(
-      `/data-quality/evaluate/${qualityRuleId}${query}`,
+      `/data-quality/evaluate/${qualityRuleId}?${query}`,
       body
     );
 
     return response;
   } catch (error) {
     console.error("Error in call of evaluating mapping: ", error);
+    throw error;
   }
 };
 
@@ -233,6 +238,32 @@ export const fetchDetailedEvaluationResults = async (
   }
 };
 
+export const getDQModels = async (
+  mappingProcessId: string,
+  qualityRuleId: string
+) => {
+  const response = await apiClient.get("/data-quality/models", {
+    params: {
+      mapping_process_id: mappingProcessId,
+      quality_method_id: qualityRuleId,
+    },
+  });
+  return response;
+};
+
+export const createDQModel = async (
+  mappingProcessId: string | null,
+  dqModelName: string,
+  body: any
+) => {
+  const params = mappingProcessId
+    ? { mapping_process_id: mappingProcessId, dq_model_name: dqModelName }
+    : {};
+  return await apiClient.post("/data-quality/model", body, {
+    params,
+  });
+};
+
 export const connectNeo4jDB = async (
   uri: string,
   user: string,
@@ -254,5 +285,17 @@ export const connectNeo4jDB = async (
     return response;
   } catch (error) {
     console.error("Error connecting to Neo4j database", error);
+  }
+};
+
+export const getAppliedMethods = async (dqModelId: string) => {
+  try {
+    const response = await apiClient.get(`/data-quality/applied_methods`, {
+      params: { dq_model_id: dqModelId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching applied methods:", error);
+    throw error;
   }
 };

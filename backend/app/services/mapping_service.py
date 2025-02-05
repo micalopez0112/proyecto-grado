@@ -72,6 +72,8 @@ async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = N
     onto_id = mapping_process_docu.ontologyId
     ontology = await onto_service.get_ontology_by_id(onto_id)
     ontology_data = onto_service.build_ontology_response(ontology, onto_id)
+    
+    print("#Ontology data before return getMapping#: ", ontology_data)
     JSON_schema = await schema_service.get_schema_by_id(mapping_process_docu.jsonSchemaId)
     complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
 

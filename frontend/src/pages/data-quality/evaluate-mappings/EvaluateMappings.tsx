@@ -6,6 +6,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { useDataContext } from "../../../context/context.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const EvaluateMappings = () => {
   const location = useLocation();
@@ -30,8 +31,10 @@ const EvaluateMappings = () => {
         })
       );
       setValidationResults(transformedResults);
+      toast.success("Successful evaluation");
     } else {
-      setError("No mappings selected for validation or no results found.");
+      toast.error("Error evaluating");
+      setError("Error evaluating.");
     }
   }, [initialResults]);
 
@@ -130,6 +133,7 @@ const EvaluateMappings = () => {
       <button className="back-button" onClick={() => navigate(-1)}>
         Back to Selection
       </button>
+      <ToastContainer />
     </div>
   );
 };

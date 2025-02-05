@@ -67,11 +67,11 @@ async def get_quality_results(mapping_process_id: Optional[str] = Query(None, de
         
 @router.post("/model")
 # agregar parametros: dq_method_id, dq_aggregated_method_id
-async def create_dq_model(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
+async def create_dq_model(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),dq_model_name: Optional[str] = Query(None, description="DQ model name"),  request_mapping_body: Dict[str, Any]= Body(...)):
     print("### Starting create DQ model process ###")
     print(f'request_mapping_body: {request_mapping_body}')
     try :
-        result = await metadata_service.create_dq_model(mapping_process_id, request_mapping_body)
+        result = await metadata_service.create_dq_model(mapping_process_id,dq_model_name, request_mapping_body)
         return result
     except Exception as e:
         msg = str(e)
