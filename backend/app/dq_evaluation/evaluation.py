@@ -109,6 +109,7 @@ class SyntanticAccuracy(QualityMetric) :
         print("## Evaluacion 4.5.3 - json keys", json_keys)
 
         # TODO: retomar y arreglar implementación del delete
+        # se borran para que no queden colgados
         #metadata_repo.delete_existing_field_value_measures(json_keys, jsonSchemaId)
         
         # se evalua cada una de las intancias json
@@ -185,6 +186,7 @@ class StrategyContext():
         self._quality_strategy = strategy
 
     def select_strategy(self, strategy: str, aggregation: str) -> None:
+        # TODO: ver si dejar aca average y eventualmente que venga el method_id y obtengo el algoritmo
         if strategy == SYNTCTATIC_ACCURACY:
             self._quality_strategy = SyntanticAccuracy(aggregation) 
             print("### STRATEGY METHOD SELECTED ## ")

@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Query, Body, HTTPException
-from pydantic import BaseModel,Field
+from pydantic import BaseModel
 from typing import List,Optional, Dict, Any
 
 from app.services import metadata_service
+from app.services.metadata_service import ParamCrateDQModel
 from app.models.mapping import  MappingResponse,  DQModel
 from app.dq_evaluation.evaluation import StrategyContext
 from ..database import neo4j_conn
@@ -64,13 +65,18 @@ async def get_quality_results(mapping_process_id: Optional[str] = Query(None, de
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
         return response
-        
+
+
 @router.post("/model")
-async def create_dq_model(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),dq_model_name: Optional[str] = Query(None, description="DQ model name"),  request_mapping_body: Dict[str, Any]= Body(...)):
+async def create_dq_model(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),dq_model_name: Optional[str] = Query(None, description="DQ model name"),  
+                          request_mapping_body: Dict[str, Any]= Body(...), dq_method_id: Optional[str] = Query(None, description="DQ method id"),
+                          dq_aggregated_method_id: Optional[str] = Query(None, description="DQ aggregated method id")
+                          ):
     print("### Starting create DQ model process ###")
     print(f'request_mapping_body: {request_mapping_body}')
     try :
-        result = await metadata_service.create_dq_model(mapping_process_id,dq_model_name, request_mapping_body)
+        create_dq_params = ParamCrateDQModel(mapping_process_id=mapping_process_id, dq_model_name=dq_model_name, dq_method_id=dq_method_id, dq_aggregated_method_id=dq_aggregated_method_id)
+        result = await metadata_service.create_dq_model(create_dq_params, request_mapping_body)
         return result
     except Exception as e:
         msg = str(e)
