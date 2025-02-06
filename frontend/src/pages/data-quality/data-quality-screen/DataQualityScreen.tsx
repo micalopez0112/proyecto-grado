@@ -39,7 +39,7 @@ const DataQualityScreen = () => {
       };
       retrieveMappings();
 
-      setDataQualityRules([{ id: "1", name: "Accuracy" }]);
+      setDataQualityRules([{ id: "D1F1M1MD1", name: "Syntactic Accuracy" }]);
     }
   }, [idDataset, mappings.length]);
 

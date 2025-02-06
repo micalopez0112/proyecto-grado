@@ -21,6 +21,19 @@
   font-size: 20px;
 }
 
+.navbar-button{
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  transition-duration: 0.4s;
+}
+
+.navbar-button:hover{
+  background-color: rgb(35, 37, 39);
+}
+
 .navbar ul li a {
   color: white;
   text-decoration: none;

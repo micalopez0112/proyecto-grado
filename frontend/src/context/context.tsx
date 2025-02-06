@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { OntologyDataType, JsonSchema } from "../types";
 
 export interface OntoElement {
@@ -76,8 +76,15 @@ const Context = createContext<ContextProps>({
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [externalFlow, setExternalFlow] = useState<boolean>(false);
-  const [externalDatasetId, setExternalDatasetId] = useState<string>("");
+  const [externalFlow, setExternalFlow] = useState<boolean>(
+    () => JSON.parse(localStorage.getItem("externalFlow") || "false")
+  );
+  const [externalDatasetId, setExternalDatasetId] = useState<string>(
+    () => localStorage.getItem("externalDatasetId") || ""
+  );
+  const [collectionPath, setCollectionPath] = useState<string>(
+    () => localStorage.getItem("collectionPath") || ""
+  );
   const [mappingProcessId, setMappingProcessId] = useState<string>("");
   const [JsonElementSelected, setJsonElementSelected] = useState<string>("");
   const [OntoElementSelected, setOntoElementSelected] = useState<OntoSelect>({
@@ -93,7 +100,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentOntologyId, setcurrentOntologyId] = useState<
     string | undefined
   >(undefined);
-  const [collectionPath, setCollectionPath] = useState<string>("");
+  
+  
 
   const addNewMapping = () => {
     console.log("Adding new mapping, actual mappings are: ", mappings);
@@ -239,7 +247,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
               updatedMappings[updatedKey]
             );
 
-            if (updatedMappings[updatedKey] != undefined) {
+            if (updatedMappings[updatedKey] !== undefined) {
               updatedMappings[updatedKey] = updatedMappings[updatedKey].filter(
                 // fix needed to work with arrays and multiple values in range
                 (element) =>
@@ -321,10 +329,26 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const outOfExternalFlow = () => {
+    setCollectionPath("");
     setExternalDatasetId("");
     setExternalFlow(false);
-    setCollectionPath("");
   }
+
+  useEffect(() => {
+    localStorage.setItem("externalFlow", JSON.stringify(externalFlow));
+  },[externalFlow]);
+
+  useEffect(() => {
+    if(externalFlow && collectionPath !== ""){
+      //Va a cambiar pero no lo va a almacenar en el local storage
+      localStorage.setItem("collectionPath", collectionPath);
+    }
+  }, [collectionPath]);
+
+  useEffect(() => {
+    localStorage.setItem("externalDatasetId", externalDatasetId);
+  }, [externalDatasetId]);
+
 
   return (
     <Context.Provider
