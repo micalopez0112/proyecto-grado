@@ -447,11 +447,11 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
         return None
     # necesito recorrer las mapped entries y crear un applied dq method y
     
-def get_dq_models(onto_id, dataset_id, method_id):
+def get_dq_models(onto_id, dataset_id, method_id, mapping_process_id):
     query = f"""
         MATCH (ctx:Context {{id: '{onto_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{dataset_id}'}})
         WITH dq_model
-        MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method {{id: '{method_id}'}})
+        MATCH (dq_model {{mapping_process_id: '{mapping_process_id}'}})-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method {{id: '{method_id}'}})
         RETURN dq_model.id, dq_model.name
     """
     # WITH dq_model, app_dq_method, method
