@@ -16,16 +16,17 @@ const DQModelsScreen = () => {
   const [selectedDQModelId, setSelectedDQModelId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const { mappingProcessId } = useDataContext();
+  const {mappingId,ruleId} = location.state;
 
   useEffect(() => {
     const fetchDQModels = async () => {
-      if (!mappingProcessId) {
+      if (!mappingId) {
         console.error("Mapping process ID is missing!");
         return;
       }
       setLoading(true);
       try {
-        const response = await getDQModels(mappingProcessId, "D1F1M1MD1");
+        const response = await getDQModels(mappingId, ruleId);
         setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");
@@ -56,8 +57,8 @@ const DQModelsScreen = () => {
       if (response) {
         navigate("/EvaluateMappings", {
           state: {
-            mappingId: mappingProcessId,
-            ruleId: "D1F1M1MD1",
+            mappingId: mappingId,
+            ruleId: ruleId,
             validationResults: response.data,
           },
         });

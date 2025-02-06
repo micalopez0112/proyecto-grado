@@ -4,6 +4,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import { OntologyDataType } from "../../types";
 import { uploadOntology,getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
+import {toast} from "react-toastify";
 
 const OntologySelectScreen = () => {
   const [ontologies, setOntologies] = useState<
@@ -66,7 +67,7 @@ const OntologySelectScreen = () => {
         setSelectedFile(files[0]);
         setNextScreen(true);
       } else {
-        alert("El archivo debe ser de tipo .owl o .rdf");
+        toast.error("El archivo debe ser de tipo .owl o .rdf");
         return;
       }
     }
@@ -83,7 +84,7 @@ const OntologySelectScreen = () => {
         console.log("Ontologia desde el back", response); 
       }
       else{
-        alert("Please select an ontology");
+        toast.error("Please select an ontology");
         setLoading(false);
         return;
       }
@@ -108,7 +109,10 @@ const OntologySelectScreen = () => {
       else
         navigate("/SchemaSelect");
     } catch (error) {
-      console.log("error en handleSubmit: ", error);
+      const errorMessage = error.response.data.detail;
+      toast.error("Failed on submit: " + errorMessage);
+      console.log("error en handleSubmit: ", errorMessage);
+      setLoading(false);
     }
   };
 

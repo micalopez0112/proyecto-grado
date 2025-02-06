@@ -36,10 +36,18 @@ const MappingsScreen = () => {
             console.log("Connection string: ", connectionString);
             console.log("Collection path: ", collectionPathParam);
             console.log("Id dataset: ", idDataset);
-    
+            //check if  not already in external flow
+            // if yes, return
             //Check if parameters are not null
             //if are null, throw error and return
-    
+            if(externalFlow){
+              console.log("Already in external flow");
+              toast.success("Already in external flow");
+              await retrieveMappings(idDataset);
+              setLoading(false);
+              return;
+            }
+
             const decodedConnectionString = connectionString
             ? decodeURIComponent(connectionString)
             : "";

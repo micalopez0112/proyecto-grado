@@ -41,6 +41,10 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
     if (mapping_proccess_id is not None and mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
         mapping_id = mapping_proccess_id
+        # schema_id = request.jsonSchemaId; --> se manda solo si es externo
+        schema_id =  await schema_service.get_or_create_schema(request.documentStoragePath,request.jsonSchema, "")
+        #TODO: hotfix: get schema_id from mapping_proccess_id
+        #TODO: when returning info from mapping_proccess for json_schema include id 
     else : 
         full_collection_path = request.documentStoragePath
         external_json_schema_id = ""
@@ -56,8 +60,10 @@ async def validate_and_save_mapping_process(request: MappingRequest, mapping_pro
                                                         mapping_suscc_validated=False)
         mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
         mapping_id = mapping_process_id_inserted
-
-    status = validate_mapping(request.mapping, ontology, request.jsonSchema)
+    if(schema_id):
+        jsonSchema = request.jsonSchema
+        jsonSchema['_id'] = schema_id
+    status = validate_mapping(request.mapping, ontology, jsonSchema)
     updated_result = await mapping_repo.update_mapping_process({}, str(mapping_id), True)
     return mapping_id
 
