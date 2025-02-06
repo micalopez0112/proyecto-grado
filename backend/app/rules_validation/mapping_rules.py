@@ -48,9 +48,9 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
                     posibleArrayErrors = []
                     # acomodar
                     if IsMappedToOP(ontoValue, ontoObjectPropertiesList):
-                        okRule3, posibleArrayErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, JSPropertyType,jsonschema) 
+                        okRule3, posibleArrayErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, JSPropertyType,jsonschema, ontoClasses) 
                     else :
-                        okRule2, posibleArrayErrors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, jsonschema)
+                        okRule2, posibleArrayErrors = validateRule2And4(jsonMappedKey, ontoValue, mappedClasses, ontoDataPropertiesList, JSPropertyType, jsonschema, ontoClasses)
                     
                     if okRule2 or okRule3:
                         continue
@@ -58,7 +58,7 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
                     raise ValueError(f"Possible errors: {posibleArrayErrors}")
                 else:
                     # Rule 3: an object property is mapped to an ontology property   
-                    okRule3, possibleErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, "",None)
+                    okRule3, possibleErrors = validateRule3And4(jsonMappedKey, ontoValue, mappedClasses, ontoObjectPropertiesList, "",None, ontoClasses)
                     if okRule3:
                         continue
                     else:
@@ -101,7 +101,7 @@ def IsMappedToOP(ontoValuesMappedTo, ontoObjectProperties):
 # 2. checks if the domain of the object property is already correctly mapped (by checking if it is in the mappedClasses dict)
 # 3. checks if the range of the object property is already correctly mapped. If it isn't it maps it to the correct class and adds it to the newMappedClasses
 # then at the end of all mapping iteration it adds the new mapped elements to the mapping json.
-def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, JSONPropertyType, jsonschema: JsonSchema):
+def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperties, JSONPropertyType, jsonschema: JsonSchema, ontoClasses):
     possibleErrors = []
     print("### Validating rule 3: ", key, "##", ontoValuesMappedTo, "###")
     for ontoElem in ontoValuesMappedTo:
@@ -155,9 +155,18 @@ def validateRule3And4(key, ontoValuesMappedTo, mappedClasses, ontoObjectProperti
                 break
 
         if not isRangeOk:
-            possibleErrors.append(f"Element {rangeIri} not found in object property range")
-            return False, possibleErrors
-
+            print("ABOUT TO CHECK ANCESTORS of range: ", objectProperty.range)
+            rangeMappedClass = getOntoPropertyByIri(rangeIri, ontoClasses)
+            isRangeAnAncestor = checkAncestors(rangeMappedClass, objectProperty.range)
+            if isRangeAnAncestor:
+                isRangeOk = True
+            if not isRangeAnAncestor:
+                possibleErrors.append(f"Element {rangeIri} not found in object property range")
+                return False, possibleErrors
+            
+        print("##isDomainOk: ", isDomainOk)
+        print("##isRangeOk: ", isRangeOk)
+        print("##Possible Errors: ", possibleErrors)
     return isDomainOk and isRangeOk, possibleErrors
 
 # validateRule2And4 recieves the json-schema key, the ontology values mapped to and all valid ontolgy data properties. Then it does the next validations:
@@ -235,14 +244,20 @@ def checkAllJsonaSchemaTypes( jsonSchema: JsonSchema, key, propType):
     print("JSONSCHEMA: ", jsonSchema)
     jsonSchema = JsonSchema(**jsonSchema)
     propertyBeingLooked = jsonSchema.findPropertyInJsonSchema(key)
+    print("paso")
+    print("## Property being looked: ", propertyBeingLooked, "##")
+    if(propertyBeingLooked is None):
+        print("## Property being looked is None ##")
     if propertyBeingLooked["type"] != "array":
         return False
     items = propertyBeingLooked["items"]
-    for item in items:
-        if propType == "simple" and item["type"] not in simpleTypes:
+    print("Items: ", items)
+    print("Prop Type: ", propType)
+    if propType == "simple" and items["type"] not in simpleTypes:
             return False
-        if propType == "object" and item["type"] != "object":
-            return False
+    if propType == "object" and items["type"] != "object":
+        return False
+        
         
     print("## All properties are##", propType)    
     return True
