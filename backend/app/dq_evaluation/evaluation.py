@@ -56,6 +56,7 @@ class QualityMetric(ABC) :
             return aggregated_measure_value
             
 
+# TODO: por aca por algun lado agregar lo del algoritmo
 class SyntanticAccuracy(QualityMetric) :
     
     def set_dq_model_id(self, dq_model_id: str) -> None:

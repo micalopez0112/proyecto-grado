@@ -66,7 +66,7 @@ async def get_dq_models(mapping_process_id: str, method_id: str):
     print("Context id: ", onto_id)
     print("Dataset id: ", dataset_id)
 
-    result = metadata_repo.get_dq_models(onto_id, dataset_id, method_id)
+    result = metadata_repo.get_dq_models(onto_id, dataset_id, method_id, mapping_process_id)
     #2nd use metric id to filter the data quality models
     #Por cada uno de los DQModels obtener los AppliedDQMethod y estos van a tener que estar 
     #relacionados con el Method que se está aplicando a traves de HAS_METHOD
