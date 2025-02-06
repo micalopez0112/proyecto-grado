@@ -129,7 +129,7 @@ const EvaluateMappings = () => {
           </button>
         </div>
       </Modal>
-
+      
       <button className="back-button" onClick={() => navigate(-1)}>
         Back to Selection
       </button>

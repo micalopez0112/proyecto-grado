@@ -44,7 +44,7 @@ async def find_schema_by_collection_name(collection_name : str):
     return schema
 
 async def get_or_create_schema(collectionPath:str,json_schema: Dict[str, Any],external_schema_id:str):
-    collection_name=json_schema['collection_name']
+    collection_name = json_schema['collection_name']
     existent_schema = await find_schema_by_collection_name(collection_name)
     if existent_schema is None:
         inserted_id = await insert_schema(json_schema,external_schema_id)

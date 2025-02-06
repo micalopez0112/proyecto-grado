@@ -12,6 +12,7 @@ import React from "react";
 import MappingList from "../../components/MappingList.tsx";
 import Json from "../../components/JsonSchema.tsx";
 import "./Mapping.css";
+import {toast} from "react-toastify";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -106,10 +107,10 @@ export const Mapping = () => {
               //navigate('/Result', {state:{mapping_process:mapping_id}});
               if (status === "success") {
                 resetMappingState();
-                alert(`Process Mapping saved successfully`);
+                toast.success(`Process Mapping saved successfully`);
                 navigate("/");
               } else {
-                alert(`Error saving Mapping Process`);
+                toast.success(`Error saving Mapping Process`);
               }
             }
           } else {
@@ -134,10 +135,10 @@ export const Mapping = () => {
                 if (status === "success") {
                   //navigate('/Result', {state:{mapping_process:mapping_id}});
                   resetMappingState();
-                  alert("Process Mapping saved successfully");
+                  toast.success("Process Mapping saved successfully");
                   navigate("/");
                 } else {
-                  alert("Error saving Mapping Process");
+                  toast.error("Error saving Mapping Process");
                 }
               }
             } else {
@@ -146,10 +147,10 @@ export const Mapping = () => {
           }
       }
       else{
-        alert("Mapping name must not be empty");
+        toast.error("Mapping name must not be empty");
       }
       } else {
-        alert("Mappings must not be empty");
+        toast.error("Mappings must not be empty");
       }
     } catch (error) {
       console.error("error en apiCall", error);
@@ -194,7 +195,7 @@ export const Mapping = () => {
               else
                 navigate("/");
             } else {
-              alert("Error validating mapping, please check: " + message);
+              toast.error("Error validating mapping, please check: " + message);
             }
             //navigate("/Result", { state: { mapping_process: mapping_id } });
           }
@@ -233,7 +234,7 @@ export const Mapping = () => {
                 else
                   navigate("/");
               } else {
-                alert("Error validating mapping, please check: " + message);
+                toast.error("Error validating mapping, please check: " + message);
               }
             }
           } else {
@@ -241,7 +242,7 @@ export const Mapping = () => {
           }
         }
       } else {
-        alert("Mappings must not be empty");
+        toast.error("Mapping entries must not be empty");
       }
     } catch (error) {
       console.error("error en apiCall", error);

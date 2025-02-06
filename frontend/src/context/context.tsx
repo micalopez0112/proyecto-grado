@@ -336,13 +336,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     localStorage.setItem("externalFlow", JSON.stringify(externalFlow));
-    console.log("External Flow changed in context: ", externalFlow);
   },[externalFlow]);
 
   useEffect(() => {
-    if(externalFlow){
-      console.log("External collection Path about to change, with externalFlow: ", externalFlow);
-      console.log("External Collection Path changed in context: ", collectionPath);
+    if(externalFlow && collectionPath !== ""){
+      //Va a cambiar pero no lo va a almacenar en el local storage
       localStorage.setItem("collectionPath", collectionPath);
     }
   }, [collectionPath]);
