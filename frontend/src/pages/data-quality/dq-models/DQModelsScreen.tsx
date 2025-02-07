@@ -27,6 +27,7 @@ const DQModelsScreen = () => {
       setLoading(true);
       try {
         const response = await getDQModels(mappingId, ruleId);
+        console.log("Response de DQModels: ", response);
         setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");

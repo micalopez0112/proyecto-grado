@@ -257,7 +257,12 @@ export const createDQModel = async (
   body: any
 ) => {
   const params = mappingProcessId
-    ? { mapping_process_id: mappingProcessId, dq_model_name: dqModelName }
+    ? {
+        mapping_process_id: mappingProcessId,
+        dq_model_name: dqModelName,
+        dq_aggregated_method_id: "D1F1M2MD1",
+        dq_method_id: "D1F1M1MD1",
+      }
     : {};
   return await apiClient.post("/data-quality/model", body, {
     params,

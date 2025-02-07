@@ -120,6 +120,8 @@ const SelectMappingsEvaluate = () => {
       );
       if (response.status === 200) {
         if (evaluateAndCreate) {
+          console.log("Response de createDQModel: ", response);
+          console.error("Response.data: ", response.data);
           const evaluationResponse = await evaluateMapping(
             SYNTCTATIC_ACCURACY,
             AGG_AVERAGE,
@@ -136,7 +138,7 @@ const SelectMappingsEvaluate = () => {
             });
           }
         } else {
-          navigate("/DQModelsScreen");
+          navigate("/DQModelsScreen",{state:{mappingId: mappingProcessId, ruleId:"D1F1M1MD1"}});
         }
       } else {
         toast.error("Failed to create DQ Model. Please try again.");
