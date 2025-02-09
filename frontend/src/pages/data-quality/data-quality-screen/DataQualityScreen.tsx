@@ -14,9 +14,9 @@ const DataQualityScreen = () => {
     Array<{ idMapping: string; name: string }>
   >([]);
   const [selectedMappingId, setSelectedMappingId] = useState("");
-  const [selectedRuleId, setSelectedRuleId] = useState("");
+  const [selectedRule, setSelectedRule] = useState <null | {method_id:string, agg_method_id:string}> (null);
   const [dataQualityRules, setDataQualityRules] = useState<
-    Array<{ id: string; name: string }>
+    Array<{ method_id: string; agg_method_id: string;name: string }>
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [mappingDetails, setMappingDetails] = useState<null | {
@@ -38,8 +38,7 @@ const DataQualityScreen = () => {
         setLoading(false);
       };
       retrieveMappings();
-
-      setDataQualityRules([{ id: "D1F1M1MD1", name: "Syntactic Accuracy" }]);
+      setDataQualityRules([{method_id: "D1F1M1MD1",agg_method_id: "D1F1M2MD1", name: "Syntactic Accuracy"}]);
     }
   }, [idDataset, mappings.length]);
 
@@ -47,18 +46,19 @@ const DataQualityScreen = () => {
     setSelectedMappingId(id);
   };
 
-  const onClickRule = (id: string) => {
-    setSelectedRuleId(id);
+  const onClickRule = (ruleInfo:any) => {
+    setSelectedRule(ruleInfo);
   };
 
   const handleSelectClick = () => {
-    if (!selectedMappingId || !selectedRuleId) {
+    if (!selectedMappingId || !selectedRule) {
       toast.error("Please select a set of mappings and a quality rule.");
       return;
     }
     setMappingProcessId(selectedMappingId);
+    console.log("Va a navegar a DQModelsScreen con los paràmetros: ", selectedMappingId, selectedRule);
     navigate("/DQModelsScreen", {
-      state: { mappingId: selectedMappingId, ruleId: selectedRuleId },
+      state: { mappingId: selectedMappingId, rule: {ruleId:selectedRule.method_id,aggRuleId:selectedRule.agg_method_id}},
     });
   };
 
@@ -103,12 +103,12 @@ const DataQualityScreen = () => {
                 <div className="quality-list-container">
                   {dataQualityRules.map((rule) => (
                     <div
-                      key={rule.id}
-                      onClick={() => onClickRule(rule.id)}
+                      key={rule.method_id}
+                      onClick={() => onClickRule(rule)}
                       style={{
                         ...styles.mappingCard,
                         backgroundColor:
-                          selectedRuleId === rule.id ? "#ffdc92" : "#fff",
+                          selectedRule?.method_id === rule.method_id ? "#ffdc92" : "#fff",
                       }}
                     >
                       {rule.name}
