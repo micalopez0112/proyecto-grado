@@ -74,7 +74,7 @@ async def get_dq_models(mapping_process_id: str, method_id: str):
 
     # mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
     # result = metadata_repo.get_data_quality_models(mapping_process_docu)
-    
+    print("result", result)
     return result
 
 # TODO: posible pero no se si queda

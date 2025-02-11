@@ -414,6 +414,7 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
     # ver si cambiamos el method_name por el id?
     print(" ## METHOD ID: ", save_dq_params.dq_method_id)
     print(" ## METHOD ID AGG: ", save_dq_params.dq_aggregated_method_id)
+    # TODO validar datos
     query = f""" 
         MATCH (dq_method:Method {{id: '{save_dq_params.dq_method_id}'}})
         MATCH (dq_method_col:Method {{id: '{save_dq_params.dq_aggregated_method_id}'}})
