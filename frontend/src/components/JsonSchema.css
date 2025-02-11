@@ -33,6 +33,13 @@
   border: 5px solid #5372d0;
 }
 
+.disabled {
+  color: #bdbdbd;
+  cursor: not-allowed;
+  pointer-events: none;
+
+}
+
 .json-arrayItem-elem {
   background-color: #cbd5ef;
   width: fit-content;

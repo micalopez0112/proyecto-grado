@@ -113,6 +113,9 @@ const Json: React.FC = () => {
           );
         }
         if (value.type === "array" && value.items) {
+          if(value.items.anyOf){
+            console.log("anyOf array", value.items.anyOf);
+          }
           return (
             <div className="property-box" key={key}>
               <div
@@ -121,14 +124,28 @@ const Json: React.FC = () => {
                   (parent ? parent + "-" + key + "_key#array" : key)
                     ? "active"
                     : ""
-                }`}
+                } ${value.items.anyOf ? "disabled" : ""}`}
                 onClick={(e) => handleClickArrayProperty(e, parent + "-" + key)}
               >
                 <strong>{key}:</strong> array
               </div>
-              <div className="object-properties">
-                {renderArrayItems(value.items, parent + "-" + key)}
-              </div>
+              {
+                value.items.anyOf 
+                ?
+                value.items.anyOf.map(element => {
+                  console.log("Element", element);
+                  return(
+                  <div className="object-properties">
+                    {renderArrayItemsAnyOf(element, parent + "-" + key)}
+                  </div>
+                  )
+                })
+                :
+                <div className="object-properties">
+                  {renderArrayItems(value.items, parent + "-" + key)}
+                </div>
+              }
+              
             </div>
           );
         }
@@ -165,7 +182,7 @@ const Json: React.FC = () => {
                 ? "active"
                 : ""
             }`}
-            onClick={(e) =>
+            onClick = {(e) =>
               handleClickElement(
                 e,
                 parent ? parent + "_value" : parent + "_value"
@@ -193,6 +210,59 @@ const Json: React.FC = () => {
         >
           <strong>array items:</strong> {items.type}
         </div>
+      </>
+    );
+  };
+
+  const renderArrayItemsAnyOf = (items: JsonSchemaProperty, parent: string) => {
+    if (items.type === "object" && items.properties) {
+      return (
+        <>
+          <div
+            key={parent + "_value"}
+            className={`json-elem array-box disabled `}
+            onClick = {(e) =>
+              handleClickElement(
+                e,
+                parent ? parent + "_value" : parent + "_value"
+              )
+            }
+          >
+            <strong>array items: object</strong>
+
+            <div className="object-properties">
+              {renderProperties(items.properties, parent)}
+            </div>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+      {
+        Array.isArray(items.type) ?
+        items.type.map((element) => {
+          return(
+            <div
+              className={`json-elem array-box disabled`}
+              onClick={(e) =>
+                console.log("clicked array item, doesn´t do anything")
+              }
+            >
+              <strong>array items:</strong> {element}
+            </div>
+          )
+        })
+        :
+        <div
+          className={`json-elem array-box disabled`}
+          onClick={(e) =>
+            console.log("clicked array item, doesn´t do anything")
+          }
+        >
+          <strong>array items:</strong> {items.type}
+        </div>
+      }
       </>
     );
   };
