@@ -27,6 +27,8 @@ class QualityMetric(ABC) :
         self.aggregation = aggregation
         pass
     
+    # this method is generic for all the quality metrics, it gets the data to be evaluated and executes the measure
+    # the specific implementation of the measure is according to the concrete class
     async def evaluation(self) -> None :
         data = self.get_data_to_evaluate()
         print("## Evaluacion 3.0 - got data to be evaluated")
@@ -79,15 +81,17 @@ class SyntanticAccuracy(QualityMetric) :
         
         print("## Evaluacion 4.1 - jsonSchemaId: ", jsonSchemaId) #self.mapping_elements)
         applied_to_fields = metadata_repo.get_applied_methods_by_dq_model(dq_model_id)
+        print("## Evaluacion 4.2 - applied to fields: ", applied_to_fields)
         mapping_elements = self.mapping_process.mapping
 
         results_dicc = {}
         print("## Evaluacion 4.2 - mapping elements: ", mapping_elements)
         for field_to_evaluate in applied_to_fields:
-            print("## Evaluacion 4.3 - mapping elements:  ", field_to_evaluate.name)
+            print("## Evaluacion 4.3 - mapping elements:  ", field_to_evaluate)
 
-            json_mapped_key = build_mapping_entrance(field_to_evaluate)
+            json_mapped_key = build_json_mapping_key(field_to_evaluate)
             print("## Evaluacion 4.4 - json mapped key  ", json_mapped_key)
+            print("Mapping elements", mapping_elements)
             onto_mapped_to_value = mapping_elements[json_mapped_key]
             
             print("## Evaluacion 4.5 - onto mapped to", onto_mapped_to_value)
@@ -99,7 +103,7 @@ class SyntanticAccuracy(QualityMetric) :
         
     # def evaluate_instances(json_instances, onto_mapped_to_value, ontology, jsonSchemaId) :
     def evaluate_instances(self, dq_model_id, json_instances, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId) :
-        json_mapped_key = build_mapping_entrance(field_to_evaluate)
+        json_mapped_key = build_json_mapping_key(field_to_evaluate)
         print("## Evaluacion 4.5.1 - onto mapped to", json_mapped_key, "###")
         print("## Evaluacion 4.5.2 - onto mapped to", len(json_instances))
         results_dicc = {}
@@ -169,7 +173,7 @@ class SyntanticAccuracy(QualityMetric) :
     
 # this functions receives the attribute_path 'contacto-nombre' and builds the proper json key to find
 # the value in the mapping document, adding the missing "rootObject", "key" and "type"
-def build_mapping_entrance(attribute_field: FieldNode):
+def build_json_mapping_key(attribute_field: FieldNode):
     print("Field node: ", attribute_field)
     return "rootObject-" + attribute_field.name + "_key#" + attribute_field.type   
 
