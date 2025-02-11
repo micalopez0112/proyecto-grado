@@ -102,7 +102,7 @@ def insert_field_measures(field: FieldNode, node_name, value, dq_model_id):
 
     applied_dq_method_name = f"applied_dq_f{node_name}col" # TODO: agregar _col / o cambiar a _aggregated 
     print("searching for: ",applied_dq_method_name )
-
+    print("About to insert field measure for: ", field.element_id)
     query = f""" 
         MATCH (fieldNode) 
         WHERE elementId(fieldNode) = '{field.element_id}' 
@@ -414,6 +414,7 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
     # ver si cambiamos el method_name por el id?
     print(" ## METHOD ID: ", save_dq_params.dq_method_id)
     print(" ## METHOD ID AGG: ", save_dq_params.dq_aggregated_method_id)
+    # TODO validar datos
     query = f""" 
         MATCH (dq_method:Method {{id: '{save_dq_params.dq_method_id}'}})
         MATCH (dq_method_col:Method {{id: '{save_dq_params.dq_aggregated_method_id}'}})
@@ -480,10 +481,14 @@ def get_dq_models(onto_id, dataset_id, method_id, mapping_process_id):
 
 # get_applied_methods_by_dq_model returns the nodes that say in witch fields the method will be applied (kinda)
 def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
+    methodName = "Method1"
+    # TODO: revisar porqque hice una moidificacion rara
     query = f"""
         MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
         -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
         -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
+         WHERE EXISTS {{
+         MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
         RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
     """
     print(f"## {query}")
@@ -491,13 +496,20 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         neo4j_driver = get_neo4j_driver()
         records, _, _ = neo4j_driver.execute_query(query)
         results = []
+        print("RECORDS: ", records)
+        # OJO: meti ese cambio ver si no da problema
+        records = records[1:]
+        print("##########")
         for record in records:
             nodes = record[0]
+            print("NODES: ", nodes)
             attribute_path_list = []
             # esto recorre todo el camino de nodos anidados para armar el string de atributos
             # donde se encuantra anidado
             for node in nodes[1:]: # se skipea el primero porque es el applied_dq
+                print("NODE: ", node)
                 attribute_path_list.insert(0, node['name'])
+                print("ATTRIBUTE PATH: ", attribute_path_list)
         
             attribute_path = "-".join(attribute_path_list)
             fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
