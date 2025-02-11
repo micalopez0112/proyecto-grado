@@ -16,7 +16,7 @@ const DQModelsScreen = () => {
   const [selectedDQModelId, setSelectedDQModelId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const { mappingProcessId } = useDataContext();
-  const {mappingId,ruleId} = location.state;
+  const {mappingId,rule} = location.state;
 
   useEffect(() => {
     const fetchDQModels = async () => {
@@ -26,7 +26,9 @@ const DQModelsScreen = () => {
       }
       setLoading(true);
       try {
-        const response = await getDQModels(mappingId, ruleId);
+        console.log("Rule: ", rule);
+        const response = await getDQModels(mappingId, rule.ruleId);
+        console.log("Response de DQModels: ", response);
         setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");
@@ -41,7 +43,7 @@ const DQModelsScreen = () => {
 
   const handleSelectClick = () => {
     navigate("/SelectMappingsValidate", {
-      state: { mappingId: mappingProcessId, ruleId: "" },
+      state: { mappingId: mappingProcessId, rule: rule },
     });
   };
 
@@ -58,7 +60,7 @@ const DQModelsScreen = () => {
         navigate("/EvaluateMappings", {
           state: {
             mappingId: mappingId,
-            ruleId: ruleId,
+            ruleId: rule.ruleId,
             validationResults: response.data,
           },
         });

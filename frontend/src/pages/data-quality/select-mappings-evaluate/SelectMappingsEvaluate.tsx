@@ -26,7 +26,7 @@ const SelectMappingsEvaluate = () => {
   } = useDataContext();
 
   const location = useLocation();
-  const mappingId = location.state?.mappingId;
+  const {mappingId, rule} = location.state;
   const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
   const [dqModelName, setdqModelName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
@@ -34,6 +34,8 @@ const SelectMappingsEvaluate = () => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [allSelected, setAllSelected] = useState<boolean>(false);
+  // const [dqAggregatedMethodId, setDQAggregatedMethodId] = useState<string>("");
+  // const [dqMethodId, setDQMethodId] = useState<string>("");
 
   const getSimpleMappings = () => {
     return Object.keys(mappings).filter(
@@ -113,13 +115,18 @@ const SelectMappingsEvaluate = () => {
     setLoading(true);
 
     try {
+      console.log("Rule just before create DQModel: ", rule);
       const response = await createDQModel(
         mappingProcessId,
         dqModelName,
+        rule.aggRuleId,
+        rule.ruleId,
         selectedMappings
       );
       if (response.status === 200) {
         if (evaluateAndCreate) {
+          console.log("Response de createDQModel: ", response);
+          console.error("Response.data: ", response.data);
           const evaluationResponse = await evaluateMapping(
             SYNTCTATIC_ACCURACY,
             AGG_AVERAGE,
@@ -130,13 +137,13 @@ const SelectMappingsEvaluate = () => {
             navigate("/EvaluateMappings", {
               state: {
                 mappingId: mappingProcessId,
-                ruleId: "D1F1M1MD1",
+                ruleId: rule.ruleId,
                 validationResults: evaluationResponse.data,
               },
             });
           }
         } else {
-          navigate("/DQModelsScreen");
+          navigate("/DQModelsScreen",{state:{mappingId: mappingProcessId, rule:rule}});
         }
       } else {
         toast.error("Failed to create DQ Model. Please try again.");
