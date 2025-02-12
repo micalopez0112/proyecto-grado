@@ -21,13 +21,6 @@ methodONEKey = "D1F1M1MD1"
 method_name = "Method1"
 method_name_columna = "Method2"
 
-
-def execute_test_query():
-    query = "CREATE (n:Test {name: 'Test', id:'testid'}) RETURN n"
-    # driver = get_neo4j_driver()
-    # driver.execute_query(query)
-    get_neo4j_driver().execute_query(query)
-
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     neo4j_driver = get_neo4j_driver()
     with neo4j_driver.session() as session:

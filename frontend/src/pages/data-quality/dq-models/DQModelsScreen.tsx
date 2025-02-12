@@ -95,7 +95,9 @@ const DQModelsScreen = () => {
                 />
               ))
             ) : (
-              <>No Instances of selected Metric</>
+              <p style={{color:"white"}}>
+                No Instances of selected Metric found
+              </p>
             )}
           </div>
           <div className="dq-models-buttons">

@@ -7,7 +7,6 @@ import HomeScreen from "./pages/home/HomeScreen.tsx";
 import DataQualityScreen from "./pages/data-quality/data-quality-screen/DataQualityScreen.tsx";
 import OntologySelectScreen from "./pages/mappings/OntologySelect.tsx";
 import MappingsScreen from "./pages/mappings/MappingsScreen.tsx";
-import MappingResult from "./pages/MappingResult.tsx";
 import { Mapping } from "./pages/mappings/Mapping.tsx";
 import SchemaSelect from "./pages/mappings/SchemaSelect.tsx";
 import SelectMappingsValidate from "./pages/data-quality/select-mappings-evaluate/SelectMappingsEvaluate.tsx";
@@ -44,7 +43,6 @@ function App() {
         <Route path="/SchemaSelect" element={<SchemaSelect />} />
         <Route path="/Mapping" element={<Mapping />} />
         <Route path="/Ontology" element={<OntologyData />} />
-        <Route path="/Result" element={<MappingResult />} />
         <Route path="/DatasetsScreen" element={<DatasetsScreen />} />
         <Route
           path="/SelectMappingsValidate"
