@@ -145,6 +145,7 @@ def insert_context_metadata(ontology_id, onto_name):
     with neo4j_conn.get_driver() as driver:
         driver.execute_query(query)
 
+# TODO: borrar este metodo
 def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     first_key = json_keys[0]
     graph_path = f""" 
@@ -165,6 +166,42 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
 
     select_measure = f"""
         {graph_path}-[fvm:FieldValueMeasure]->(measure) 
+        RETURN f{latest_item}, measure, fvm
+        SKIP {skip} 
+        LIMIT {limit}
+    """
+    print("QUERY: ", select_measure)
+    # returns record, summay, keys
+    neo4j_driver = get_neo4j_driver()
+    records, _, _ = neo4j_driver.execute_query(select_measure)
+    results = []
+    for record in records:
+        dq = DqResult(name=record[0]['name'], id_document=record[2]['id_document'], 
+                      date=record[1]['date'], 
+                      measure=record[1]['measure'])
+        results.append(dq)
+
+    return results
+
+# TODO ver de sacar el id de la collecion y el 
+def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, page_number):
+    first_key = json_keys[0]
+    graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+        -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+    """
+       
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
+
+    if page_number is None or page_number < 1:
+        page_number = 1
+    skip = (page_number - 1) * limit
+    latest_item = json_keys[-1]
+    print("LATEST ITEM: ", latest_item)
+    # TODO: ver porque no me sale
+    select_measure = f"""
+        {graph_path}-[fvm:FieldValueMeasure]->(measure)
         RETURN f{latest_item}, measure, fvm
         SKIP {skip} 
         LIMIT {limit}
