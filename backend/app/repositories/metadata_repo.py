@@ -485,12 +485,20 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
         -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
         RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
-    """
+        ORDER BY size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) DESC
+        LIMIT 1
+    """## VER SI ESTA ES LA FORMA CORRECTA DE OBTENER LOS FIELDS
+       ##LO VAMOS A TENER QUE EXPLICAR EN EL INFORME
     print(f"## {query}")
     try:
         neo4j_driver = get_neo4j_driver()
         records, _, _ = neo4j_driver.execute_query(query)
         results = []
+        print("RECORDS: ", records)
+        # OJO: meti ese cambio ver si no da problema
+        # records = records[1:]
+        print("RECORDS LEN: ", records.__len__())
+        print("##########")
         for record in records:
             nodes = record[0]
             attribute_path_list = []
