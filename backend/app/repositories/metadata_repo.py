@@ -27,10 +27,11 @@ def execute_neo4j_query(query:str, params:Dict[str, Any]):
         result = session.run(query=query, parameters=params)
         return result.data()
 
-def delete_existing_field_value_measures(json_keys, json_schema_id):
+def delete_existing_field_value_measures(data_model_id, json_keys, json_schema_id):
     first_key = json_keys[0]
     graph_path = f"""
-        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+        -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:
@@ -44,6 +45,8 @@ def delete_existing_field_value_measures(json_keys, json_schema_id):
         MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
         DETACH DELETE m
     """
+
+    print("DELETE QUERY: ", delete_existing_measures)
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(delete_existing_measures)
 
