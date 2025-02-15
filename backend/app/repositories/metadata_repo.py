@@ -193,8 +193,8 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
 # TODO ver de sacar el id de la collecion y el 
 def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, page_number):
     first_key = json_keys[0]
-    graph_path = f""" 
-        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+    graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+        -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
        
     for key in json_keys[1:]:
@@ -205,10 +205,10 @@ def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, p
         page_number = 1
     skip = (page_number - 1) * limit
     latest_item = json_keys[-1]
-
+    print("LATEST ITEM: ", latest_item)
+    # TODO: ver porque no me sale
     select_measure = f"""
-        {graph_path}-[fvm:FieldValueMeasure]->(measure)<-[model_m:MODEL_MEASURE]-(app_dq_method:AppliedDQMethod)
-        <-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{data_model_id}'}})
+        {graph_path}-[fvm:FieldValueMeasure]->(measure)
         RETURN f{latest_item}, measure, fvm
         SKIP {skip} 
         LIMIT {limit}

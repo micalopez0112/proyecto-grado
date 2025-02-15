@@ -61,6 +61,7 @@ async def get_quality_results(mapping_process_id: Optional[str] = Query(None, de
     print(f'request_mapping_body: {mapping_process_id}')
     try :
         result = await metadata_service.get_evaluation_results_by_json(dq_model_id, mapping_process_id, json_key, limit, offset)
+        print("### Got evaluation results ###, result: ", result)
         return result
     except Exception as e:
         msg = str(e)
