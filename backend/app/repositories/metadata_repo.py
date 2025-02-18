@@ -21,23 +21,17 @@ methodONEKey = "D1F1M1MD1"
 method_name = "Method1"
 method_name_columna = "Method2"
 
-
-def execute_test_query():
-    query = "CREATE (n:Test {name: 'Test', id:'testid'}) RETURN n"
-    # driver = get_neo4j_driver()
-    # driver.execute_query(query)
-    get_neo4j_driver().execute_query(query)
-
 def execute_neo4j_query(query:str, params:Dict[str, Any]):
     neo4j_driver = get_neo4j_driver()
     with neo4j_driver.session() as session:
         result = session.run(query=query, parameters=params)
         return result.data()
 
-def delete_existing_field_value_measures(json_keys, json_schema_id):
+def delete_existing_field_value_measures(data_model_id, json_keys, json_schema_id):
     first_key = json_keys[0]
     graph_path = f"""
-        MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+        -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
     """
 
     for key in json_keys[1:]:
@@ -51,6 +45,8 @@ def delete_existing_field_value_measures(json_keys, json_schema_id):
         MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
         DETACH DELETE m
     """
+
+    print("DELETE QUERY: ", delete_existing_measures)
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(delete_existing_measures)
 
@@ -102,7 +98,7 @@ def insert_field_measures(field: FieldNode, node_name, value, dq_model_id):
 
     applied_dq_method_name = f"applied_dq_f{node_name}col" # TODO: agregar _col / o cambiar a _aggregated 
     print("searching for: ",applied_dq_method_name )
-
+    print("About to insert field measure for: ", field.element_id)
     query = f""" 
         MATCH (fieldNode) 
         WHERE elementId(fieldNode) = '{field.element_id}' 
@@ -152,6 +148,7 @@ def insert_context_metadata(ontology_id, onto_name):
     with neo4j_conn.get_driver() as driver:
         driver.execute_query(query)
 
+# TODO: borrar este metodo
 def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     first_key = json_keys[0]
     graph_path = f""" 
@@ -172,6 +169,42 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
 
     select_measure = f"""
         {graph_path}-[fvm:FieldValueMeasure]->(measure) 
+        RETURN f{latest_item}, measure, fvm
+        SKIP {skip} 
+        LIMIT {limit}
+    """
+    print("QUERY: ", select_measure)
+    # returns record, summay, keys
+    neo4j_driver = get_neo4j_driver()
+    records, _, _ = neo4j_driver.execute_query(select_measure)
+    results = []
+    for record in records:
+        dq = DqResult(name=record[0]['name'], id_document=record[2]['id_document'], 
+                      date=record[1]['date'], 
+                      measure=record[1]['measure'])
+        results.append(dq)
+
+    return results
+
+# TODO ver de sacar el id de la collecion y el 
+def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, page_number):
+    first_key = json_keys[0]
+    graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+        -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+    """
+       
+    for key in json_keys[1:]:
+        node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+        graph_path += node_path
+
+    if page_number is None or page_number < 1:
+        page_number = 1
+    skip = (page_number - 1) * limit
+    latest_item = json_keys[-1]
+    print("LATEST ITEM: ", latest_item)
+    # TODO: ver porque no me sale
+    select_measure = f"""
+        {graph_path}-[fvm:FieldValueMeasure]->(measure)
         RETURN f{latest_item}, measure, fvm
         SKIP {skip} 
         LIMIT {limit}
@@ -414,6 +447,7 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
     # ver si cambiamos el method_name por el id?
     print(" ## METHOD ID: ", save_dq_params.dq_method_id)
     print(" ## METHOD ID AGG: ", save_dq_params.dq_aggregated_method_id)
+    # TODO validar datos
     query = f""" 
         MATCH (dq_method:Method {{id: '{save_dq_params.dq_method_id}'}})
         MATCH (dq_method_col:Method {{id: '{save_dq_params.dq_aggregated_method_id}'}})
@@ -480,10 +514,14 @@ def get_dq_models(onto_id, dataset_id, method_id, mapping_process_id):
 
 # get_applied_methods_by_dq_model returns the nodes that say in witch fields the method will be applied (kinda)
 def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
+    methodName = "Method1"
+    # TODO: revisar porqque hice una moidificacion rara
     query = f"""
         MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
         -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
         -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
+         WHERE EXISTS {{
+         MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
         RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
         ORDER BY size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) DESC
         LIMIT 1
@@ -501,11 +539,14 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         print("##########")
         for record in records:
             nodes = record[0]
+            print("NODES: ", nodes)
             attribute_path_list = []
             # esto recorre todo el camino de nodos anidados para armar el string de atributos
             # donde se encuantra anidado
             for node in nodes[1:]: # se skipea el primero porque es el applied_dq
+                print("NODE: ", node)
                 attribute_path_list.insert(0, node['name'])
+                print("ATTRIBUTE PATH: ", attribute_path_list)
         
             attribute_path = "-".join(attribute_path_list)
             fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])

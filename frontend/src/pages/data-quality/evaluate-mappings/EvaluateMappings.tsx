@@ -11,8 +11,8 @@ import { toast, ToastContainer } from "react-toastify";
 const EvaluateMappings = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { mappingProcessId } = useDataContext();
-
+  // const { mappingProcessId } = useDataContext();
+  const {mappingId} = location.state;
   const initialResults = location.state?.validationResults || {};
 
   const [validationResults, setValidationResults] = useState<any[]>([]);
@@ -39,7 +39,7 @@ const EvaluateMappings = () => {
   }, [initialResults]);
 
   const handleFetchDetailedResults = async (mappingName: string) => {
-    if (!mappingProcessId) {
+    if (!mappingId) {
       setError("Mapping process ID is not available.");
       return;
     }
@@ -49,7 +49,7 @@ const EvaluateMappings = () => {
     setError("");
     try {
       const data = await fetchDetailedEvaluationResults(
-        mappingProcessId,
+        mappingId,
         mappingName
       );
       setDetailedResults(data);

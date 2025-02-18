@@ -11,11 +11,13 @@ from typing import Dict, Any
 
 from app.models.mapping import FieldNode
 
-async def get_evaluation_results_by_json(mapping_process_id: str, json_key: str, limit: int, offset:int):
+async def get_evaluation_results_by_json(dq_model_id:str, mapping_process_id: str, json_key: str, limit: int, offset:int):
     mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_process_id))
     schema_id = mapping_process.jsonSchemaId
     keys_list = find_json_keys(json_key)
-    results = metadata_repo.get_evaluation_results(str(schema_id), keys_list, limit, offset)
+    results = metadata_repo.get_evaluation_results_v2(dq_model_id, str(schema_id), keys_list, limit, offset)
+    #results = metadata_repo.get_evaluation_results(str(schema_id), keys_list, limit, offset)
+
     # if json_key not in json_schema_properties_keys:
     #     raise ValueError(f"Invalid JSON key: {json_key}")
     return results
@@ -74,7 +76,7 @@ async def get_dq_models(mapping_process_id: str, method_id: str):
 
     # mapping_process_docu = await mapping_repo.find_mapping_process_by_id(mapping_process_id)
     # result = metadata_repo.get_data_quality_models(mapping_process_docu)
-    
+    print("result", result)
     return result
 
 # TODO: posible pero no se si queda
