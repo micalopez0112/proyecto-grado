@@ -349,7 +349,7 @@ def save_quality_methods():
     
     query_template = """        
         MERGE ({method_var_name}: Method {{id:'{method_id}',name:'{method_name}', description: '{method_description}', algorithm: '{method_algorithm}'}})
-        MERGE ({method_var_name})-[:HAS_METHOD]->(metric)
+        MERGE ({method_var_name})-[:HAS_METRIC]->(metric)
     """
 
     query = ''
