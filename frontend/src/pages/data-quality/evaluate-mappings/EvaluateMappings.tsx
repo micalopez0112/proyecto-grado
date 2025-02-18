@@ -12,7 +12,7 @@ const EvaluateMappings = () => {
   const location = useLocation();
   const navigate = useNavigate();
   // const { mappingProcessId } = useDataContext();
-  const {mappingId} = location.state;
+  const {mappingId,dqModelId} = location.state;
   const initialResults = location.state?.validationResults || {};
 
   const [validationResults, setValidationResults] = useState<any[]>([]);
@@ -50,7 +50,8 @@ const EvaluateMappings = () => {
     try {
       const data = await fetchDetailedEvaluationResults(
         mappingId,
-        mappingName
+        mappingName,
+        dqModelId
       );
       setDetailedResults(data);
       setModalIsOpen(true);

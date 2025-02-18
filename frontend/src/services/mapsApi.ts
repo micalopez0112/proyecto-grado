@@ -213,7 +213,10 @@ export const evaluateMapping = async (
 
 export const fetchDetailedEvaluationResults = async (
   mappingProcessId: string,
-  mappingName: string
+  mappingName: string,
+  dq_model_id: string,
+  limit?: number,
+  offset?: number
 ) => {
   if (!mappingProcessId) {
     throw new Error("Mapping process ID is not available.");
@@ -224,6 +227,7 @@ export const fetchDetailedEvaluationResults = async (
       params: {
         mapping_process_id: mappingProcessId,
         json_key: mappingName,
+        dq_model_id: dq_model_id,
       },
     });
 

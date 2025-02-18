@@ -62,6 +62,7 @@ const DQModelsScreen = () => {
             mappingId: mappingId,
             ruleId: rule.ruleId,
             validationResults: response.data,
+            dqModelId: selectedDQModelId,
           },
         });
       }
