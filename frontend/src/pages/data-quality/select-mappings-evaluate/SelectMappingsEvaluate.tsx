@@ -139,6 +139,7 @@ const SelectMappingsEvaluate = () => {
                 mappingId: mappingProcessId,
                 ruleId: rule.ruleId,
                 validationResults: evaluationResponse.data,
+                dqModelId:response.data,
               },
             });
           }
