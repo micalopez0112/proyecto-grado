@@ -113,10 +113,7 @@ class SyntanticAccuracy(QualityMetric) :
         latest_item_node_name = json_keys[-1]
         print("## Evaluacion 4.5.3 - json keys", json_keys)
 
-        # TODO: retomar y arreglar implementación del delete
-        # se borran para que no queden colgados
-        #metadata_repo.delete_existing_field_value_measures(json_keys, jsonSchemaId)
-        
+        metadata_repo.delete_existing_field_value_measures(dq_model_id, json_keys, jsonSchemaId)        
         # se evalua cada una de las intancias json
         for json_instance in json_instances :
             print("## Evaluacion 4.5.4 - json keys", json_instance)
