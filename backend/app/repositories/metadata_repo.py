@@ -425,6 +425,36 @@ class ParamRepoCrateDQModel(BaseModel):
     dq_aggregated_method_id : str = None
     mapped_entries: List[str]
     
+# TODO: retorna true si existe un dq model con el mismo contexto, dataset y que tenga appliedDqMethod para todos los atributos mapeados
+def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
+    query = f"""
+        MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
+        WITH dq_model
+    """
+    for attribute in attributes_mapped:
+        json_keys = find_json_keys(attribute)
+        print("json keys before query: ", json_keys)
+        query += " MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method)"
+        for key in json_keys:
+            print("key: ", key)
+            query += f" MATCH (app_dq_method)-[:APPLIED_TO]->(field:Field{{name: '{key}'}})"
+    query += " RETURN dq_model.id, dq_model.name"
+    print("query for checking dq model: ", query)
+    neo4j_driver = get_neo4j_driver()
+    try:
+        records, _, _ = neo4j_driver.execute_query(query)
+        if(records.__len__() > 0):
+            dqmodel_id = records[0]['dq_model.id']
+            dqmodel_name = records[0]['dq_model.name']
+            return {
+                "id": dqmodel_id,
+                "name": dqmodel_name
+            }
+        return None
+    except Exception as e:
+        print("error in executing query: ", e)
+        return None
+
 
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
 # CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie 
@@ -438,6 +468,12 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
     json_schema_id = mapping_process_docu.jsonSchemaId
     dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
     timestamp_milliseconds = int(time.time() * 1000)
+    print("##First check if dq model with same context, dataset and appliedDqMethod's exists")
+    dq_model_already_exists = get_dq_model(ontology_id, json_schema_id, save_dq_params.mapped_entries)
+    if (dq_model_already_exists):
+        print("DQ Model already exists, with the info: ", dq_model_already_exists)
+        print("#########")
+        return dq_model_already_exists
     # dq_model_name = "dq_model_" + str(timestamp_milliseconds)
     # Aca empieza la query de construccion, se matchean todos los nodos principales
     # dq_method, contexto, collection, dq_model (el que se va a crear)

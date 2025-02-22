@@ -124,6 +124,12 @@ const SelectMappingsEvaluate = () => {
         selectedMappings
       );
       if (response.status === 200) {
+        if(response.data.name){
+          console.log("##DQ MODEL ALREADY EXISTS##: ", response.data.name);
+          alert("A DQ Model with the same attributes already exists. Its name is: '" + response.data.name+ "'.");
+          navigate("/DQModelsScreen",{state:{mappingId: mappingProcessId, rule:rule}});
+          return;
+        }
         if (evaluateAndCreate) {
           console.log("Response de createDQModel: ", response);
           console.error("Response.data: ", response.data);
