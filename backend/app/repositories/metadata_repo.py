@@ -552,17 +552,34 @@ def get_dq_models(onto_id, dataset_id, method_id, mapping_process_id):
 def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     methodName = "Method1"
     # TODO: revisar porqque hice una moidificacion rara
-    query = f"""
-        MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
-        -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
-        -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
-         WHERE EXISTS {{
-         MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
-        RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
-        ORDER BY size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) DESC
-        LIMIT 1
-    """## VER SI ESTA ES LA FORMA CORRECTA DE OBTENER LOS FIELDS
+    # query = f"""
+    #     MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
+    #     -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
+    #     -[:APPLIED_TO]->(startNode:Field)-[:belongsToField*0..]->(endNode) 
+    #      WHERE EXISTS {{
+    #      MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
+    #     RETURN nodes(path)[1..] AS nodes, relationships(path) AS relationships
+        
+    # """## VER SI ESTA ES LA FORMA CORRECTA DE OBTENER LOS FIELDS
        ##LO VAMOS A TENER QUE EXPLICAR EN EL INFORME
+    #    ORDER BY size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) DESC
+    #    LIMIT 1
+    print("About to return Fields")
+    query = f"""
+    MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
+    -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
+    -[:APPLIED_TO]->(startNode:Field)
+    -[:belongsToField*0..]->(endNode) 
+    WHERE EXISTS {{
+        MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
+    WITH endNode, path, size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) AS depth
+    ORDER BY depth DESC
+    WITH endNode, collect(path)[0] AS longest_path
+    RETURN nodes(longest_path)[1..] AS nodes, relationships(longest_path) AS relationships
+"""
+
+
+
     print(f"## {query}")
     try:
         neo4j_driver = get_neo4j_driver()
@@ -585,8 +602,15 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
                 print("ATTRIBUTE PATH: ", attribute_path_list)
         
             attribute_path = "-".join(attribute_path_list)
-            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
-            results.append(fieldNode)
+            nodeAlreadyInResults = False
+            for result in results:
+                if attribute_path in result.name:
+                    print("-##Attribute path: '"+attribute_path +"',already in results##-")
+                    nodeAlreadyInResults = True
+                    break
+            if not nodeAlreadyInResults:
+                fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
+                results.append(fieldNode)
         return results
     except Exception as e:
         print("error in executing query: ", e)
