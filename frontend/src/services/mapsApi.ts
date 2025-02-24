@@ -316,3 +316,13 @@ export const getAppliedMethods = async (dqModelId: string) => {
     throw error;
   }
 };
+
+export const getDataQualityRules = async () => {
+  try {
+    const response = await apiClient.get(`/data-quality/data-quality-rules`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data quality rules:", error);
+    throw error;
+  }
+};

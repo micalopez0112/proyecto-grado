@@ -638,3 +638,51 @@ def get_mapping_id_by_dq_model(dq_model_id: str):
     result, _, _ = neo4j_driver.execute_query(match_query)
     print("RESULT: ",result[0]['mapping_process_id'])
     return result[0]['mapping_process_id']
+
+from collections import defaultdict
+
+def get_data_quality_rules():
+    match_query = """
+        MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
+        RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
+    """
+    neo4j_driver = get_neo4j_driver()
+    result, _, _ = neo4j_driver.execute_query(match_query)
+
+    # Step 1: Organize results by dimension and factor
+    data_structure = defaultdict(lambda: defaultdict(list))
+
+    for record in result:
+        dimension = record["dimension"]
+        factor = record["factor"]
+        granularity = record["granularity"]
+        method_id = record["method_id"]
+
+        # Store methods under their respective factor
+        data_structure[dimension][factor].append({"granularity": granularity, "method_id": method_id})
+
+    # Step 2: Transform into required format
+    final_data = []
+
+    for dimension, factors in data_structure.items():
+        dimension_obj = {"dimension": dimension, "factors": []}
+
+        for factor, methods in factors.items():
+            # Separate value and field granularities
+            value_methods = [m for m in methods if m["granularity"] == "value"]
+            field_methods = [m for m in methods if m["granularity"] == "field"]
+
+            # Pair them together
+            measures = []
+            for v, f in zip(value_methods, field_methods):
+                measures.append({
+                    "method_id": v["method_id"],
+                    "agg_method_id": f["method_id"],
+                    "name": f"Measure {len(measures) + 1}"  # Assign measure names dynamically
+                })
+
+            dimension_obj["factors"].append({"name": factor, "measures": measures})
+
+        final_data.append(dimension_obj)
+
+    return final_data

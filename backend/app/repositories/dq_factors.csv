@@ -1,2 +1,3 @@
 factor_id,name,dimension_id
 D1F1,Syntactic Accuracy,D1
+D3F1,Correctitude,D3

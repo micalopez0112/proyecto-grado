@@ -4,7 +4,8 @@ import { deleteMapping, getMapping } from "../services/mapsApi.ts";
 import { useDataContext } from "../context/context.tsx";
 import MappingList from "./MappingList.tsx";
 import { Spinner } from "./Spinner/Spinner.tsx";
-import { FaMagnifyingGlass, FaTrash } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
+import { FaEye } from "react-icons/fa";
 import "./MappingCard.css";
 
 const MappingCard = ({
@@ -104,7 +105,7 @@ const MappingCard = ({
             }}
             className="info-button"
           >
-            <FaMagnifyingGlass size={20} />
+            <FaEye size={24} />
           </button>
         )}
         {includeTrash && (

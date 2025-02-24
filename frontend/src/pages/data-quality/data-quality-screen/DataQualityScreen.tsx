@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { getDatasetMappings } from "../../../services/mapsApi.ts";
+import {
+  getDataQualityRules,
+  getDatasetMappings,
+} from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
@@ -9,15 +12,12 @@ import { useDataContext } from "../../../context/context.tsx";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
+  const { setMappingProcessId } = useDataContext();
   const { idDataset } = useParams<{ idDataset: string }>();
   const [mappings, setMappings] = useState<
     Array<{ idMapping: string; name: string }>
   >([]);
   const [selectedMappingId, setSelectedMappingId] = useState("");
-  const [selectedRule, setSelectedRule] = useState <null | {method_id:string, agg_method_id:string}> (null);
-  const [dataQualityRules, setDataQualityRules] = useState<
-    Array<{ method_id: string; agg_method_id: string;name: string }>
-  >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [mappingDetails, setMappingDetails] = useState<null | {
     mapping_name: string;
@@ -26,7 +26,39 @@ const DataQualityScreen = () => {
     ontology: string;
   }>(null);
 
-  const { setMappingProcessId } = useDataContext();
+  const [selectedDimension, setSelectedDimension] = useState<string | null>(
+    null
+  );
+  const [selectedFactor, setSelectedFactor] = useState<string | null>(null);
+  const [selectedMeasure, setSelectedMeasure] = useState<null | {
+    method_id: string;
+    agg_method_id: string;
+  }>(null);
+
+  const [dataQualityRules, setDataQualityRules] = useState<
+    Array<{
+      dimension: string;
+      factors: Array<{
+        name: string;
+        measures: Array<{
+          method_id: string;
+          agg_method_id: string;
+          name: string;
+        }>;
+      }>;
+    }>
+  >([]);
+
+  useEffect(() => {
+    const fetchDataQualityRules = async () => {
+      setLoading(true);
+      const response = await getDataQualityRules();
+      setDataQualityRules(response);
+      setLoading(false);
+    };
+
+    fetchDataQualityRules();
+  }, []);
 
   useEffect(() => {
     if (idDataset && mappings.length === 0) {
@@ -38,7 +70,7 @@ const DataQualityScreen = () => {
         setLoading(false);
       };
       retrieveMappings();
-      setDataQualityRules([{method_id: "D1F1M1MD1",agg_method_id: "D1F1M2MD1", name: "Syntactic Accuracy"}]);
+      // setDataQualityRules([{method_id: "D1F1M1MD1",agg_method_id: "D1F1M2MD1", name: "Syntactic Accuracy"}]);
     }
   }, [idDataset, mappings.length]);
 
@@ -46,19 +78,37 @@ const DataQualityScreen = () => {
     setSelectedMappingId(id);
   };
 
-  const onClickRule = (ruleInfo:any) => {
-    setSelectedRule(ruleInfo);
+  const onClickDimension = (dimension: string) => {
+    setSelectedDimension(dimension);
+    setSelectedFactor(null);
+    setSelectedMeasure(null);
+  };
+
+  const onClickFactor = (factor: string) => {
+    setSelectedFactor(factor);
+    setSelectedMeasure(null);
+  };
+
+  const onClickMeasure = (measure: any) => {
+    setSelectedMeasure(measure);
   };
 
   const handleSelectClick = () => {
-    if (!selectedMappingId || !selectedRule) {
-      toast.error("Please select a set of mappings and a quality rule.");
+    if (!selectedMappingId || !selectedMeasure) {
+      toast.error(
+        "Please select a mapping, a dimension, a factor, and a measure."
+      );
       return;
     }
     setMappingProcessId(selectedMappingId);
-    console.log("Va a navegar a DQModelsScreen con los paràmetros: ", selectedMappingId, selectedRule);
     navigate("/DQModelsScreen", {
-      state: { mappingId: selectedMappingId, rule: {ruleId:selectedRule.method_id,aggRuleId:selectedRule.agg_method_id}},
+      state: {
+        mappingId: selectedMappingId,
+        rule: {
+          ruleId: selectedMeasure.method_id,
+          aggRuleId: selectedMeasure.agg_method_id,
+        },
+      },
     });
   };
 
@@ -99,26 +149,90 @@ const DataQualityScreen = () => {
 
             <div className="container">
               <div className="data-quality-container">
-                <h2 className="sub-title">Data Quality Rules</h2>
                 <div className="quality-list-container">
-                  {dataQualityRules.map((rule) => (
-                    <div
-                      key={rule.method_id}
-                      onClick={() => onClickRule(rule)}
-                      style={{
-                        ...styles.mappingCard,
-                        backgroundColor:
-                          selectedRule?.method_id === rule.method_id ? "#ffdc92" : "#fff",
-                      }}
-                    >
-                      {rule.name}
+                  {/* Dimension Selection */}
+                  <div className="">
+                    <h2 className="sub-title">Select Dimension</h2>
+                    <div className="quality-list-container">
+                      {dataQualityRules.map((dim) => (
+                        <div
+                          key={dim.dimension}
+                          onClick={() => onClickDimension(dim.dimension)}
+                          style={{
+                            ...styles.mappingCard,
+                            backgroundColor:
+                              selectedDimension === dim.dimension
+                                ? "#ffdc92"
+                                : "#fff",
+                          }}
+                        >
+                          {dim.dimension}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Factor Selection */}
+                  {selectedDimension && (
+                    <div className="">
+                      <h2 className="sub-title">Select Factor</h2>
+                      <div className="quality-list-container">
+                        {dataQualityRules
+                          .find((dim) => dim.dimension === selectedDimension)
+                          ?.factors.map((factor) => (
+                            <div
+                              key={factor.name}
+                              onClick={() => onClickFactor(factor.name)}
+                              style={{
+                                ...styles.mappingCard,
+                                backgroundColor:
+                                  selectedFactor === factor.name
+                                    ? "#ffdc92"
+                                    : "#fff",
+                              }}
+                            >
+                              {factor.name}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Measure Selection */}
+                  {selectedFactor && (
+                    <div className="">
+                      <h2 className="sub-title">Select Measure</h2>
+                      <div className="quality-list-container">
+                        {dataQualityRules
+                          .find((dim) => dim.dimension === selectedDimension)
+                          ?.factors.find((fact) => fact.name === selectedFactor)
+                          ?.measures.map((measure) => (
+                            <div
+                              key={measure.method_id}
+                              onClick={() => onClickMeasure(measure)}
+                              style={{
+                                ...styles.mappingCard,
+                                backgroundColor:
+                                  selectedMeasure?.method_id ===
+                                  measure.method_id
+                                    ? "#ffdc92"
+                                    : "#fff",
+                              }}
+                            >
+                              {measure.name}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
+          {/* </div> */}
+          {/* // </div> */}
 
+          {/* Select Button */}
           <button className="select-button" onClick={handleSelectClick}>
             Select
           </button>

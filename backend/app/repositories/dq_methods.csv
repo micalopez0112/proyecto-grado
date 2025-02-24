@@ -1,3 +1,4 @@
 method_id,name,description,algorithm,metric_id
 D1F1M1MD1,Method1,The attribute value in the document collection is compared against its corresponding value in the domain ontology,def compare_onto_with_json_value(onto_prop_value; json_value) :\nif onto_prop_value == json_value:\nreturn 1\nelse:\nreturn 0 ,D1F1M1
 D1F1M2MD1,Method2,Rate of ... document values that matches to its value in the domain ontology,def +/total,D1F1M2
+D3F1M1MD1,Method2,relevance method,def +/total,D3F1M1
