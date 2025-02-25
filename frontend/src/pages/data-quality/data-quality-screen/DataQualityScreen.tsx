@@ -70,7 +70,6 @@ const DataQualityScreen = () => {
         setLoading(false);
       };
       retrieveMappings();
-      // setDataQualityRules([{method_id: "D1F1M1MD1",agg_method_id: "D1F1M2MD1", name: "Syntactic Accuracy"}]);
     }
   }, [idDataset, mappings.length]);
 
@@ -150,8 +149,7 @@ const DataQualityScreen = () => {
             <div className="container">
               <div className="data-quality-container">
                 <div className="quality-list-container">
-                  {/* Dimension Selection */}
-                  <div className="">
+                  <div>
                     <h2 className="sub-title">Select Dimension</h2>
                     <div className="quality-list-container">
                       {dataQualityRules.map((dim) => (
@@ -172,9 +170,8 @@ const DataQualityScreen = () => {
                     </div>
                   </div>
 
-                  {/* Factor Selection */}
                   {selectedDimension && (
-                    <div className="">
+                    <div>
                       <h2 className="sub-title">Select Factor</h2>
                       <div className="quality-list-container">
                         {dataQualityRules
@@ -198,9 +195,8 @@ const DataQualityScreen = () => {
                     </div>
                   )}
 
-                  {/* Measure Selection */}
                   {selectedFactor && (
-                    <div className="">
+                    <div>
                       <h2 className="sub-title">Select Measure</h2>
                       <div className="quality-list-container">
                         {dataQualityRules
@@ -229,10 +225,7 @@ const DataQualityScreen = () => {
               </div>
             </div>
           </div>
-          {/* </div> */}
-          {/* // </div> */}
 
-          {/* Select Button */}
           <button className="select-button" onClick={handleSelectClick}>
             Select
           </button>

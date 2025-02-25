@@ -105,7 +105,7 @@ const MappingCard = ({
             }}
             className="info-button"
           >
-            <FaEye size={24} />
+            <FaEye size={20} />
           </button>
         )}
         {includeTrash && (

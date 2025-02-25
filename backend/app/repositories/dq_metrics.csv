@@ -1,4 +1,3 @@
 metric_id,name,factor_id,granularity
 D1F1M1,Attribute Syntax,D1F1,value
 D1F1M2,Attribute Syntax,D1F1,field
-D3F1M1,relevance,D3F1,field
