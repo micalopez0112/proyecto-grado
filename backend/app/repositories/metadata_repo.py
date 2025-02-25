@@ -569,23 +569,20 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
     -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
     -[:APPLIED_TO]->(startNode:Field)
-    -[:belongsToField*0..]->(endNode) 
+    -[:belongsToField*0..]->(endNode)-[:belongsToSchema]->(col:Collection) 
     WHERE EXISTS {{
         MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
     WITH endNode, path, size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) AS depth
     ORDER BY depth DESC
     WITH endNode, collect(path)[0] AS longest_path
     RETURN nodes(longest_path)[1..] AS nodes, relationships(longest_path) AS relationships
-"""
-
-
-
+    """
     print(f"## {query}")
     try:
         neo4j_driver = get_neo4j_driver()
         records, _, _ = neo4j_driver.execute_query(query)
         results = []
-        print("RECORDS: ", records)
+        # print("RECORDS: ", records)
         # OJO: meti ese cambio ver si no da problema
         # records = records[1:]
         print("RECORDS LEN: ", records.__len__())
@@ -596,21 +593,14 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
             attribute_path_list = []
             # esto recorre todo el camino de nodos anidados para armar el string de atributos
             # donde se encuantra anidado
-            for node in nodes[1:]: # se skipea el primero porque es el applied_dq
+            for node in nodes[1:len(nodes)-1]: # se skipea el primero porque es el applied_dq
                 print("NODE: ", node)
                 attribute_path_list.insert(0, node['name'])
                 print("ATTRIBUTE PATH: ", attribute_path_list)
-        
             attribute_path = "-".join(attribute_path_list)
-            nodeAlreadyInResults = False
-            for result in results:
-                if attribute_path in result.name:
-                    print("-##Attribute path: '"+attribute_path +"',already in results##-")
-                    nodeAlreadyInResults = True
-                    break
-            if not nodeAlreadyInResults:
-                fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
-                results.append(fieldNode)
+            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
+            results.append(fieldNode)    
+        print("RESULTS: ", results)
         return results
     except Exception as e:
         print("error in executing query: ", e)
