@@ -105,6 +105,16 @@ async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Mod
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
         return response
+    
+@router.get("/data-quality-rules")
+async def get_data_quality_rules():
+    try :
+        result = await metadata_service.get_data_quality_rules()
+        return result
+    except Exception as e:
+        msg = str(e)
+        response = MappingResponse(message=msg, status="error")
+        return response
         
 # TODO: posible pero no se si quda aca. Me parece que esto ya no
 # @router.get("/metrics")

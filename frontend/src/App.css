@@ -128,3 +128,10 @@ label {
   font-size: 16px;
   color: #333;
 }
+
+.no-elements-message {
+  text-align: center;
+  color: rgb(255, 255, 255);
+  font-style: italic;
+  margin-top: 10px;
+}

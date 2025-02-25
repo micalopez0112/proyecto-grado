@@ -16,7 +16,7 @@ const DQModelsScreen = () => {
   const [selectedDQModelId, setSelectedDQModelId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const { mappingProcessId } = useDataContext();
-  const {mappingId,rule} = location.state;
+  const { mappingId, rule } = location.state;
 
   useEffect(() => {
     const fetchDQModels = async () => {
@@ -96,7 +96,7 @@ const DQModelsScreen = () => {
                 />
               ))
             ) : (
-              <p style={{color:"white"}}>
+              <p className="no-elements-message">
                 No Instances of selected Metric found
               </p>
             )}

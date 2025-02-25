@@ -12,7 +12,7 @@ import React from "react";
 import MappingList from "../../components/MappingList.tsx";
 import Json from "../../components/JsonSchema.tsx";
 import "./Mapping.css";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export const Mapping = () => {
     collectionPath,
     resetMappingState,
     externalFlow,
-    externalDatasetId
+    externalDatasetId,
   } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
@@ -86,7 +86,7 @@ export const Mapping = () => {
   const saveMappingsApiCall = async () => {
     try {
       if (Object.keys(mappings).length > 0) {
-        if(mappingName !== "") {
+        if (mappingName !== "") {
           if (mappingId) {
             //invocar put
             console.log("Flujo donde existe mappingId: ", mappingId);
@@ -117,7 +117,8 @@ export const Mapping = () => {
             //new mapping
             if (currentOntologyId) {
               const schemaAndCollectionName = jsonSchemaContext;
-              schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
+              schemaAndCollectionName.collection_name =
+                collectionPath.split(".")[0];
 
               const body = {
                 ontology_id: currentOntologyId,
@@ -127,7 +128,7 @@ export const Mapping = () => {
                 mapping_proccess_id: mappingId,
                 documentStoragePath: collectionPath,
               };
-              
+
               const response = await saveMapping(body);
               console.log("Response al guardar mappings (save): ", response);
               if (response) {
@@ -145,10 +146,9 @@ export const Mapping = () => {
               console.error("#ERROR#: No hay ontologyId al editar");
             }
           }
-      }
-      else{
-        toast.error("Mapping name must not be empty");
-      }
+        } else {
+          toast.error("Mapping name must not be empty");
+        }
       } else {
         toast.error("Mappings must not be empty");
       }
@@ -186,14 +186,12 @@ export const Mapping = () => {
             if (status === "success") {
               resetMappingState();
               alert("Mapping procces successfully validated and saved");
-              if(externalFlow && externalDatasetId){
-                //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+              if (externalFlow && externalDatasetId) {
+                //en flujo externo que vaya directo a evaluar calidad de los atributos con los
                 //mappings y las métricas definidas
-                console.log("External flow: ", externalFlow)
-                navigate(`/DataQualityScreen/${externalDatasetId}`)
-              }
-              else
-                navigate("/");
+                console.log("External flow: ", externalFlow);
+                navigate(`/DataQualityScreen/${externalDatasetId}`);
+              } else navigate("/");
             } else {
               toast.error("Error validating mapping, please check: " + message);
             }
@@ -202,9 +200,9 @@ export const Mapping = () => {
         } else {
           //new mapping
           if (currentOntologyId) {
-            
             const schemaAndCollectionName = jsonSchemaContext;
-            schemaAndCollectionName.collection_name = collectionPath.split(".")[0]
+            schemaAndCollectionName.collection_name =
+              collectionPath.split(".")[0];
             const body = {
               name: mappingName,
               mapping: mappings,
@@ -225,16 +223,16 @@ export const Mapping = () => {
               if (status === "success") {
                 resetMappingState();
                 alert("Mapping procces successfully validated and saved");
-                if(externalFlow && externalDatasetId){
-                  //en flujo externo que vaya directo a evaluar calidad de los atributos con los 
+                if (externalFlow && externalDatasetId) {
+                  //en flujo externo que vaya directo a evaluar calidad de los atributos con los
                   //mappings y las métricas definidas
-                  console.log("External flow: ", externalFlow)
-                  navigate(`/DataQualityScreen/${externalDatasetId}`)
-                }
-                else
-                  navigate("/");
+                  console.log("External flow: ", externalFlow);
+                  navigate(`/DataQualityScreen/${externalDatasetId}`);
+                } else navigate("/");
               } else {
-                toast.error("Error validating mapping, please check: " + message);
+                toast.error(
+                  "Error validating mapping, please check: " + message
+                );
               }
             }
           } else {
@@ -294,7 +292,7 @@ export const Mapping = () => {
       ) : (
         <div className="App">
           <div className="mapping-name">
-            <label>Mapping Process Name</label>
+            <label>Name</label>
             <input
               type="text"
               value={mappingName}
@@ -329,15 +327,14 @@ export const Mapping = () => {
                   >
                     Validate & Save
                   </button>
-                  {!externalFlow ?
+                  {!externalFlow ? (
                     <button
-                    className="button success"
-                    onClick={saveMappingsApiCall}
+                      className="button success"
+                      onClick={saveMappingsApiCall}
                     >
                       Save
                     </button>
-                  : null
-                  }
+                  ) : null}
                 </div>
               </div>
             </div>

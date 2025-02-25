@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { useDataContext } from "../../../context/context.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
 import { toast, ToastContainer } from "react-toastify";
+import { FaEye } from "react-icons/fa";
 
 const EvaluateMappings = () => {
   const location = useLocation();
   const navigate = useNavigate();
   // const { mappingProcessId } = useDataContext();
-  const {mappingId,dqModelId} = location.state;
+  const { mappingId, dqModelId } = location.state;
   const initialResults = location.state?.validationResults || {};
 
   const [validationResults, setValidationResults] = useState<any[]>([]);
@@ -94,7 +93,7 @@ const EvaluateMappings = () => {
                       handleFetchDetailedResults(result.mappingName)
                     }
                   >
-                    <FaMagnifyingGlass size={20} />
+                    <FaEye size={20} />
                   </button>
                 </li>
               ))}
@@ -130,7 +129,7 @@ const EvaluateMappings = () => {
           </button>
         </div>
       </Modal>
-      
+
       <button className="back-button" onClick={() => navigate(-1)}>
         Back to Selection
       </button>

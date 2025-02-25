@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { getAppliedMethods } from "../../services/mapsApi.ts";
 import { Spinner } from "../Spinner/Spinner.tsx";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import "./DQModelCard.css";
+import { FaEye } from "react-icons/fa";
 
 const DQModelCard = ({
   id,
@@ -83,7 +83,7 @@ const DQModelCard = ({
           }}
           className="info-button"
         >
-          <FaMagnifyingGlass size={20} />
+          <FaEye size={20} />
         </button>
       </div>
     </>
