@@ -673,15 +673,15 @@ def get_data_quality_rules():
             field_methods = [m for m in methods if m["granularity"] == "field"]
 
             # Pair them together
-            measures = []
+            metrics = []
             for v, f in zip(value_methods, field_methods):
-                measures.append({
+                metrics.append({
                     "method_id": v["method_id"],
                     "agg_method_id": f["method_id"],
-                    "name": f"Measure {len(measures) + 1}"  # Assign measure names dynamically
+                    "name": f"Metric {len(metrics) + 1}"  # Assign metric names dynamically
                 })
 
-            dimension_obj["factors"].append({"name": factor, "measures": measures})
+            dimension_obj["factors"].append({"name": factor, "metrics": metrics})
 
         final_data.append(dimension_obj)
 

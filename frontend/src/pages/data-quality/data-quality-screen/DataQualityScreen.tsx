@@ -30,7 +30,7 @@ const DataQualityScreen = () => {
     null
   );
   const [selectedFactor, setSelectedFactor] = useState<string | null>(null);
-  const [selectedMeasure, setSelectedMeasure] = useState<null | {
+  const [selectedMetric, setSelectedMetric] = useState<null | {
     method_id: string;
     agg_method_id: string;
   }>(null);
@@ -40,7 +40,7 @@ const DataQualityScreen = () => {
       dimension: string;
       factors: Array<{
         name: string;
-        measures: Array<{
+        metrics: Array<{
           method_id: string;
           agg_method_id: string;
           name: string;
@@ -80,22 +80,22 @@ const DataQualityScreen = () => {
   const onClickDimension = (dimension: string) => {
     setSelectedDimension(dimension);
     setSelectedFactor(null);
-    setSelectedMeasure(null);
+    setSelectedMetric(null);
   };
 
   const onClickFactor = (factor: string) => {
     setSelectedFactor(factor);
-    setSelectedMeasure(null);
+    setSelectedMetric(null);
   };
 
-  const onClickMeasure = (measure: any) => {
-    setSelectedMeasure(measure);
+  const onClickMetric = (metric: any) => {
+    setSelectedMetric(metric);
   };
 
   const handleSelectClick = () => {
-    if (!selectedMappingId || !selectedMeasure) {
+    if (!selectedMappingId || !selectedMetric) {
       toast.error(
-        "Please select a mapping, a dimension, a factor, and a measure."
+        "Please select a mapping, a dimension, a factor, and a metric."
       );
       return;
     }
@@ -104,8 +104,8 @@ const DataQualityScreen = () => {
       state: {
         mappingId: selectedMappingId,
         rule: {
-          ruleId: selectedMeasure.method_id,
-          aggRuleId: selectedMeasure.agg_method_id,
+          ruleId: selectedMetric.method_id,
+          aggRuleId: selectedMetric.agg_method_id,
         },
       },
     });
@@ -152,21 +152,27 @@ const DataQualityScreen = () => {
                   <div>
                     <h2 className="sub-title">Select Dimension</h2>
                     <div className="quality-list-container">
-                      {dataQualityRules.map((dim) => (
-                        <div
-                          key={dim.dimension}
-                          onClick={() => onClickDimension(dim.dimension)}
-                          style={{
-                            ...styles.mappingCard,
-                            backgroundColor:
-                              selectedDimension === dim.dimension
-                                ? "#ffdc92"
-                                : "#fff",
-                          }}
-                        >
-                          {dim.dimension}
-                        </div>
-                      ))}
+                      {dataQualityRules.length === 0 ? (
+                        <p className="no-elements-message">
+                          No dimensions available.
+                        </p>
+                      ) : (
+                        dataQualityRules.map((dim) => (
+                          <div
+                            key={dim.dimension}
+                            onClick={() => onClickDimension(dim.dimension)}
+                            style={{
+                              ...styles.mappingCard,
+                              backgroundColor:
+                                selectedDimension === dim.dimension
+                                  ? "#ffdc92"
+                                  : "#fff",
+                            }}
+                          >
+                            {dim.dimension}
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
 
@@ -174,50 +180,69 @@ const DataQualityScreen = () => {
                     <div>
                       <h2 className="sub-title">Select Factor</h2>
                       <div className="quality-list-container">
-                        {dataQualityRules
-                          .find((dim) => dim.dimension === selectedDimension)
-                          ?.factors.map((factor) => (
-                            <div
-                              key={factor.name}
-                              onClick={() => onClickFactor(factor.name)}
-                              style={{
-                                ...styles.mappingCard,
-                                backgroundColor:
-                                  selectedFactor === factor.name
-                                    ? "#ffdc92"
-                                    : "#fff",
-                              }}
-                            >
-                              {factor.name}
-                            </div>
-                          ))}
+                        {dataQualityRules.find(
+                          (dim) => dim.dimension === selectedDimension
+                        )?.factors.length === 0 ? (
+                          <p className="no-elements-message">
+                            No factors available.
+                          </p>
+                        ) : (
+                          dataQualityRules
+                            .find((dim) => dim.dimension === selectedDimension)
+                            ?.factors.map((factor) => (
+                              <div
+                                key={factor.name}
+                                onClick={() => onClickFactor(factor.name)}
+                                style={{
+                                  ...styles.mappingCard,
+                                  backgroundColor:
+                                    selectedFactor === factor.name
+                                      ? "#ffdc92"
+                                      : "#fff",
+                                }}
+                              >
+                                {factor.name}
+                              </div>
+                            ))
+                        )}
                       </div>
                     </div>
                   )}
 
                   {selectedFactor && (
                     <div>
-                      <h2 className="sub-title">Select Measure</h2>
+                      <h2 className="sub-title">Select Metric</h2>
                       <div className="quality-list-container">
                         {dataQualityRules
                           .find((dim) => dim.dimension === selectedDimension)
                           ?.factors.find((fact) => fact.name === selectedFactor)
-                          ?.measures.map((measure) => (
-                            <div
-                              key={measure.method_id}
-                              onClick={() => onClickMeasure(measure)}
-                              style={{
-                                ...styles.mappingCard,
-                                backgroundColor:
-                                  selectedMeasure?.method_id ===
-                                  measure.method_id
-                                    ? "#ffdc92"
-                                    : "#fff",
-                              }}
-                            >
-                              {measure.name}
-                            </div>
-                          ))}
+                          ?.metrics.length === 0 ? (
+                          <p className="no-elements-message">
+                            No metrics available.
+                          </p>
+                        ) : (
+                          dataQualityRules
+                            .find((dim) => dim.dimension === selectedDimension)
+                            ?.factors.find(
+                              (fact) => fact.name === selectedFactor
+                            )
+                            ?.metrics.map((metric) => (
+                              <div
+                                key={metric.method_id}
+                                onClick={() => onClickMetric(metric)}
+                                style={{
+                                  ...styles.mappingCard,
+                                  backgroundColor:
+                                    selectedMetric?.method_id ===
+                                    metric.method_id
+                                      ? "#ffdc92"
+                                      : "#fff",
+                                }}
+                              >
+                                {metric.name}
+                              </div>
+                            ))
+                        )}
                       </div>
                     </div>
                   )}
