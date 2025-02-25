@@ -4,7 +4,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import { OntologyDataType } from "../../types";
 import { uploadOntology,getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import {toast} from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
 
 const OntologySelectScreen = () => {
   const [ontologies, setOntologies] = useState<
@@ -204,6 +204,7 @@ const OntologySelectScreen = () => {
                     ></input>
                   </div>
                 )}
+                <ToastContainer/>
               </div>
             </div>
           </div>
