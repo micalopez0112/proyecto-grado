@@ -431,19 +431,38 @@ def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
         MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
         WITH dq_model
     """
+    
+    print("attributes mapped: ", attributes_mapped)
     for attribute in attributes_mapped:
+        print("attribute: ", attribute)
         json_keys = find_json_keys(attribute)
         print("json keys before query: ", json_keys)
         query += " MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method)"
-        for key in json_keys:
+        # Construcción de relaciones entre los campos
+        previous_field = None  # Almacena el campo anterior para enlazar con BELONGS_TO_FIELD
+        for i, key in enumerate(json_keys):
             print("key: ", key)
-            query += f" MATCH (app_dq_method)-[:APPLIED_TO]->(field:Field{{name: '{key}'}})"
+            if i == len(json_keys) - 1:
+                # Último atributo: Relación con app_dq_method
+                if previous_field:
+                    query += f"<-[:belongsToField]-(last_field:Field{{name:'{key}'}})"
+                query += f" MATCH (app_dq_method)-[:APPLIED_TO]->(last_field:Field{{name: '{key}'}})"
+            else:
+                # Atributos anteriores: Relación BELONGS_TO_FIELD
+                if previous_field:
+                    # TODO: check if this is correct
+                    query += f"<-[:belongsToField]-(field_{key}:Field{{name: '{key}'}})"
+                else:
+                    query += f" MATCH (field_{key}:Field{{name: '{key}'}})"
+                previous_field = key
     query += " RETURN dq_model.id, dq_model.name"
-    print("query for checking dq model: ", query)
+    print("#query for checking if dq model exist#: ", query)
     neo4j_driver = get_neo4j_driver()
     try:
         records, _, _ = neo4j_driver.execute_query(query)
         if(records.__len__() > 0):
+            for record in records:
+                print("Get applied fields");
             dqmodel_id = records[0]['dq_model.id']
             dqmodel_name = records[0]['dq_model.name']
             return {
