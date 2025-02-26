@@ -47,3 +47,9 @@
   padding: 10px;
   flex-direction: column;
 }
+
+.dimension-card:hover,
+.factor-card:hover,
+.metric-card:hover {
+  opacity: 0.8;
+}

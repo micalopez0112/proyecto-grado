@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
-import {toast} from "react-toastify";
-import { fetchMappings,connectNeo4jDB,getDatasetMappings} from "../../services/mapsApi.ts";
+import { toast } from "react-toastify";
+import {
+  fetchMappings,
+  connectNeo4jDB,
+  getDatasetMappings,
+} from "../../services/mapsApi.ts";
 import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import "./MappingsScreen.css";
@@ -21,18 +25,24 @@ const MappingsScreen = () => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const {externalFlow,setExternalFlow,externalDatasetId,setExternalDatasetId,collectionPath,setCollectionPath} =
-  useDataContext();
+  const {
+    externalFlow,
+    setExternalFlow,
+    externalDatasetId,
+    setExternalDatasetId,
+    collectionPath,
+    setCollectionPath,
+  } = useDataContext();
 
   useEffect(() => {
-    if(!effectRun.current){
+    if (!effectRun.current) {
       const checkFlow = async () => {
         console.log("Search params size: ", searchParams.size);
         setLoading(true);
-        if(searchParams.size > 0){
-          if(connectionString && collectionPathParam && idDataset){
+        if (searchParams.size > 0) {
+          if (connectionString && collectionPathParam && idDataset) {
             //erase navigation stack
-            console.log("FLUJO EXTERNO")
+            console.log("FLUJO EXTERNO");
             console.log("Connection string: ", connectionString);
             console.log("Collection path: ", collectionPathParam);
             console.log("Id dataset: ", idDataset);
@@ -40,7 +50,7 @@ const MappingsScreen = () => {
             // if yes, return
             //Check if parameters are not null
             //if are null, throw error and return
-            if(externalFlow){
+            if (externalFlow) {
               console.log("Already in external flow");
               toast.success("Already in external flow");
               await retrieveMappings(idDataset);
@@ -49,39 +59,52 @@ const MappingsScreen = () => {
             }
 
             const decodedConnectionString = connectionString
-            ? decodeURIComponent(connectionString)
-            : "";
-    
-            console.log("#DECODED connection_string#: ", decodedConnectionString);
+              ? decodeURIComponent(connectionString)
+              : "";
+
+            console.log(
+              "#DECODED connection_string#: ",
+              decodedConnectionString
+            );
             //call update neo4j connection
             //set info in context for external app flow
             const credentials = decodedConnectionString.split("$");
             const uri = credentials[0];
             const user = credentials[1];
             const password = credentials[2];
-            
+
             setLoading(true);
-            const responseUpdateNeo4j = await connectNeo4jDB(uri,user,password);
-            if(responseUpdateNeo4j?.status === 200){
+            const responseUpdateNeo4j = await connectNeo4jDB(
+              uri,
+              user,
+              password
+            );
+            if (responseUpdateNeo4j?.status === 200) {
               setLoading(false);
               //capaz cambiar a que si recien acá da 200 OK guardar en contexto
               toast.success("The external connection has been established");
-              console.log("Response update neo4j en MappingsScreen.tsx: ",responseUpdateNeo4j);
+              console.log(
+                "Response update neo4j en MappingsScreen.tsx: ",
+                responseUpdateNeo4j
+              );
               setExternalFlow(true);
               setExternalDatasetId(idDataset);
               setCollectionPath(collectionPathParam);
-              if(idDataset){
+              if (idDataset) {
                 await retrieveMappings(idDataset);
               }
-            }
-            else{
+            } else {
               setLoading(false);
-              toast.error("Error establishing the external connection, please check the connection string and try again.");
-              console.log("Response update neo4j en MappingsScreen.tsx: ",responseUpdateNeo4j);
+              toast.error(
+                "Error establishing the external connection, please check the connection string and try again."
+              );
+              console.log(
+                "Response update neo4j en MappingsScreen.tsx: ",
+                responseUpdateNeo4j
+              );
               navigate("/");
             }
-          }
-          else{
+          } else {
             try {
               toast.error("Error: Missing parameters in external flow");
               console.log("Error: Missing parameters in external flow");
@@ -91,46 +114,42 @@ const MappingsScreen = () => {
               setLoading(false); // Detener spinner cuando haya un error
               return;
             }
-            
           }
-        }
-        else{
-          console.log("FLUJO INTERNO")
+        } else {
+          console.log("FLUJO INTERNO");
           await retrieveMappings("");
         }
         setLoading(false);
       };
       checkFlow();
     }
-    return () =>{
+    return () => {
       console.log("EffectRun seteado a true");
       effectRun.current = true;
     };
-  },[searchParams]);
+  }, [searchParams]);
 
-  const retrieveMappings = async (datasetId:string) => {
+  const retrieveMappings = async (datasetId: string) => {
     setLoading(true);
     console.log("Mappings antes de fetchMappings: ", mappings);
-    if(datasetId !== ""){
+    if (datasetId !== "") {
       const datasetMappings = await getDatasetMappings(datasetId);
       console.log("Dataset mappings from idDataset: ", datasetMappings);
-      if (datasetMappings && idDataset){
+      if (datasetMappings && idDataset) {
         console.log("Mapping data from dataset id: ", datasetMappings.data);
         //Es necesario el map porque viene con distintos campos
         const transformedMappings = datasetMappings.data.map((item: any) => ({
-          id: item.idMapping,  
-          name: item.name,     
+          id: item.idMapping,
+          name: item.name,
         }));
         setMappings(transformedMappings);
       }
-    }
-    else{
+    } else {
       const datasetMappings = await fetchMappings();
-      if (datasetMappings && !externalDatasetId){
+      if (datasetMappings && !externalDatasetId) {
         console.log("Mapping data from dataset id: ", datasetMappings.data);
         setMappings(datasetMappings.data);
-      } 
-        
+      }
     }
     console.log("Mappings: ", mappings);
     setLoading(false);
@@ -151,8 +170,8 @@ const MappingsScreen = () => {
     mapping.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const newMapping = () =>{
-    if(externalFlow){
+  const newMapping = () => {
+    if (externalFlow) {
       //hay que navegar a OntologySelect pero:
       //1. setear el id del dataset
       //2. setear la collection path
@@ -160,12 +179,10 @@ const MappingsScreen = () => {
       console.log("External dataset id: ", externalDatasetId);
       console.log("Collection path: ", collectionPath);
       navigate("/OntologySelect");
-    }
-    else{
+    } else {
       navigate("/OntologySelect");
     }
-    
-  }
+  };
 
   return (
     <>
@@ -174,20 +191,17 @@ const MappingsScreen = () => {
       ) : (
         <div className="mappings-list-container">
           <div className="mappings-title-container">
-            <h1 className="mappings-list-title">Set of Mappings</h1>
+            <h1 className="mappings-list-title">List of Mappings</h1>
           </div>
           <div className="input-button-container">
             <input
               type="text"
-              placeholder="Search Set of Mappings..."
+              placeholder="Search list of Mappings..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
             />
-            <button
-              onClick={() => newMapping()}
-              className="button"
-            >
+            <button onClick={() => newMapping()} className="button">
               New Set of Mapping
             </button>
           </div>

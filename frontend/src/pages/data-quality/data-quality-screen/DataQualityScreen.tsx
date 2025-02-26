@@ -74,22 +74,41 @@ const DataQualityScreen = () => {
   }, [idDataset, mappings.length]);
 
   const onClickMappingCard = (id: string) => {
-    setSelectedMappingId(id);
+    if (selectedMappingId === id) {
+      setSelectedMappingId("");
+    } else {
+      setSelectedMappingId(id);
+    }
   };
 
   const onClickDimension = (dimension: string) => {
-    setSelectedDimension(dimension);
-    setSelectedFactor(null);
-    setSelectedMetric(null);
+    if (dimension === selectedDimension) {
+      setSelectedDimension(null);
+      setSelectedFactor(null);
+      setSelectedMetric(null);
+    } else {
+      setSelectedDimension(dimension);
+      setSelectedFactor(null);
+      setSelectedMetric(null);
+    }
   };
 
   const onClickFactor = (factor: string) => {
-    setSelectedFactor(factor);
-    setSelectedMetric(null);
+    if (factor === selectedFactor) {
+      setSelectedFactor(null);
+      setSelectedMetric(null);
+    } else {
+      setSelectedFactor(factor);
+      setSelectedMetric(null);
+    }
   };
 
   const onClickMetric = (metric: any) => {
-    setSelectedMetric(metric);
+    if (metric === selectedMetric) {
+      setSelectedMetric(null);
+    } else {
+      setSelectedMetric(metric);
+    }
   };
 
   const handleSelectClick = () => {
@@ -122,7 +141,7 @@ const DataQualityScreen = () => {
           <div className="quality-container">
             <div className="container">
               <div className="data-quality-container">
-                <h2 className="sub-title">Set of Mappings</h2>
+                <h2 className="sub-title">List of Mappings</h2>
                 <div className="quality-list-container">
                   {mappings.map((mapping) => (
                     <MappingCard
@@ -168,6 +187,7 @@ const DataQualityScreen = () => {
                                   ? "#ffdc92"
                                   : "#fff",
                             }}
+                            className="dimension-card"
                           >
                             {dim.dimension}
                           </div>
@@ -200,6 +220,7 @@ const DataQualityScreen = () => {
                                       ? "#ffdc92"
                                       : "#fff",
                                 }}
+                                className="factor-card"
                               >
                                 {factor.name}
                               </div>
@@ -238,6 +259,7 @@ const DataQualityScreen = () => {
                                       ? "#ffdc92"
                                       : "#fff",
                                 }}
+                                className="metric-card"
                               >
                                 {metric.name}
                               </div>

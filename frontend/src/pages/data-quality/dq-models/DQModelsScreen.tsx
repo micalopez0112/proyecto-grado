@@ -47,6 +47,15 @@ const DQModelsScreen = () => {
     });
   };
 
+  const onSelectModel = (id: string) => {
+    console.log("ID: ", id);
+    if (selectedDQModelId === id) {
+      setSelectedDQModelId("");
+    } else {
+      setSelectedDQModelId(id);
+    }
+  };
+
   const handleEvaluateClick = async () => {
     try {
       setLoading(true);
@@ -104,7 +113,7 @@ const DQModelsScreen = () => {
                     backgroundColor:
                       selectedDQModelId === id ? "#ffdc92" : "#fff",
                   }}
-                  onClickCallback={() => setSelectedDQModelId(id)}
+                  onClickCallback={() => onSelectModel(id)}
                 />
               ))
             ) : (

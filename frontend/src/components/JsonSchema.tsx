@@ -13,7 +13,11 @@ const Json: React.FC = () => {
   ) => {
     e.stopPropagation();
     console.log("Obj. elem. selected: ", element);
-    setJsonElementSelected(element);
+    if (element === JsonElementSelected) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
+    }
   };
 
   const handleClickSimpleProperty = (
@@ -22,8 +26,13 @@ const Json: React.FC = () => {
     type: string
   ) => {
     e.stopPropagation();
-    setJsonElementSelected(element + "_key#" + type);
-    console.log("Simp. elem. selected: " + element + "_key#" + type);
+    element = element + "_key#" + type;
+    if (JsonElementSelected === element) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
+    }
+    console.log("Simp. elem. selected: " + element);
   };
 
   const handleClickArrayProperty = (
@@ -31,8 +40,13 @@ const Json: React.FC = () => {
     element: string
   ) => {
     e.stopPropagation();
-    setJsonElementSelected(element + "_key#array");
-    console.log("Array elem. selected: " + element + "_key#array");
+    element = element + "_key#array";
+    if (JsonElementSelected === element) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
+    }
+    console.log("Array elem. selected: " + element);
   };
 
   const renderProperties = (
@@ -113,7 +127,7 @@ const Json: React.FC = () => {
           );
         }
         if (value.type === "array" && value.items) {
-          if(value.items.anyOf){
+          if (value.items.anyOf) {
             console.log("anyOf array", value.items.anyOf);
           }
           return (
@@ -129,23 +143,20 @@ const Json: React.FC = () => {
               >
                 <strong>{key}:</strong> array
               </div>
-              {
-                value.items.anyOf 
-                ?
-                value.items.anyOf.map(element => {
+              {value.items.anyOf ? (
+                value.items.anyOf.map((element) => {
                   console.log("Element", element);
-                  return(
-                  <div className="object-properties">
-                    {renderArrayItemsAnyOf(element, parent + "-" + key)}
-                  </div>
-                  )
+                  return (
+                    <div className="object-properties">
+                      {renderArrayItemsAnyOf(element, parent + "-" + key)}
+                    </div>
+                  );
                 })
-                :
+              ) : (
                 <div className="object-properties">
                   {renderArrayItems(value.items, parent + "-" + key)}
                 </div>
-              }
-              
+              )}
             </div>
           );
         }
@@ -182,7 +193,7 @@ const Json: React.FC = () => {
                 ? "active"
                 : ""
             }`}
-            onClick = {(e) =>
+            onClick={(e) =>
               handleClickElement(
                 e,
                 parent ? parent + "_value" : parent + "_value"
@@ -221,7 +232,7 @@ const Json: React.FC = () => {
           <div
             key={parent + "_value"}
             className={`json-elem array-box disabled `}
-            onClick = {(e) =>
+            onClick={(e) =>
               handleClickElement(
                 e,
                 parent ? parent + "_value" : parent + "_value"
@@ -239,30 +250,29 @@ const Json: React.FC = () => {
     }
     return (
       <>
-      {
-        Array.isArray(items.type) ?
-        items.type.map((element) => {
-          return(
-            <div
-              className={`json-elem array-box disabled`}
-              onClick={(e) =>
-                console.log("clicked array item, doesn´t do anything")
-              }
-            >
-              <strong>array items:</strong> {element}
-            </div>
-          )
-        })
-        :
-        <div
-          className={`json-elem array-box disabled`}
-          onClick={(e) =>
-            console.log("clicked array item, doesn´t do anything")
-          }
-        >
-          <strong>array items:</strong> {items.type}
-        </div>
-      }
+        {Array.isArray(items.type) ? (
+          items.type.map((element) => {
+            return (
+              <div
+                className={`json-elem array-box disabled`}
+                onClick={(e) =>
+                  console.log("clicked array item, doesn´t do anything")
+                }
+              >
+                <strong>array items:</strong> {element}
+              </div>
+            );
+          })
+        ) : (
+          <div
+            className={`json-elem array-box disabled`}
+            onClick={(e) =>
+              console.log("clicked array item, doesn´t do anything")
+            }
+          >
+            <strong>array items:</strong> {items.type}
+          </div>
+        )}
       </>
     );
   };
