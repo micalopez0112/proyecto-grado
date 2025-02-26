@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { evaluateMapping, getDQModels } from "../../../services/mapsApi.ts";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DQModelsScreen.css";
@@ -57,14 +57,26 @@ const DQModelsScreen = () => {
         {}
       );
       if (response) {
+        const validationResults = Object.entries(response.data).map(
+          ([mappingName, score]) => ({
+            mappingName,
+            score,
+          })
+        );
+        console.log("Validation results: ", validationResults);
         navigate("/EvaluateMappings", {
           state: {
             mappingId: mappingId,
             ruleId: rule.ruleId,
-            validationResults: response.data,
+            validationResults: validationResults,
             dqModelId: selectedDQModelId,
           },
         });
+        if (validationResults.length > 0) {
+          toast.success("Successful evaluation");
+        } else {
+          toast.error("Error evaluating");
+        }
       }
     } catch (error) {
       console.error("Error evaluating mappings:", error);
@@ -117,7 +129,6 @@ const DQModelsScreen = () => {
               Evaluate
             </button>
           </div>
-          <ToastContainer />
         </div>
       )}
     </>

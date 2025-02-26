@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   getDataQualityRules,
   getDatasetMappings,
@@ -273,7 +273,6 @@ const DataQualityScreen = () => {
               <button onClick={() => setMappingDetails(null)}>Close</button>
             </div>
           )}
-          <ToastContainer />
         </div>
       )}
     </>

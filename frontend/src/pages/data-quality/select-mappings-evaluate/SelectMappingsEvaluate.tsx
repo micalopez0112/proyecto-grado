@@ -26,7 +26,7 @@ const SelectMappingsEvaluate = () => {
   } = useDataContext();
 
   const location = useLocation();
-  const {mappingId, rule} = location.state;
+  const { mappingId, rule } = location.state;
   const [evaluateAndCreate, setEvaluateAndCreate] = useState(false);
   const [dqModelName, setdqModelName] = useState<string>("");
   const [selectedMappings, setSelectedMappings] = useState<Record<string, any>>(
@@ -124,10 +124,16 @@ const SelectMappingsEvaluate = () => {
         selectedMappings
       );
       if (response.status === 200) {
-        if(response.data.name){
+        if (response.data.name) {
           console.log("##DQ MODEL ALREADY EXISTS##: ", response.data.name);
-          alert("A DQ Model with the same attributes already exists. Its name is: '" + response.data.name+ "'.");
-          navigate("/DQModelsScreen",{state:{mappingId: mappingProcessId, rule:rule}});
+          alert(
+            "A DQ Model with the same attributes already exists. Its name is: '" +
+              response.data.name +
+              "'."
+          );
+          navigate("/DQModelsScreen", {
+            state: { mappingId: mappingProcessId, rule: rule },
+          });
           return;
         }
         if (evaluateAndCreate) {
@@ -140,17 +146,31 @@ const SelectMappingsEvaluate = () => {
             {}
           );
           if (evaluationResponse) {
+            const validationResults = Object.entries(
+              evaluationResponse.data
+            ).map(([mappingName, score]) => ({
+              mappingName,
+              score,
+            }));
+            console.log("Validation results: ", validationResults);
             navigate("/EvaluateMappings", {
               state: {
                 mappingId: mappingProcessId,
                 ruleId: rule.ruleId,
-                validationResults: evaluationResponse.data,
-                dqModelId:response.data,
+                validationResults: validationResults,
+                dqModelId: response.data,
               },
             });
+            if (validationResults.length > 0) {
+              toast.success("Successful evaluation");
+            } else {
+              toast.error("Error evaluating");
+            }
           }
         } else {
-          navigate("/DQModelsScreen",{state:{mappingId: mappingProcessId, rule:rule}});
+          navigate("/DQModelsScreen", {
+            state: { mappingId: mappingProcessId, rule: rule },
+          });
         }
       } else {
         toast.error("Failed to create DQ Model. Please try again.");

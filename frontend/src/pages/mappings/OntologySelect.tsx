@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDataContext } from "../../context/context.tsx";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OntologyDataType } from "../../types";
-import { uploadOntology,getJsonSchema } from "../../services/mapsApi.ts";
+import { uploadOntology, getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import {ToastContainer, toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const OntologySelectScreen = () => {
-  const [ontologies, setOntologies] = useState<
-    Array<{ id: string; type: string; file: string; uri: string }>
-  >([]);
-  const { collectionPath,externalFlow,externalDatasetId,ontologyDataContext,
-     setontologyDataContext, setcurrentOntologyId,mappings, clearMappings,
-     setJsonSchemaContext } =
-    useDataContext();
+  const {
+    collectionPath,
+    externalFlow,
+    externalDatasetId,
+    setontologyDataContext,
+    setcurrentOntologyId,
+    clearMappings,
+    setJsonSchemaContext,
+  } = useDataContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [idSelectedOnto, setIdSelectedOnto] = useState<string>("");
   const [nextScreen, setNextScreen] = useState<boolean>(false);
@@ -51,12 +53,11 @@ const OntologySelectScreen = () => {
     // }
     // retrieveOntologies();
 
-    if(externalFlow){
+    if (externalFlow) {
       console.log("#External Flow en OntologySelect.tsx#");
       console.log("Collection path: ", collectionPath);
       console.log("External dataset id: ", externalDatasetId);
     }
-
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,9 +82,8 @@ const OntologySelectScreen = () => {
         response = await uploadOntology("FILE", selectedFile, "");
       } else if (selectedMethod && selectedMethod === "uri" && uriValue) {
         response = await uploadOntology("URI", undefined, uriValue);
-        console.log("Ontologia desde el back", response); 
-      }
-      else{
+        console.log("Ontologia desde el back", response);
+      } else {
         toast.error("Please select an ontology");
         setLoading(false);
         return;
@@ -92,22 +92,19 @@ const OntologySelectScreen = () => {
       const ontologyId = response?.data.ontologyData.ontology_id;
       setcurrentOntologyId(ontologyId);
       setontologyDataContext(ontologyData);
-      if(externalFlow){
+      if (externalFlow) {
         //cargar schema a partir del collection path y el externalIdDataset
         //navegar a MappingSelect
         setLoading(true);
         //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
-        const response = await getJsonSchema(collectionPath);//filepath
+        const response = await getJsonSchema(collectionPath); //filepath
         const schema = response?.data;
         //setJsonSchema(schema);
         console.log("##GENERATED SCHEMA##", schema);
-        setJsonSchemaContext(schema);//Check que se pase bien esto
+        setJsonSchemaContext(schema); //Check que se pase bien esto
         setLoading(false);
         navigate("/Mapping");
-        
-      }
-      else
-        navigate("/SchemaSelect");
+      } else navigate("/SchemaSelect");
     } catch (error) {
       const errorMessage = error.response.data.detail;
       toast.error("Failed on submit: " + errorMessage);
@@ -204,7 +201,7 @@ const OntologySelectScreen = () => {
                     ></input>
                   </div>
                 )}
-                <ToastContainer/>
+                {/* <ToastContainer/> */}
               </div>
             </div>
           </div>

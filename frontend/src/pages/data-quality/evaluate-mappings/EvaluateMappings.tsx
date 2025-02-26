@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
-import { toast, ToastContainer } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 
 const EvaluateMappings = () => {
@@ -14,28 +13,11 @@ const EvaluateMappings = () => {
   const { mappingId, dqModelId } = location.state;
   const initialResults = location.state?.validationResults || {};
 
-  const [validationResults, setValidationResults] = useState<any[]>([]);
   const [detailedResults, setDetailedResults] = useState<any[]>([]);
   const [selectedMapping, setSelectedMapping] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (Object.keys(initialResults).length > 0) {
-      const transformedResults = Object.entries(initialResults).map(
-        ([mappingName, score]) => ({
-          mappingName,
-          score,
-        })
-      );
-      setValidationResults(transformedResults);
-      toast.success("Successful evaluation");
-    } else {
-      toast.error("Error evaluating");
-      setError("Error evaluating.");
-    }
-  }, [initialResults]);
 
   const handleFetchDetailedResults = async (mappingName: string) => {
     if (!mappingId) {
@@ -45,7 +27,6 @@ const EvaluateMappings = () => {
 
     setLoading(true);
     setSelectedMapping(mappingName);
-    setError("");
     try {
       const data = await fetchDetailedEvaluationResults(
         mappingId,
@@ -67,6 +48,8 @@ const EvaluateMappings = () => {
     setDetailedResults([]);
   };
 
+  console.log("Initial results: ", initialResults);
+
   return (
     <div className="container">
       <h1 className="title-section">Validation Results</h1>
@@ -77,9 +60,9 @@ const EvaluateMappings = () => {
         <div className="error-message">{error}</div>
       ) : (
         <div className="validation-results-container">
-          {validationResults.length > 0 ? (
+          {initialResults.length > 0 ? (
             <ul className="validation-results-list">
-              {validationResults.map((result, index) => (
+              {initialResults.map((result, index) => (
                 <li key={index} className="validation-result-item">
                   <div className="result-mapping">
                     <strong>Mapping:</strong> {result.mappingName}
@@ -133,7 +116,6 @@ const EvaluateMappings = () => {
       <button className="back-button" onClick={() => navigate(-1)}>
         Back to Selection
       </button>
-      <ToastContainer />
     </div>
   );
 };
