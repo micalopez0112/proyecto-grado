@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { OntologyDataType, JsonSchema } from "../types";
+import { toast } from "react-toastify";
 
 export interface OntoElement {
   name?: string;
@@ -76,8 +77,8 @@ const Context = createContext<ContextProps>({
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [externalFlow, setExternalFlow] = useState<boolean>(
-    () => JSON.parse(localStorage.getItem("externalFlow") || "false")
+  const [externalFlow, setExternalFlow] = useState<boolean>(() =>
+    JSON.parse(localStorage.getItem("externalFlow") || "false")
   );
   const [externalDatasetId, setExternalDatasetId] = useState<string>(
     () => localStorage.getItem("externalDatasetId") || ""
@@ -100,8 +101,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentOntologyId, setcurrentOntologyId] = useState<
     string | undefined
   >(undefined);
-  
-  
 
   const addNewMapping = () => {
     console.log("Adding new mapping, actual mappings are: ", mappings);
@@ -196,8 +195,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setJsonElementSelected("");
     } else {
       console.log("mappings vaciós");
-      alert(
-        "Para agregar un mapeo primero debe seleccionarse un elemento del JSONSchema y de la ontología"
+      toast.error(
+        "To add a mapping select element one element from th JSON Schema and the Ontology"
       );
     }
   };
@@ -332,14 +331,14 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setCollectionPath("");
     setExternalDatasetId("");
     setExternalFlow(false);
-  }
+  };
 
   useEffect(() => {
     localStorage.setItem("externalFlow", JSON.stringify(externalFlow));
-  },[externalFlow]);
+  }, [externalFlow]);
 
   useEffect(() => {
-    if(externalFlow && collectionPath !== ""){
+    if (externalFlow && collectionPath !== "") {
       //Va a cambiar pero no lo va a almacenar en el local storage
       localStorage.setItem("collectionPath", collectionPath);
     }
@@ -348,7 +347,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     localStorage.setItem("externalDatasetId", externalDatasetId);
   }, [externalDatasetId]);
-
 
   return (
     <Context.Provider

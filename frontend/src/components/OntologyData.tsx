@@ -56,35 +56,38 @@ const OntologyData: React.FC<{}> = () => {
     },
   };
 
-  useEffect(() => {
-    
-  },[]);
+  useEffect(() => {}, []);
 
   const handleClickOntoElem = (element: any, type: string) => {
-    if (isMapping && type !== "object_property") {
-      setOntoElementSelected({ type: type, ontoElement: element });
-    } else if (isMapping && type === "object_property") {
-      const OntoElementToSelect = {
-        type: type,
-        ontoElement: {
-          name: element.name,
-          iri: element.iri,
-          range: [],
-        },
-      };
-      console.log("Element selected: ", OntoElementToSelect);
-      setOntoElementSelected(OntoElementToSelect);
+    console.log("Element selected: ", element);
+    if (element === OntoElementSelected) {
+      setOntoElementSelected({});
+    } else {
+      if (isMapping && type !== "object_property") {
+        setOntoElementSelected({ type: type, ontoElement: element });
+      } else if (isMapping && type === "object_property") {
+        const OntoElementToSelect = {
+          type: type,
+          ontoElement: {
+            name: element.name,
+            iri: element.iri,
+            range: [],
+          },
+        };
+        console.log("Element selected: ", OntoElementToSelect);
+        setOntoElementSelected(OntoElementToSelect);
 
-      // es necesario mapear el rango de la propiedad de objeto
+        // es necesario mapear el rango de la propiedad de objeto
 
-      // if(//chequear si el jsonElementSelected _value está en mapping){
+        // if(//chequear si el jsonElementSelected _value está en mapping){
 
-      // }
-      // else{
-      //   setRangeList([...rangeList, element.range]);
-      //   setObjectPropertyElement(element);
-      //   setModalIsOpen(true);
-      //   }
+        // }
+        // else{
+        //   setRangeList([...rangeList, element.range]);
+        //   setObjectPropertyElement(element);
+        //   setModalIsOpen(true);
+        //   }
+      }
     }
   };
 

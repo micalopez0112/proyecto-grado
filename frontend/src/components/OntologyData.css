@@ -118,7 +118,7 @@
 }
 
 .column-name-container.active {
-  background-color: #f39c12; /* Example active state style */
+  background-color: #ffdc92;
   font-weight: bold;
   border-radius: 5px;
   padding-right: 10px;
