@@ -449,6 +449,7 @@ def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
          RETURN dq_model.id, dq_model.name
      """
     print("#query for checking if dq model exist#: ", query)
+    print("Locked Fields: ", looked_fields)
     neo4j_driver = get_neo4j_driver()
     try:
         records, _, _ = neo4j_driver.execute_query(query)
@@ -457,13 +458,14 @@ def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
                 dq_model_id = record.get('dq_model.id')
                 list_of_fields = get_applied_methods_by_dq_model(dq_model_id)
                 # print("#dqmodel ID#: ", dq_model_id)
-                # print("#list_of_fields#: ", list_of_fields)
+                print("#list_of_fields de dq_model#: ", list_of_fields)
                 counter = 0
                 for field in list_of_fields:
                     # print("##dq_model_applied_field: ", field)
                     if(field.name in looked_fields):
                         counter += 1
-                if counter == len (looked_fields):
+                print("Counter al finalizar el recorrido de list_of_fields: ", counter)
+                if counter == len (list_of_fields):
                     return {
                         "id": dq_model_id,
                         "name": record.get('dq_model.name')
