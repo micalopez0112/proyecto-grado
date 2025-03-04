@@ -458,14 +458,17 @@ def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
                 dq_model_id = record.get('dq_model.id')
                 list_of_fields = get_applied_methods_by_dq_model(dq_model_id)
                 # print("#dqmodel ID#: ", dq_model_id)
-                print("#list_of_fields de dq_model#: ", list_of_fields)
+                list_of_fields_names = [field.name for field in list_of_fields]
+                print("#list_of_fields_names de dq_model#: ", list_of_fields_names)
                 counter = 0
-                for field in list_of_fields:
-                    # print("##dq_model_applied_field: ", field)
-                    if(field.name in looked_fields):
+                for field in looked_fields:
+                    if(field in list_of_fields_names):
                         counter += 1
+                    else:
+                        break
                 print("Counter al finalizar el recorrido de list_of_fields: ", counter)
-                if counter == len (list_of_fields):
+                print("len(list_of_fields_name): ", len(list_of_fields_names))
+                if counter == len (list_of_fields_names) and counter == len(looked_fields):
                     return {
                         "id": dq_model_id,
                         "name": record.get('dq_model.name')
