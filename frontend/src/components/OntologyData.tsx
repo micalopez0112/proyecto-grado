@@ -76,17 +76,6 @@ const OntologyData: React.FC<{}> = () => {
         };
         console.log("Element selected: ", OntoElementToSelect);
         setOntoElementSelected(OntoElementToSelect);
-
-        // es necesario mapear el rango de la propiedad de objeto
-
-        // if(//chequear si el jsonElementSelected _value está en mapping){
-
-        // }
-        // else{
-        //   setRangeList([...rangeList, element.range]);
-        //   setObjectPropertyElement(element);
-        //   setModalIsOpen(true);
-        //   }
       }
     }
   };
@@ -188,7 +177,7 @@ const OntologyData: React.FC<{}> = () => {
           </div>
           <div style={ModalOPStyles.modalfooter}>
             <button className="button danger" onClick={closeModal}>
-              Cerrar
+              Close
             </button>
             <button
               className="button success"
@@ -213,7 +202,7 @@ const OntologyData: React.FC<{}> = () => {
             <Spinner />
           ) : (
             <>
-              <label>Ontología Seleccionada:</label>
+              <label>Ontology</label>
               <div style={ModalOntoStyles.graphContainer}>
                 {graphData ? (
                   <Graph
@@ -228,7 +217,7 @@ const OntologyData: React.FC<{}> = () => {
           )}
 
           <button className="button" onClick={closeOntoModal}>
-            Cerrar
+            CLose
           </button>
         </div>
       </Modal>
@@ -236,11 +225,6 @@ const OntologyData: React.FC<{}> = () => {
       <div className="title-wrapper">
         <h1 className="title">Ontology Elements</h1>
       </div>
-      {/* {OntoElementSelected.type && (
-        <strong style={{ fontFamily: "cursive" }}>
-          An Element is selected: {OntoElementSelected.ontoElement.iri}
-        </strong>
-      )} */}
       {ontologyDataContext?.ontoData.map((ontology, i) => (
         <div className="onto-container" key={`ontology-${i}`}>
           {ontology?.data?.map((x, i) => (
@@ -327,7 +311,7 @@ const OntologyData: React.FC<{}> = () => {
                 </div>
               )}
               <button
-                style={{ fontSize: "16px" }}
+                style={{ fontSize: "16px", alignSelf: "center" }}
                 className="button"
                 onClick={() => openModal()}
               >

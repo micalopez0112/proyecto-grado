@@ -19,7 +19,7 @@ const MappingCard = ({
 }: {
   id: string;
   name: string;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   onClickCallback?: (id: string) => void;
   onDeleteCallback?: (id: string) => void;
   includeMappingInfo?: boolean;
@@ -90,11 +90,7 @@ const MappingCard = ({
           </button>
         </div>
       </Modal>
-      <div
-        className="mapping-card"
-        style={style}
-        onClick={() => onClickCallback(id)}
-      >
+      <div className="card" style={style} onClick={() => onClickCallback(id)}>
         <div>{name}</div>
 
         {includeMappingInfo && (

@@ -426,34 +426,60 @@ class ParamRepoCrateDQModel(BaseModel):
     mapped_entries: List[str]
     
 # TODO: retorna true si existe un dq model con el mismo contexto, dataset y que tenga appliedDqMethod para todos los atributos mapeados
+
+# La query inicial trae el/los dq_model que tengan el contexto y el dataset 
+# se recorre cada uno y :
+## Usar la función get_applied_methods_by_dq_model retorna el nombre de todos los fields unidos por '-'
+## Por cada dq_model:
+    ## Recorrer los json_keys, 
+        ## si están en el resultado de la función get_applied_methods_by_dq_model se saca
+        ## sino break al siguiente DQ_MODEL
+    ## si llega al final para un dq_model y ambas listas son vacías return ese dq_model
+    ## sino seguir con el siguiente dq_model
+# si no se encontró ningun dq_model se retorna None
 def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
-    query = f"""
-        MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
-        WITH dq_model
-    """
+    looked_fields = []
     for attribute in attributes_mapped:
-        json_keys = find_json_keys(attribute)
-        print("json keys before query: ", json_keys)
-        query += " MATCH (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method:AppliedDQMethod)-[:APPLIES_METHOD]->(method:Method)"
-        for key in json_keys:
-            print("key: ", key)
-            query += f" MATCH (app_dq_method)-[:APPLIED_TO]->(field:Field{{name: '{key}'}})"
-    query += " RETURN dq_model.id, dq_model.name"
-    print("query for checking dq model: ", query)
+        attr_keys = attribute.split('_')[0]
+        attr_keys = '-'.join(attr_keys.split('-')[1:])
+        looked_fields.append(attr_keys)
+        print("attr_keys: ", attr_keys)
+    query = f"""
+         MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)-[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
+         RETURN dq_model.id, dq_model.name
+     """
+    print("#query for checking if dq model exist#: ", query)
+    print("Locked Fields: ", looked_fields)
     neo4j_driver = get_neo4j_driver()
     try:
         records, _, _ = neo4j_driver.execute_query(query)
         if(records.__len__() > 0):
-            dqmodel_id = records[0]['dq_model.id']
-            dqmodel_name = records[0]['dq_model.name']
-            return {
-                "id": dqmodel_id,
-                "name": dqmodel_name
-            }
-        return None
+            for record in records:## recorrer cada dq_model
+                dq_model_id = record.get('dq_model.id')
+                list_of_fields = get_applied_methods_by_dq_model(dq_model_id)
+                # print("#dqmodel ID#: ", dq_model_id)
+                list_of_fields_names = [field.name for field in list_of_fields]
+                print("#list_of_fields_names de dq_model#: ", list_of_fields_names)
+                counter = 0
+                for field in looked_fields:
+                    if(field in list_of_fields_names):
+                        counter += 1
+                    else:
+                        break
+                print("Counter al finalizar el recorrido de list_of_fields: ", counter)
+                print("len(list_of_fields_name): ", len(list_of_fields_names))
+                if counter == len (list_of_fields_names) and counter == len(looked_fields):
+                    return {
+                        "id": dq_model_id,
+                        "name": record.get('dq_model.name')
+                    }
+            return None
+        else:
+            return None
     except Exception as e:
         print("error in executing query: ", e)
         return None
+    
 
 
 # TODO: ver de cambiar el nombre de Collection a Dataset quizas
@@ -585,7 +611,7 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
         # print("RECORDS: ", records)
         # OJO: meti ese cambio ver si no da problema
         # records = records[1:]
-        print("RECORDS LEN: ", records.__len__())
+        # print("RECORDS LEN: ", records.__len__())
         print("##########")
         for record in records:
             nodes = record[0]

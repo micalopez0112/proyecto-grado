@@ -9,6 +9,7 @@ from app.dq_evaluation.evaluation import StrategyContext
 from ..database import neo4j_conn
 
 from app.repositories import metadata_repo
+import time
 
 
 router = APIRouter()
@@ -44,8 +45,10 @@ async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Opt
     try :
         context = StrategyContext()
         context.select_strategy(quality_rule, aggregation)
-        
+        inicio = time.time()
         result = await context.evaluate_quality(dq_model_id)
+        fin = time.time()
+        print(f"Tiempo de ejecución de la evaluación del dq_model_id: {dq_model_id} fue:-- {fin - inicio} --")
         return result
     except Exception as e:
         msg = str(e)

@@ -30,12 +30,12 @@ const SchemaSelect = () => {
 
   const handleGenerateSchema = async () => {
     try {
-      if(filePath !== ""){
+      if (filePath !== "") {
         //CHECK FILEPATH SIZE > 0
         console.log("##File path: ", filePath);
         setLoading(true);
         //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
-        const response = await getJsonSchema(filePath);//filepath
+        const response = await getJsonSchema(filePath); //filepath
         //handle error al abrir el archivo
         const schema = response?.data;
         setJsonSchema(schema);
@@ -44,16 +44,17 @@ const SchemaSelect = () => {
         setCollectionPath(filePath); //Check que se pase bien esto
         navigate("/Mapping");
         setLoading(false);
-      }
-      else{
+      } else {
         toast.error("Please introduce a valid path to load the dataset");
         setLoading(false);
-        return
+        return;
       }
     } catch (error) {
       setFilePath("");
       console.error("Invalid JSON input");
-      toast.error("Invalid path, please introduce a valid one to load the dataset");
+      toast.error(
+        "Invalid path, please introduce a valid one to load the dataset"
+      );
       setJsonSchema(null);
       setLoading(false);
     }
@@ -61,53 +62,59 @@ const SchemaSelect = () => {
 
   return (
     <>
-    {loading ? (
-      <Spinner />
-    ):(
-    <div style={styles.container}>
-      <h1 style={{ margin: "0" }}>Select Dataset</h1>
-      <div style={styles.selectHeader}>
-      <p style={{
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div style={styles.container}>
+          <h1>Upload Dataset</h1>
+          <div style={styles.selectHeader}>
+            <p
+              style={{
                 marginBottom: "8px",
                 display: "flex",
                 alignItems: "flex-start",
                 fontSize: "18px",
-              }}>
-        Provide a local path to load the dataset from:
-      </p>
-      <div
-      style={{
-        display:"flex",
-        flexDirection:"column",
-        border: "2px solid rgb(0,0,0)",
-        borderRadius: "8px",
-        padding: "10px",
-        
-      }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent:"center",
-            gap: "12px",
-          }}
-        >
-          <label style={{ fontSize: "18px" }}>Path:</label>
-          <input
-            style={{}}
-            type="text"
-            value={filePath}
-            onChange={(e) => setFilePath(e.target.value)}
-          ></input>
+              }}
+            >
+              Provide a local path to load the dataset from:
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                border: "2px solid rgb(0,0,0)",
+                borderRadius: "8px",
+                padding: "10px",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  gap: "12px",
+                }}
+              >
+                <label style={{ fontSize: "18px" }}>Path:</label>
+                <input
+                  style={{}}
+                  type="text"
+                  value={filePath}
+                  onChange={(e) => setFilePath(e.target.value)}
+                ></input>
+              </div>
+            </div>
+          </div>
+          <button
+            className="button"
+            onClick={handleGenerateSchema}
+            disabled={filePath === ""}
+          >
+            Confirm dataset and generate schema
+          </button>
         </div>
-        <button className="button" onClick={handleGenerateSchema}
-          disabled={filePath === ""} >
-          Confirm Dataset and Generate Schema
-        </button>
-        </div>
-      </div>
-
-    </div>)}
+      )}
     </>
   );
 };
@@ -118,14 +125,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
-    backgroundColor: "#f0f0f0",
     minHeight: "100vh",
   },
   inputWrapper: {},
-  selectHeader:{
+  selectHeader: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
     width: "800px",
   },
 };

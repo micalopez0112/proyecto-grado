@@ -109,9 +109,8 @@ const DQModelsScreen = () => {
                   id={id}
                   name={name}
                   style={{
-                    ...styles.mappingCard,
                     backgroundColor:
-                      selectedDQModelId === id ? "#ffdc92" : "#fff",
+                      selectedDQModelId === id ? "#ffdc92" : "#efefef",
                   }}
                   onClickCallback={() => onSelectModel(id)}
                 />

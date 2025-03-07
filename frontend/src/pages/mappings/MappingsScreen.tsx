@@ -192,6 +192,10 @@ const MappingsScreen = () => {
         <div className="mappings-list-container">
           <div className="mappings-title-container">
             <h1 className="mappings-list-title">List of Mappings</h1>
+            <p className="subtitle">
+              Select an item to see the mappings associated or create a new set
+              of mappings.
+            </p>
           </div>
           <div className="input-button-container">
             <input
@@ -202,7 +206,7 @@ const MappingsScreen = () => {
               className="search-input"
             />
             <button onClick={() => newMapping()} className="button">
-              New Set of Mapping
+              New Set of Mappings
             </button>
           </div>
           {filteredMappings.length > 0 ? (
