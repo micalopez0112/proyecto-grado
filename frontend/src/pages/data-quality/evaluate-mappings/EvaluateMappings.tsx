@@ -52,7 +52,7 @@ const EvaluateMappings = () => {
 
   return (
     <div className="container">
-      <h1 className="title-section">Validation Results</h1>
+      <h1 className="title-section">Evaluation results</h1>
 
       {loading ? (
         <Spinner />
@@ -63,7 +63,10 @@ const EvaluateMappings = () => {
           {initialResults.length > 0 ? (
             <ul className="validation-results-list">
               {initialResults.map((result, index) => (
-                <li key={index} className="validation-result-item">
+                <li
+                  key={index}
+                  className="validation-result-item card no-hover"
+                >
                   <div className="result-mapping">
                     <strong>Mapping:</strong> {result.mappingName}
                   </div>
@@ -93,29 +96,36 @@ const EvaluateMappings = () => {
         style={modalStyles}
         ariaHideApp={false}
       >
-        <div style={modalStyles.modalContent}>
-          <h2>Detailed Results for: {selectedMapping}</h2>
-          {loading && <Spinner />}
+        <div className="modal-content">
+          <h2>Evaluation results for: {selectedMapping}</h2>
+          {loading && <div className="spinner"></div>}
           {!loading && detailedResults.length > 0 ? (
-            <ul>
-              {detailedResults.map((detail, idx) => (
-                <li key={idx}>
-                  <strong>Detail:</strong> {JSON.stringify(detail)}
-                </li>
-              ))}
-            </ul>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Document id</th>
+                  <th>Date</th>
+                  <th>Measure</th>
+                </tr>
+              </thead>
+              <tbody>
+                {detailedResults.map((detail, idx) => (
+                  <tr key={idx}>
+                    <td>{detail.id_document}</td>
+                    <td>{detail.date}</td>
+                    <td>{detail.measure}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
-            <p>No detailed results available.</p>
+            <p>No evaluation results available.</p>
           )}
           <button className="button" onClick={closeModal}>
             Close
           </button>
         </div>
       </Modal>
-
-      <button className="back-button" onClick={() => navigate(-1)}>
-        Back to Selection
-      </button>
     </div>
   );
 };
@@ -127,8 +137,8 @@ const modalStyles: { [key: string]: React.CSSProperties } = {
     right: "auto",
     bottom: "auto",
     transform: "translate(-50%, -50%)",
-    width: "600px",
-    height: "400px",
+    width: "800px",
+    height: "500px",
     padding: "20px",
     display: "flex",
     flexDirection: "column",

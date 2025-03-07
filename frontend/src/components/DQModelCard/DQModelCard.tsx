@@ -13,7 +13,7 @@ const DQModelCard = ({
 }: {
   id: string;
   name: string;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
   onClickCallback?: (id: string) => void;
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -50,15 +50,24 @@ const DQModelCard = ({
             <Spinner />
           ) : (
             <div>
-              <h2>Details</h2>
+              <h2>Applied to attributes:</h2>
               {modalData && modalData.length > 0 ? (
-                <ul>
-                  {modalData.map((item: any, index: number) => (
-                    <li key={index}>
-                      <strong>{item.name}:</strong> {item.type}
-                    </li>
-                  ))}
-                </ul>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modalData.map((item: any, index) => (
+                      <tr key={index}>
+                        <td>{item.name}</td>
+                        <td>{item.type}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <p>No data available.</p>
               )}
@@ -70,11 +79,7 @@ const DQModelCard = ({
         </div>
       </Modal>
 
-      <div
-        className="mapping-card"
-        style={style}
-        onClick={() => onClickCallback(id)}
-      >
+      <div className="card" style={style} onClick={() => onClickCallback(id)}>
         <div>{name}</div>
         <button
           onClick={(e) => {

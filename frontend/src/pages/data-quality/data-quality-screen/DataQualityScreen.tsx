@@ -141,7 +141,7 @@ const DataQualityScreen = () => {
           <div className="quality-container">
             <div className="container">
               <div className="data-quality-container">
-                <h2 className="sub-title">List of Mappings</h2>
+                <h2 className="sub-title-black">List of Mappings</h2>
                 <div className="quality-list-container">
                   {mappings.map((mapping) => (
                     <MappingCard
@@ -149,11 +149,10 @@ const DataQualityScreen = () => {
                       id={mapping.idMapping}
                       name={mapping.name}
                       style={{
-                        ...styles.mappingCard,
                         backgroundColor:
                           selectedMappingId === mapping.idMapping
                             ? "#ffdc92"
-                            : "#fff",
+                            : "#efefef",
                       }}
                       onClickCallback={() =>
                         onClickMappingCard(mapping.idMapping)
@@ -169,7 +168,7 @@ const DataQualityScreen = () => {
               <div className="data-quality-container">
                 <div className="quality-list-container">
                   <div>
-                    <h2 className="sub-title">Select Dimension</h2>
+                    <h2 className="sub-title-black">Select Dimension</h2>
                     <div className="quality-list-container">
                       {dataQualityRules.length === 0 ? (
                         <p className="no-elements-message">
@@ -181,13 +180,12 @@ const DataQualityScreen = () => {
                             key={dim.dimension}
                             onClick={() => onClickDimension(dim.dimension)}
                             style={{
-                              ...styles.mappingCard,
                               backgroundColor:
                                 selectedDimension === dim.dimension
                                   ? "#ffdc92"
-                                  : "#fff",
+                                  : "#efefef",
                             }}
-                            className="dimension-card"
+                            className="card"
                           >
                             {dim.dimension}
                           </div>
@@ -198,7 +196,7 @@ const DataQualityScreen = () => {
 
                   {selectedDimension && (
                     <div>
-                      <h2 className="sub-title">Select Factor</h2>
+                      <h2 className="sub-title-black">Select Factor</h2>
                       <div className="quality-list-container">
                         {dataQualityRules.find(
                           (dim) => dim.dimension === selectedDimension
@@ -214,13 +212,12 @@ const DataQualityScreen = () => {
                                 key={factor.name}
                                 onClick={() => onClickFactor(factor.name)}
                                 style={{
-                                  ...styles.mappingCard,
                                   backgroundColor:
                                     selectedFactor === factor.name
                                       ? "#ffdc92"
-                                      : "#fff",
+                                      : "#efefef",
                                 }}
-                                className="factor-card"
+                                className="card"
                               >
                                 {factor.name}
                               </div>
@@ -232,7 +229,7 @@ const DataQualityScreen = () => {
 
                   {selectedFactor && (
                     <div>
-                      <h2 className="sub-title">Select Metric</h2>
+                      <h2 className="sub-title-black">Select Metric</h2>
                       <div className="quality-list-container">
                         {dataQualityRules
                           .find((dim) => dim.dimension === selectedDimension)
@@ -252,14 +249,13 @@ const DataQualityScreen = () => {
                                 key={metric.method_id}
                                 onClick={() => onClickMetric(metric)}
                                 style={{
-                                  ...styles.mappingCard,
                                   backgroundColor:
                                     selectedMetric?.method_id ===
                                     metric.method_id
                                       ? "#ffdc92"
-                                      : "#fff",
+                                      : "#efefef",
                                 }}
-                                className="metric-card"
+                                className="card"
                               >
                                 {metric.name}
                               </div>
@@ -299,17 +295,6 @@ const DataQualityScreen = () => {
       )}
     </>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  mappingCard: {
-    display: "flex",
-    padding: 10,
-    cursor: "pointer",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
 };
 
 export default DataQualityScreen;

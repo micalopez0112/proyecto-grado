@@ -11,8 +11,6 @@
   gap: 10px;
   overflow-y: auto;
   height: 65vh;
-  margin: 15px;
-  background: #0d245b;
   width: 100%;
   border-radius: 5px;
 }
@@ -46,10 +44,4 @@
   gap: 10px;
   padding: 10px;
   flex-direction: column;
-}
-
-.dimension-card:hover,
-.factor-card:hover,
-.metric-card:hover {
-  opacity: 0.8;
 }

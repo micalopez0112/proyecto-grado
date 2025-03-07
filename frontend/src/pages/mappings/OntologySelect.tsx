@@ -125,23 +125,10 @@ const OntologySelectScreen = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1>Select the domain ontology</h1>
-          <button className="button" onClick={handleSubmit}>
-            Confirm Selection
-          </button>
+          <h1>Upload the domain ontology</h1>
           <div style={styles.selectHeader}>
-            <p
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                fontSize: "18px",
-              }}
-            >
-              Upload the Ontology:
-            </p>
-
+            <p style={{ fontSize: "16px" }}>Upload method:</p>
             <div style={styles.checkboxContainer}>
-              <p style={{ fontSize: "16px" }}>Upload method:</p>
               <div
                 style={{
                   display: "flex",
@@ -173,7 +160,6 @@ const OntologySelectScreen = () => {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  paddingTop: "10px",
                 }}
               >
                 {selectedMethod === "file" && (
@@ -205,6 +191,9 @@ const OntologySelectScreen = () => {
               </div>
             </div>
           </div>
+          <button className="button" onClick={handleSubmit}>
+            Confirm selection
+          </button>
         </div>
       )}
     </>
@@ -217,7 +206,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
-    backgroundColor: "#f0f0f0",
     minHeight: "100vh",
   },
   selectHeader: {
