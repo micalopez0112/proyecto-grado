@@ -9,6 +9,7 @@ import MappingCard from "../../../components/MappingCard.tsx";
 import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
 import { useDataContext } from "../../../context/context.tsx";
+import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
@@ -136,7 +137,14 @@ const DataQualityScreen = () => {
         <Spinner />
       ) : (
         <div className="container">
-          <h1 className="title-section">Data Quality</h1>
+          <div className="title-info">
+            <h1 className="title-section">Data Quality</h1>
+            <InfoModal
+              text={
+                "This page allows you to select a mapping, a dimension, a factor, and a metric to be used in the data quality process."
+              }
+            />
+          </div>
 
           <div className="quality-container">
             <div className="container">
