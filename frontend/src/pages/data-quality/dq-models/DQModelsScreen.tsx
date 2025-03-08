@@ -8,6 +8,7 @@ import { useDataContext } from "../../../context/context.tsx";
 
 import { SYNTCTATIC_ACCURACY, AGG_AVERAGE } from "../../../types/constants.ts";
 import DQModelCard from "../../../components/DQModelCard/DQModelCard.tsx";
+import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
 
 const DQModelsScreen = () => {
   const navigate = useNavigate();
@@ -100,7 +101,14 @@ const DQModelsScreen = () => {
         <Spinner />
       ) : (
         <div className="container">
-          <h1 className="title-section">Instances of selected Metric</h1>
+          <div className="title-info">
+            <h1 className="title-section">Instances of selected Metric</h1>
+            <InfoModal
+              text={
+                'Instances of selected Metric. To create a new instance click on the "New Metric Instance" button. After selecting an instance, click on "Evaluate" to evalute the metric.'
+              }
+            />
+          </div>
           <div className="dq-models-container">
             {Object.entries(dqModels).length > 0 ? (
               Object.entries(dqModels).map(([id, name]) => (

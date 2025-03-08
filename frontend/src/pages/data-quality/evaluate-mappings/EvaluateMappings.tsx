@@ -5,6 +5,7 @@ import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
 import { FaEye } from "react-icons/fa";
+import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
 
 const EvaluateMappings = () => {
   const location = useLocation();
@@ -52,8 +53,14 @@ const EvaluateMappings = () => {
 
   return (
     <div className="container">
-      <h1 className="title-section">Evaluation results</h1>
-
+      <div className="title-info">
+        <h1 className="title-section">Evaluation results</h1>
+        <InfoModal
+          text={
+            "This page shows the evaluation results for each mapping. The evaluation is made using the metric selected previously. Click on the eye icon to see the evaluation results for each document."
+          }
+        />
+      </div>
       {loading ? (
         <Spinner />
       ) : error ? (

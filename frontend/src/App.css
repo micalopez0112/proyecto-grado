@@ -160,3 +160,10 @@ label {
   opacity: 1;
   cursor: unset;
 }
+
+.title-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}

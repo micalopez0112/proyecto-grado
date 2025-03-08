@@ -5,6 +5,7 @@ import { OntologyDataType } from "../../types";
 import { uploadOntology, getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import { toast } from "react-toastify";
+import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 const OntologySelectScreen = () => {
   const {
@@ -125,7 +126,14 @@ const OntologySelectScreen = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1>Upload the domain ontology</h1>
+          <div className="title-info">
+            <h1>Upload the domain ontology</h1>
+            <InfoModal
+              text={
+                "The domain ontology will be used as the context. In the next screen you will be promted to upload a JSON document. Afterwards you can define mappings between the domain ontology and the JSON document Schema. In the evaluation section of the application you can evaluate the JSON document data againt the domain ontology given the mappings defined."
+              }
+            />
+          </div>
           <div style={styles.selectHeader}>
             <p style={{ fontSize: "16px" }}>Upload method:</p>
             <div style={styles.checkboxContainer}>
