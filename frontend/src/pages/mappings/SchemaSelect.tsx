@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import { toast, ToastContainer } from "react-toastify";
+import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 const SchemaSelect = () => {
   const [filePath, setFilePath] = useState<string>("");
@@ -66,7 +67,14 @@ const SchemaSelect = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1>Upload Dataset</h1>
+          <div className="title-info">
+            <h1>Upload Dataset</h1>
+            <InfoModal
+              text={
+                "The dataset must be in JSON format. It is the source from which you want to evalueate the data. In the next screen you can define mappings between the domain ontology loaded before and the dataset uploaded in this scree. Afterwards in the evaluation section of the application you can evaluate the data associated with the mappings defined."
+              }
+            />
+          </div>
           <div style={styles.selectHeader}>
             <p
               style={{
