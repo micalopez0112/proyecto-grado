@@ -2,6 +2,8 @@ from app.models.schema import JsonSchema
 
 VALUE = "value"
 KEY = "key"
+# constantes
+mapping_type_separator='?'
 
 simpleTypes = ["string", "integer", "bool", "number"]
 # TODO: revisar el tema del orden, mirar la tesis de aquellos para ver como hacian, ahora como esta hecho 
@@ -32,7 +34,7 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
             if isJSONValue(jsonMappedKey):
                 # Rule 1: an object is mapped to an ontology class
                 mappedIris = validateRule1(jsonMappedKey, ontoValue, ontoClasses)
-                mappedClassKey = jsonMappedKey.split("_")[0]
+                mappedClassKey = jsonMappedKey.split(mapping_type_separator)[0]
                 mappedClasses[mappedClassKey] = mappedIris
                 print("## Mapped OK ##", mappedClasses)             
             if isJSONKey(jsonMappedKey):              
@@ -294,39 +296,29 @@ def getParentProperty(jsonKey):
     return parent
 
 def getSonProperty(jsonKey):
-    son = jsonKey.split("_")[0]
+    son = jsonKey.split(mapping_type_separator)[0]
     # se deja como hijo toda la cadena, por si hay elementos repetidos
     # es decir de "destination-accomodation-ratings_key" el hijo es "destination-accomodation-ratings"
     print("## Son property: ", son, "##")
     return son
 
 def isJSONValue(str):
-    splittedMappingKey = str.split("_")
+    splittedMappingKey = str.split(mapping_type_separator)
     return splittedMappingKey[1] == VALUE
 
 def isJSONKey(str):
-    splittedMappingKey = str.split("_")
+    splittedMappingKey = str.split(mapping_type_separator)
     # if the mapping was done to a data property concatenated with a "-" next to the key comes the property type: 
     # example: "accomodation-ratings_key-string"
     keyPart = splittedMappingKey[1].split("#")
     return keyPart[0] == KEY
-
-
-
-def isDataPropertyMapping(str):
-    splittedMappingKey = str.split("_")
-    keyPart = splittedMappingKey[1]
-    hashTag = keyPart.split("#")
-    if hashTag[1] in simpleTypes:
-        return True
-    return False
 
 # valores posibles que retorna = string, int, bool, float, array
 # con esto nos dice si el mapping es una dataproperty o no
 # destion-accomodation_key#string
 def getJsonSchemaPropertieType(str):
     print("## Getting JSON Schema Property Type ##")
-    splittedMappingKey = str.split("_")
+    splittedMappingKey = str.split(mapping_type_separator)
     keyPart = splittedMappingKey[1]
     hashTag = keyPart.split("#")
     print("hashTag", hashTag)
@@ -339,3 +331,37 @@ def checkRangeAndJSONDataProperty(JSONProperty, ontoRange):
         return True
     
     return False
+
+# mover para otro file pero dentro de este mismo modulo
+
+# find_json_keys gets the key of a mapping structure for example "#contacto-city_key#string", and returns 
+# a lis of the json keys of that entry: ['contacto','city'], this means that 'city' its an attribute inside 'contacto'
+def find_json_keys(path) :
+    print(f'path ${path}') #contacto-city?key#string
+    # TODO-change-serparador
+    keys = path.replace('-', mapping_type_separator).split(mapping_type_separator)
+    print(f'keys ${keys}')
+
+    json_keys = keys[:-1] 
+    json_keys.remove('rootObject')
+    return json_keys
+
+# esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
+# destination-accomodation-name
+# accomodation aca puedo recibir value
+# TODO: ver posibilidad de obtener el nodo FIELD, aprovechando la anidación entre los campos del json
+def find_element_in_JSON_instance(json_document, path) :
+    print(f'json_document ${json_document}')
+    print(f'path ${path}') #contacto-city_key#string
+    # TODO-change-serparador
+    keys = path.replace('-', mapping_type_separator).split(mapping_type_separator)
+
+    json_keys = keys[:-1] 
+    json_keys.remove('rootObject')
+    element = json_document
+    try:
+        for key in json_keys:
+            element = element[key]
+        return element
+    except (KeyError, TypeError):
+        return None
