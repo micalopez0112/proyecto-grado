@@ -215,8 +215,8 @@ export const fetchDetailedEvaluationResults = async (
   mappingProcessId: string,
   mappingName: string,
   dq_model_id: string,
-  limit?: number,
-  offset?: number
+  limit: number = 10,
+  offset: number = 0
 ) => {
   if (!mappingProcessId) {
     throw new Error("Mapping process ID is not available.");
@@ -228,6 +228,8 @@ export const fetchDetailedEvaluationResults = async (
         mapping_process_id: mappingProcessId,
         json_key: mappingName,
         dq_model_id: dq_model_id,
+        limit,
+        offset,
       },
     });
 
@@ -235,7 +237,10 @@ export const fetchDetailedEvaluationResults = async (
       throw new Error(response.data.message);
     }
 
-    return response.data;
+    return {
+      results: response.data.results,
+      total: response.data.total,
+    };
   } catch (error) {
     console.error("Error fetching detailed results:", error);
     throw new Error("Failed to fetch detailed results.");

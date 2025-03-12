@@ -303,7 +303,7 @@ export const Mapping = () => {
             </div>
             <InfoModal
               text={
-                'In this screen you can define mappings between the domain ontology and the JSON Schema structure of the datastet uploaded. The mappings can be used to evaluate the quality of the dataset. The "Name" filed will be displayed in the Mappings List screen to identify this mapping.'
+                'On this screen, you can define mappings between the domain ontology and the JSON Schema structure of the uploaded dataset. These mappings can be used to evaluate the quality of the dataset on the Data Quality flow of the application. The "Name" input field will be displayed on the Mappings List screen to identify this mapping.'
               }
             />
           </div>

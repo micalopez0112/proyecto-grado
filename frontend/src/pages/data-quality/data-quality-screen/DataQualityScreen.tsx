@@ -138,10 +138,10 @@ const DataQualityScreen = () => {
       ) : (
         <div className="container">
           <div className="title-info">
-            <h1 className="title-section">Data Quality</h1>
+            <h1 className="title-section">Select Mapping and Metric</h1>
             <InfoModal
               text={
-                "This page allows you to select a mapping, a dimension, a factor, and a metric to be used in the data quality process."
+                "On this screen you can select a Mapping that has been previously defined for the selected Dataset. Then you can choose a Dimension, Factor, and a Metric to apply in the data quality process to evaluate the data."
               }
             />
           </div>

@@ -15,12 +15,9 @@ async def get_evaluation_results_by_json(dq_model_id:str, mapping_process_id: st
     mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_process_id))
     schema_id = mapping_process.jsonSchemaId
     keys_list = find_json_keys(json_key)
-    results = metadata_repo.get_evaluation_results_v2(dq_model_id, str(schema_id), keys_list, limit, offset)
-    #results = metadata_repo.get_evaluation_results(str(schema_id), keys_list, limit, offset)
+    results, total_count = metadata_repo.get_evaluation_results_v2(dq_model_id, str(schema_id), keys_list, limit, offset)
+    return results, total_count
 
-    # if json_key not in json_schema_properties_keys:
-    #     raise ValueError(f"Invalid JSON key: {json_key}")
-    return results
 
 class ParamCrateDQModel(BaseModel):
     mapping_process_id : str = None

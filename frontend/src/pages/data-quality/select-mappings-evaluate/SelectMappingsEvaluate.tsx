@@ -361,12 +361,10 @@ const SelectMappingsEvaluate = () => {
       ) : (
         <div className="container">
           <div className="title-info">
-            <h1 className="title-section">
-              Select Schema Values to Create DQ Model
-            </h1>
+            <h1 className="title-section">Select Schema Attributes</h1>
             <InfoModal
               text={
-                "Select the schema values you want to create a DQ model for."
+                "Select the JSON Schema attributes where the metric will be applied."
               }
             />
           </div>
