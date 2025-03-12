@@ -102,10 +102,10 @@ const DQModelsScreen = () => {
       ) : (
         <div className="container">
           <div className="title-info">
-            <h1 className="title-section">Instances of selected Metric</h1>
+            <h1 className="title-section">Available DQ Model’s</h1>
             <InfoModal
               text={
-                'You can select a defined Data Quality Model or create a new one clicking on "New DQ Model". Click on "Evaluate" to run the evaluation of the selected DQ Model.'
+                'You can select a defined Data Quality Model or create a new one clicking on "New DQ Model". The DQ Model is defined based on the mapped attributes  of the previously selected dataset.Click on "Evaluate" to run the evaluation of the selected DQ Model.'
               }
             />
           </div>
