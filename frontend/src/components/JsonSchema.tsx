@@ -26,7 +26,7 @@ const Json: React.FC = () => {
     type: string
   ) => {
     e.stopPropagation();
-    element = element + "_key#" + type;
+    element = element + "?key#" + type;
     if (JsonElementSelected === element) {
       setJsonElementSelected("");
     } else {
@@ -40,7 +40,7 @@ const Json: React.FC = () => {
     element: string
   ) => {
     e.stopPropagation();
-    element = element + "_key#array";
+    element = element + "?key#array";
     if (JsonElementSelected === element) {
       setJsonElementSelected("");
     } else {
@@ -59,10 +59,10 @@ const Json: React.FC = () => {
           <div className="property-box" key={"rootObject"}>
             <div
               className={`json-elem ${
-                JsonElementSelected === "rootObject_value" ? "active" : ""
+                JsonElementSelected === "rootObject?value" ? "active" : ""
               }`}
               onClick={
-                (e) => handleClickElement(e, "rootObject_value") //se tiene que mapear a class
+                (e) => handleClickElement(e, "rootObject?value") //se tiene que mapear a class
               }
             >
               <strong>rootObject:</strong>
@@ -78,7 +78,7 @@ const Json: React.FC = () => {
         if (value.type === "object" && value.properties) {
           const elementKey = parent ? `${parent}-${key}` : key;
 
-          const fullKey = `${elementKey}_key#${value.type}`;
+          const fullKey = `${elementKey}?key#${value.type}`;
 
           console.log("fullKey ", fullKey);
 
@@ -86,14 +86,14 @@ const Json: React.FC = () => {
             <div className="property-box" key={key}>
               <div
                 className={`json-elem ${
-                  JsonElementSelected === parent + "-" + key + "_key"
+                  JsonElementSelected === parent + "-" + key + "?key"
                     ? "active"
                     : ""
                 }`}
                 onClick={(e) =>
                   handleClickElement(
                     e,
-                    parent ? parent + "-" + key + "_key" : key + "_key"
+                    parent ? parent + "-" + key + "?key" : key + "?key"
                   )
                 }
               >
@@ -101,17 +101,17 @@ const Json: React.FC = () => {
               </div>
 
               <div
-                key={key + "_value"}
+                key={key + "?value"}
                 className={`json-elem object-box ${
                   JsonElementSelected ===
-                  (parent ? parent + "-" + key + "_value" : key + "_value")
+                  (parent ? parent + "-" + key + "?value" : key + "?value")
                     ? "active"
                     : ""
                 }`}
                 onClick={(e) =>
                   handleClickElement(
                     e,
-                    parent ? parent + "-" + key + "_value" : key + "_value"
+                    parent ? parent + "-" + key + "?value" : key + "?value"
                   )
                 }
               >
@@ -135,7 +135,7 @@ const Json: React.FC = () => {
               <div
                 className={`json-elem ${
                   JsonElementSelected ===
-                  (parent ? parent + "-" + key + "_key#array" : key)
+                  (parent ? parent + "-" + key + "?key#array" : key)
                     ? "active"
                     : ""
                 } ${value.items.anyOf ? "disabled" : ""}`}
@@ -165,7 +165,7 @@ const Json: React.FC = () => {
             <div
               className={`json-elem ${
                 JsonElementSelected ===
-                (parent ? parent + "-" + key + "_key#" + value.type : key)
+                (parent ? parent + "-" + key + "?key#" + value.type : key)
                   ? "active"
                   : ""
               }`}
@@ -186,17 +186,17 @@ const Json: React.FC = () => {
       return (
         <>
           <div
-            key={parent + "_value"}
+            key={parent + "?value"}
             className={`json-elem array-box ${
               JsonElementSelected ===
-              (parent ? parent + "_value" : parent + "_value")
+              (parent ? parent + "?value" : parent + "?value")
                 ? "active"
                 : ""
             }`}
             onClick={(e) =>
               handleClickElement(
                 e,
-                parent ? parent + "_value" : parent + "_value"
+                parent ? parent + "?value" : parent + "?value"
               )
             }
           >
@@ -230,12 +230,12 @@ const Json: React.FC = () => {
       return (
         <>
           <div
-            key={parent + "_value"}
+            key={parent + "?value"}
             className={`json-elem array-box disabled `}
             onClick={(e) =>
               handleClickElement(
                 e,
-                parent ? parent + "_value" : parent + "_value"
+                parent ? parent + "?value" : parent + "?value"
               )
             }
           >

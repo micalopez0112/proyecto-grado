@@ -172,7 +172,7 @@ class SyntanticAccuracy(QualityMetric) :
 # the value in the mapping document, adding the missing "rootObject", "key" and "type"
 def build_json_mapping_key(attribute_field: FieldNode):
     print("Field node: ", attribute_field)
-    return "rootObject-" + attribute_field.name + "_key#" + attribute_field.type   
+    return "rootObject-" + attribute_field.name + "?key#" + attribute_field.type   
 
     
 class StrategyContext():
