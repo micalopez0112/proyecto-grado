@@ -130,7 +130,7 @@ const OntologySelectScreen = () => {
             <h1>Upload the domain ontology</h1>
             <InfoModal
               text={
-                "The domain ontology will be used as the context. In the next screen you will be promted to upload a JSON document. Afterwards you can define mappings between the domain ontology and the JSON document Schema. In the evaluation section of the application you can evaluate the JSON document data againt the domain ontology given the mappings defined."
+                "On this screen you can select the Domain Ontology that will be used as Context."
               }
             />
           </div>

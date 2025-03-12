@@ -46,14 +46,15 @@ const ModalOntoStyles: { [key: string]: React.CSSProperties } = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+    width: "1000px",
+    display: "flex",
+    justifyContent: "center",
   },
   modalContent: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "1000px",
-    height: "500px",
   },
 };
 
