@@ -60,12 +60,12 @@ async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Opt
 async def get_quality_results(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), 
                               dq_model_id: Optional[str] = Query(None, description="DQ Model ID"),
                               json_key: Optional[str] = Query(None, description="Json key to get quality results, its the mapping key"), 
-                              limit: Optional[int] = 100, offset: Optional[int] = 0):
+                              limit: Optional[int] = 10, offset: Optional[int] = 0):
     print(f'request_mapping_body: {mapping_process_id}')
     try :
-        result = await metadata_service.get_evaluation_results_by_json(dq_model_id, mapping_process_id, json_key, limit, offset)
+        result, total = await metadata_service.get_evaluation_results_by_json(dq_model_id, mapping_process_id, json_key, limit, offset)
         print("### Got evaluation results ###, result: ", result)
-        return result
+        return {"results": result, "total": total} 
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")

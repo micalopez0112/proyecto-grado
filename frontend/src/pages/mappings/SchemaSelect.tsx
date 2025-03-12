@@ -4,11 +4,11 @@ import { useDataContext } from "../../context/context.tsx";
 import { useNavigate } from "react-router-dom";
 import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 const SchemaSelect = () => {
   const [filePath, setFilePath] = useState<string>("");
-  const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
   const { setJsonSchemaContext, setCollectionPath } = useDataContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const SchemaSelect = () => {
         setJsonSchema(schema);
         console.log("##GENERATED SCHEMA##", schema);
         setJsonSchemaContext(schema);
-        setCollectionPath(filePath); //Check que se pase bien esto
+        setCollectionPath(filePath);
         navigate("/Mapping");
         setLoading(false);
       } else {
@@ -66,7 +66,14 @@ const SchemaSelect = () => {
         <Spinner />
       ) : (
         <div style={styles.container}>
-          <h1>Upload Dataset</h1>
+          <div className="title-info">
+            <h1>Upload Dataset</h1>
+            <InfoModal
+              text={
+                "The dataset must be in JSON format. It serves as the source dataset from which you can define mappings against the previously loaded domain ontology."
+              }
+            />
+          </div>
           <div style={styles.selectHeader}>
             <p
               style={{

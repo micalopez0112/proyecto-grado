@@ -187,7 +187,7 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     return results
 
 # TODO ver de sacar el id de la collecion y el 
-def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, page_number):
+def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, offset):
     first_key = json_keys[0]
     graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
         -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
@@ -197,21 +197,23 @@ def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, p
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
         graph_path += node_path
 
-    if page_number is None or page_number < 1:
-        page_number = 1
-    skip = (page_number - 1) * limit
     latest_item = json_keys[-1]
-    print("LATEST ITEM: ", latest_item)
-    # TODO: ver porque no me sale
+    count_query = f"""
+        {graph_path}-[fvm:FieldValueMeasure]->(measure)
+        RETURN COUNT(*)
+    """
+    neo4j_driver = get_neo4j_driver()
+    count_result, _, _ = neo4j_driver.execute_query(count_query)
+    total_count = count_result[0][0] if count_result else 0  # Extraer el total de la consulta
+
     select_measure = f"""
         {graph_path}-[fvm:FieldValueMeasure]->(measure)
         RETURN f{latest_item}, measure, fvm
-        SKIP {skip} 
+        SKIP {offset} 
         LIMIT {limit}
     """
     print("QUERY: ", select_measure)
-    # returns record, summay, keys
-    neo4j_driver = get_neo4j_driver()
+    
     records, _, _ = neo4j_driver.execute_query(select_measure)
     results = []
     for record in records:
@@ -220,7 +222,8 @@ def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, p
                       measure=record[1]['measure'])
         results.append(dq)
 
-    return results
+    return results, total_count
+
 
 def init_governance_zone():
     ## Hardcoded specific dimension, factor and metric for this project

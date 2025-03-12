@@ -6,6 +6,7 @@ import { fetchDatasets } from "../../../services/mapsApi.ts";
 import MappingCard from "../../../components/MappingCard.tsx";
 
 import "./DatasetsScreen.css";
+import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
 
 const DatasetsScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -58,7 +59,14 @@ const DatasetsScreen = () => {
       ) : (
         <>
           <div className="container">
-            <h1 className="title-section">Loaded Datasets</h1>
+            <div className="title-info">
+              <h1 className="title-section">Loaded Datasets</h1>
+              <InfoModal
+                text={
+                  "On this screen, you can select a dataset to evaluate the quality of its attributes. The datasets listed here are those uploaded in the mapping section of the application."
+                }
+              />
+            </div>
             <p className="subtitle">
               Select a dataset to evaluate the quality of its attributes
             </p>

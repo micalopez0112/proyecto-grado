@@ -12,6 +12,7 @@ import "./SelectMappingsEvaluate.css";
 import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 import { toast } from "react-toastify";
 import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
+import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -359,9 +360,14 @@ const SelectMappingsEvaluate = () => {
         <Spinner />
       ) : (
         <div className="container">
-          <h1 className="title-section">
-            Select Schema Values to Create DQ Model
-          </h1>
+          <div className="title-info">
+            <h1 className="title-section">Select Schema Attributes</h1>
+            <InfoModal
+              text={
+                "Select the JSON Schema attributes where the metric will be applied."
+              }
+            />
+          </div>
           <div className="name-select">
             <div className="dq-model-name">
               <label>DQ Model Name</label>

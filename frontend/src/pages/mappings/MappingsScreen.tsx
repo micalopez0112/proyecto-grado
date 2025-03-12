@@ -10,6 +10,7 @@ import {
 import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import "./MappingsScreen.css";
+import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 const MappingsScreen = () => {
   const navigate = useNavigate();
@@ -191,7 +192,14 @@ const MappingsScreen = () => {
       ) : (
         <div className="mappings-list-container">
           <div className="mappings-title-container">
-            <h1 className="mappings-list-title">List of Mappings</h1>
+            <div className="title-info">
+              <h1 className="mappings-list-title">List of Mappings</h1>
+              <InfoModal
+                text={
+                  "On this screen, you can view your existing mappings. To define new mappings, click the 'New Set of Mappings' button or add mappings to an existing set."
+                }
+              />
+            </div>
             <p className="subtitle">
               Select an item to see the mappings associated or create a new set
               of mappings.

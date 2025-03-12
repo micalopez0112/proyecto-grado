@@ -13,6 +13,7 @@ import MappingList from "../../components/MappingList.tsx";
 import Json from "../../components/JsonSchema.tsx";
 import "./Mapping.css";
 import { toast } from "react-toastify";
+import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -282,13 +283,20 @@ export const Mapping = () => {
         <Spinner />
       ) : (
         <div className="App">
-          <div className="mapping-name">
-            <label>Name</label>
-            <input
-              type="text"
-              value={mappingName}
-              onChange={(e) => setMappingName(e.target.value)}
-            ></input>
+          <div className="title-info">
+            <div className="mapping-name">
+              <label>Name</label>
+              <input
+                type="text"
+                value={mappingName}
+                onChange={(e) => setMappingName(e.target.value)}
+              ></input>
+            </div>
+            <InfoModal
+              text={
+                'On this screen, you can define mappings between the domain ontology and the JSON Schema structure of the uploaded dataset. These mappings can be used to evaluate the quality of the dataset on the Data Quality flow of the application. The "Name" input field will be displayed on the Mappings List screen to identify this mapping.'
+              }
+            />
           </div>
           <div className="content-container">
             <div className="content-box">
