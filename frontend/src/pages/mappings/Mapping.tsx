@@ -324,7 +324,7 @@ export const Mapping = () => {
                     Add mapping
                   </button>
                   <button className="button" onClick={clearMappings}>
-                    Clean mappings
+                    Clear mappings
                   </button>
                 </div>
                 <MappingList isResult={false} />

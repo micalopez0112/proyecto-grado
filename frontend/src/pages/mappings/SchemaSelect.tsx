@@ -67,7 +67,7 @@ const SchemaSelect = () => {
       ) : (
         <div style={styles.container}>
           <div className="title-info">
-            <h1>Upload Dataset</h1>
+            <h1>Upload dataset</h1>
             <InfoModal
               text={
                 "The dataset must be in JSON format. It serves as the source dataset from which you can define mappings against the previously loaded domain ontology."

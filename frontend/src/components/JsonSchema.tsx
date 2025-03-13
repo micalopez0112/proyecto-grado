@@ -280,7 +280,7 @@ const Json: React.FC = () => {
   return (
     <div className="container">
       <div className="title-wrapper">
-        <h1 className="title">JSON Schema of the Selected Dataset</h1>
+        <h1 className="title">JSON Schema of the selected dataset</h1>
       </div>
       {jsonSchemaContext && (
         <div className="json-schema-container">

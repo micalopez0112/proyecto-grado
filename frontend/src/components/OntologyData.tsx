@@ -223,7 +223,7 @@ const OntologyData: React.FC<{}> = () => {
       </Modal>
 
       <div className="title-wrapper">
-        <h1 className="title">Ontology Elements</h1>
+        <h1 className="title">Ontology elements</h1>
       </div>
       {ontologyDataContext?.ontoData.map((ontology, i) => (
         <div className="onto-container" key={`ontology-${i}`}>
