@@ -10,6 +10,7 @@ import { Spinner } from "../../../components/Spinner/Spinner.tsx";
 import "./DataQualityScreen.css";
 import { useDataContext } from "../../../context/context.tsx";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const DataQualityScreen = () => {
   const navigate = useNavigate();
@@ -138,6 +139,7 @@ const DataQualityScreen = () => {
       ) : (
         <div className="container">
           <div className="title-info">
+            <BackButton />
             <h1 className="title-section">Select Mapping and Metric</h1>
             <InfoModal
               text={

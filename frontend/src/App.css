@@ -166,4 +166,6 @@ label {
   flex-direction: row;
   align-items: center;
   gap: 30px;
+  width: 1000px;
+  justify-content: space-between;
 }

@@ -13,6 +13,7 @@ import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 import { toast } from "react-toastify";
 import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -361,6 +362,7 @@ const SelectMappingsEvaluate = () => {
       ) : (
         <div className="container">
           <div className="title-info">
+            <BackButton />
             <h1 className="title-section">Select Schema Attributes</h1>
             <InfoModal
               text={

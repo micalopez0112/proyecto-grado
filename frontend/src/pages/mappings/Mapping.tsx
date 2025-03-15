@@ -14,6 +14,7 @@ import Json from "../../components/JsonSchema.tsx";
 import "./Mapping.css";
 import { toast } from "react-toastify";
 import InfoModal from "../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../components/BackButton/BackButton.tsx";
 
 export const Mapping = () => {
   const navigate = useNavigate();
@@ -293,6 +294,7 @@ export const Mapping = () => {
       ) : (
         <div className="App">
           <div className="title-info">
+            <BackButton />
             <div className="mapping-name">
               <label>Name</label>
               <input

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { StyledSpinnerImage } from "../../../components/Spinner/Spinner.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
 import { FaAngleLeft, FaAngleRight, FaEye } from "react-icons/fa";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const PAGE_SIZE = 10;
 
@@ -64,6 +65,7 @@ const EvaluateMappings = () => {
   return (
     <div className="container">
       <div className="title-info">
+        <BackButton />
         <h1 className="title-section">Evaluation results</h1>
         <InfoModal
           text={

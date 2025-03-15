@@ -11,6 +11,7 @@ import MappingCard from "../../components/MappingCard.tsx";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import "./MappingsScreen.css";
 import InfoModal from "../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../components/BackButton/BackButton.tsx";
 
 const MappingsScreen = () => {
   const navigate = useNavigate();
@@ -193,6 +194,7 @@ const MappingsScreen = () => {
         <div className="mappings-list-container">
           <div className="mappings-title-container">
             <div className="title-info">
+              <BackButton />
               <h1 className="mappings-list-title">List of Mappings</h1>
               <InfoModal
                 text={

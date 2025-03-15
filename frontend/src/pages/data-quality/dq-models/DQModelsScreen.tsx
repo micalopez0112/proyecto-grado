@@ -9,6 +9,7 @@ import { useDataContext } from "../../../context/context.tsx";
 import { SYNTCTATIC_ACCURACY, AGG_AVERAGE } from "../../../types/constants.ts";
 import DQModelCard from "../../../components/DQModelCard/DQModelCard.tsx";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const DQModelsScreen = () => {
   const navigate = useNavigate();
@@ -102,6 +103,7 @@ const DQModelsScreen = () => {
       ) : (
         <div className="container">
           <div className="title-info">
+            <BackButton />
             <h1 className="title-section">Available DQ Model’s</h1>
             <InfoModal
               text={
@@ -149,17 +151,6 @@ const DQModelsScreen = () => {
       )}
     </>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  mappingCard: {
-    display: "flex",
-    padding: 10,
-    cursor: "pointer",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
 };
 
 export default DQModelsScreen;
