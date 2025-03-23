@@ -6,7 +6,7 @@ from app.repositories import mapping_repo, metadata_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
-from app.dq_evaluation.evaluation import find_json_keys
+from app.rules_validation.mapping_rules import find_json_keys
 
 from bson import ObjectId
 

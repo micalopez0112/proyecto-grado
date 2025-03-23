@@ -3,7 +3,7 @@
 from app.repositories import mapping_repo, metadata_repo
 
 from app.repositories.metadata_repo import ParamRepoCrateDQModel 
-from app.dq_evaluation.evaluation import find_json_keys
+from app.rules_validation.mapping_rules import find_json_keys
 
 from pydantic import BaseModel
 from bson import ObjectId

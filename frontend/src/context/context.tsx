@@ -137,13 +137,13 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         // setMappings((prevMappings) => {
         //   const newMappings = {
         //     ...prevMappings,
-        //     [JsonElementSelected.endsWith("_key#array")
+        //     [JsonElementSelected.endsWith("?key#array")
         //       ? JsonElementSelected
-        //       : JsonElementSelected + "_key"]: [
+        //       : JsonElementSelected + "?key"]: [
         //       ...(prevMappings[
-        //         JsonElementSelected.endsWith("_key#array")
+        //         JsonElementSelected.endsWith("?key#array")
         //           ? JsonElementSelected
-        //           : JsonElementSelected + "_key"
+        //           : JsonElementSelected + "?key"
         //       ] || []),
         //       key,
         //     ],
@@ -158,18 +158,18 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           };
 
           //acá tendría que preguntar si el object ya está mappeado no hago nada
-          //y si no está mappeado agrego el _value con el rango
+          //y si no está mappeado agrego el ?value con el rango
 
           //Enrealidad se haría en el ontologyData.tsx al buscar en mappings
-          //si el _key es seleccionado y el _value aún no => se abre el modal
+          //si el ?key es seleccionado y el ?value aún no => se abre el modal
           if (rango && rango.length > 0) {
             console.log("RANGO RANGO RANGO", rango);
-            let claveMap = JsonElementSelected.endsWith("_key#array")
-              ? JsonElementSelected.slice(0, JsonElementSelected.length - 10) //quitar _key#array
-              : JsonElementSelected.slice(0, JsonElementSelected.length - 4); //quitar _key
+            let claveMap = JsonElementSelected.endsWith("?key#array")
+              ? JsonElementSelected.slice(0, JsonElementSelected.length - 10) //quitar ?key#array
+              : JsonElementSelected.slice(0, JsonElementSelected.length - 4); //quitar ?key
             console.log("ClaveMap", claveMap);
-            newMappings[claveMap + "_value"] = [
-              ...(prevMappings[claveMap + "_value"] || []),
+            newMappings[claveMap + "?value"] = [
+              ...(prevMappings[claveMap + "?value"] || []),
               ...rango,
             ];
           } else {
@@ -208,8 +208,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappings((prevMappings) => {
       const updatedMappings = { ...prevMappings };
       if (updatedMappings[key]) {
-        // TODO: check if it is an object property mapping with _key
-        // if so, remove the _key and _value mappings
+        // TODO: check if it is an object property mapping with ?key
+        // if so, remove the ?key and ?value mappings
 
         updatedMappings[key] = updatedMappings[key].filter(
           (element) =>
@@ -281,10 +281,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const getUpdatedKey = (key: string): string | null => {
-    if (key.endsWith("_key")) {
-      return key.slice(0, key.length - 4) + "_value";
-    } else if (key.endsWith("_key#array")) {
-      return key.slice(0, key.length - 10) + "_value";
+    if (key.endsWith("?key")) {
+      return key.slice(0, key.length - 4) + "?value";
+    } else if (key.endsWith("?key#array")) {
+      return key.slice(0, key.length - 10) + "?value";
     }
     return null;
   };

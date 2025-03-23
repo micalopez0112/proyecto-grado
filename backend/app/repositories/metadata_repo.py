@@ -5,7 +5,7 @@ import time
 
 from ..database  import neo4j_conn
 from app.models.mapping import DqResult, FieldNode,MappingProcessDocument
-from app.dq_evaluation.evaluation import find_json_keys
+from app.rules_validation.mapping_rules import find_json_keys
 from ..database import get_neo4j_driver
 
 from pydantic import BaseModel
@@ -289,6 +289,7 @@ def save_quality_factor():
         else:
             query += "WITH dim\n"
 
+        # TODO-pau: ver esto
         factor_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
         
         query += query_template.format(
@@ -440,10 +441,13 @@ class ParamRepoCrateDQModel(BaseModel):
     ## si llega al final para un dq_model y ambas listas son vacías return ese dq_model
     ## sino seguir con el siguiente dq_model
 # si no se encontró ningun dq_model se retorna None
+mapping_type_separator = "?"
 def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
     looked_fields = []
+    # TODO: paula ver si esto esta bien
     for attribute in attributes_mapped:
-        attr_keys = attribute.split('_')[0]
+        # TODO-change-serparador
+        attr_keys = attribute.split(mapping_type_separator)[0]
         attr_keys = '-'.join(attr_keys.split('-')[1:])
         looked_fields.append(attr_keys)
         print("attr_keys: ", attr_keys)

@@ -8,7 +8,7 @@ from app.database import mapping_process_collection, onto_collection
 from app.dq_evaluation.mocks import get_hardcoded_test_documents
 from app.models.mapping import MappingProcessDocument,DQModel, FieldNode
 from app.models.ontology import OntologyDocument
-from app.rules_validation.mapping_rules import getOntoPropertyByIri, getJsonSchemaPropertieType
+from app.rules_validation.mapping_rules import getOntoPropertyByIri, find_element_in_JSON_instance, find_json_keys
 from app.repositories import mapping_repo, metadata_repo
 from ..database import  get_neo4j_driver
 
@@ -172,7 +172,7 @@ class SyntanticAccuracy(QualityMetric) :
 # the value in the mapping document, adding the missing "rootObject", "key" and "type"
 def build_json_mapping_key(attribute_field: FieldNode):
     print("Field node: ", attribute_field)
-    return "rootObject-" + attribute_field.name + "_key#" + attribute_field.type   
+    return "rootObject-" + attribute_field.name + "?key#" + attribute_field.type   
 
     
 class StrategyContext():
@@ -232,42 +232,6 @@ def get_documents_from_storage(path : str) :
         print(f"Data loaded from storage successfully")
     #data = get_hardcoded_test_documents()
     return data
-
-# esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
-# destination-accomodation-name
-# accomodation aca puedo recibir value
-# TODO: ver posibilidad de obtener el nodo FIELD, aprovechando la anidación entre los campos del json
-def find_element_in_JSON_instance(json_document, path) :
-    print(f'json_document ${json_document}')
-    print(f'path ${path}') #contacto-city_key#string
-    keys = path.replace('-', '_').split('_')
-    for key in keys:
-        print(key)
-    print(f'keys ${keys}')
-
-    json_keys = keys[:-1] 
-    json_keys.remove('rootObject')
-    element = json_document
-    try:
-        for key in json_keys:
-            element = element[key]
-        return element
-    except (KeyError, TypeError):
-        return None
-
-# find_json_keys gets the key of a mapping structure for example "#contacto-city_key#string", and returns 
-# a lis of the json keys of that entry: ['contacto','city'], this means that 'city' its an attribute inside 'contacto'
-def find_json_keys(path) :
-    print(f'path ${path}') #contacto-city_key#string
-    keys = path.replace('-', '_').split('_')
-    for key in keys:
-        print(key)
-    print(f'keys ${keys}')
-
-    # json_keys = ['contacto', 'city']
-    json_keys = keys[:-1] 
-    json_keys.remove('rootObject')
-    return json_keys
 
 def compare_onto_with_json_value(onto_prop_value, json_value) :
     # hacer un toLower() aca o

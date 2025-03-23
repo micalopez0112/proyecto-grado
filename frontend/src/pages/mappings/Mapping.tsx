@@ -90,23 +90,20 @@ export const Mapping = () => {
       if (Object.keys(mappings).length > 0) {
         if (mappingName !== "") {
           if (mappingId) {
-            //invocar put
             console.log("Flujo donde existe mappingId: ", mappingId);
             const body = {
               ontology_id: "",
               name: mappingName,
               mapping: mappings,
-              jsonSchema: {}, //null because it is not updated in the collection
+              jsonSchema: {},
               mapping_proccess_id: mappingId,
-              // documentStoragePath: collectionPath
             };
             setLoading(true);
             const response = await saveMapping(body);
             setLoading(false);
             console.log("Respuesta al editar mapping: ", response);
             if (response) {
-              const { status, message, mapping_id } = response.data;
-              //navigate('/Result', {state:{mapping_process:mapping_id}});
+              const { status } = response.data;
               if (status === "success") {
                 resetMappingState();
                 toast.success(`Process Mapping saved successfully`);
@@ -134,9 +131,8 @@ export const Mapping = () => {
               const response = await saveMapping(body);
               console.log("Response al guardar mappings (save): ", response);
               if (response) {
-                const { status, message, mapping_id } = response.data;
+                const { status } = response.data;
                 if (status === "success") {
-                  //navigate('/Result', {state:{mapping_process:mapping_id}});
                   resetMappingState();
                   toast.success("Process Mapping saved successfully");
                   navigate("/");
@@ -163,7 +159,6 @@ export const Mapping = () => {
     try {
       if (Object.keys(mappings).length > 0) {
         if (mappingId) {
-          //invocar post con mapping_proccess_id
           console.log("Flujo donde existe mappingId");
           const body = {
             ontology_id: currentOntologyId,
@@ -172,7 +167,6 @@ export const Mapping = () => {
             jsonSchema: jsonSchemaContext,
             mapping_proccess_id: mappingId,
             ...(externalFlow && { jsonSchemaId: externalDatasetId }),
-            // documentStoragePath: collectionPath
           };
           setLoading(true);
           const response = await saveAndValidateMappings(
@@ -181,10 +175,9 @@ export const Mapping = () => {
             body
           );
           setLoading(false);
-          //capaz chequear que si currentOntologyId es undefined no se haga el post
           console.log("Respuesta al editar mapping: ", response);
           if (response) {
-            const { status, message, mapping_id } = response.data;
+            const { status, message } = response.data;
             if (status === "success") {
               resetMappingState();
               alert("Mapping procces successfully validated and saved");
@@ -197,10 +190,8 @@ export const Mapping = () => {
             } else {
               toast.error("Error validating mapping, please check: " + message);
             }
-            //navigate("/Result", { state: { mapping_process: mapping_id } });
           }
         } else {
-          //new mapping
           if (currentOntologyId) {
             const schemaAndCollectionName = jsonSchemaContext;
             schemaAndCollectionName.collection_name =
@@ -221,7 +212,7 @@ export const Mapping = () => {
             setLoading(false);
             console.log("Response al guardar mappings (validate): ", response);
             if (response) {
-              const { status, message, mapping_id } = response.data;
+              const { status, message } = response.data;
               if (status === "success") {
                 resetMappingState();
                 alert("Mapping procces successfully validated and saved");

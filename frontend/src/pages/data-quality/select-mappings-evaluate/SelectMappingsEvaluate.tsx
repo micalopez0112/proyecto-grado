@@ -55,7 +55,7 @@ const SelectMappingsEvaluate = () => {
         try {
           const response = await getMapping(mappingProcessId);
           if (response) {
-            const { mapping_name, mapping, schema, ontology } = response.data;
+            const { mapping, schema, ontology } = response.data;
             setMappings(mapping);
             setJsonSchemaContext(schema);
             setcurrentOntologyId(ontology.ontology_id);
@@ -209,13 +209,13 @@ const SelectMappingsEvaluate = () => {
     } else {
       return Object.entries(properties).map(([key, value]) => {
         const elementKey = parent ? `${parent}-${key}` : key;
-        const fullKey = `${elementKey}_key#${value.type}`;
+        const fullKey = `${elementKey}?key#${value.type}`;
         const isMapped = !!mappings[fullKey];
         const mappingInfo = isMapped ? mappings[fullKey] : null;
         const isActive = !!selectedMappings[fullKey];
 
         if (value.type === "object" && value.properties) {
-          const elementValue = `${elementKey}_value`;
+          const elementValue = `${elementKey}?value`;
           const isMappedObjectValue = !!mappings[elementValue];
           const mappingInfoValue = isMappedObjectValue
             ? mappings[elementValue]
@@ -329,7 +329,7 @@ const SelectMappingsEvaluate = () => {
       return (
         <>
           <div
-            key={parent + "_value"}
+            key={parent + "?value"}
             className={`json-elem array-box disabled`}
           >
             <strong>array items: object</strong>
