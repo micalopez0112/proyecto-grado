@@ -1,23 +1,21 @@
 .validation-result-item {
-  display: flex;
-  gap: 50px;
+  display: grid;
+  grid-template-columns: 3fr 2fr 0.5fr;
 }
 
 .validation-results-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
+  padding: 0;
 }
 
 .validation-results-container {
   width: 1000px;
-}
-
-.modal-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
 }
 
 .table {
@@ -39,4 +37,19 @@
 
 .close-button:hover {
   background-color: #e04747;
+}
+
+.pages-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.table-container {
+  width: 100%;
 }

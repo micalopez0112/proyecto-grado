@@ -7,6 +7,7 @@ import MappingCard from "../../../components/MappingCard.tsx";
 
 import "./DatasetsScreen.css";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const DatasetsScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,10 +61,11 @@ const DatasetsScreen = () => {
         <>
           <div className="container">
             <div className="title-info">
+              <BackButton />
               <h1 className="title-section">Loaded Datasets</h1>
               <InfoModal
                 text={
-                  "In this screen you can select a dataset to evaluate the quality of its attributes from which mappings to the context have been already defined. The datasets listed in this screen are the ones loaded in the mapping section of the application."
+                  "On this screen, you can select a dataset to evaluate the quality of its attributes. The datasets listed here are those uploaded in the mapping section of the application."
                 }
               />
             </div>

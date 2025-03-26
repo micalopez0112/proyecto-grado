@@ -4,12 +4,11 @@ import { useDataContext } from "../../context/context.tsx";
 import { useNavigate } from "react-router-dom";
 import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import InfoModal from "../../components/InfoModal/InfoModal.tsx";
 
 const SchemaSelect = () => {
   const [filePath, setFilePath] = useState<string>("");
-  const [jsonInput, setJsonInput] = useState<string>("");
   const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
   const { setJsonSchemaContext, setCollectionPath } = useDataContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +41,7 @@ const SchemaSelect = () => {
         setJsonSchema(schema);
         console.log("##GENERATED SCHEMA##", schema);
         setJsonSchemaContext(schema);
-        setCollectionPath(filePath); //Check que se pase bien esto
+        setCollectionPath(filePath);
         navigate("/Mapping");
         setLoading(false);
       } else {
@@ -68,10 +67,10 @@ const SchemaSelect = () => {
       ) : (
         <div style={styles.container}>
           <div className="title-info">
-            <h1>Upload Dataset</h1>
+            <h1>Upload dataset</h1>
             <InfoModal
               text={
-                "The dataset must be in JSON format. It is the source from which you want to evalueate the data. In the next screen you can define mappings between the domain ontology loaded before and the dataset uploaded in this scree. Afterwards in the evaluation section of the application you can evaluate the data associated with the mappings defined."
+                "The dataset must be in JSON format. It serves as the source dataset from which you can define mappings against the previously loaded domain ontology."
               }
             />
           </div>

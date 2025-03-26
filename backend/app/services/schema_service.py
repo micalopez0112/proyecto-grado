@@ -11,7 +11,8 @@ from genson import SchemaBuilder
 
 import json
 
-
+# constantes
+json_key_separator='?'
 
 async def get_all_schemas():
     schemas = await schema_repo.find_all_schemas()
@@ -126,3 +127,37 @@ def cleanJsonSchema (jsonSchema:Dict[str,Any])->Dict[str,Any]:
 async def delete_schema_by_id(schema_id: str) -> bool:
     result = schema_repo.delete_schema_by_id(schema_id)
     return result
+
+
+# find_json_keys gets the key of a mapping structure for example "#contacto-city_key#string", and returns 
+# a lis of the json keys of that entry: ['contacto','city'], this means that 'city' its an attribute inside 'contacto'
+def find_json_keys(path) :
+    print(f'path ${path}') #contacto-city?key#string
+    # TODO-change-serparador
+    keys = path.replace('-', json_key_separator).split(json_key_separator)
+    print(f'keys ${keys}')
+
+    json_keys = keys[:-1] 
+    json_keys.remove('rootObject')
+    return json_keys
+
+# esta función busca un elemento en un json a partir de un path dado por la entrada del mapping
+# destination-accomodation-name
+# accomodation aca puedo recibir value
+# TODO: ver posibilidad de obtener el nodo FIELD, aprovechando la anidación entre los campos del json
+def find_element_in_JSON_instance(json_document, path) :
+    print(f'json_document ${json_document}')
+    print(f'path ${path}') #contacto-city_key#string
+    # TODO-change-serparador
+    keys = path.replace('-', json_key_separator).split(json_key_separator)
+
+    json_keys = keys[:-1] 
+    json_keys.remove('rootObject')
+    element = json_document
+    try:
+        for key in json_keys:
+            element = element[key]
+        return element
+    except (KeyError, TypeError):
+        return None
+

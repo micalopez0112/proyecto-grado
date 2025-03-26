@@ -13,6 +13,7 @@ import { JsonSchemaProperty } from "../../../types/JsonSchema.ts";
 import { toast } from "react-toastify";
 import { AGG_AVERAGE, SYNTCTATIC_ACCURACY } from "../../../types/constants.ts";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const SelectMappingsEvaluate = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const SelectMappingsEvaluate = () => {
         try {
           const response = await getMapping(mappingProcessId);
           if (response) {
-            const { mapping_name, mapping, schema, ontology } = response.data;
+            const { mapping, schema, ontology } = response.data;
             setMappings(mapping);
             setJsonSchemaContext(schema);
             setcurrentOntologyId(ontology.ontology_id);
@@ -208,13 +209,13 @@ const SelectMappingsEvaluate = () => {
     } else {
       return Object.entries(properties).map(([key, value]) => {
         const elementKey = parent ? `${parent}-${key}` : key;
-        const fullKey = `${elementKey}_key#${value.type}`;
+        const fullKey = `${elementKey}?key#${value.type}`;
         const isMapped = !!mappings[fullKey];
         const mappingInfo = isMapped ? mappings[fullKey] : null;
         const isActive = !!selectedMappings[fullKey];
 
         if (value.type === "object" && value.properties) {
-          const elementValue = `${elementKey}_value`;
+          const elementValue = `${elementKey}?value`;
           const isMappedObjectValue = !!mappings[elementValue];
           const mappingInfoValue = isMappedObjectValue
             ? mappings[elementValue]
@@ -328,7 +329,7 @@ const SelectMappingsEvaluate = () => {
       return (
         <>
           <div
-            key={parent + "_value"}
+            key={parent + "?value"}
             className={`json-elem array-box disabled`}
           >
             <strong>array items: object</strong>
@@ -361,12 +362,11 @@ const SelectMappingsEvaluate = () => {
       ) : (
         <div className="container">
           <div className="title-info">
-            <h1 className="title-section">
-              Select Schema Values to Create DQ Model
-            </h1>
+            <BackButton />
+            <h1 className="title-section">Select Schema Attributes</h1>
             <InfoModal
               text={
-                "Select the schema values you want to create a DQ model for."
+                "Select the JSON Schema attributes where the metric will be applied."
               }
             />
           </div>

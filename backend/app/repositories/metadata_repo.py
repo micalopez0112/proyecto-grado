@@ -5,7 +5,7 @@ import time
 
 from ..database  import neo4j_conn
 from app.models.mapping import DqResult, FieldNode,MappingProcessDocument
-from app.dq_evaluation.evaluation import find_json_keys
+from app.rules_validation.mapping_rules import find_json_keys
 from ..database import get_neo4j_driver
 
 from pydantic import BaseModel
@@ -187,7 +187,7 @@ def get_evaluation_results(json_schema_id, json_keys, limit, page_number):
     return results
 
 # TODO ver de sacar el id de la collecion y el 
-def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, page_number):
+def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, offset):
     first_key = json_keys[0]
     graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
         -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
@@ -197,21 +197,23 @@ def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, p
         node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
         graph_path += node_path
 
-    if page_number is None or page_number < 1:
-        page_number = 1
-    skip = (page_number - 1) * limit
     latest_item = json_keys[-1]
-    print("LATEST ITEM: ", latest_item)
-    # TODO: ver porque no me sale
+    count_query = f"""
+        {graph_path}-[fvm:FieldValueMeasure]->(measure)
+        RETURN COUNT(*)
+    """
+    neo4j_driver = get_neo4j_driver()
+    count_result, _, _ = neo4j_driver.execute_query(count_query)
+    total_count = count_result[0][0] if count_result else 0  # Extraer el total de la consulta
+
     select_measure = f"""
         {graph_path}-[fvm:FieldValueMeasure]->(measure)
         RETURN f{latest_item}, measure, fvm
-        SKIP {skip} 
+        SKIP {offset} 
         LIMIT {limit}
     """
     print("QUERY: ", select_measure)
-    # returns record, summay, keys
-    neo4j_driver = get_neo4j_driver()
+    
     records, _, _ = neo4j_driver.execute_query(select_measure)
     results = []
     for record in records:
@@ -220,7 +222,8 @@ def get_evaluation_results_v2(data_model_id, json_schema_id, json_keys, limit, p
                       measure=record[1]['measure'])
         results.append(dq)
 
-    return results
+    return results, total_count
+
 
 def init_governance_zone():
     ## Hardcoded specific dimension, factor and metric for this project
@@ -286,6 +289,7 @@ def save_quality_factor():
         else:
             query += "WITH dim\n"
 
+        # TODO-pau: ver esto
         factor_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
         
         query += query_template.format(
@@ -437,10 +441,13 @@ class ParamRepoCrateDQModel(BaseModel):
     ## si llega al final para un dq_model y ambas listas son vacías return ese dq_model
     ## sino seguir con el siguiente dq_model
 # si no se encontró ningun dq_model se retorna None
+mapping_type_separator = "?"
 def get_dq_model(ontology_id, json_schema_id, attributes_mapped):
     looked_fields = []
+    # TODO: paula ver si esto esta bien
     for attribute in attributes_mapped:
-        attr_keys = attribute.split('_')[0]
+        # TODO-change-serparador
+        attr_keys = attribute.split(mapping_type_separator)[0]
         attr_keys = '-'.join(attr_keys.split('-')[1:])
         looked_fields.append(attr_keys)
         print("attr_keys: ", attr_keys)

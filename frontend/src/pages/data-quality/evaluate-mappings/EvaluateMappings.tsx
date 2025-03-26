@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Spinner } from "../../../components/Spinner/Spinner.tsx";
+import { StyledSpinnerImage } from "../../../components/Spinner/Spinner.tsx";
 import { fetchDetailedEvaluationResults } from "../../../services/mapsApi.ts";
 import "./EvaluateMappings.css";
-import { FaEye } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaEye } from "react-icons/fa";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
+
+const PAGE_SIZE = 10;
 
 const EvaluateMappings = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  // const { mappingProcessId } = useDataContext();
   const { mappingId, dqModelId } = location.state;
-  const initialResults = location.state?.validationResults || {};
+  const initialResults = location.state?.validationResults || [];
 
   const [detailedResults, setDetailedResults] = useState<any[]>([]);
   const [selectedMapping, setSelectedMapping] = useState<string | null>(null);
@@ -20,7 +21,10 @@ const EvaluateMappings = () => {
   const [error, setError] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const handleFetchDetailedResults = async (mappingName: string) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+
+  const handleFetchDetailedResults = async (mappingName: string, page = 1) => {
     if (!mappingId) {
       setError("Mapping process ID is not available.");
       return;
@@ -28,13 +32,19 @@ const EvaluateMappings = () => {
 
     setLoading(true);
     setSelectedMapping(mappingName);
+    const offset = (page - 1) * PAGE_SIZE;
+
     try {
       const data = await fetchDetailedEvaluationResults(
         mappingId,
         mappingName,
-        dqModelId
+        dqModelId,
+        PAGE_SIZE,
+        offset
       );
-      setDetailedResults(data);
+      setDetailedResults(data.results);
+      setTotalResults(data.total || 0);
+      setCurrentPage(page);
       setModalIsOpen(true);
     } catch (err: any) {
       setError(err.message);
@@ -47,23 +57,23 @@ const EvaluateMappings = () => {
     setModalIsOpen(false);
     setSelectedMapping(null);
     setDetailedResults([]);
+    setCurrentPage(1);
   };
 
-  console.log("Initial results: ", initialResults);
+  const totalPages = Math.ceil(totalResults / PAGE_SIZE);
 
   return (
     <div className="container">
       <div className="title-info">
+        <BackButton />
         <h1 className="title-section">Evaluation results</h1>
         <InfoModal
           text={
-            "This page shows the evaluation results for each mapping. The evaluation is made using the metric selected previously. Click on the eye icon to see the evaluation results for each document."
+            "This page shows the evaluation results for each attribute at Field level. Click on the eye icon to see the evaluation results for each document."
           }
         />
       </div>
-      {loading ? (
-        <Spinner />
-      ) : error ? (
+      {error ? (
         <div className="error-message">{error}</div>
       ) : (
         <div className="validation-results-container">
@@ -103,14 +113,17 @@ const EvaluateMappings = () => {
         style={modalStyles}
         ariaHideApp={false}
       >
-        <div className="modal-content">
-          <h2>Evaluation results for: {selectedMapping}</h2>
-          {loading && <div className="spinner"></div>}
-          {!loading && detailedResults.length > 0 ? (
+        <h2>Evaluation results for: {selectedMapping}</h2>
+        {loading ? (
+          <div className="spinner-wrapper">
+            <StyledSpinnerImage />
+          </div>
+        ) : detailedResults.length > 0 ? (
+          <div className="table-container">
             <table className="table">
               <thead>
                 <tr>
-                  <th>Document id</th>
+                  <th>Document ID</th>
                   <th>Date</th>
                   <th>Measure</th>
                 </tr>
@@ -125,13 +138,37 @@ const EvaluateMappings = () => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>No evaluation results available.</p>
-          )}
-          <button className="button" onClick={closeModal}>
-            Close
-          </button>
-        </div>
+
+            <div className="pagination">
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  handleFetchDetailedResults(selectedMapping!, currentPage - 1)
+                }
+                className="pages-button"
+              >
+                <FaAngleLeft size={20} />
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                disabled={currentPage === totalPages || totalResults === 0}
+                onClick={() =>
+                  handleFetchDetailedResults(selectedMapping!, currentPage + 1)
+                }
+                className="pages-button"
+              >
+                <FaAngleRight size={20} />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p>No evaluation results available.</p>
+        )}
+        <button className="button" onClick={closeModal}>
+          Close
+        </button>
       </Modal>
     </div>
   );
@@ -145,12 +182,12 @@ const modalStyles: { [key: string]: React.CSSProperties } = {
     bottom: "auto",
     transform: "translate(-50%, -50%)",
     width: "800px",
-    height: "500px",
     padding: "20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    height: "700px",
   },
   modalContent: {
     width: "100%",

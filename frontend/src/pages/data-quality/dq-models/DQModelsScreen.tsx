@@ -9,6 +9,7 @@ import { useDataContext } from "../../../context/context.tsx";
 import { SYNTCTATIC_ACCURACY, AGG_AVERAGE } from "../../../types/constants.ts";
 import DQModelCard from "../../../components/DQModelCard/DQModelCard.tsx";
 import InfoModal from "../../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../../components/BackButton/BackButton.tsx";
 
 const DQModelsScreen = () => {
   const navigate = useNavigate();
@@ -102,10 +103,11 @@ const DQModelsScreen = () => {
       ) : (
         <div className="container">
           <div className="title-info">
-            <h1 className="title-section">Instances of selected Metric</h1>
+            <BackButton />
+            <h1 className="title-section">Available DQ Model’s</h1>
             <InfoModal
               text={
-                'Instances of selected Metric. To create a new instance click on the "New Metric Instance" button. After selecting an instance, click on "Evaluate" to evalute the metric.'
+                'You can select a defined Data Quality Model or create a new one clicking on "New DQ Model". The DQ Model is defined based on the mapped attributes  of the previously selected dataset.Click on "Evaluate" to run the evaluation of the selected DQ Model.'
               }
             />
           </div>
@@ -131,7 +133,7 @@ const DQModelsScreen = () => {
           </div>
           <div className="dq-models-buttons">
             <button className="select-button" onClick={handleSelectClick}>
-              New Metric Instance
+              New DQ Model
             </button>
             <button
               className="select-button"
@@ -149,17 +151,6 @@ const DQModelsScreen = () => {
       )}
     </>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  mappingCard: {
-    display: "flex",
-    padding: 10,
-    cursor: "pointer",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
 };
 
 export default DQModelsScreen;
