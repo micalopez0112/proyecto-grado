@@ -2,7 +2,7 @@ from datetime import date
 from typing import Dict, Any
 
 from app.repositories.metadata_repo import execute_neo4j_query
-
+import uuid
 import json
 
 ZONE = "trusted"
@@ -71,10 +71,12 @@ def generate_fields_metadata(parent_node_Id:str, parent_type:str, field:str, fie
         print(f"Error al crear el NODO para field {field}: {e}")
 
 def get_field_query(belongs_to):
+    #autogenerate fieldId
+    fieldId = str(uuid.uuid4())
     return f"""
             MATCH (parent) WHERE elementId(parent) = $parentNodeId
             CREATE (field:Field {{
-                id_field: "idfield",
+                id_field: '{fieldId}',
                 name: $fieldName,
                 type: $fieldType
             }})
