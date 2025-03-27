@@ -6,6 +6,7 @@ import { getJsonSchema } from "../../services/mapsApi.ts";
 import { Spinner } from "../../components/Spinner/Spinner.tsx";
 import { toast } from "react-toastify";
 import InfoModal from "../../components/InfoModal/InfoModal.tsx";
+import BackButton from "../../components/BackButton/BackButton.tsx";
 
 const SchemaSelect = () => {
   const [filePath, setFilePath] = useState<string>("");
@@ -67,6 +68,7 @@ const SchemaSelect = () => {
       ) : (
         <div style={styles.container}>
           <div className="title-info">
+            <BackButton />
             <h1>Upload dataset</h1>
             <InfoModal
               text={
