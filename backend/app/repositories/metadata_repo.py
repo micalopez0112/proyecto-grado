@@ -525,6 +525,7 @@ def save_data_quality_modedl(save_dq_params: ParamRepoCrateDQModel):
         MERGE (dq_model:DQModel  {{name: '{save_dq_params.dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{save_dq_params.mapping_process_id}'}})
         MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
         MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
+        MERGE (context)-[:DATASET_CONTEXT]->(collection)
     """
     
     # en mapped_entries tengo:
