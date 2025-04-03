@@ -1,4 +1,4 @@
-import { json, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDataContext } from "../../context/context.tsx";
 import { useEffect, useState } from "react";
 import {
@@ -31,13 +31,11 @@ export const Mapping = () => {
     setontologyDataContext,
     setMappings,
     setJsonSchemaContext,
-    removeMapping,
     collectionPath,
     resetMappingState,
     externalFlow,
     externalDatasetId,
   } = useDataContext();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mappingName, setMappingName] = useState<string>("");
   const [mappingId, setMappingId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,15 +49,7 @@ export const Mapping = () => {
     const state = location.state;
     if (state) {
       setMappingId(state.mappingId);
-      //usarlo para invocar un patch al back para actualizar el mapeo
     }
-    /*else{//limpiar contexto si es nuevo mapeo
-            if(mappings){
-              console.log("Se ejecuta clear mappings2222222")
-              clearMappings();
-            }
-                
-        }*/
   }, []);
 
   useEffect(() => {
@@ -180,7 +170,7 @@ export const Mapping = () => {
             const { status, message } = response.data;
             if (status === "success") {
               resetMappingState();
-              alert("Mapping procces successfully validated and saved");
+              toast.success("Set of mappings successfully validated and saved");
               if (externalFlow && externalDatasetId) {
                 //en flujo externo que vaya directo a evaluar calidad de los atributos con los
                 //mappings y las métricas definidas
