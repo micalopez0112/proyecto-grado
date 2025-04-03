@@ -37,15 +37,6 @@
   color: #bdbdbd;
   cursor: not-allowed;
   pointer-events: none;
-
-}
-
-.json-arrayItem-elem {
-  background-color: #cbd5ef;
-  width: fit-content;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 10px 5px 10px 10px;
 }
 
 .json-object-elem {

@@ -584,7 +584,7 @@ def get_dq_models(onto_id, dataset_id, method_id, mapping_process_id):
 
 # get_applied_methods_by_dq_model returns the nodes that say in witch fields the method will be applied (kinda)
 def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
-    methodName = "Method1"
+    methodName = "Method2"
     # TODO: revisar porqque hice una moidificacion rara
     # query = f"""
     #     MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
@@ -606,10 +606,15 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
     -[:belongsToField*0..]->(endNode)-[:belongsToSchema]->(col:Collection) 
     WHERE EXISTS {{
         MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
-    WITH endNode, path, size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) AS depth
+    WITH endNode, applied, path, size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) AS depth
     ORDER BY depth DESC
-    WITH endNode, collect(path)[0] AS longest_path
-    RETURN nodes(longest_path)[1..] AS nodes, relationships(longest_path) AS relationships
+    WITH endNode, applied, collect(path)[0] AS longest_path
+
+    OPTIONAL MATCH (applied)-[:MODEL_MEASURE]->(measure:Measure)<-[:FieldMeasure]-(field:Field)
+
+    RETURN nodes(longest_path)[1..] AS nodes, 
+        relationships(longest_path) AS relationships, 
+        COLLECT(DISTINCT measure) AS measures
     """
     print(f"## {query}")
     try:
@@ -627,13 +632,24 @@ def get_applied_methods_by_dq_model(dq_model_id) -> List[FieldNode]:
             attribute_path_list = []
             # esto recorre todo el camino de nodos anidados para armar el string de atributos
             # donde se encuantra anidado
+
+            measures = record["measures"]
+            attribute_measures = []
+            for measure in measures:
+                attribute_measures.append({"date": measure["date"], "measure": measure["measure"]})
+
             for node in nodes[1:len(nodes)-1]: # se skipea el primero porque es el applied_dq
                 print("NODE: ", node)
                 attribute_path_list.insert(0, node['name'])
                 print("ATTRIBUTE PATH: ", attribute_path_list)
             attribute_path = "-".join(attribute_path_list)
-            fieldNode = FieldNode(element_id=nodes[1].element_id, name=attribute_path, type=nodes[1]['type'])
-            results.append(fieldNode)    
+            fieldNode = FieldNode(
+                element_id=nodes[1].element_id, 
+                name=attribute_path, 
+                type=nodes[1]['type'],
+                measures=attribute_measures
+            )
+            results.append(fieldNode)
         print("RESULTS: ", results)
         return results
     except Exception as e:

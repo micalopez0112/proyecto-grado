@@ -24,7 +24,7 @@ class JsonSchema(BaseModel):
 
     def findPropertyInJsonSchema(self, property_name: str)-> Optional[Dict[str, Any]]:
         print("## PROPERTY NAME: ##", property_name)
-        properties = property_name.split("_")[0]
+        properties = property_name.split("?")[0]
         properties_names = properties.split("-")
         properties_names = properties_names[1:]
         print("Properties names: ", properties_names)

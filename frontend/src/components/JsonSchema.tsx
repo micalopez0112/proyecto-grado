@@ -212,7 +212,7 @@ const Json: React.FC = () => {
     return (
       <>
         <div
-          className={`json-arrayItem-elem ${
+          className={`json-elem ${
             JsonElementSelected === parent + `items` ? "active" : ""
           }`}
           onClick={(e) =>

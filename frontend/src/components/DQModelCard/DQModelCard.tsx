@@ -57,6 +57,8 @@ const DQModelCard = ({
                     <tr>
                       <th>Name</th>
                       <th>Type</th>
+                      <th>Date</th>
+                      <th>Measures</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -64,6 +66,46 @@ const DQModelCard = ({
                       <tr key={index}>
                         <td>{item.name}</td>
                         <td>{item.type}</td>
+                        <td>
+                          {item.measures && item.measures.length > 0 ? (
+                            <div>
+                              {item.measures.map(
+                                (measure: any, mIndex: number) => (
+                                  <div key={mIndex}>
+                                    {new Date(measure.date).toLocaleString(
+                                      "uy-UY",
+                                      {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                      }
+                                    )}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          ) : (
+                            "No date"
+                          )}
+                        </td>
+                        <td>
+                          {item.measures && item.measures.length > 0 ? (
+                            <div>
+                              {item.measures.map(
+                                (measure: any, mIndex: number) => (
+                                  <div key={mIndex}>
+                                    {measure.measure.toFixed(2)}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          ) : (
+                            "No measures"
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

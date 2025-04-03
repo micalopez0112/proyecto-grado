@@ -344,7 +344,7 @@ const SelectMappingsEvaluate = () => {
     return (
       <>
         <div
-          className={`json-arrayItem-elem `}
+          className={`json-elem `}
           onClick={(e) =>
             console.log("clicked array item, doesn´t do anything")
           }

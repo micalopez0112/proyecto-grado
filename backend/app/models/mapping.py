@@ -55,12 +55,17 @@ class MappingProcessDocument(BaseModel):
 # si lo dejo mover para otro file
 class DQModel(BaseModel):
     id : Optional[str] = None
+    
+class Measure(BaseModel):
+    date : str = None
+    measure : float = None
 
 # Represents a field node (a field is an attribute from a json document) in neo4j
 class FieldNode(BaseModel):
     element_id : str = None
     name : str = None
     type : str = None
+    measures : List[Measure] = None
     
 class PyObjectId(ObjectId):
     @classmethod
