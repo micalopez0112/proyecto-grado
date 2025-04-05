@@ -1,5 +1,6 @@
 
 from fastapi import APIRouter, HTTPException
+
 from app.services import schema_service as service
 
 router = APIRouter()
@@ -15,7 +16,6 @@ async def get_schema_from_path(collectionPath: str):
     try:
         schema = service.generate_schema_from_collection(collectionPath)
         if(schema):
-            print(f'## SCHEMA al retornar en generateSchema ##: {schema}')
             return schema
         else:
             raise HTTPException(status_code=500, detail="Error al generar el esquema")

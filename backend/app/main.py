@@ -27,6 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# routers mapped to endpoints
 app.include_router(mapping_router, prefix="/mapping", tags=["mappings"])
 app.include_router(ontology_router, prefix="/ontologies", tags=["ontologies"])
 app.include_router(schema_router, prefix="/schemas", tags=["schemas"])

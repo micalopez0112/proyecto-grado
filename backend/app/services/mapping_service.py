@@ -2,23 +2,28 @@
 
 from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
-from app.repositories import mapping_repo, metadata_repo
+from app.repositories import mapping_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
-from app.rules_validation.mapping_rules import find_json_keys
 
 from bson import ObjectId
 
-async def get_mappings_by_json_schema(json_schema_id: str):
-    mappingJsons = []
-    mapping_prosses_list = await mapping_repo.find_mappings_by_schema(json_schema_id, True)
-    # TODO revisar cuales son todos los valores que necesitamos
-    for mapping_process_doc in mapping_prosses_list:
-        mappingByJSON = MappingsByJSONResponse(idMapping=str(mapping_process_doc['_id']), name=mapping_process_doc['name'], jsonSchemaId=mapping_process_doc['jsonSchemaId'])
-        mappingJsons.append(mappingByJSON)
-    
-    return mappingJsons
+class MappingService:
+    def __init__(self, mapping_repository: mapping_repo.MappingRepository):
+        self.mapping_repository = mapping_repository
+
+    async def get_mappings_by_json_schema(self, json_schema_id: str) -> List[MappingProcessDocument]:
+        mappingJsons = []
+        mapping_prosses_list = await self.mapping_repository.find_mappings_by_schema(json_schema_id, True)
+        # TODO revisar cuales son todos los valores que necesitamos
+        for mapping_process_doc in mapping_prosses_list:
+            mappingByJSON = MappingsByJSONResponse(
+                idMapping=str(mapping_process_doc['_id']), 
+            name=mapping_process_doc['name'], 
+            jsonSchemaId=mapping_process_doc['jsonSchemaId'])
+            mappingJsons.append(mappingByJSON)
+        return mappingJsons
 
 def build_update_data_from_mapping_request(edit_mapping_request: EditMappingRequest):
     update_data ={}

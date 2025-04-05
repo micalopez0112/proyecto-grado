@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Query, Body, HTTPException
 from pydantic import BaseModel
-from typing import List,Optional, Dict, Any
+from typing import Optional, Dict, Any
 
 from app.services import metadata_service
 from app.services.metadata_service import ParamCrateDQModel
-from app.models.mapping import  MappingResponse,  DQModel
+from app.models.mapping import  MappingResponse
 from app.dq_evaluation.evaluation import StrategyContext
+from app.repositories import metadata_repo
 from ..database import neo4j_conn
 
-from app.repositories import metadata_repo
 import time
 
 
@@ -21,14 +21,11 @@ class ConnectionCredentials(BaseModel):
 
 @router.post("/update-neo4j-connection")
 async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
-    # CAMBIAR PARAMETROS A BODY
     try:
         uri = request.uri
         user = request.user
         password = request.password
-        print("Credentials: " + uri + " " + user + " " + password)
         if(uri == "" and user == "" and password == ""):
-            print("Credentials are empty")
             neo4j_conn.re_connect_local();
         else:
             neo4j_conn.connect(uri, user, password)

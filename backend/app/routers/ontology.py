@@ -1,7 +1,6 @@
 
 from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
-from owlready2 import get_ontology
 from typing import Optional, List, Any
 
 from ..database import onto_collection
@@ -9,16 +8,12 @@ from app.models.ontology import OntologyDocument
 from app.services import ontology_service as onto_service
 from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
 
-import os
-
 router = APIRouter()
 
 toDirectory = "upload/ontologies"
 @router.post("/")
 async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
     try:
-        # print("Ontology file:", ontology_file.filename)
-        print("Antes de hacer el onto_service.save_ontology")
         ontology_data = await onto_service.save_ontology(type, ontology_file, uri)
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",
@@ -38,13 +33,10 @@ async def get_ontology_graph(ontology_id: str):
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")
     return graph
 
-# Borrar luego 
 @router.get("/", response_model=List[OntologyDocument])
 async def get_ontologies():
     try:
-        # Encuentra todos los documentos en la colección
         documents = await onto_collection.find().to_list(length=100)  # Ajusta el valor de length según sea necesario
-        # Convierte ObjectId a cadena en los documentos
         for doc in documents:
             doc['id'] = str(doc['_id'])
         return documents
@@ -61,6 +53,3 @@ async def get_ontology_by_id(ontology_id: str):
         return ontology_data
     except Exception as e:
         return HTTPException(status_code=500, detail="Internal error while generating the graph ")
-    
-    return graph
-   
