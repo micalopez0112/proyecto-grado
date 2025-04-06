@@ -2,13 +2,11 @@
 
 from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
-from app.repositories import mapping_repo, metadata_repo
+from app.repositories import mapping_repo
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
-from app.rules_validation.mapping_rules import find_json_keys
 
-from bson import ObjectId
 
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
@@ -36,7 +34,7 @@ async def update_mapping_process(request: MappingRequest, mapping_proccess_id: s
 
 # validate_and_save_mapping_process validates the rules and saves a mapping process
 async def validate_and_save_mapping_process(request: MappingRequest, mapping_proccess_id: str, ontology_id: str):
-    ontology = await onto_service.get_ontology_by_id(ontology_id)
+    #ontology = await onto_service.get_ontology_by_id(ontology_id)
     # return ontology not found
     if (mapping_proccess_id is not None and mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
@@ -89,8 +87,8 @@ async def get_mappings(validated_mappings: bool = None):
     query = {}
     if((validated_mappings is not None) and (validated_mappings == True)):
         query = {'mapping_suscc_validated': validated_mappings}
-    print("query", query)
     mapping_process_docs_list = await mapping_repo.find_mappings_by_query(query)
+    print("mapping_process_docs_list", mapping_process_docs_list)
     mappingpr_names = []
     for mapping_process_doc in mapping_process_docs_list:
         mappingpr = build_mapping_id_name_tupple(mapping_process_doc)

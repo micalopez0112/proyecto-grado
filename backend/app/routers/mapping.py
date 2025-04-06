@@ -1,14 +1,11 @@
-from fastapi import APIRouter, HTTPException, Query, Body
-from typing import List,Optional, Dict, Any
+from fastapi import APIRouter, HTTPException, Body, Depends
+from typing import List,Optional
 from pydantic import BaseModel
 
 from app.services import mapping_service as service
 from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
-from app.dq_evaluation.evaluation import StrategyContext
-from app.Coleccion_Películas.governance import cleanJsonSchema
-from ..database import DLzone
-from genson import SchemaBuilder
-import json
+from app.dependencies import get_mapping_service
+from app.services.mapping.service import MappingService
 
 URI = "bolt://localhost:7687"
 AUTH = ("neo4j","tesis2024")
@@ -46,6 +43,7 @@ async def put_mapping(request: PutMappingRequest = Body(...)):
         return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = str(mapping_id))
     except Exception as e:
         msg = str(e)
+        print("Error updating mapping process:", e)
         response = MappingResponse(message=msg, status="error")
         return response
 
@@ -62,10 +60,12 @@ async def get_mapping(mapping_process_id: str, filter_dp: Optional[bool] = None)
         return response
 
 @router.get("/" )
-async def get_mappings(validated_mappings: Optional[bool] = None) :
+async def get_mappings(
+    validated_mappings: Optional[bool] = None,
+    service: MappingService = Depends(get_mapping_service)
+):
     try :
         mapping_process_names = await service.get_mappings(validated_mappings)
-
         return mapping_process_names
     except Exception as e:
         msg = str(e)
