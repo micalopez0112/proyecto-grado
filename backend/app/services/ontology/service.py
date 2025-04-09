@@ -60,7 +60,7 @@ class OntologyService:
         Get an ontology by its ID.
         Returns the loaded ontology object.
         """
-        ontology_doc = await self.repository.find_ontology_by_id(ontology_id)
+        ontology_doc = await self.repository.find_by_id(ontology_id)
         if ontology_doc is None:
             raise OntologyNotFoundError(f"Ontology {ontology_id} not found")
 

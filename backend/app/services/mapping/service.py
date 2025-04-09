@@ -1,13 +1,16 @@
 from app.repositories.mapping.repository import MappingRepository
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, EditMappingRequest, MappingRequest, PutMappingRequest
-from app.services import schema_service, ontology_service
+from app.services import schema_service
+from app.services.ontology.service import OntologyService
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
+from app.services.ontology.types import build_ontology_response
 from .types import build_mapping_id_name_tupple,build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
 from .exceptions import MappingNotFoundError, InvalidMappingDataError,MappingValidationError
 
 class MappingService:
-    def __init__(self, mapping_repository: MappingRepository):
+    def __init__(self, mapping_repository: MappingRepository, ontology_service: OntologyService):
         self.repository = mapping_repository
+        self.ontology_service = ontology_service
 
     async def create_mapping_process(self, mapping_create_data: MappingCreateData, validated: bool) -> str:
         """
@@ -70,7 +73,7 @@ class MappingService:
             jsonSchema = mapping_create_data.json_schema
             jsonSchema['_id'] = schema_id
 
-            ontology = await ontology_service.get_ontology_by_id(mapping_create_data.ontology_id)
+            ontology = await self.ontology_service.get_ontology_by_id(mapping_create_data.ontology_id)
             # all mapping rules are validated here
             status = validate_mapping(mapping_create_data.mapping, ontology, jsonSchema)
             updated = await self.update_mapping_process(EditMappingRequest(name=mapping_create_data.name, mapping=mapping_create_data.mapping), mapping_id, True)
@@ -105,27 +108,31 @@ class MappingService:
         return mappingpr_names
 
     async def get_mapping_process_by_id(self, mapping_process_id: str, filter_dp: bool = None):
-        """Get a mapping process by ID with optional data property filtering."""
-        mapping_process_doc = await self.repository.find_by_id(mapping_process_id)
-        if not mapping_process_doc:
-            raise MappingNotFoundError(f"Mapping {mapping_process_id} not found")
+        try:
+            """Get a mapping process by ID with optional data property filtering."""
+            mapping_process_doc = await self.repository.find_by_id(mapping_process_id)
+            if not mapping_process_doc:
+                raise MappingNotFoundError(f"Mapping {mapping_process_id} not found")
 
-        if filter_dp:
-            # Filter mapping to retrieve only data properties components
-            mapping_process_doc.mapping = {
-                k: v for k, v in mapping_process_doc.mapping.items() 
-                if getJsonSchemaPropertieType(k) != ""
-            }
-        
-        onto_id = mapping_process_doc.ontologyId
-        ontology = await ontology_service.get_ontology_by_id(onto_id)
-        ontology_data = ontology_service.build_ontology_response(ontology, onto_id)
-        
-        print("#Ontology data before return getMapping#: ", ontology_data)
-        JSON_schema = await schema_service.get_schema_by_id(mapping_process_doc.jsonSchemaId)
-        complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping_process_doc.mapping, mapping_process_doc)
-        
-        return complete_mapping
+            if filter_dp:
+                # Filter mapping to retrieve only data properties components
+                mapping_process_doc.mapping = {
+                    k: v for k, v in mapping_process_doc.mapping.items() 
+                    if getJsonSchemaPropertieType(k) != ""
+                }
+            
+            onto_id = mapping_process_doc.ontologyId
+            ontology = await self.ontology_service.get_ontology_by_id(onto_id)
+            ontology_data = build_ontology_response(ontology, onto_id)
+            
+            print("#Ontology data before return getMapping#: ", ontology_data)
+            JSON_schema = await schema_service.get_schema_by_id(mapping_process_doc.jsonSchemaId)
+            complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping_process_doc.mapping, mapping_process_doc)
+            
+            return complete_mapping
+        except Exception as e:
+            print("Error getting mapping process:", e)
+            raise InvalidMappingDataError(f"Could not get mapping process: {str(e)}")
     
     async def delete_mapping_by_id(self, mapping_process_id: str):
         return await self.repository.delete(mapping_process_id)
