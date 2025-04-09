@@ -57,8 +57,7 @@ class MappingRepository():
         self, 
         json_schema_id: str, 
         validated: bool = None
-    ) -> List[MappingProcessDocument]:
-        """Find all mappings associated with a specific schema."""
+    ):
         try:
             query = {'jsonSchemaId': json_schema_id}
             if validated is not None:
@@ -66,7 +65,7 @@ class MappingRepository():
             
             cursor = self.collection.find(query)
             docs = await cursor.to_list(length=None)
-            return [MappingProcessDocument(**doc) for doc in docs]
+            return docs
         except Exception as e:
             raise QueryError(f"Error finding mappings by schema: {str(e)}")
 

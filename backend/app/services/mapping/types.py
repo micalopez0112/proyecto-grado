@@ -22,7 +22,7 @@ class MappingCreateData(BaseModel):
     ontology_id: str = Field(default=None) 
     json_schema: Dict[str, Any] = Field(default=None) 
     # ver como se supone que tendría que venir esto!!
-    document_storage_path : str = Field(default=None)
+    document_storage_path : Optional[str] = Field(default=None)
     json_schema_id: Optional[str] = Field(default=None)
     
 class MappingUpdateData(BaseModel):
@@ -45,3 +45,10 @@ def build_update_data_from_mapping_request(edit_mapping_request: EditMappingRequ
                 update_data[key] = value
     return update_data
     
+def build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu):
+    return {
+            'ontology': ontology_data,
+            'schema': JSON_schema,
+            'mapping': mapping,
+            'mapping_name': mapping_process_docu.name
+    }

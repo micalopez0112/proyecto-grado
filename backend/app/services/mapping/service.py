@@ -1,16 +1,15 @@
 from app.repositories.mapping.repository import MappingRepository
-from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, EditMappingRequest, MappingRequest
+from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, EditMappingRequest, MappingRequest, PutMappingRequest
 from app.services import schema_service, ontology_service
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
-from .types import build_mapping_id_name_tupple,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
+from .types import build_mapping_id_name_tupple,build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
 from .exceptions import MappingNotFoundError, InvalidMappingDataError,MappingValidationError
-
 
 class MappingService:
     def __init__(self, mapping_repository: MappingRepository):
         self.repository = mapping_repository
 
-    async def create_mapping(self, mapping_create_data: MappingCreateData) -> str:
+    async def create_mapping_process(self, mapping_create_data: MappingCreateData, validated: bool) -> str:
         """
         Create a new mapping process.
         
@@ -25,31 +24,14 @@ class MappingService:
             InvalidMappingDataError: If the data is invalid
         """
         try:
-            # Get or create schema
-            # ojo ver si sigue funcionando
-            schema_id = await schema_service.get_or_create_schema(
-                mapping_create_data.document_storage_path,
-                mapping_create_data.json_schema,
-                mapping_create_data.json_schema_id or ""
-            )
-            
-            # Get ontology
-            ontology = await ontology_service.get_ontology_by_id(mapping_create_data.ontology_id)
-            if not ontology:
-                raise InvalidMappingDataError(f"Ontology {mapping_create_data.ontology_id} not found")
-
-            # Validate mapping
-            json_schema = mapping_create_data.json_schema
-            json_schema['_id'] = schema_id
-
             # Create mapping document
             mapping_doc = MappingProcessDocument(
                 name=mapping_create_data.name,
-                jsonSchemaId=str(schema_id),
+                jsonSchemaId=str(mapping_create_data.json_schema_id),
                 ontologyId=mapping_create_data.ontology_id,
                 mapping=mapping_create_data.mapping,
                 document_storage_path=mapping_create_data.document_storage_path,
-                mapping_suscc_validated=True
+                mapping_suscc_validated=validated
             )
 
             # Save to repository
@@ -58,27 +40,47 @@ class MappingService:
         except Exception as e:
             raise InvalidMappingDataError(f"Could not create mapping: {str(e)}")
 
-    async def update_mapping_process(self, mapping_create_data: MappingCreateData, mapping_proccess_id: str, mapping_validated: bool):
-        edit_body = EditMappingRequest(name=mapping_create_data.name, mapping=mapping_create_data.mapping)
-        data_to_update = build_update_data_from_mapping_request(edit_body)
+    async def update_mapping_process(self, edit_mapping_request: EditMappingRequest, mapping_proccess_id: str, mapping_validated: bool):
+        data_to_update = build_update_data_from_mapping_request(edit_mapping_request)
         updated_result = await self.repository.update(mapping_proccess_id, data_to_update, mapping_validated)
 
         return updated_result
 
-    # Revisar
-    # temdría que ser, valido actualizo y/o guardo
-    async def create_or_update_mapping(self, mapping_create_data: MappingCreateData, mapping_proccess_id: str, mapping_validated: bool):
-        if mapping_proccess_id is not None and mapping_proccess_id != "":
-            result = await self.update_mapping_process(mapping_create_data, mapping_proccess_id, False)
-            # TODO: ver por que estaba  esto
-            schema_id = await schema_service.get_or_create_schema(mapping_create_data.document_storage_path, mapping_create_data.json_schema, "")
-        else:
-            full_collection_path = mapping_create_data.document_storage_path
-            external_json_schema_id = ""
-            external_dataset_id = mapping_create_data.json_schema_id
-            result = await self.create_mapping(mapping_create_data)
+    # TODO: completar
+    async def create_or_update_mapping_process(self, mapping_create_data: MappingCreateData, mapping_proccess_id: str):
+        try:
+            schema_id =  await schema_service.get_or_create_schema(mapping_create_data.document_storage_path, mapping_create_data.json_schema, mapping_create_data.json_schema_id)
+            if mapping_proccess_id is not None and mapping_proccess_id != "":
+                edit_body = EditMappingRequest(name=mapping_create_data.name, mapping=mapping_create_data.mapping)
+                mapping_updated = await self.update_mapping_process(edit_body, mapping_proccess_id, False)
+                mapping_id = mapping_proccess_id
+            else:
+                mapping_create_data.json_schema_id = schema_id
+                mapping_id = await self.create_mapping_process(mapping_create_data, False)
+            
+            return mapping_id, schema_id
+        except Exception as e:
+            print(e)
+            raise InvalidMappingDataError(f"Could not create or update mapping: {str(e)}")
 
-        return result
+    # Revisar
+    async def create_or_update_mapping_process_with_validation(self, mapping_create_data: MappingCreateData, mapping_proccess_id: str):
+        try:
+            mapping_id, schema_id = await self.create_or_update_mapping_process(mapping_create_data, mapping_proccess_id)
+            jsonSchema = mapping_create_data.json_schema
+            jsonSchema['_id'] = schema_id
+
+            ontology = await ontology_service.get_ontology_by_id(mapping_create_data.ontology_id)
+            # all mapping rules are validated here
+            status = validate_mapping(mapping_create_data.mapping, ontology, jsonSchema)
+            updated = await self.update_mapping_process(EditMappingRequest(name=mapping_create_data.name, mapping=mapping_create_data.mapping), mapping_id, True)
+            
+            return mapping_id
+        except ValueError as e:
+            raise e
+        except Exception as e:
+            print(e)
+            raise InvalidMappingDataError(f"Could not create or update mapping: {str(e)}")
 
     async def get_mappings_by_json_schema(self, json_schema_id: str):
         mappingJsons = []
@@ -102,7 +104,7 @@ class MappingService:
             mappingpr_names.append(mappingpr)
         return mappingpr_names
 
-    async def get_mapping_process_by_id(self, mapping_process_id: str, filter_dp: bool = None) -> MappingProcessDocument:
+    async def get_mapping_process_by_id(self, mapping_process_id: str, filter_dp: bool = None):
         """Get a mapping process by ID with optional data property filtering."""
         mapping_process_doc = await self.repository.find_by_id(mapping_process_id)
         if not mapping_process_doc:
@@ -115,4 +117,15 @@ class MappingService:
                 if getJsonSchemaPropertieType(k) != ""
             }
         
-        return mapping_process_doc
+        onto_id = mapping_process_doc.ontologyId
+        ontology = await ontology_service.get_ontology_by_id(onto_id)
+        ontology_data = ontology_service.build_ontology_response(ontology, onto_id)
+        
+        print("#Ontology data before return getMapping#: ", ontology_data)
+        JSON_schema = await schema_service.get_schema_by_id(mapping_process_doc.jsonSchemaId)
+        complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping_process_doc.mapping, mapping_process_doc)
+        
+        return complete_mapping
+    
+    async def delete_mapping_by_id(self, mapping_process_id: str):
+        return await self.repository.delete(mapping_process_id)

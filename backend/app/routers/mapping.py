@@ -6,58 +6,53 @@ from app.services import mapping_service as service
 from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
 from app.dependencies import get_mapping_service
 from app.services.mapping.service import MappingService
-
-URI = "bolt://localhost:7687"
-AUTH = ("neo4j","tesis2024")
+from app.services.mapping.types import MappingCreateData
 
 router = APIRouter()
 
-class JsonRequest(BaseModel):
-    jsonInstances: dict
-class JsonRequestList(BaseModel):
-    jsonInstances: List[dict]  # Cambiado para aceptar una lista de JSON
-
 @router.post("/ontology_id/{ontology_id}", response_model = MappingResponse)
-async def save_and_validate_mapping(ontology_id: str, mapping_proccess_id: Optional[str] = None, 
-                       request: MappingRequest = Body(...)):
+async def create_and_validate_mapping(
+    ontology_id: str, 
+    mapping_proccess_id: Optional[str] = None, 
+    request: MappingRequest = Body(...),
+    service: MappingService = Depends(get_mapping_service)):
     try:
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code= 400, detail="Invalid mapping body")
-        mapping_inserted = await service.validate_and_save_mapping_process(request, mapping_proccess_id, ontology_id)
+
+        mapping_create_data = MappingCreateData(name=request.name, mapping=request.mapping, ontology_id=ontology_id,
+                                                json_schema=request.jsonSchema, json_schema_id=request.jsonSchemaId,
+                                                document_storage_path=request.documentStoragePath)
+        mapping_inserted = await service.create_or_update_mapping_process_with_validation(mapping_create_data, mapping_proccess_id)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
-    
     except ValueError as e:
-        msg = str(e)
-        status = "error"
-        response = MappingResponse(message=msg, status="error")
-        return response
+        return MappingResponse(message=str(e), status="error")
     except Exception as e:
         print("Error saving mapping process:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.put("/")
-async def put_mapping(request: PutMappingRequest = Body(...)):
+async def put_mapping(
+    request: PutMappingRequest = Body(...),
+    service: MappingService = Depends(get_mapping_service)):
     try:
-        print("REQUEST DEL PUT: ", request)
-        mapping_id = await service.update_whole_mapping_process(request)
+        mapping_create_data = MappingCreateData(name=request.name, mapping=request.mapping, ontology_id=request.ontology_id,
+                                                json_schema=request.jsonSchema, json_schema_id="",
+                                                document_storage_path=request.documentStoragePath)
+        mapping_id, schema_id = await service.create_or_update_mapping_process(mapping_create_data, request.mapping_proccess_id)
         return MappingResponse(message="Mapping process updated successfully", status="success",mapping_id = str(mapping_id))
     except Exception as e:
-        msg = str(e)
         print("Error updating mapping process:", e)
-        response = MappingResponse(message=msg, status="error")
-        return response
-
+        return MappingResponse(message=str(e), status="error")
 
 @router.get("/{mapping_process_id}")
-async def get_mapping(mapping_process_id: str, filter_dp: Optional[bool] = None):
+async def get_mapping(mapping_process_id: str, filter_dp: Optional[bool] = None, service: MappingService = Depends(get_mapping_service)):
     try:
         complete_mapping = await service.get_mapping_process_by_id(mapping_process_id, filter_dp)
         return complete_mapping
-        
     except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
+        return MappingResponse(message=str(e), status="error")
 
 @router.get("/" )
 async def get_mappings(
@@ -68,13 +63,12 @@ async def get_mappings(
         mapping_process_names = await service.get_mappings(validated_mappings)
         return mapping_process_names
     except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
-
+        return MappingResponse(message=str(e), status="error")
 
 @router.get("/schemas/{schema_id}")
-async def get_mappings_by_schema_id(schema_id: str):
+async def get_mappings_by_schema_id(
+    schema_id: str,
+    service: MappingService = Depends(get_mapping_service)):
     try:
         result = await service.get_mappings_by_json_schema(schema_id)
     except Exception as e:
@@ -83,8 +77,7 @@ async def get_mappings_by_schema_id(schema_id: str):
     return result
 
 @router.delete("/{mapping_process_id}")
-async def delete_mapping_by_schema_id(mapping_process_id: str):
-    print(f'mapping_process_id: {mapping_process_id}')
+async def delete_mapping_by_schema_id(mapping_process_id: str, service: MappingService = Depends(get_mapping_service)):
     try:
         result = await service.delete_mapping_by_id(mapping_process_id)
         return result

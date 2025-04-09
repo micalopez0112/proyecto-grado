@@ -7,7 +7,7 @@ from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPr
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
 
-
+# TODO - se podria borrar    
 async def get_mappings_by_json_schema(json_schema_id: str):
     mappingJsons = []
     mapping_prosses_list = await mapping_repo.find_mappings_by_schema(json_schema_id, True)
@@ -17,14 +17,14 @@ async def get_mappings_by_json_schema(json_schema_id: str):
         mappingJsons.append(mappingByJSON)
     
     return mappingJsons
-
+# TODO - se podria borrar    
 def build_update_data_from_mapping_request(edit_mapping_request: EditMappingRequest):
     update_data ={}
     for key, value in edit_mapping_request:
             if value is not None and value != "" and value != {} and value != "string":
                 update_data[key] = value
     return update_data
-
+# TODO - se podria borrar    
 async def update_mapping_process(request: MappingRequest, mapping_proccess_id: str, mapping_validated: bool):
     edit_body = EditMappingRequest(name=request.name, mapping=request.mapping)
     data_to_update = build_update_data_from_mapping_request(edit_body)
@@ -34,8 +34,31 @@ async def update_mapping_process(request: MappingRequest, mapping_proccess_id: s
 
 # validate_and_save_mapping_process validates the rules and saves a mapping process
 async def validate_and_save_mapping_process(request: MappingRequest, mapping_proccess_id: str, ontology_id: str):
-    #ontology = await onto_service.get_ontology_by_id(ontology_id)
-    # return ontology not found
+    # Get schema
+    schema_id =  await schema_service.get_or_create_schema(request.documentStoragePath,request.jsonSchema, request.jsonSchemaId)
+    if (mapping_proccess_id is not None and mapping_proccess_id != ""):
+        result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
+        mapping_id = mapping_proccess_id
+    else : 
+        mapping_process_docu = MappingProcessDocument(name=request.name, mapping=request.mapping, ontologyId=ontology_id,
+                                                        jsonSchemaId=str(schema_id),
+                                                        document_storage_path = request.documentStoragePath,
+                                                        mapping_suscc_validated=False)
+        mapping_process_id_inserted = await mapping_repo.insert_mapping_process(mapping_process_docu)
+        mapping_id = mapping_process_id_inserted
+
+    jsonSchema = request.jsonSchema
+    jsonSchema['_id'] = schema_id
+    # Get ontology for validation
+    ontology = await onto_service.get_ontology_by_id(ontology_id)
+    status = validate_mapping(request.mapping, ontology, jsonSchema)
+    # ver como mejorar esto y que se use el update_mapping_process de arriba
+    updated_result = await mapping_repo.update_mapping_process({}, str(mapping_id), True)
+    return mapping_id
+# TODO - se podria borrar    
+async def validate_and_save_mapping_process_backup(request: MappingRequest, mapping_proccess_id: str, ontology_id: str):
+    ontology = await onto_service.get_ontology_by_id(ontology_id)
+    schema_id =  await schema_service.get_or_create_schema(request.documentStoragePath,request.jsonSchema, "")
     if (mapping_proccess_id is not None and mapping_proccess_id != ""):
         result = await update_mapping_process(request, mapping_proccess_id, False) #ver si se levanta la excepcion de validacion correctamente
         mapping_id = mapping_proccess_id
@@ -82,7 +105,7 @@ async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = N
     complete_mapping = build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu)
 
     return complete_mapping
-
+# TODO - se podria borrar    
 async def get_mappings(validated_mappings: bool = None):
     query = {}
     if((validated_mappings is not None) and (validated_mappings == True)):
@@ -95,13 +118,14 @@ async def get_mappings(validated_mappings: bool = None):
         mappingpr_names.append(mappingpr)
 
     return mappingpr_names
-
+# TODO - se podria borrar    
 def build_mapping_id_name_tupple(mapping_process_doc):
     return  {
             "id": str(mapping_process_doc['_id']),
             "name": mapping_process_doc['name'],
     }
 
+# TODO - se podria borrar    
 def build_mapping_proccess_response(ontology_data, JSON_schema, mapping, mapping_process_docu):
     return {
             'ontology': ontology_data,
@@ -130,8 +154,10 @@ async def update_whole_mapping_process(put_request: PutMappingRequest):
             return "Mapping process not found"
         map_request = MappingRequest(name=put_request.name, mapping=put_request.mapping)
         mapping_updated = await update_mapping_process(map_request, put_request.mapping_proccess_id, False)
+        print("Mapping updated acknowledged: ", mapping_updated.acknowledged)
         return mapping_updated.acknowledged
-    
+
+# TODO - se podria borrar    
 async def delete_mapping_by_id(mapping_process_id: str) -> str:
     print(f"Starting deletion process for mapping ID: {mapping_process_id}")
     

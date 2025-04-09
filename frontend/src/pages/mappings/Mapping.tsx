@@ -85,7 +85,7 @@ export const Mapping = () => {
               ontology_id: "",
               name: mappingName,
               mapping: mappings,
-              jsonSchema: {},
+              jsonSchema: jsonSchemaContext, // OJO sume esto!
               mapping_proccess_id: mappingId,
             };
             setLoading(true);
