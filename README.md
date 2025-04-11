@@ -1,4 +1,4 @@
-## Getting Started
+# Getting Started
 
 To run this application, make sure you have the following dependencies installed:
 
@@ -37,7 +37,7 @@ $ npm install react
 
 Create a file named .env in backend/app of your project and add the following variables:
 
-# Neo4j settings
+### Neo4j settings
 
 ```shell
 NEO4J_URI=
