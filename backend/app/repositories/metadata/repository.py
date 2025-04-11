@@ -130,15 +130,24 @@ class MetadataRepository:
             return None
 
     async def get_applied_methods_by_dq_model(self, dq_model_id):
+        methodName = "Method2"
         query = f"""
-            MATCH (dq:DQModel {{id: '{dq_model_id}'}})-[:HAS_APPLIED_DQ_METHOD]->(a:AppliedDQMethod)-[:APPLIED_TO]->(f:Field)
-            WITH a, f, [(f)<-[:belongsToField*0..]-(child:Field) | child] as fields
-            UNWIND fields as field
-            WITH a, field
-            MATCH (field)<-[r:FieldValueMeasure]-(m:Measure)
-            RETURN collect(distinct field) as fields, collect({{date: m.date, measure: m.measure}}) as measures
-            ORDER BY field.name
-        """
+            MATCH path = (dq_model:DQModel {{id: '{dq_model_id}'}})
+            -[:HAS_APPLIED_DQ_METHOD]->(applied:AppliedDQMethod)
+            -[:APPLIED_TO]->(startNode:Field)
+            -[:belongsToField*0..]->(endNode)-[:belongsToSchema]->(col:Collection) 
+            WHERE EXISTS {{
+                MATCH (applied)-[:APPLIES_METHOD]->(method:Method {{name: '{methodName}'}})}}
+            WITH endNode, applied, path, size([rel IN relationships(path) WHERE type(rel) = 'belongsToField']) AS depth
+            ORDER BY depth DESC
+            WITH endNode, applied, collect(path)[0] AS longest_path
+
+            OPTIONAL MATCH (applied)-[:MODEL_MEASURE]->(measure:Measure)<-[:FieldMeasure]-(field:Field)
+
+            RETURN nodes(longest_path)[1..] AS nodes, 
+                relationships(longest_path) AS relationships, 
+                COLLECT(DISTINCT measure) AS measures
+            """
         
         try:
             records, _, _ = self.neo4j_driver.execute_query(query)
@@ -169,39 +178,44 @@ class MetadataRepository:
             return None
 
     async def get_data_quality_rules(self):
-        query = """
-            MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
-            RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
-        """
+        try:
+            query = """
+                MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
+                RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
+            """
         
-        result, _, _ = self.neo4j_driver.execute_query(query)
-        data_structure = {}
+            result, _, _ = self.neo4j_driver.execute_query(query)
+            data_structure = {}
 
-        for record in result:
-            dimension = record["dimension"]
-            factor = record["factor"]
-            granularity = record["granularity"]
-            method_id = record["method_id"]
+            for record in result:
+                dimension = record["dimension"]
+                factor = record["factor"]
+                granularity = record["granularity"]
+                method_id = record["method_id"]
 
-            if dimension not in data_structure:
-                data_structure[dimension] = {"dimension": dimension, "factors": {}}
+                if dimension not in data_structure:
+                    data_structure[dimension] = {"dimension": dimension, "factors": {}}
 
-            if factor not in data_structure[dimension]["factors"]:
-                data_structure[dimension]["factors"][factor] = {
-                    "name": factor,
-                    "metrics": []
-                }
+                if factor not in data_structure[dimension]["factors"]:
+                    data_structure[dimension]["factors"][factor] = {
+                        "name": factor,
+                        "metrics": []
+                    }
 
-            current_factor = data_structure[dimension]["factors"][factor]
-            if granularity == "value":
-                current_factor["metrics"].append({
-                    "method_id": method_id,
-                    "name": f"Metric {len(current_factor['metrics']) + 1}"
-                })
+                current_factor = data_structure[dimension]["factors"][factor]
+                if granularity == "value":
+                    current_factor["metrics"].append({
+                        "method_id": method_id,
+                        "name": f"Metric {len(current_factor['metrics']) + 1}"
+                    })
 
-        final_data = []
-        for dimension_data in data_structure.values():
-            dimension_data["factors"] = list(dimension_data["factors"].values())
-            final_data.append(dimension_data)
+            final_data = []
+            for dimension_data in data_structure.values():
+                dimension_data["factors"] = list(dimension_data["factors"].values())
+                final_data.append(dimension_data)
 
-        return final_data
+            return final_data
+
+        except Exception as e:
+            print("Error executing query:", e)
+            raise Exception("Error executing query")

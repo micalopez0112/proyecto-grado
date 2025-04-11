@@ -34,11 +34,16 @@ def get_schema_service(
     """Get an instance of the schema service with its repository dependency."""
     return SchemaService(repo)
 
+def get_metadata_repository() -> MetadataRepository:
+    """Get an instance of the metadata repository."""
+    return MetadataRepository()
+
 def get_metadata_service(
-    mapping_repo: Annotated[MappingRepository, Depends(get_mapping_repository)]
+    mapping_repo: Annotated[MappingRepository, Depends(get_mapping_repository)],
+    metadata_repo: Annotated[MetadataRepository, Depends(get_metadata_repository)]
 ) -> MetadataService:
     """Get an instance of the metadata service with its repository dependencies."""
-    return MetadataService(mapping_repo)
+    return MetadataService(mapping_repo, metadata_repo)
 
 def get_mapping_service(
     repo: Annotated[MappingRepository, Depends(get_mapping_repository)],
