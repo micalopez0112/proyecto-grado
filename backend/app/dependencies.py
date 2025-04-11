@@ -7,6 +7,8 @@ from app.repositories.ontology.repository import OntologyRepository
 from app.services.ontology.service import OntologyService
 from app.repositories.schema.repository import SchemaRepository
 from app.services.schema.service import SchemaService
+from app.repositories.metadata.repository import MetadataRepository
+from app.services.metadata.service import MetadataService
 
 def get_mapping_repository() -> MappingRepository:
     """Get an instance of the mapping repository."""
@@ -31,6 +33,12 @@ def get_schema_service(
 ) -> SchemaService:
     """Get an instance of the schema service with its repository dependency."""
     return SchemaService(repo)
+
+def get_metadata_service(
+    mapping_repo: Annotated[MappingRepository, Depends(get_mapping_repository)]
+) -> MetadataService:
+    """Get an instance of the metadata service with its repository dependencies."""
+    return MetadataService(mapping_repo)
 
 def get_mapping_service(
     repo: Annotated[MappingRepository, Depends(get_mapping_repository)],

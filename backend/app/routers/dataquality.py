@@ -1,16 +1,16 @@
-from fastapi import APIRouter, Query, Body, HTTPException
+from fastapi import APIRouter, Query, Body, HTTPException, Depends
 from pydantic import BaseModel
-from typing import List,Optional, Dict, Any
+from typing import Optional, Dict, Any, Annotated
 
-from app.services import metadata_service
-from app.services.metadata_service import ParamCrateDQModel
-from app.models.mapping import  MappingResponse,  DQModel
+from app.services.metadata.service import MetadataService
+from app.services.metadata.types import CreateDQModelParams
+from app.models.mapping import MappingResponse
+from app.services.metadata.types import EvaluationParams
 from app.dq_evaluation.evaluation import StrategyContext
+from app.dependencies import get_metadata_service
 from ..database import neo4j_conn
 
-from app.repositories import metadata_repo
 import time
-
 
 router = APIRouter()
 
@@ -57,15 +57,27 @@ async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Opt
         
 
 @router.get("/results")
-async def get_quality_results(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"), 
-                              dq_model_id: Optional[str] = Query(None, description="DQ Model ID"),
-                              json_key: Optional[str] = Query(None, description="Json key to get quality results, its the mapping key"), 
-                              limit: Optional[int] = 10, offset: Optional[int] = 0):
-    print(f'request_mapping_body: {mapping_process_id}')
-    try :
-        result, total = await metadata_service.get_evaluation_results_by_json(dq_model_id, mapping_process_id, json_key, limit, offset)
+async def get_quality_results(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
+    mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),
+    dq_model_id: Optional[str] = Query(None, description="DQ Model ID"),
+    json_key: Optional[str] = Query(None, description="Json key to get quality results"),
+    limit: Optional[int] = 10,
+    offset: Optional[int] = 0
+):
+    print("Using metadata service to get quality results")
+    try:
+
+        params = EvaluationParams(
+            dq_model_id=dq_model_id,
+            mapping_process_id=mapping_process_id,
+            json_key=json_key,
+            limit=limit,
+            offset=offset
+        )
+        result, total = await metadata_service.get_evaluation_results_by_json(params)
         print("### Got evaluation results ###, result: ", result)
-        return {"results": result, "total": total} 
+        return {"results": result, "total": total}
     except Exception as e:
         msg = str(e)
         response = MappingResponse(message=msg, status="error")
@@ -73,15 +85,25 @@ async def get_quality_results(mapping_process_id: Optional[str] = Query(None, de
 
 
 @router.post("/model")
-async def create_dq_model(mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),dq_model_name: Optional[str] = Query(None, description="DQ model name"),  
-                          request_mapping_body: Dict[str, Any]= Body(...), dq_method_id: Optional[str] = Query(None, description="DQ method id"),
-                          dq_aggregated_method_id: Optional[str] = Query(None, description="DQ aggregated method id")
-                          ):
+async def create_dq_model(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
+    request_mapping_body: Dict[str, Any] = Body(...),
+    mapping_process_id: Optional[str] = Query(None, description="ID for mapping"),
+    dq_model_name: Optional[str] = Query(None, description="DQ model name"),
+    dq_method_id: Optional[str] = Query(None, description="DQ method id"),
+    dq_aggregated_method_id: Optional[str] = Query(None, description="DQ aggregated method id")
+):
     print("### Starting create DQ model process ###")
     print(f'request_mapping_body: {request_mapping_body}')
-    try :
-        create_dq_params = ParamCrateDQModel(mapping_process_id=mapping_process_id, dq_model_name=dq_model_name, dq_method_id=dq_method_id, dq_aggregated_method_id=dq_aggregated_method_id)
-        result = await metadata_service.create_dq_model(create_dq_params, request_mapping_body)
+    try:
+        create_params = CreateDQModelParams(
+            mapping_process_id=mapping_process_id,
+            dq_model_name=dq_model_name,
+            dq_method_id=dq_method_id,
+            dq_aggregated_method_id=dq_aggregated_method_id,
+            mapped_entries=list(request_mapping_body.keys())
+        )
+        result = await metadata_service.create_dq_model(create_params, request_mapping_body)
         return result
     except Exception as e:
         msg = str(e)
@@ -89,19 +111,24 @@ async def create_dq_model(mapping_process_id: Optional[str] = Query(None, descri
         return response
 
 @router.get("/models")
-async def get_dq_models(mapping_process_id: str = Query(None, description="ID for mapping"), quality_method_id: str = Query(None, description="ID for quality rule")):
-    try :
-        result = await metadata_service.get_dq_models(mapping_process_id,quality_method_id)
+async def get_dq_models(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
+    mapping_process_id: str = Query(None, description="ID for mapping"),
+    quality_method_id: str = Query(None, description="ID for quality rule")
+):
+    try:
+        result = await metadata_service.get_dq_models(mapping_process_id, quality_method_id)
         return result
     except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
+        return MappingResponse(message= str(e), status="error")
 
 
 @router.get("/applied_methods")
-async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Model id")):
-    try :
+async def get_applied_methods(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
+    dq_model_id: str = Query(None, description="DQ Model id")
+):
+    try:
         result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
         return result
     except Exception as e:
@@ -110,8 +137,10 @@ async def get_applied_methods(dq_model_id: str = Query(None, description="DQ Mod
         return response
     
 @router.get("/data-quality-rules")
-async def get_data_quality_rules():
-    try :
+async def get_data_quality_rules(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)]
+):
+    try:
         result = await metadata_service.get_data_quality_rules()
         return result
     except Exception as e:
