@@ -33,7 +33,7 @@ Install React using npm:
 $ npm install react
 ```
 
-### Step 2: Create a .env File
+## Step 2: Create a .env File
 
 Create a file named .env in backend/app of your project and add the following variables:
 
