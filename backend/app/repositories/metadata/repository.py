@@ -246,16 +246,49 @@ class MetadataRepository:
         """
         return query
 
-    def get_dq_model(self, ontology_id: str, json_schema_id: str, mapped_entries: List[str]) -> str:
-        query = f"""
-            MATCH (dq_model:DQModel)-[:MODEL_CONTEXT]->(context:Context {{id: '{ontology_id}'}})
-            MATCH (dq_model)-[:MODEL_DQ_FOR]->(collection:Collection {{id_dataset: '{json_schema_id}'}})
-            RETURN dq_model.id as id
+    mapping_type_separator = "?"
+
+    async def get_dq_model(self, ontology_id: str, json_schema_id: str, attributes_mapped: List[str]) -> str:
+        """Check if a DQ model exists for the given context, dataset and mapped attributes.
+        
+        Args:
+            ontology_id: ID of the ontology (context)
+            json_schema_id: ID of the JSON schema (dataset)
+            attributes_mapped: List of mapped attributes to check
+            
+        Returns:
+            str: ID of the existing DQ model if found, None otherwise
         """
+        looked_fields = []
+        for attribute in attributes_mapped:
+            # Split by separator and get the first part (attribute path)
+            attr_keys = attribute.split(self.mapping_type_separator)[0]
+            # Remove the first element and join the rest with '-'
+            attr_keys = '-'.join(attr_keys.split('-')[1:])
+            looked_fields.append(attr_keys)
+            print("attr_keys: ", attr_keys)
+
+        query = f"""
+            MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)
+            -[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
+            RETURN dq_model.id, dq_model.name
+        """
+        print("#query for checking if dq model exist#: ", query)
+        print("Looked Fields: ", looked_fields)
+
         try:
-            result, _, _ = self.neo4j_driver.execute_query(query)
-            if result:
-                return result[0]["id"]
+            records, _, _ = self.neo4j_driver.execute_query(query)
+            if records:
+                for record in records:  # Check each DQ model
+                    dq_model_id = record.get('dq_model.id')
+                    # Get applied methods for this model
+                    applied_methods = await self.get_applied_methods_by_dq_model(dq_model_id)
+                    if applied_methods:
+                        # Get field names from applied methods
+                        applied_fields = [method.name for method in applied_methods]
+                        # Check if all looked fields are in applied fields
+                        if all(field in applied_fields for field in looked_fields):
+                            return dq_model_id
             return None
         except Exception as e:
             print("error in executing query: ", e)
@@ -270,7 +303,6 @@ class MetadataRepository:
         Returns:
             str: The ID of the created or existing DQ model.
         """
-        print("### Starting save data quality model process in neo4j ###")
         print("### Model dq entries : ###", dto.mapped_entries)
         mapping_process_docu = dto.mapping_process_docu
         ontology_id = mapping_process_docu.ontologyId
@@ -279,9 +311,9 @@ class MetadataRepository:
         timestamp_milliseconds = int(time.time() * 1000)
 
         print("##First check if dq model with same context, dataset and appliedDqMethod's exists")
-        dq_model_already_exists = self.get_dq_model(ontology_id, json_schema_id, dto.mapped_entries)
+        dq_model_already_exists = await self.get_dq_model(ontology_id, json_schema_id, dto.mapped_entries)
         if (dq_model_already_exists):
-            print("DQ Model already exists, with the info: ", dq_model_already_exists)
+            print("DQ Model already exists, with the info paula: ", dq_model_already_exists)
             print("#########")
             return dq_model_already_exists
 

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from app.models.mapping import MappingProcessDocument
 
 class SaveDQModelDTO(BaseModel):
@@ -8,5 +8,5 @@ class SaveDQModelDTO(BaseModel):
     dq_model_name: str
     dq_method_id: str
     mapping_process_docu: MappingProcessDocument
-    dq_aggregated_method_id: str
+    dq_aggregated_method_id: Optional[str]
     mapped_entries: List[str]

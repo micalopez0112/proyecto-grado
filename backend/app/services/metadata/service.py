@@ -28,10 +28,8 @@ class MetadataService:
         """Create a new DQ model."""
         print("### Create dq model in metadata service ###" + create_params.dq_model_name)
         mapping_process_doc = await self.mapping_repository.find_by_id(create_params.mapping_process_id)
-        print("### Got mapping proccess document ###", mapping_process_doc)
         
         save_dto = CreateDQModelRequest.to_save_dto(create_params, mapping_process_doc, mapped_entries)
-        print("About to save DQ model:", save_dto)
         result = await self.metadata_repository.save_data_quality_model(save_dto)
         return result
 
