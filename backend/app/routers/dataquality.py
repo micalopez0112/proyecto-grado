@@ -31,7 +31,8 @@ async def update_neo4j_connection(metadata_repo: Annotated[MetadataRepository, D
             print("Credentials are empty")
             neo4j_conn.re_connect_local();
         else:
-            neo4j_conn.connect(uri, user, password)
+            external_driver = neo4j_conn.connect(uri, user, password)
+            metadata_repo.set_neo4j_driver(external_driver)
             metadata_repo.init_governance_zone();
             # pasar todo a service
         print("Neo4j connection updated successfully, and the governance_zone initialized")

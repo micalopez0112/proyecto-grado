@@ -18,7 +18,6 @@ async def create_and_validate_mapping(
     try:
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code= 400, detail="Invalid mapping body")
-
         mapping_create_data = MappingCreateData(name=request.name, mapping=request.mapping, ontology_id=ontology_id,
                                                 json_schema=request.jsonSchema, json_schema_id=request.jsonSchemaId,
                                                 document_storage_path=request.documentStoragePath)

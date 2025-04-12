@@ -79,7 +79,6 @@ class MappingService:
             mapping_id, schema_id = await self.create_or_update_mapping_process(mapping_create_data, mapping_proccess_id)
             jsonSchema = mapping_create_data.json_schema
             jsonSchema['_id'] = schema_id
-
             ontology = await self.ontology_service.get_ontology_by_id(mapping_create_data.ontology_id)
             # all mapping rules are validated here
             status = validate_mapping(mapping_create_data.mapping, ontology, jsonSchema)
