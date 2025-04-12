@@ -1,14 +1,15 @@
 from app.repositories.mapping.repository import MappingRepository
 from app.repositories.metadata.repository import MetadataRepository
 from app.rules_validation.mapping_rules import find_json_keys
-from .types import CreateDQModelParams, EvaluationParams
+from .types import CreateDQModelRequest, GetEvaluationResultsRequest
+from app.repositories.metadata.types import SaveDQModelDTO
 
 class MetadataService:
     def __init__(self, mapping_repository: MappingRepository, metadata_repository: MetadataRepository):
         self.mapping_repository = mapping_repository
         self.metadata_repository = metadata_repository
 
-    async def get_evaluation_results_by_json(self, evaluation_params: EvaluationParams):
+    async def get_evaluation_results_by_json(self, evaluation_params: GetEvaluationResultsRequest):
         """Get evaluation results for a specific JSON key."""
         mapping_process = await self.mapping_repository.find_by_id(evaluation_params.mapping_process_id)
         schema_id = mapping_process.jsonSchemaId
@@ -23,20 +24,15 @@ class MetadataService:
         )
         return results, total_count
 
-    async def create_dq_model(self, create_params: CreateDQModelParams, mapped_entries):
+    async def create_dq_model(self, create_params: CreateDQModelRequest, mapped_entries):
         """Create a new DQ model."""
-        print("### Create dq model in metadata service ###")
+        print("### Create dq model in metadata service ###" + create_params.dq_model_name)
         mapping_process_doc = await self.mapping_repository.find_by_id(create_params.mapping_process_id)
         print("### Got mapping proccess document ###", mapping_process_doc)
         
-        result = await self.metadata_repository.save_data_quality_model(
-            mapping_process_id=create_params.mapping_process_id,
-            dq_model_name=create_params.dq_model_name,
-            dq_method_id=create_params.dq_method_id,
-            mapping_process_doc=mapping_process_doc,
-            dq_aggregated_method_id=create_params.dq_aggregated_method_id,
-            mapped_entries=mapped_entries.keys()
-        )
+        save_dto = CreateDQModelRequest.to_save_dto(create_params, mapping_process_doc, mapped_entries)
+        print("About to save DQ model:", save_dto)
+        result = await self.metadata_repository.save_data_quality_model(save_dto)
         return result
 
     async def get_applied_methods_by_dq_model(self, dq_model_id: str):
@@ -50,13 +46,8 @@ class MetadataService:
         print("method_id:", method_id)
 
         map_process_info = await self.mapping_repository.find_by_id(mapping_process_id)
-        print("### Got mapping process document ###", map_process_info)
         onto_id = map_process_info.ontologyId
         dataset_id = map_process_info.jsonSchemaId
-
-        print("#IDs#")
-        print("Context id:", onto_id)
-        print("Dataset id:", dataset_id)
 
         result = await self.metadata_repository.get_dq_models(onto_id, dataset_id, method_id, mapping_process_id)
         print("result", result)
