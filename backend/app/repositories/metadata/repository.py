@@ -240,25 +240,27 @@ class MetadataRepository:
 
     def get_last_node_in_nested_fields_query(self, json_schema_id: str, dq_model_id: str, json_keys: List[str]) -> str:
         first_key = json_keys[0]
-        last_key = json_keys[-1]
-        graph_path = f"""
-            MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})        
+        graph_path = f""" 
+            MATCH (collection)<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
         """
-        print("first key: ", first_key)
+        last_node = "f"+ first_key
         for key in json_keys[1:]:
             node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
             graph_path += node_path
-            print("key: ", key)
+            last_node = "f"+ key
 
-        create_dq_method_q = f"""
-            MERGE (app_dq_method:AppliedDQMethod {{name: 'applied_dq_f{last_key}'}})                
-            MERGE (app_dq_method_col:AppliedDQMethod {{name: 'applied_dq_f{last_key}col'}})                
-            MERGE (app_dq_method)-[:APPLIED_TO]->(f{last_key})
-            MERGE (app_dq_method_col)-[:APPLIED_TO]->(f{last_key})
-            MERGE (dq_method)-[:APPLIED_IN]->(app_dq_method)
-            MERGE (dq_method_col)-[:APPLIED_IN]->(app_dq_method_col)
-            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
+        applied_dq_name = "applied_dq_" + last_node
+        applied_dq_name_col = "applied_dq_" + last_node + "col"
+        create_dq_method_q = f""" 
+            WITH collection, {last_node}, dq_model, dq_method, dq_method_col
+            MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method:AppliedDQMethod 
+            {{name: '{applied_dq_name}'}})
+            MERGE ({last_node})<-[:APPLIED_TO]-(app_dq_method_col:AppliedDQMethod 
+            {{name: '{applied_dq_name_col}'}})
+            MERGE (dq_method)<-[:APPLIES_METHOD]-(app_dq_method)
+            MERGE (dq_method_col)<-[:APPLIES_METHOD]-(app_dq_method_col)
             MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method_col)
+            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
         """
 
         graph_path += create_dq_method_q
@@ -323,8 +325,6 @@ class MetadataRepository:
         Returns:
             str: The ID of the created or existing DQ model.
         """
-        print("### Starting save data quality model process in neo4j ###")
-        print("### Model dq entries : ###", dto.mapped_entries)
         mapping_process_docu = dto.mapping_process_docu
         ontology_id = mapping_process_docu.ontologyId
         json_schema_id = mapping_process_docu.jsonSchemaId
@@ -348,7 +348,6 @@ class MetadataRepository:
         """
         
         for attribute in dto.mapped_entries:
-            print("attribute mapped: ", attribute)
             json_keys = find_json_keys(attribute)
             print("json keys: ", json_keys)
             query += " WITH collection, dq_model, dq_method, dq_method_col"
