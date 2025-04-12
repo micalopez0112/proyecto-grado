@@ -93,7 +93,6 @@ async def create_dq_model(
     dq_method_id: Optional[str] = Query(None, description="DQ method id"),
     dq_aggregated_method_id: Optional[str] = Query(None, description="DQ aggregated method id")
 ): 
-    print("DQ aggregated method id:", dq_aggregated_method_id)
     print("### Starting create DQ model process with new arq ###")
     try:
         create_params = CreateDQModelRequest(

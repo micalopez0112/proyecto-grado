@@ -2,11 +2,10 @@ from typing import Dict, Any, List
 from datetime import datetime
 import uuid
 import time
-from bson import ObjectId
-from pathlib import Path
+
 
 from app.database import get_neo4j_driver
-from app.models.mapping import DqResult, FieldNode, MappingProcessDocument
+from app.models.mapping import FieldNode
 from app.rules_validation.mapping_rules import find_json_keys
 from app.repositories.metadata.types import SaveDQModelDTO
 
@@ -24,26 +23,29 @@ class MetadataRepository:
         first_key = json_keys[0]
         graph_path = f"""
             MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
-            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})        
         """
 
         for key in json_keys[1:]:
-            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"            
             graph_path += node_path
 
         latest_item = json_keys[-1]
-        delete_query = f"""
+
+        delete_existing_measures = f"""
             {graph_path}
             MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
             DETACH DELETE m
         """
-        
-        self.neo4j_driver.execute_query(delete_query)
+
+        print("DELETE QUERY: ", delete_existing_measures)
+        self.neo4j_driver.execute_query(delete_existing_measures)
 
     async def insert_field_value_measures(self, field: FieldNode, value, id_document, dq_model_id, node_name):
-        applied_dq_method_name = f"applied_dq_f{node_name}"
+        applied_dq_method_name = f"applied_dq_f{node_name}" 
+        print("APPLIED DQ METHOD: ", applied_dq_method_name)
         current_datetime = datetime.now()
-        
+        # ver que esta pasando porque me crea doble los resultados de las medidas
         insert_measure_query = f"""
             MATCH (fieldNode) 
             WHERE elementId(fieldNode) = '{field.element_id}' 
@@ -52,12 +54,16 @@ class MetadataRepository:
             CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
             SET m.measure = {value}, m.date= '{current_datetime}'
         """
-        
+        print("## Evaluacion 4.6.1 - query:", insert_measure_query, " ##")
         self.neo4j_driver.execute_query(insert_measure_query)
 
     async def insert_field_measures(self, field: FieldNode, node_name, value, dq_model_id):
+        print("LAST ITEM: ", node_name)
         current_datetime = datetime.now()
-        applied_dq_method_name = f"applied_dq_f{node_name}col"
+
+        applied_dq_method_name = f"applied_dq_f{node_name}col" # TODO: agregar _col / o cambiar a _aggregated 
+        print("searching for: ", applied_dq_method_name)
+        print("About to insert field measure for: ", field.element_id)
 
         query = f"""
             MATCH (fieldNode) 
@@ -67,18 +73,20 @@ class MetadataRepository:
             CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
             SET m.measure = {value}, m.date= '{current_datetime}'
         """
-        
+
+        print("## QUERY ##", query)
         self.neo4j_driver.execute_query(query)
 
     async def get_evaluation_results_v2(self, data_model_id, json_schema_id, json_keys, limit, offset):
         first_key = json_keys[0]
         graph_path = f"""
-            MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
-            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+            MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})            
+            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})
+            <-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})        
         """
 
         for key in json_keys[1:]:
-            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"            
             graph_path += node_path
 
         latest_item = json_keys[-1]
@@ -98,11 +106,19 @@ class MetadataRepository:
             RETURN count(m) as total
         """
 
-        results = self.execute_neo4j_query(query)
-        count_result = self.execute_neo4j_query(count_query)
-        total_count = count_result[0]["total"] if count_result else 0
+        print("## QUERY ##", query)
+        print("## COUNT QUERY ##", count_query)
 
-        return results, total_count
+        try:
+            result, _, _ = self.neo4j_driver.execute_query(query)
+            count_result, _, _ = self.neo4j_driver.execute_query(count_query)
+            total_count = count_result[0].get('total')
+            print("## RESULT ##", result)
+            print("## TOTAL COUNT ##", total_count)
+            return result, total_count
+        except Exception as e:
+            print("Error executing query:", e)
+            return None
 
     async def get_dq_models(self, onto_id, dataset_id, method_id, mapping_process_id):
         query = f"""
@@ -168,8 +184,8 @@ class MetadataRepository:
 
                 attribute_path = "-".join(attribute_path_list)
                 field_node = FieldNode(
-                    element_id=nodes[1].element_id,
-                    name=attribute_path,
+                    element_id=nodes[1].element_id, 
+                    name=attribute_path, 
                     type=nodes[1]['type'],
                     measures=attribute_measures
                 )
@@ -180,13 +196,13 @@ class MetadataRepository:
             return None
 
     async def get_data_quality_rules(self):
+        match_query = """
+            MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
+            RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
+        """
+
         try:
-            query = """
-                MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
-                RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
-            """
-        
-            result, _, _ = self.neo4j_driver.execute_query(query)
+            result, _, _ = self.neo4j_driver.execute_query(match_query)
             data_structure = {}
 
             for record in result:
@@ -228,23 +244,26 @@ class MetadataRepository:
         graph_path = f"""
             MATCH (c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})        
         """
-
+        print("first key: ", first_key)
         for key in json_keys[1:]:
             node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
             graph_path += node_path
+            print("key: ", key)
 
-        query = f"""
-            {graph_path}
-            MERGE (applied_dq_method:AppliedDQMethod {{name: 'applied_dq_f{last_key}'}})                
-            MERGE (applied_dq_method_col:AppliedDQMethod {{name: 'applied_dq_f{last_key}col'}})                
-            MERGE (applied_dq_method)-[:APPLIED_TO]->(f{last_key})
-            MERGE (applied_dq_method_col)-[:APPLIED_TO]->(f{last_key})
-            MERGE (dq_method)-[:APPLIED_IN]->(applied_dq_method)
-            MERGE (dq_method_col)-[:APPLIED_IN]->(applied_dq_method_col)
-            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(applied_dq_method)
-            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(applied_dq_method_col)
+        create_dq_method_q = f"""
+            MERGE (app_dq_method:AppliedDQMethod {{name: 'applied_dq_f{last_key}'}})                
+            MERGE (app_dq_method_col:AppliedDQMethod {{name: 'applied_dq_f{last_key}col'}})                
+            MERGE (app_dq_method)-[:APPLIED_TO]->(f{last_key})
+            MERGE (app_dq_method_col)-[:APPLIED_TO]->(f{last_key})
+            MERGE (dq_method)-[:APPLIED_IN]->(app_dq_method)
+            MERGE (dq_method_col)-[:APPLIED_IN]->(app_dq_method_col)
+            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method)
+            MERGE (dq_model)-[:HAS_APPLIED_DQ_METHOD]->(app_dq_method_col)
         """
-        return query
+
+        graph_path += create_dq_method_q
+        print("builded query: ", graph_path)
+        return graph_path
 
     mapping_type_separator = "?"
 
@@ -261,9 +280,7 @@ class MetadataRepository:
         """
         looked_fields = []
         for attribute in attributes_mapped:
-            # Split by separator and get the first part (attribute path)
             attr_keys = attribute.split(self.mapping_type_separator)[0]
-            # Remove the first element and join the rest with '-'
             attr_keys = '-'.join(attr_keys.split('-')[1:])
             looked_fields.append(attr_keys)
             print("attr_keys: ", attr_keys)
@@ -279,16 +296,19 @@ class MetadataRepository:
         try:
             records, _, _ = self.neo4j_driver.execute_query(query)
             if records:
-                for record in records:  # Check each DQ model
+                for record in records:
                     dq_model_id = record.get('dq_model.id')
                     # Get applied methods for this model
                     applied_methods = await self.get_applied_methods_by_dq_model(dq_model_id)
                     if applied_methods:
                         # Get field names from applied methods
                         applied_fields = [method.name for method in applied_methods]
-                        # Check if all looked fields are in applied fields
-                        if all(field in applied_fields for field in looked_fields):
+                        counter_looked = len(looked_fields)
+                        counter_applied = len(applied_fields)
+                        # Check if both lists have the same length and all looked fields are in applied fields
+                        if counter_looked == counter_applied and all(field in applied_fields for field in looked_fields):
                             return dq_model_id
+                return None
             return None
         except Exception as e:
             print("error in executing query: ", e)
@@ -303,22 +323,18 @@ class MetadataRepository:
         Returns:
             str: The ID of the created or existing DQ model.
         """
+        print("### Starting save data quality model process in neo4j ###")
         print("### Model dq entries : ###", dto.mapped_entries)
         mapping_process_docu = dto.mapping_process_docu
         ontology_id = mapping_process_docu.ontologyId
         json_schema_id = mapping_process_docu.jsonSchemaId
-        dq_model_id = str(uuid.uuid4())
+        dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
         timestamp_milliseconds = int(time.time() * 1000)
 
-        print("##First check if dq model with same context, dataset and appliedDqMethod's exists")
         dq_model_already_exists = await self.get_dq_model(ontology_id, json_schema_id, dto.mapped_entries)
         if (dq_model_already_exists):
-            print("DQ Model already exists, with the info paula: ", dq_model_already_exists)
-            print("#########")
+            print("DQ Model already exists, with the info: ", dq_model_already_exists)
             return dq_model_already_exists
-
-        print(" ## METHOD ID: ", dto.dq_method_id)
-        print(" ## METHOD ID AGG: ", dto.dq_aggregated_method_id)
 
         query = f""" 
             MATCH (dq_method:Method {{id: '{dto.dq_method_id}'}})
