@@ -205,7 +205,7 @@ export const Mapping = () => {
               const { status, message } = response.data;
               if (status === "success") {
                 resetMappingState();
-                alert("Mapping procces successfully validated and saved");
+                toast.success("Set of mappings successfully validated and saved");
                 if (externalFlow && externalDatasetId) {
                   //en flujo externo que vaya directo a evaluar calidad de los atributos con los
                   //mappings y las métricas definidas
