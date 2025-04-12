@@ -69,10 +69,10 @@ class MappingRepository():
         except Exception as e:
             raise QueryError(f"Error finding mappings by schema: {str(e)}")
 
-    async def find_by_query(self, query: Dict[str, Any]):
+    async def find_by_query(self, query: Dict[str, Any], projection: Dict[str, Any] = None):
         """Find mappings by custom query."""
         try:
-            mapping_docus =  self.collection.find(query)
+            mapping_docus =  self.collection.find(query, projection)
             mapping_docus_list = await mapping_docus.to_list(length=None)
             return mapping_docus_list
         except Exception as e:

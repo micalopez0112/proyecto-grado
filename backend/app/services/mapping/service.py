@@ -5,7 +5,7 @@ from app.services.schema.types import SchemaCreateData
 from app.services.ontology.service import OntologyService
 from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
 from app.services.ontology.types import build_ontology_response
-from .types import build_mapping_id_name_tupple,build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
+from .types import build_mapping_id_name_tupple, MappingBasicInfo, build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
 from .exceptions import MappingNotFoundError, InvalidMappingDataError,MappingValidationError
 
 class MappingService:
@@ -102,17 +102,25 @@ class MappingService:
         return mappingJsons
 
     async def get_mappings(self, validated_mappings: bool = None) :
-        """Get all mappings with optional validation filter."""
+        """Get all mappings with optional validation filter.
+        
+        Args:
+            validated_mappings: Optional filter for validated mappings
+            
+        Returns:
+            List[MappingBasicInfo]: List of mappings with basic information
+        """
         query = {}
         if validated_mappings is not None and validated_mappings is True:
             query = {'mapping_suscc_validated': validated_mappings}
-            
-        mapping_process_docs_list = await self.repository.find_by_query(query)
-        mappingpr_names = []
-        for mapping_process_doc in mapping_process_docs_list:
-            mappingpr = build_mapping_id_name_tupple(mapping_process_doc)
-            mappingpr_names.append(mappingpr)
-        return mappingpr_names
+
+        projection = {'_id': 1, 'name': 1}  
+        mapping_process_docs_list = await self.repository.find_by_query(query, projection)
+
+        return [
+            MappingBasicInfo(id=str(doc['_id']), name=doc['name'])
+            for doc in mapping_process_docs_list
+        ]
 
     async def get_mapping_process_by_id(self, mapping_process_id: str, filter_dp: bool = None):
         try:

@@ -31,6 +31,11 @@ class MappingUpdateData(BaseModel):
     description: Optional[str] = None
     mapping: Optional[Dict[str, Any]] = None
 
+class MappingBasicInfo(BaseModel):
+    """Basic mapping information response."""
+    id: str
+    name: str
+    
 def build_mapping_id_name_tupple(mapping_process_doc) -> Dict[str, str]:
     """Build a tuple with mapping ID and name."""
     return {
