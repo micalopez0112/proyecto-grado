@@ -2,7 +2,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 import uuid
 import time
-
+from collections import defaultdict
 
 from app.database import get_neo4j_driver
 from app.models.mapping import FieldNode
@@ -200,43 +200,45 @@ class MetadataRepository:
             MATCH (d:Dimension)<-[:HAS_DIMENSION]-(f:Factor)<-[:HAS_FACTOR]-(m:Metric)<-[:HAS_METRIC]-(me:Method)
             RETURN d.name AS dimension, f.name AS factor, m.granularity AS granularity, me.id AS method_id
         """
+        result, _, _ = self.neo4j_driver.execute_query(match_query)
 
-        try:
-            result, _, _ = self.neo4j_driver.execute_query(match_query)
-            data_structure = {}
+        # Step 1: Organize results by dimension and factor
+        data_structure = defaultdict(lambda: defaultdict(list))
 
-            for record in result:
-                dimension = record["dimension"]
-                factor = record["factor"]
-                granularity = record["granularity"]
-                method_id = record["method_id"]
+        for record in result:
+            dimension = record["dimension"]
+            factor = record["factor"]
+            granularity = record["granularity"]
+            method_id = record["method_id"]
 
-                if dimension not in data_structure:
-                    data_structure[dimension] = {"dimension": dimension, "factors": {}}
+            # Store methods under their respective factor
+            data_structure[dimension][factor].append({"granularity": granularity, "method_id": method_id})
 
-                if factor not in data_structure[dimension]["factors"]:
-                    data_structure[dimension]["factors"][factor] = {
-                        "name": factor,
-                        "metrics": []
-                    }
+        # Step 2: Transform into required format
+        final_data = []
 
-                current_factor = data_structure[dimension]["factors"][factor]
-                if granularity == "value":
-                    current_factor["metrics"].append({
-                        "method_id": method_id,
-                        "name": f"Metric {len(current_factor['metrics']) + 1}"
+        for dimension, factors in data_structure.items():
+            dimension_obj = {"dimension": dimension, "factors": []}
+
+            for factor, methods in factors.items():
+                # Separate value and field granularities
+                value_methods = [m for m in methods if m["granularity"] == "value"]
+                field_methods = [m for m in methods if m["granularity"] == "field"]
+
+                # Pair them together
+                metrics = []
+                for v, f in zip(value_methods, field_methods):
+                    metrics.append({
+                        "method_id": v["method_id"],
+                        "agg_method_id": f["method_id"],
+                        "name": f"Metric {len(metrics) + 1}"  # Assign metric names dynamically
                     })
 
-            final_data = []
-            for dimension_data in data_structure.values():
-                dimension_data["factors"] = list(dimension_data["factors"].values())
-                final_data.append(dimension_data)
+                dimension_obj["factors"].append({"name": factor, "metrics": metrics})
 
-            return final_data
+            final_data.append(dimension_obj)
 
-        except Exception as e:
-            print("Error executing query:", e)
-            raise Exception("Error executing query")
+        return final_data
 
     def get_last_node_in_nested_fields_query(self, json_schema_id: str, dq_model_id: str, json_keys: List[str]) -> str:
         first_key = json_keys[0]
