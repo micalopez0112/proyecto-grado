@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException, Body, Depends
-from typing import List,Optional
+from typing import Optional
 from pydantic import BaseModel
 
-from app.services import mapping_service as service
 from app.models.mapping import  MappingRequest, MappingResponse, PutMappingRequest
 from app.dependencies import get_mapping_service
 from app.services.mapping.service import MappingService
@@ -71,7 +70,6 @@ async def get_mappings_by_schema_id(
     service: MappingService = Depends(get_mapping_service)):
     try:
         result = await service.get_mappings_by_json_schema(schema_id)
-        print("### Got mappings by schema id ###, result: ", result)
     except Exception as e:
         print("Error getting mappings by schema id:", e)
         raise HTTPException(status_code=500, detail=str(e))

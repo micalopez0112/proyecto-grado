@@ -10,3 +10,9 @@ class SaveDQModelDTO(BaseModel):
     mapping_process_docu: MappingProcessDocument
     dq_aggregated_method_id: Optional[str]
     mapped_entries: List[str]
+
+class DqResultDTO(BaseModel):
+    name : str
+    id_document : int
+    date : str
+    measure : float

@@ -40,8 +40,6 @@ async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
 
 @router.post("/evaluate/{quality_rule}")
 async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
-    print("### Starting evaluate quality process with new arq ###")
-    print(f'request_mapping_body: {request_mapping_body}')
     try :
         context = StrategyContext()
         context.select_strategy(quality_rule, aggregation)
@@ -65,7 +63,6 @@ async def get_quality_results(
     limit: Optional[int] = 10,
     offset: Optional[int] = 0
 ):
-    print("### Starting get quality results process with new arq ###")
     try:
 
         params = GetEvaluationResultsRequest(
@@ -76,7 +73,6 @@ async def get_quality_results(
             offset=offset
         )
         result, total = await metadata_service.get_evaluation_results_by_json(params)
-        print("### Got evaluation results ###, result: ", result)
         return {"results": result, "total": total}
     except Exception as e:
         msg = str(e)
@@ -93,7 +89,6 @@ async def create_dq_model(
     dq_method_id: Optional[str] = Query(None, description="DQ method id"),
     dq_aggregated_method_id: Optional[str] = Query(None, description="DQ aggregated method id")
 ): 
-    print("### Starting create DQ model process with new arq ###")
     try:
         create_params = CreateDQModelRequest(
             mapping_process_id=mapping_process_id,
@@ -114,7 +109,6 @@ async def get_dq_models(
     mapping_process_id: str = Query(None, description="ID for mapping"),
     quality_method_id: str = Query(None, description="ID for quality rule")
 ):
-    print("### Starting get DQ models process with new arq ###")
     try:
         result = await metadata_service.get_dq_models(mapping_process_id, quality_method_id)
         return result
@@ -127,7 +121,6 @@ async def get_applied_methods(
     metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
     dq_model_id: str = Query(None, description="DQ Model id")
 ):
-    print("### Starting get applied methods process with new arq ###")
     try:
         result = await metadata_service.get_applied_methods_by_dq_model(dq_model_id)
         return result
@@ -140,7 +133,6 @@ async def get_applied_methods(
 async def get_data_quality_rules(
     metadata_service: Annotated[MetadataService, Depends(get_metadata_service)]
 ):
-    print("### Starting get data quality rules process with new arq ###")
     try:
         result = await metadata_service.get_data_quality_rules()
         return result

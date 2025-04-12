@@ -1,6 +1,5 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException, Form, Depends
 from fastapi.responses import JSONResponse
-from owlready2 import get_ontology
 from typing import Optional, List, Any, Annotated
 
 from app.models.ontology import OntologyDocument
@@ -8,8 +7,6 @@ from app.services.ontology.service import OntologyService
 from app.services.ontology.types import OntologyCreateData, build_ontology_response
 from app.dependencies import get_ontology_service
 from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
-
-import os
 
 router = APIRouter()
 
@@ -39,7 +36,6 @@ async def upload_ontology(
 #Retrieves the graph structure of an ontology
 @router.get("/ontology-graph/{ontology_id}", response_model = Any)
 async def get_ontology_graph(ontology_id: str):
-    print("Generating graph for ontology with id!!:", ontology_id)
     try:
         onto_for_graph = await get_ontology_info_from_pid(ontology_id)
         graph = graph_generator(onto_for_graph, {})

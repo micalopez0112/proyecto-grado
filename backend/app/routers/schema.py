@@ -22,10 +22,8 @@ async def get_schema_from_path(
     try:
         schema = schema_service.generate_schema_from_collection(collectionPath)
         if(schema):
-            print(f'## SCHEMA al retornar en generateSchema ##: {schema}')
             return schema
         else:
             raise HTTPException(status_code=500, detail="Error al generar el esquema")
     except Exception as e:
-        print(f"Error al generar el esquema: {e}")
         raise HTTPException(status_code=500, detail=str(e))

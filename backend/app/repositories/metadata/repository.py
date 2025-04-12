@@ -1,13 +1,12 @@
 from typing import Dict, Any, List
 from datetime import datetime
 import uuid
-import time
 from collections import defaultdict
 
 from app.database import get_neo4j_driver
 from app.models.mapping import FieldNode
 from app.rules_validation.mapping_rules import find_json_keys
-from app.repositories.metadata.types import SaveDQModelDTO
+from app.repositories.metadata.types import SaveDQModelDTO, DqResultDTO
 
 class MetadataRepository:
     def __init__(self, neo4j_driver=None):
@@ -38,14 +37,11 @@ class MetadataRepository:
             DETACH DELETE m
         """
 
-        print("DELETE QUERY: ", delete_existing_measures)
         self.neo4j_driver.execute_query(delete_existing_measures)
 
     async def insert_field_value_measures(self, field: FieldNode, value, id_document, dq_model_id, node_name):
         applied_dq_method_name = f"applied_dq_f{node_name}" 
-        print("APPLIED DQ METHOD: ", applied_dq_method_name)
         current_datetime = datetime.now()
-        # ver que esta pasando porque me crea doble los resultados de las medidas
         insert_measure_query = f"""
             MATCH (fieldNode) 
             WHERE elementId(fieldNode) = '{field.element_id}' 
@@ -54,16 +50,13 @@ class MetadataRepository:
             CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
             SET m.measure = {value}, m.date= '{current_datetime}'
         """
-        print("## Evaluacion 4.6.1 - query:", insert_measure_query, " ##")
         self.neo4j_driver.execute_query(insert_measure_query)
 
     async def insert_field_measures(self, field: FieldNode, node_name, value, dq_model_id):
-        print("LAST ITEM: ", node_name)
         current_datetime = datetime.now()
 
         applied_dq_method_name = f"applied_dq_f{node_name}col" # TODO: agregar _col / o cambiar a _aggregated 
-        print("searching for: ", applied_dq_method_name)
-        print("About to insert field measure for: ", field.element_id)
+
 
         query = f"""
             MATCH (fieldNode) 
@@ -74,51 +67,44 @@ class MetadataRepository:
             SET m.measure = {value}, m.date= '{current_datetime}'
         """
 
-        print("## QUERY ##", query)
         self.neo4j_driver.execute_query(query)
 
     async def get_evaluation_results_v2(self, data_model_id, json_schema_id, json_keys, limit, offset):
         first_key = json_keys[0]
-        graph_path = f"""
-            MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})            
-            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})
-            <-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})        
+        graph_path = f"""MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id.strip()}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
         """
-
+        
         for key in json_keys[1:]:
-            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"            
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
             graph_path += node_path
 
         latest_item = json_keys[-1]
-        query = f"""
-            {graph_path}
-            MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
-            WITH m, r
-            ORDER BY r.id_document
-            SKIP {offset}
-            LIMIT {limit}
-            RETURN m.measure as measure, m.date as date, r.id_document as id_document
-        """
-
         count_query = f"""
-            {graph_path}
-            MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
-            RETURN count(m) as total
+            {graph_path}-[fvm:FieldValueMeasure]->(measure)
+            RETURN COUNT(*)
         """
+        neo4j_driver = get_neo4j_driver()
+        count_result, _, _ = neo4j_driver.execute_query(count_query)
+        total_count = count_result[0][0] if count_result else 0  # Extraer el total de la consulta
 
-        print("## QUERY ##", query)
-        print("## COUNT QUERY ##", count_query)
+        select_measure = f"""
+            {graph_path}-[fvm:FieldValueMeasure]->(measure)
+            RETURN f{latest_item}, measure, fvm
+            SKIP {offset} 
+            LIMIT {limit}
+        """
+        
+        records, _, _ = neo4j_driver.execute_query(select_measure)
+        results = []
+        for record in records:
+            dq = DqResultDTO(name=record[0]['name'], id_document=record[2]['id_document'], 
+                        date=record[1]['date'], 
+                        measure=record[1]['measure'])
+            results.append(dq)
 
-        try:
-            result, _, _ = self.neo4j_driver.execute_query(query)
-            count_result, _, _ = self.neo4j_driver.execute_query(count_query)
-            total_count = count_result[0].get('total')
-            print("## RESULT ##", result)
-            print("## TOTAL COUNT ##", total_count)
-            return result, total_count
-        except Exception as e:
-            print("Error executing query:", e)
-            return None
+        return results, total_count
+
 
     async def get_dq_models(self, onto_id, dataset_id, method_id, mapping_process_id):
         query = f"""
@@ -141,11 +127,10 @@ class MetadataRepository:
                         print("No dq model id or attribute name")
             else:
                 print("No data found")
-            print("Return info: ", return_info)
             return return_info
         except Exception as e:
-            print("error in executing query: ", e)
-            return None
+            print("Error in executing query: ", e)
+            raise e
 
     async def get_applied_methods_by_dq_model(self, dq_model_id):
         methodName = "Method2"
@@ -193,7 +178,7 @@ class MetadataRepository:
             return results
         except Exception as e:
             print("Error executing query:", e)
-            return None
+            raise e
 
     async def get_data_quality_rules(self):
         match_query = """
@@ -266,7 +251,6 @@ class MetadataRepository:
         """
 
         graph_path += create_dq_method_q
-        print("builded query: ", graph_path)
         return graph_path
 
     mapping_type_separator = "?"
@@ -287,15 +271,12 @@ class MetadataRepository:
             attr_keys = attribute.split(self.mapping_type_separator)[0]
             attr_keys = '-'.join(attr_keys.split('-')[1:])
             looked_fields.append(attr_keys)
-            print("attr_keys: ", attr_keys)
 
         query = f"""
             MATCH (ctx:Context {{id: '{ontology_id}'}})<-[:MODEL_CONTEXT]-(dq_model:DQModel)
             -[:MODEL_DQ_FOR]->(ds:Collection {{id_dataset: '{json_schema_id}'}})
             RETURN dq_model.id, dq_model.name
         """
-        print("#query for checking if dq model exist#: ", query)
-        print("Looked Fields: ", looked_fields)
 
         try:
             records, _, _ = self.neo4j_driver.execute_query(query)
@@ -327,40 +308,36 @@ class MetadataRepository:
         Returns:
             str: The ID of the created or existing DQ model.
         """
-        mapping_process_docu = dto.mapping_process_docu
-        ontology_id = mapping_process_docu.ontologyId
-        json_schema_id = mapping_process_docu.jsonSchemaId
-        dq_model_id = str(uuid.uuid4()) # ver que hacemos con esto
-        timestamp_milliseconds = int(time.time() * 1000)
-
-        dq_model_already_exists = await self.get_dq_model(ontology_id, json_schema_id, dto.mapped_entries)
-        if (dq_model_already_exists):
-            print("DQ Model already exists, with the info: ", dq_model_already_exists)
-            return dq_model_already_exists
-
-        query = f""" 
-            MATCH (dq_method:Method {{id: '{dto.dq_method_id}'}})
-            MATCH (dq_method_col:Method {{id: '{dto.dq_aggregated_method_id}'}})
-            MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
-            MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
-            MERGE (dq_model:DQModel  {{name: '{dto.dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{dto.mapping_process_id}'}})
-            MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
-            MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
-            MERGE (context)-[:DATASET_CONTEXT]->(collection)
-        """
-        
-        for attribute in dto.mapped_entries:
-            json_keys = find_json_keys(attribute)
-            print("json keys: ", json_keys)
-            query += " WITH collection, dq_model, dq_method, dq_method_col"
-            add_applied_method_query = self.get_last_node_in_nested_fields_query(json_schema_id, dq_model_id, json_keys)
-            print("add_applied_method_query: ", add_applied_method_query)
-            query += add_applied_method_query
-       
-        print("### Query for creating dq model ###", query)
         try:
+            mapping_process_docu = dto.mapping_process_docu
+            ontology_id = mapping_process_docu.ontologyId
+            json_schema_id = mapping_process_docu.jsonSchemaId
+            dq_model_id = str(uuid.uuid4())
+
+            dq_model_already_exists = await self.get_dq_model(ontology_id, json_schema_id, dto.mapped_entries)
+            if (dq_model_already_exists):
+                print("DQ Model already exists, with the info: ", dq_model_already_exists)
+                return dq_model_already_exists
+
+            query = f""" 
+                MATCH (dq_method:Method {{id: '{dto.dq_method_id}'}})
+                MATCH (dq_method_col:Method {{id: '{dto.dq_aggregated_method_id}'}})
+                MERGE (context:Context {{name: 'context', id: '{ontology_id}'}})
+                MERGE (collection:Collection {{id_dataset: '{json_schema_id}'}})
+                MERGE (dq_model:DQModel  {{name: '{dto.dq_model_name}', id: '{dq_model_id}', mapping_process_id: '{dto.mapping_process_id}'}})
+                MERGE (dq_model)-[:MODEL_CONTEXT]->(context)
+                MERGE (dq_model)-[:MODEL_DQ_FOR]->(collection)
+                MERGE (context)-[:DATASET_CONTEXT]->(collection)
+            """
+            
+            for attribute in dto.mapped_entries:
+                json_keys = find_json_keys(attribute)
+                query += " WITH collection, dq_model, dq_method, dq_method_col"
+                add_applied_method_query = self.get_last_node_in_nested_fields_query(json_schema_id, dq_model_id, json_keys)
+                query += add_applied_method_query
+        
             self.neo4j_driver.execute_query(query)
             return dq_model_id
         except Exception as e:
-            print("error in executing query: ", e)
-            return None
+            print("Error in executing query: ", e)
+            raise e
