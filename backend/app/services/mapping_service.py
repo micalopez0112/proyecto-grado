@@ -3,7 +3,7 @@
 from ..database import  mapping_process_collection
 from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse,EditMappingRequest, MappingRequest, PutMappingRequest
 from app.repositories import mapping_repo
-from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
+from app.rules_validation.mapping_rules import validate_mapping, get_json_schema_property_type
 from app.services import ontology_service as onto_service
 from app.services import schema_service as schema_service
 
@@ -93,7 +93,7 @@ async def get_mapping_process_by_id(mapping_process_id: str, filter_dp: bool = N
     mapping = mapping_process_docu.mapping
     if(filter_dp is not None and filter_dp == True):
         # Filter mapping_process to retrieve only data properties components
-        filered_by_dp = {k: v for k, v in mapping.items() if (getJsonSchemaPropertieType(k) != "" ) }
+        filered_by_dp = {k: v for k, v in mapping.items() if (get_json_schema_property_type(k) != "" ) }
         mapping = filered_by_dp
     
     onto_id = mapping_process_docu.ontologyId

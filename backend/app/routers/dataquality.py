@@ -49,9 +49,7 @@ async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Opt
         print(f"Tiempo de ejecución de la evaluación del dq_model_id: {dq_model_id} fue:-- {fin - inicio} --")
         return result
     except Exception as e:
-        msg = str(e)
-        response = MappingResponse(message=msg, status="error")
-        return response
+        return MappingResponse(message=str(e), status="error")
         
 
 @router.get("/results")

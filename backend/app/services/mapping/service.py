@@ -3,7 +3,7 @@ from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, E
 from app.services.schema.service import SchemaService
 from app.services.schema.types import SchemaCreateData
 from app.services.ontology.service import OntologyService
-from app.rules_validation.mapping_rules import validate_mapping, getJsonSchemaPropertieType
+from app.rules_validation.mapping_rules import validate_mapping, get_json_schema_property_type
 from app.services.ontology.types import build_ontology_response
 from .types import build_mapping_id_name_tupple, MappingBasicInfo, build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
 from .exceptions import MappingNotFoundError, InvalidMappingDataError,MappingValidationError
@@ -133,7 +133,7 @@ class MappingService:
                 # Filter mapping to retrieve only data properties components
                 mapping_process_doc.mapping = {
                     k: v for k, v in mapping_process_doc.mapping.items() 
-                    if getJsonSchemaPropertieType(k) != ""
+                    if get_json_schema_property_type(k) != ""
                 }
             
             onto_id = mapping_process_doc.ontologyId
