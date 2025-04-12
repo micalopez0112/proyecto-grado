@@ -5,9 +5,10 @@ from typing import Optional, Dict, Any, Annotated
 from app.services.metadata.service import MetadataService
 from app.models.mapping import MappingResponse
 from app.dq_evaluation.evaluation import StrategyContext
-from app.dependencies import get_metadata_service
+from app.dependencies import get_metadata_service, get_metadata_repository
 from app.services.metadata.types import CreateDQModelRequest, GetEvaluationResultsRequest
 from ..database import neo4j_conn
+from app.repositories.metadata.repository import MetadataRepository
 
 import time
 
@@ -19,7 +20,7 @@ class ConnectionCredentials(BaseModel):
     password: str
 
 @router.post("/update-neo4j-connection")
-async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
+async def update_neo4j_connection(metadata_repo: Annotated[MetadataRepository, Depends(get_metadata_repository)], request: ConnectionCredentials = Body(...)):
     # CAMBIAR PARAMETROS A BODY
     try:
         uri = request.uri
@@ -32,6 +33,7 @@ async def update_neo4j_connection(request: ConnectionCredentials = Body(...)):
         else:
             neo4j_conn.connect(uri, user, password)
             metadata_repo.init_governance_zone();
+            # pasar todo a service
         print("Neo4j connection updated successfully, and the governance_zone initialized")
         return {"message": "Neo4j connection updated successfully"}
     except Exception as e:

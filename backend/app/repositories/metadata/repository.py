@@ -3,14 +3,21 @@ from datetime import datetime
 import uuid
 from collections import defaultdict
 
+import pandas as pd
+from pathlib import Path
+from unidecode import unidecode
+
 from app.database import get_neo4j_driver
 from app.models.mapping import FieldNode
 from app.rules_validation.mapping_rules import find_json_keys
 from app.repositories.metadata.types import SaveDQModelDTO, DqResultDTO
 
+
+
 class MetadataRepository:
     def __init__(self, neo4j_driver=None):
         self.neo4j_driver = neo4j_driver or get_neo4j_driver()
+        self.current_directory = Path(__file__).resolve().parent
 
     def execute_neo4j_query(self, query: str, params: Dict[str, Any] = None):
         """Execute a Neo4j query with optional parameters."""
@@ -341,3 +348,157 @@ class MetadataRepository:
         except Exception as e:
             print("Error in executing query: ", e)
             raise e
+        
+ 
+    def init_governance_zone(self):
+        ## Hardcoded specific dimension, factor and metric for this project
+        try:
+            print("Going to init governance zone")
+            self.save_quality_dimension()
+            self.save_quality_factor()
+            self.save_quality_metrics()
+            self.save_quality_methods()
+            print("Finished init governance zone")
+        except Exception as e:
+            print("Error in init governance zone: ", e)
+            raise e
+
+    def save_quality_dimension(self):
+    # print("Se va a ejecutar save_quality_dimension")
+        current_directory = Path(__file__).resolve().parent
+        dimensions_file_path = current_directory / "quality_data/dq_dimensions.csv"
+        dimension_ds = pd.read_csv(dimensions_file_path);
+
+        query_template = """
+            MERGE ({dimension_var_name}:Dimension {{id:'{dimension_id}',name: '{dimension_name}'}})
+        """
+        query = ''
+        for index, row in dimension_ds.iterrows():
+            query += query_template.format(
+                dimension_id = row['dimension_id'],
+                dimension_name=row['name'],
+                dimension_var_name=row['name'].lower(),
+            )
+        self.neo4j_driver.execute_query(query)
+    
+    def save_quality_factor(self):
+        
+        current_directory = Path(__file__).resolve().parent
+        factor_file_path = current_directory / "quality_data/dq_factors.csv"
+        factor_ds = pd.read_csv(factor_file_path);
+        
+        query_template = """
+            MERGE ({factor_var_name}:Factor {{name: '{factor_name}', id:'{factor_id}'}})
+            MERGE ({factor_var_name})-[:HAS_DIMENSION]->(dim)
+        """
+        
+        query = ''
+        previous_dimension = ''
+        for index, row in factor_ds.iterrows():
+            
+            if (row['dimension_id'] != previous_dimension):
+                if (previous_dimension != ''):
+                    neo4j_driver = get_neo4j_driver()
+                    with neo4j_driver.session() as session:
+                        result = session.run(query=query)
+                        query = ''
+                
+                query += """
+                    MATCH (dim:Dimension {{id: '{dimension_id}'}})
+                    WITH dim
+                """.format(dimension_id=row['dimension_id'])
+            else:
+                query += "WITH dim\n"
+
+            # TODO-pau: ver esto
+            factor_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
+            
+            query += query_template.format(
+                factor_name=row['name'],
+                factor_var_name=factor_var_name,
+                factor_id=row['factor_id'],
+                dimension_id=row['dimension_id']
+            )
+            
+            previous_dimension = row['dimension_id']
+        self.neo4j_driver.execute_query(query)
+        
+    def save_quality_metrics(self):
+        neo4j_driver = get_neo4j_driver()
+        metrics_file_path = self.current_directory / "quality_data/dq_metrics.csv"
+        metrics_ds = pd.read_csv(metrics_file_path);
+        
+        query_template = """        
+            MERGE ({metric_var_name}: Metric {{id:'{metric_id}',name:'{metric_name}', granularity: '{metric_granularity}'}})
+            MERGE ({metric_var_name})-[:HAS_FACTOR]->(factor)
+        """
+
+        query = ''
+        previous_factor = ''
+        for index, row in metrics_ds.iterrows():
+            
+            factor_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
+
+            if (row['factor_id'] != previous_factor):
+                if (previous_factor != ''):
+                    neo4j_driver.execute_query(query)
+                    query = ''
+                
+                query += """
+                    MATCH (factor:Factor {{id: '{factor_id}'}})
+                    WITH factor
+                """.format(factor_id=row['factor_id'])
+            else:
+                query += "WITH factor\n"
+
+            metric_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
+            
+            query += query_template.format(
+                metric_name=row['name'],
+                metric_var_name=metric_var_name,
+                metric_granularity=row['granularity'],
+                metric_id=row['metric_id'],
+            )
+            
+            previous_factor = row['factor_id']
+        self.neo4j_driver.execute_query(query)
+
+    def save_quality_methods(self):
+        neo4j_driver = get_neo4j_driver()
+        methods_file_path = self.current_directory / "quality_data/dq_methods.csv"
+        methods = pd.read_csv(methods_file_path);
+        
+        query_template = """        
+            MERGE ({method_var_name}: Method {{id:'{method_id}',name:'{method_name}', description: '{method_description}', algorithm: '{method_algorithm}'}})
+            MERGE ({method_var_name})-[:HAS_METRIC]->(metric)
+        """
+
+        query = ''
+        previous_metric = ''
+        for index, row in methods.iterrows():
+            
+            if (row['metric_id'] != previous_metric):
+                if (previous_metric != ''):
+                    neo4j_driver.execute_query(query)
+                    query = ''
+                
+                query += """
+                    MATCH (metric:Metric {{id: '{metric_id}'}})
+                    WITH metric
+                """.format(metric_id=row['metric_id'])
+            else:
+                query += "WITH metric\n"
+
+            method_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
+            
+            query += query_template.format(
+                method_name=row['name'],
+                method_description=row['description'],
+                method_var_name=method_var_name,
+                method_algorithm=row['algorithm'],
+                method_id=row['method_id'],
+            )
+            
+            previous_metric = row['metric_id']
+
+        self.neo4j_driver.execute_query(query)

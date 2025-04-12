@@ -244,7 +244,6 @@ def save_quality_dimension():
     query_template = """
         MERGE ({dimension_var_name}:Dimension {{id:'{dimension_id}',name: '{dimension_name}'}})
     """
-    
     query = ''
     for index, row in dimension_ds.iterrows():
         query += query_template.format(
@@ -254,10 +253,6 @@ def save_quality_dimension():
         )
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(query)
-    # with neo4j_driver.session() as session:
-    #     result = session.run(query=query)
-        
-    # print("Se ejecutó save_quality_dimension")
     
 def save_quality_factor():
     
@@ -275,7 +270,6 @@ def save_quality_factor():
     for index, row in factor_ds.iterrows():
         
         if (row['dimension_id'] != previous_dimension):
-            # no es la primera fila
             if (previous_dimension != ''):
                 neo4j_driver = get_neo4j_driver()
                 with neo4j_driver.session() as session:
@@ -302,8 +296,6 @@ def save_quality_factor():
         previous_dimension = row['dimension_id']
     neo4j_driver = get_neo4j_driver()
     neo4j_driver.execute_query(query)
-    # with neo4j_driver.session() as session:
-    #     result = session.run(query=query)
         
 def save_quality_metrics():
     neo4j_driver = get_neo4j_driver()
@@ -322,7 +314,6 @@ def save_quality_metrics():
         factor_var_name = unidecode(row['name'].lower().replace(' ', "_").replace('-','_'))
 
         if (row['factor_id'] != previous_factor):
-            #no es la primera fila
             if (previous_factor != ''):
                 neo4j_driver.execute_query(query)
                 query = ''
@@ -361,7 +352,6 @@ def save_quality_methods():
     for index, row in methods.iterrows():
         
         if (row['metric_id'] != previous_metric):
-            #no es la primera fila
             if (previous_metric != ''):
                 neo4j_driver.execute_query(query)
                 query = ''
