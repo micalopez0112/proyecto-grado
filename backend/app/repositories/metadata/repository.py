@@ -19,6 +19,9 @@ class MetadataRepository:
         self.neo4j_driver = neo4j_driver or get_neo4j_driver()
         self.current_directory = Path(__file__).resolve().parent
 
+    def set_neo4j_driver(self, new_neo4j_driver):
+        self.neo4j_driver = new_neo4j_driver
+
     def execute_neo4j_query(self, query: str, params: Dict[str, Any] = None):
         """Execute a Neo4j query with optional parameters."""
         with self.neo4j_driver.session() as session:
