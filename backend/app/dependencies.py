@@ -24,15 +24,6 @@ def get_ontology_service(
     """Get an instance of the ontology service with its repository dependency."""
     return OntologyService(repo)
 
-def get_schema_repository() -> SchemaRepository:
-    """Get an instance of the schema repository."""
-    return SchemaRepository()
-
-def get_schema_service(
-    repo: Annotated[SchemaRepository, Depends(get_schema_repository)]
-) -> SchemaService:
-    """Get an instance of the schema service with its repository dependency."""
-    return SchemaService(repo)
 
 def get_metadata_repository() -> MetadataRepository:
     """Get an instance of the metadata repository."""
@@ -44,6 +35,17 @@ def get_metadata_service(
 ) -> MetadataService:
     """Get an instance of the metadata service with its repository dependencies."""
     return MetadataService(mapping_repo, metadata_repo)
+
+def get_schema_repository() -> SchemaRepository:
+    """Get an instance of the schema repository."""
+    return SchemaRepository()
+
+def get_schema_service(
+    repo: Annotated[SchemaRepository, Depends(get_schema_repository)],
+    metadata_repo: Annotated[MetadataRepository, Depends(get_metadata_repository)]
+) -> SchemaService:
+    """Get an instance of the schema service with its repository dependency."""
+    return SchemaService(repo,metadata_repo)
 
 def get_mapping_service(
     repo: Annotated[MappingRepository, Depends(get_mapping_repository)],

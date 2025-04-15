@@ -2,12 +2,14 @@ import json
 from genson import SchemaBuilder
 
 from app.repositories.schema.repository import SchemaRepository
+from app.repositories.metadata.repository import MetadataRepository
 from app.models.schema import JSONSchemaResponse, JsonRequestList
 from app.repositories.build_movies_metadata import generate_metadata_from_schema
 from .types import SchemaCreateData, clean_json_schema
 class SchemaService:
-    def __init__(self, schema_repository: SchemaRepository):
+    def __init__(self, schema_repository: SchemaRepository, metadata_repository: MetadataRepository):
         self.repository = schema_repository
+        self.metadata_repository = metadata_repository
 
     async def get_all_schemas(self):
         """Get all schemas."""
@@ -46,7 +48,7 @@ class SchemaService:
         if existing_schema is None:
             schema_id = await self.insert_schema(schema_data)
             if schema_data.collection_path:
-                generate_metadata_from_schema(
+                self.metadata_repository.generate_metadata_from_schema(
                     schema_data.collection_path, 
                     schema_data.json_schema, 
                     str(schema_id)
