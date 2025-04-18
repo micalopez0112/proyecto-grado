@@ -1,11 +1,12 @@
 from bson import ObjectId
 from app.database import onto_collection
 from app.models.ontology import OntologyDocument
-from app.repositories.metadata_repo import insert_context_metadata
+from app.repositories.metadata.repository import MetadataRepository
 
 class OntologyRepository:
-    def __init__(self, collection=onto_collection):
+    def __init__(self, collection=onto_collection, metadata_repo: MetadataRepository = None):
         self.collection = collection
+        self.metadata_repo = metadata_repo
 
     async def find_by_id(self, ontology_id: str):
         """Find an ontology by its ID."""
@@ -44,7 +45,7 @@ class OntologyRepository:
         
         result = await self.collection.insert_one(onto_model_data)
         inserted_onto_id = str(result.inserted_id)
-        insert_context_metadata(inserted_onto_id, onto_name)
+        self.metadata_repo.insert_context_metadata(inserted_onto_id, onto_name)
         return inserted_onto_id
 
     async def delete_ontology_by_id(self, ontology_id: str) -> bool:

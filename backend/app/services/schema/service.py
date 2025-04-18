@@ -4,7 +4,6 @@ from genson import SchemaBuilder
 from app.repositories.schema.repository import SchemaRepository
 from app.repositories.metadata.repository import MetadataRepository
 from app.models.schema import JSONSchemaResponse, JsonRequestList
-from app.repositories.build_movies_metadata import generate_metadata_from_schema
 from .types import SchemaCreateData, clean_json_schema
 class SchemaService:
     def __init__(self, schema_repository: SchemaRepository, metadata_repository: MetadataRepository):

@@ -597,3 +597,47 @@ class MetadataRepository:
             CREATE (collection)-[:STOREDIN]->(zone)
             RETURN elementId(collection) AS collectionElementId
         """
+    # TODO completar
+    def insert_context_metadata(self, ontology_id, onto_name):
+        print("Inserting context with new implementation")
+        query = f"""
+            MERGE (ctx:Context {{name:'{onto_name}',id: '{ontology_id}'}})
+        """
+        self.neo4j_driver.execute_query(query)
+    
+    def get_mapping_id_by_dq_model(self, dq_model_id: str):
+        match_query = f"""
+            MATCH (dq:DQModel  {{id: '{dq_model_id}'}}) 
+            return dq.mapping_process_id as mapping_process_id
+        """
+        result, _, _ = self.neo4j_driver.execute_query(match_query)
+        #     neo4j_driver = get_neo4j_driver()
+        # result, _, _ = neo4j_driver.execute_query(match_query)
+        print("RESULT: ",result[0]['mapping_process_id'])
+        return result[0]['mapping_process_id']
+
+    def delete_existing_field_value_measures(self, data_model_id, json_keys, json_schema_id):
+        first_key = json_keys[0]
+        graph_path = f"""
+            MATCH (dq:DQModel {{id: '{data_model_id.strip()}'}})
+            -[:MODEL_DQ_FOR]->(c:Collection {{id_dataset: '{json_schema_id}'}})<-[:belongsToSchema]-(f{first_key}:Field{{name: '{first_key}'}})
+        """
+
+        for key in json_keys[1:]:
+            node_path = f"<-[:belongsToField]-(f{key}:Field{{name: '{key}'}})"
+            graph_path += node_path
+
+        latest_item = json_keys[-1]
+
+        delete_existing_measures = f"""
+            {graph_path}
+            MATCH (f{latest_item})-[r:FieldValueMeasure]->(m:Measure)
+            DETACH DELETE m
+        """
+
+        print("DELETE QUERY: ", delete_existing_measures)
+        self.neo4j_driver.execute_query(delete_existing_measures)
+
+
+   
+        

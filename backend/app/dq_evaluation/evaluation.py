@@ -1,15 +1,13 @@
 from owlready2 import get_ontology, locstr
-from typing import Dict, Any
 from abc import ABC, abstractmethod
 from bson import ObjectId
 import json
 
-from app.database import mapping_process_collection, onto_collection
-from app.dq_evaluation.mocks import get_hardcoded_test_documents
+from app.database import onto_collection
 from app.models.mapping import MappingProcessDocument,DQModel, FieldNode
 from app.models.ontology import OntologyDocument
 from app.rules_validation.mapping_rules import getOntoPropertyByIri, find_element_in_JSON_instance, find_json_keys
-from app.repositories import mapping_repo, metadata_repo
+from app.services.metadata.service import MetadataService
 from ..database import  get_neo4j_driver
 
 neo4j_driver = get_neo4j_driver()
@@ -19,12 +17,13 @@ QUALITY_RULES = [SYNTCTATIC_ACCURACY]
 AGG_AVERAGE = "average"
 class QualityMetric(ABC) : 
 
-    def __init__(self, aggregation) -> None:
+    def __init__(self, aggregation, metadata_service: MetadataService) -> None:
         self.mapping_process_id: str = ""
         self.mapping_process: MappingProcessDocument = None
         self.dq_model_id: str = ""
         self.dq_model: DQModel = None
         self.aggregation = aggregation
+        self.metadata_service = metadata_service
         pass
     
     # this method is generic for all the quality metrics, it gets the data to be evaluated and executes the measure
@@ -67,8 +66,10 @@ class SyntanticAccuracy(QualityMetric) :
     async def set_mapping_process(self, dq_model_id: str) -> None:
         # necesito obtener el mapping_process_id a partir del dq_model
         print("## Evaluacion 1.1 - get mapping id by dq model with dq id : ", dq_model_id, " ##")
-        mapping_procces_id = metadata_repo.get_mapping_id_by_dq_model(dq_model_id)
-        mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_procces_id))
+        # mapping_procces_id = metadata_repo.get_mapping_id_by_dq_model(dq_model_id)
+        # mapping_process = await mapping_repo.find_mapping_process_by_id(ObjectId(mapping_procces_id))
+        mapping_process = await self.metadata_service.get_mapping_process_by_dq_model(dq_model_id)
+        print("## Evaluacion 1.1 - mapping process: ", mapping_process)
         self.mapping_process = mapping_process
 
     async def execute_measure(self, data_to_evaluate) :
@@ -79,8 +80,8 @@ class SyntanticAccuracy(QualityMetric) :
         ontology = await get_onto(self.mapping_process.ontologyId)
         jsonSchemaId = self.mapping_process.jsonSchemaId
         
-        print("## Evaluacion 4.1 - jsonSchemaId: ", jsonSchemaId) #self.mapping_elements)
-        applied_to_fields = metadata_repo.get_applied_methods_by_dq_model(dq_model_id)
+        print("## Evaluacion 4.1 - jsonSchemaId: ", jsonSchemaId)
+        applied_to_fields = await self.metadata_service.get_applied_methods_by_dq_model(dq_model_id)
         print("## Evaluacion 4.2 - applied to fields: ", applied_to_fields)
         mapping_elements = self.mapping_process.mapping
 
@@ -95,14 +96,14 @@ class SyntanticAccuracy(QualityMetric) :
             onto_mapped_to_value = mapping_elements[json_mapped_key]
             
             print("## Evaluacion 4.5 - onto mapped to", onto_mapped_to_value)
-            results_for_mapped_entrance = self.evaluate_instances(dq_model_id, data_to_evaluate, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId)
+            results_for_mapped_entrance = await self.evaluate_instances(dq_model_id, data_to_evaluate, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId)
             results_dicc[json_mapped_key] = results_for_mapped_entrance
             
         print("##---- Evaluation results: ", results_dicc, " ----##")
         return results_dicc
         
     # def evaluate_instances(json_instances, onto_mapped_to_value, ontology, jsonSchemaId) :
-    def evaluate_instances(self, dq_model_id, json_instances, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId) :
+    async def evaluate_instances(self, dq_model_id, json_instances, field_to_evaluate, onto_mapped_to_value, ontology, jsonSchemaId): 
         json_mapped_key = build_json_mapping_key(field_to_evaluate)
         print("## Evaluacion 4.5.1 - onto mapped to", json_mapped_key, "###")
         print("## Evaluacion 4.5.2 - onto mapped to", len(json_instances))
@@ -113,7 +114,7 @@ class SyntanticAccuracy(QualityMetric) :
         latest_item_node_name = json_keys[-1]
         print("## Evaluacion 4.5.3 - json keys", json_keys)
 
-        metadata_repo.delete_existing_field_value_measures(dq_model_id, json_keys, jsonSchemaId)        
+        self.metadata_service.delete_existing_field_value_measures(dq_model_id, json_keys, jsonSchemaId)        
         # se evalua cada una de las intancias json
         for json_instance in json_instances :
             print("## Evaluacion 4.5.4 - json keys", json_instance)
@@ -145,7 +146,8 @@ class SyntanticAccuracy(QualityMetric) :
             field_measures.append(value)
 
             print("## Evaluacion 4.6 - insert value in neo4j", value, " ##")
-            metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
+            self.metadata_service.insert_field_value_measures(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
+            #metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
             results_dicc[result_key] = value
 
         #almacena un FieldMeasure por corrida, asi manetemos el historicos del las corridas
@@ -153,7 +155,7 @@ class SyntanticAccuracy(QualityMetric) :
         if field_measures:
             aggregated_measure_value = self.calculate_aggregated_measure(field_measures)
             print("Aggregated", aggregated_measure_value,)
-            metadata_repo.insert_field_measures(field_to_evaluate, latest_item_node_name, aggregated_measure_value, dq_model_id)
+            await self.metadata_service.insert_field_measures(field_to_evaluate, latest_item_node_name, aggregated_measure_value, dq_model_id)
 
         # ver: pero de alguna forma devolver solo el resultado agregado
         return aggregated_measure_value
@@ -187,17 +189,16 @@ class StrategyContext():
     def strategy(self, strategy: QualityMetric) -> None:
         self._quality_strategy = strategy
 
-    def select_strategy(self, strategy: str, aggregation: str) -> None:
+    def select_strategy(self, strategy: str, aggregation: str, metadata_service: MetadataService) -> None:
         # TODO: ver si dejar aca average y eventualmente que venga el method_id y obtengo el algoritmo
         if strategy == SYNTCTATIC_ACCURACY:
-            self._quality_strategy = SyntanticAccuracy(aggregation) 
+            self._quality_strategy = SyntanticAccuracy(aggregation, metadata_service) 
             print("### STRATEGY METHOD SELECTED ## ")
                     
     async def evaluate_quality(self, dq_model_id: str) -> None:
         # no se si vamos a menter esto o mandamos el mapping id como parametro siempre VER
         try:
             if dq_model_id != "" and dq_model_id != None :
-            # ver si queda aca o lo mando por parametro al contstructor
                 print("## Evaluacion 1.0 - about to se mapping process", dq_model_id)
                 await self.quality_strategy.set_mapping_process(dq_model_id)
                 self.quality_strategy.set_dq_model_id(dq_model_id)

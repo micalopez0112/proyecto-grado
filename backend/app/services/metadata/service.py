@@ -3,7 +3,7 @@ from app.repositories.metadata.repository import MetadataRepository
 from app.rules_validation.mapping_rules import find_json_keys
 from .types import CreateDQModelRequest, GetEvaluationResultsRequest
 from app.repositories.metadata.types import SaveDQModelDTO
-
+from app.models.mapping import FieldNode
 class MetadataService:
     def __init__(self, mapping_repository: MappingRepository, metadata_repository: MetadataRepository):
         self.mapping_repository = mapping_repository
@@ -56,3 +56,19 @@ class MetadataService:
         data_quality_rules = await self.metadata_repository.get_data_quality_rules()
         print("data_quality_rules:", data_quality_rules)
         return data_quality_rules
+
+    async def get_mapping_process_by_dq_model(self, dq_model_id: str):
+        """Get mapping process by DQ model ID."""
+        print("## get_mapping_process_by_dq_model new arq##")
+        mapping_procces_id = self.metadata_repository.get_mapping_id_by_dq_model(dq_model_id)
+        mapping_process = await self.mapping_repository.find_by_id(mapping_procces_id)
+        return mapping_process
+
+    async def delete_existing_field_value_measures(self, data_model_id, json_keys, json_schema_id):
+        return await self.metadata_repository.delete_existing_field_value_measures(data_model_id, json_keys, json_schema_id)
+
+    async def insert_field_value_measures(self, field: FieldNode, value, id_document, dq_model_id, node_name):
+        return await self.metadata_repository.insert_field_value_measures(field, value, id_document, dq_model_id, node_name)
+    
+    async def insert_field_measures(self, field: FieldNode, node_name, value, dq_model_id):
+        return await self.metadata_repository.insert_field_measures(field, node_name, value, dq_model_id)

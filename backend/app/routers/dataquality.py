@@ -42,10 +42,16 @@ async def update_neo4j_connection(metadata_repo: Annotated[MetadataRepository, D
 
 
 @router.post("/evaluate/{quality_rule}")
-async def evaluate_quality(quality_rule: str, aggregation: str, dq_model_id: Optional[str] = Query(None, description="ID for mapping"), request_mapping_body: Dict[str, Any]= Body(...)):
-    try :
+async def evaluate_quality(
+    metadata_service: Annotated[MetadataService, Depends(get_metadata_service)],
+    quality_rule: str,
+    aggregation: str,
+    dq_model_id: Optional[str] = Query(None, description="ID for mapping"),
+    request_mapping_body: Dict[str, Any]= Body(...)
+):
+    try:
         context = StrategyContext()
-        context.select_strategy(quality_rule, aggregation)
+        context.select_strategy(quality_rule, aggregation, metadata_service)
         inicio = time.time()
         result = await context.evaluate_quality(dq_model_id)
         fin = time.time()
