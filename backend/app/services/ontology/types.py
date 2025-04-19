@@ -1,11 +1,14 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from fastapi import File
+
 @dataclass
 class OntologyCreateData:
     type: str
     file_path: Optional[str] = None
     uri: Optional[str] = None
+    ontology_content: Optional[File] = None
 
 def build_ontology_response(ontology, onto_id):
     """Build a standardized response for ontology data."""

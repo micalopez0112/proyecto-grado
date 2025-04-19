@@ -6,8 +6,6 @@ import "./Unauthorized.css";
 const UnauthorizedPage: React.FC = () => {
   const navigate = useNavigate();
   const { collectionPath, externalDatasetId } = useDataContext();
-  console.log("Unautorized: Collection path: ", collectionPath);
-  console.log("Unauthorized: External dataset id: ", externalDatasetId);
   return (
     <div className="unauthorized-container">
       <div className="unauthorized-box">
