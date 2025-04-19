@@ -19,7 +19,6 @@ const SchemaSelect = () => {
   const handleGenerateSchema = async () => {
     try {
       if (filePath !== "") {
-        console.log("##File path: ", filePath);
         setLoading(true);
         const response = await getJsonSchema(filePath);
         const schema = response?.data;

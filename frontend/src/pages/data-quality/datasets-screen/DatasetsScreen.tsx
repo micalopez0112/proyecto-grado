@@ -28,10 +28,6 @@ const DatasetsScreen = () => {
             (dataset) => dataset.is_external !== true
           );
           setDatasets(datasetsFiltered);
-          console.log(
-            "Datasets (is_external !== true) en DatasetsScreen: ",
-            datasetsFiltered
-          );
         }
         setLoading(false);
       } catch (error) {

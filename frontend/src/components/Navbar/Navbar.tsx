@@ -8,8 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { externalFlow, setExternalFlow, outOfExternalFlow } = useDataContext();
-  console.log("Valor de externalFlow en Navbar: ", externalFlow);
+  const { externalFlow, outOfExternalFlow } = useDataContext();
   const navigate = useNavigate();
   const handleExit = async () => {
     try {

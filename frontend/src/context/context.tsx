@@ -134,11 +134,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
               ...(prevMappings[claveMap + "?value"] || []),
               ...rango,
             ];
-          } else {
-            console.log(
-              "Se mapeó Object Property pero no se agregó el rango siendo el mismo: ",
-              rango
-            );
           }
           return newMappings;
         });

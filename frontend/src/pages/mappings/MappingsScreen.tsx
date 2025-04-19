@@ -39,7 +39,6 @@ const MappingsScreen = () => {
   useEffect(() => {
     if (!effectRun.current) {
       const checkFlow = async () => {
-        console.log("Search params size: ", searchParams.size);
         setLoading(true);
         if (searchParams.size > 0) {
           if (connectionString && collectionPathParam && idDataset) {
