@@ -2,7 +2,6 @@ from app.repositories.mapping.repository import MappingRepository
 from app.repositories.metadata.repository import MetadataRepository
 from app.rules_validation.mapping_rules import find_json_keys
 from .types import CreateDQModelRequest, GetEvaluationResultsRequest
-from app.repositories.metadata.types import SaveDQModelDTO
 from app.models.mapping import FieldNode
 class MetadataService:
     def __init__(self, mapping_repository: MappingRepository, metadata_repository: MetadataRepository):

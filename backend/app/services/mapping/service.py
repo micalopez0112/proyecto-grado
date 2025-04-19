@@ -1,12 +1,12 @@
 from app.repositories.mapping.repository import MappingRepository
-from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, EditMappingRequest, MappingRequest, PutMappingRequest
+from app.models.mapping import MappingProcessDocument, MappingsByJSONResponse, EditMappingRequest
 from app.services.schema.service import SchemaService
 from app.services.schema.types import SchemaCreateData
 from app.services.ontology.service import OntologyService
 from app.rules_validation.mapping_rules import validate_mapping, get_json_schema_property_type
 from app.services.ontology.types import build_ontology_response
-from .types import build_mapping_id_name_tupple, MappingBasicInfo, build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData, MappingUpdateData
-from .exceptions import MappingNotFoundError, InvalidMappingDataError,MappingValidationError
+from .types import MappingBasicInfo, build_mapping_proccess_response,build_update_data_from_mapping_request, MappingCreateData
+from .exceptions import MappingNotFoundError, InvalidMappingDataError
 
 class MappingService:
     def __init__(self, mapping_repository: MappingRepository, ontology_service: OntologyService, schema_service: SchemaService):
