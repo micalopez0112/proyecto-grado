@@ -21,25 +21,13 @@ const DatasetsScreen = () => {
     const retrieveDatasets = async () => {
       try {
         setLoading(true);
-        // if(externalFlow){
-        //     navigate to home with outOfExternalFlow
-        // }
         const response = await fetchDatasets();
         if (response?.status === 200) {
           const datasets = response.data;
-          // if(!externalFlow){
-          //     //Se muestran solo los datasets que no son externalFlow, cambiar?
-          //     const datasetsFiltered = datasets.filter((dataset) => dataset.is_external !== true);
-          //     datasets = datasetsFiltered;
-          // }
           const datasetsFiltered = datasets.filter(
             (dataset) => dataset.is_external !== true
           );
           setDatasets(datasetsFiltered);
-          console.log(
-            "Datasets (is_external !== true) en DatasetsScreen: ",
-            datasetsFiltered
-          );
         }
         setLoading(false);
       } catch (error) {

@@ -28,9 +28,7 @@ const DQModelsScreen = () => {
       }
       setLoading(true);
       try {
-        console.log("Rule: ", rule);
         const response = await getDQModels(mappingId, rule.ruleId);
-        console.log("Response de DQModels: ", response);
         setDQModels(response.data);
       } catch (error) {
         toast.error("Failed to fetch Data Quality models");
@@ -50,7 +48,6 @@ const DQModelsScreen = () => {
   };
 
   const onSelectModel = (id: string) => {
-    console.log("ID: ", id);
     if (selectedDQModelId === id) {
       setSelectedDQModelId("");
     } else {
@@ -74,7 +71,6 @@ const DQModelsScreen = () => {
             score,
           })
         );
-        console.log("Validation results: ", validationResults);
         navigate("/EvaluateMappings", {
           state: {
             mappingId: mappingId,

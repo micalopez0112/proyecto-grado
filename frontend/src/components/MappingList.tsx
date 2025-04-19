@@ -6,8 +6,6 @@ import "./MappingList.css";
 
 const MappingList = ({ isResult }) => {
   const { mappings, removeMapping } = useDataContext();
-
-  console.log("mappings", { mappings });
   return (
     <div className={`mappings ${isResult ? "mappings-width" : ""}`}>
       {Object.keys(mappings).map((key) => {

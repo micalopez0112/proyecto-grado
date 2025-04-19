@@ -1,15 +1,10 @@
-import React, { useEffect,useRef } from "react";
-import {toast} from "react-toastify";
-import { useDataContext } from "../../context/context.tsx";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import {connectNeo4jDB} from "../../services/mapsApi.ts";
 import "./HomeScreen.css";
-
 
 const HomeScreen = () => {
   const navigate = useNavigate();
-  const effectRun = useRef(false);
-  
+
   return (
     <div className="home-container">
       <button

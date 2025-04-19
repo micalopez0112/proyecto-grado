@@ -7,7 +7,6 @@ const InfoModal = ({ text }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
-    console.log("Opening modal", modalIsOpen); // Debugging
     setModalIsOpen(true);
   };
 

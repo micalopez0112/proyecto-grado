@@ -15,29 +15,11 @@ export const saveAndValidateMappings = async (
         mapping_proccess_id: mapping_pid,
       },
     };
-    // if (mapping_pid !== "") {
-    //   options = {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     params: {
-    //       mapping_proccess_id: mapping_pid,
-    //     },
-    //   };
-    // } else {
-    //   options = {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   };
-    // }
-
     const response = await apiClient.post(
       `/mapping/ontology_id/${ontologyId}`,
       body,
       options
     );
-    console.log("#Se enviaron los mappings al back#: ", response);
     return response;
   } catch (error) {
     console.error("Error in Saving mappings: ", error);
@@ -69,14 +51,13 @@ export const uploadOntology = async (
     return response;
   } catch (error) {
     console.error("Error in uploading ontology", error);
-    throw error; // Recomendable lanzar el error para manejarlo fuera
+    throw error;
   }
 };
 
 export const getMappingGraph = async (processId: string) => {
   try {
     const response = await apiClient.get(`/mapping/graph/${processId}`);
-    console.log("Mapping Graph: ", response);
     return response;
   } catch (error) {
     console.error("Error in getting Mapping Graph");
@@ -114,7 +95,7 @@ export const getDatasetMappings = async (datasetId: string) => {
     const response = await apiClient.get(`/mapping/schemas/${datasetId}`);
     return response;
   } catch (error) {
-    console.log("Error fetching mappings for dataset: ", error);
+    console.error("Error fetching mappings for dataset: ", error);
   }
 };
 
@@ -144,10 +125,7 @@ export const deleteMapping = async (mappingId: string) => {
 
 export const saveMapping = async (data: any) => {
   try {
-    //Tal vez agregar mapping_id como query parameter por prolijidad
-    console.log("Se manda en el put: ", data);
     const response = await apiClient.put(`/mapping/`, data);
-    //console.log("Response from editing mapping: ", response);
     return response;
   } catch (error) {
     console.error("Error in call of editing mapping: ", error);
@@ -178,10 +156,8 @@ export const getJsonSchema = async (jsonFilePath: string /*JsonFile?? */) => {
     const response = await apiClient.get(
       `/schemas/generateSchema${queryParam}`
     );
-    console.log("Response from generating schema: ", response);
     return response;
   } catch (error) {
-    //handle error al no poder levantar el schema
     console.error("Error fetching JsonSchema", error);
     throw error;
   }
@@ -267,12 +243,6 @@ export const createDQModel = async (
   dqMethodId: string,
   body: any
 ) => {
-  console.log(
-    "API call to create DQ model with dqMethodId: " +
-      dqMethodId +
-      " and dqAggregatedMethodId: " +
-      dqAggregatedMethodId
-  );
   const params = mappingProcessId
     ? {
         mapping_process_id: mappingProcessId,
