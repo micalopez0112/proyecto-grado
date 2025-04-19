@@ -36,14 +36,13 @@ const SelectMappingsEvaluate = () => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [allSelected, setAllSelected] = useState<boolean>(false);
-  // const [dqAggregatedMethodId, setDQAggregatedMethodId] = useState<string>("");
-  // const [dqMethodId, setDQMethodId] = useState<string>("");
 
   const getSimpleMappings = () => {
     return Object.keys(mappings).filter(
       (key) =>
         key.endsWith("#string") ||
         key.endsWith("#number") ||
+        key.endsWith("#integer") ||
         key.endsWith("#boolean")
     );
   };
@@ -117,7 +116,6 @@ const SelectMappingsEvaluate = () => {
     setLoading(true);
 
     try {
-      console.log("Rule just before create DQModel: ", rule);
       const response = await createDQModel(
         mappingProcessId,
         dqModelName,
@@ -127,7 +125,6 @@ const SelectMappingsEvaluate = () => {
       );
       if (response.status === 200) {
         if (response.data.name) {
-          console.log("##DQ MODEL ALREADY EXISTS##: ", response.data.name);
           alert(
             "A DQ Model with the same attributes already exists. Its name is: '" +
               response.data.name +
@@ -139,8 +136,6 @@ const SelectMappingsEvaluate = () => {
           return;
         }
         if (evaluateAndCreate) {
-          console.log("Response de createDQModel: ", response);
-          console.error("Response.data: ", response.data);
           const evaluationResponse = await evaluateMapping(
             SYNTCTATIC_ACCURACY,
             AGG_AVERAGE,
@@ -154,7 +149,6 @@ const SelectMappingsEvaluate = () => {
               mappingName,
               score,
             }));
-            console.log("Validation results: ", validationResults);
             navigate("/EvaluateMappings", {
               state: {
                 mappingId: mappingProcessId,

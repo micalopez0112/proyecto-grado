@@ -32,7 +32,6 @@ const OntologySelectScreen = () => {
     setSelectedMethod(event.target.value);
   };
   useEffect(() => {
-    //limpiar contexto de mappings
     clearMappings();
     if (collection_name) {
       //
@@ -45,20 +44,6 @@ const OntologySelectScreen = () => {
       // const decodedPath = decodeURIComponent(collection_name);
       // console.log("Decoded path:", decodedPath);
       console.log("##Collection name from path##: ", collection_name);
-    }
-    // const retrieveOntologies = async () =>{
-    //     const ontologies = await fetchOntologies();
-    //     if(ontologies){
-    //         console.log("Ontologies: ",ontologies);
-    //         setOntologies(ontologies.data);
-    //     }
-    // }
-    // retrieveOntologies();
-
-    if (externalFlow) {
-      console.log("#External Flow en OntologySelect.tsx#");
-      console.log("Collection path: ", collectionPath);
-      console.log("External dataset id: ", externalDatasetId);
     }
   }, []);
 
@@ -84,7 +69,6 @@ const OntologySelectScreen = () => {
         response = await uploadOntology("FILE", selectedFile, "");
       } else if (selectedMethod && selectedMethod === "uri" && uriValue) {
         response = await uploadOntology("URI", undefined, uriValue);
-        console.log("Ontologia desde el back", response);
       } else {
         toast.error("Please select an ontology");
         setLoading(false);
@@ -98,27 +82,17 @@ const OntologySelectScreen = () => {
         //cargar schema a partir del collection path y el externalIdDataset
         //navegar a MappingSelect
         setLoading(true);
-        //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
-        const response = await getJsonSchema(collectionPath); //filepath
+        const response = await getJsonSchema(collectionPath);
         const schema = response?.data;
-        //setJsonSchema(schema);
-        console.log("##GENERATED SCHEMA##", schema);
-        setJsonSchemaContext(schema); //Check que se pase bien esto
+        setJsonSchemaContext(schema);
         setLoading(false);
         navigate("/Mapping");
       } else navigate("/SchemaSelect");
     } catch (error) {
       const errorMessage = error.response.data.detail;
       toast.error("Failed on submit: " + errorMessage);
-      console.log("error en handleSubmit: ", errorMessage);
       setLoading(false);
     }
-  };
-
-  const handleSelectOntology = (id: string) => {
-    setSelectedFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    setIdSelectedOnto(id);
   };
 
   return (
@@ -197,7 +171,6 @@ const OntologySelectScreen = () => {
                     ></input>
                   </div>
                 )}
-                {/* <ToastContainer/> */}
               </div>
             </div>
           </div>
@@ -232,11 +205,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "8px",
     padding: "20px",
   },
-  title: {
-    fontSize: "2em",
-    color: "#000",
-    marginBottom: "20px",
-  },
   button: {
     padding: "10px 20px",
     fontSize: "1em",
@@ -246,26 +214,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     marginBottom: "20px",
-  },
-  dashboard: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-    gap: "10px",
-    width: "100%",
-    maxWidth: "800px",
-    marginTop: "10px",
-    maxHeight: "1000px",
-    overflowY: "scroll",
-  },
-  ontologyCard: {
-    backgroundColor: "#fff",
-    padding: "15px",
-    borderRadius: "5px",
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    color: "#000",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    wordBreak: "break-word",
   },
 };
 

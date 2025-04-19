@@ -21,7 +21,6 @@ interface ContextProps {
   setExternalFlow: (value: boolean) => void;
   externalDatasetId: string;
   setExternalDatasetId: (value: string) => void;
-  //
   currentOntologyId?: string;
   setcurrentOntologyId: (value: string | undefined) => void;
   jsonSchemaContext: any;
@@ -103,9 +102,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   >(undefined);
 
   const addNewMapping = () => {
-    console.log("Adding new mapping, actual mappings are: ", mappings);
     if (JsonElementSelected !== "" && OntoElementSelected.type !== undefined) {
-      console.log("ONTO ELEMENT SELECTED", OntoElementSelected);
       if (OntoElementSelected.type === "class") {
         setMappings({
           ...mappings,
@@ -115,39 +112,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           ],
         });
       } else if (OntoElementSelected.type === "object_property") {
-        console.log(
-          "Object Property seleccionado en context",
-          OntoElementSelected.ontoElement
-        );
-        console.log("JsonElementSelected en context", JsonElementSelected);
-        console.log(
-          "Rango de OntoElementSelected que se está agregando en context",
-          OntoElementSelected.ontoElement.range
-        );
-
         const rango = OntoElementSelected.ontoElement.range;
-        console.log("RANGO", rango);
         const key = {
           name: OntoElementSelected.ontoElement.name,
           iri: OntoElementSelected.ontoElement.iri,
         };
-        console.log("Key que se está agregando en context", key);
-
-        // Mejor hacer todas las las actualizaciones de una sino hay problemas con el estado
-        // setMappings((prevMappings) => {
-        //   const newMappings = {
-        //     ...prevMappings,
-        //     [JsonElementSelected.endsWith("?key#array")
-        //       ? JsonElementSelected
-        //       : JsonElementSelected + "?key"]: [
-        //       ...(prevMappings[
-        //         JsonElementSelected.endsWith("?key#array")
-        //           ? JsonElementSelected
-        //           : JsonElementSelected + "?key"
-        //       ] || []),
-        //       key,
-        //     ],
-        //   };
         setMappings((prevMappings) => {
           const newMappings = {
             ...prevMappings,
@@ -157,17 +126,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
             ],
           };
 
-          //acá tendría que preguntar si el object ya está mappeado no hago nada
-          //y si no está mappeado agrego el ?value con el rango
-
-          //Enrealidad se haría en el ontologyData.tsx al buscar en mappings
-          //si el ?key es seleccionado y el ?value aún no => se abre el modal
           if (rango && rango.length > 0) {
-            console.log("RANGO RANGO RANGO", rango);
             let claveMap = JsonElementSelected.endsWith("?key#array")
               ? JsonElementSelected.slice(0, JsonElementSelected.length - 10) //quitar ?key#array
               : JsonElementSelected.slice(0, JsonElementSelected.length - 4); //quitar ?key
-            console.log("ClaveMap", claveMap);
             newMappings[claveMap + "?value"] = [
               ...(prevMappings[claveMap + "?value"] || []),
               ...rango,
@@ -182,7 +144,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         });
       } else {
         // Data property
-        console.log("JsonElementSelected en context", JsonElementSelected);
         setMappings({
           ...mappings,
           [JsonElementSelected]: [
@@ -194,9 +155,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setOntoElementSelected({ type: undefined, ontoElement: {} });
       setJsonElementSelected("");
     } else {
-      console.log("mappings vaciós");
       toast.error(
-        "To add a mapping select element one element from th JSON Schema and the Ontology"
+        "To add a mapping select one element from the JSON Schema and the Ontology"
       );
     }
   };
@@ -208,9 +168,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMappings((prevMappings) => {
       const updatedMappings = { ...prevMappings };
       if (updatedMappings[key]) {
-        // TODO: check if it is an object property mapping with ?key
-        // if so, remove the ?key and ?value mappings
-
         updatedMappings[key] = updatedMappings[key].filter(
           (element) =>
             element.name !== elementToRemove.name ||
@@ -219,63 +176,30 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
         const updatedKey = getUpdatedKey(key);
         if (updatedKey) {
-          // obtener el rango de la object property
           const objectPropertyRange = getRangeByObjectPropertyName(
             ontologyDataContext,
             elementToRemove.name
           );
 
           if (objectPropertyRange && objectPropertyRange.length > 0) {
-            const objectPropertyRangeNames = objectPropertyRange.map(
-              (rangeItem) => rangeItem.name
-            );
-            console.log(
-              "El rango de la object property que se está eliminando es: ",
-              objectPropertyRange
-            );
-            console.log(
-              "De este rango los nombres son: ",
-              objectPropertyRangeNames
-            );
-            console.log(
-              "El rango que se quiere eliminar es: ",
-              objectPropertyRange[0].name
-            );
-            console.log(
-              "Entradas de la key que se quiere eliminar: ",
-              updatedMappings[updatedKey]
-            );
-
             if (updatedMappings[updatedKey] !== undefined) {
               updatedMappings[updatedKey] = updatedMappings[updatedKey].filter(
-                // fix needed to work with arrays and multiple values in range
                 (element) =>
                   element.name !== objectPropertyRange[0].name ||
                   element.iri !== objectPropertyRange[0].iri
               );
-              console.log(
-                "Entradas de la key después de eliminar: ",
-                updatedMappings[updatedKey]
-              );
-
               if (updatedMappings[updatedKey].length === 0) {
                 // delete Object Property key if it has no elements
                 delete updatedMappings[updatedKey];
               }
             }
-          } else {
-            // handle not range, POSSIBLE??
           }
-          // falta caso de array sería con slice -10
         }
 
-        // Delete key if it has no elements
-        // necessary?
         if (updatedMappings[key].length === 0) {
           delete updatedMappings[key];
         }
       }
-      console.log("Updated mappings: ", updatedMappings);
       return updatedMappings;
     });
   };
@@ -293,16 +217,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     ontologyData: OntologyDataType,
     objectPropertyName: string
   ): Array<{ name: string; iri: string }> => {
-    console.log("Ontología del detail", ontologyData);
     for (const onto of ontologyData.ontoData) {
       for (const dataItem of onto.data) {
         for (const objectProperty of dataItem.object_properties) {
           if (objectProperty.name === objectPropertyName) {
-            console.log("ENTRO BIEN BIEN");
-            console.log(
-              "El rango de la object property es: ",
-              objectProperty.range
-            );
             return Array.isArray(objectProperty.range)
               ? objectProperty.range
               : [objectProperty.range];
@@ -314,7 +232,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const clearMappings = () => {
-    console.log("Se ejecuta clear mappings");
     setMappings({});
     setOntoElementSelected({ type: undefined, ontoElement: {} });
     setJsonElementSelected("");

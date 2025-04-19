@@ -53,7 +53,6 @@ const MappingsScreen = () => {
             //Check if parameters are not null
             //if are null, throw error and return
             if (externalFlow) {
-              console.log("Already in external flow");
               toast.success("Already in external flow");
               await retrieveMappings(idDataset);
               setLoading(false);
@@ -109,7 +108,6 @@ const MappingsScreen = () => {
           } else {
             try {
               toast.error("Error: Missing parameters in external flow");
-              console.log("Error: Missing parameters in external flow");
             } catch (e) {
               console.error("Error: ", e);
             } finally {
@@ -126,20 +124,16 @@ const MappingsScreen = () => {
       checkFlow();
     }
     return () => {
-      console.log("EffectRun seteado a true");
       effectRun.current = true;
     };
   }, [searchParams]);
 
   const retrieveMappings = async (datasetId: string) => {
     setLoading(true);
-    console.log("Mappings antes de fetchMappings: ", mappings);
     if (datasetId !== "") {
       const datasetMappings = await getDatasetMappings(datasetId);
-      console.log("Dataset mappings from idDataset: ", datasetMappings);
       if (datasetMappings && idDataset) {
-        console.log("Mapping data from dataset id: ", datasetMappings.data);
-        //Es necesario el map porque viene con distintos campos
+        //Map porque viene con distintos campos
         const transformedMappings = datasetMappings.data.map((item: any) => ({
           id: item.idMapping,
           name: item.name,
@@ -149,13 +143,10 @@ const MappingsScreen = () => {
     } else {
       const datasetMappings = await fetchMappings();
       if (datasetMappings && !externalDatasetId) {
-        console.log("Mapping data from dataset id: ", datasetMappings.data);
         setMappings(datasetMappings.data);
       }
     }
-    console.log("Mappings: ", mappings);
     setLoading(false);
-    // }
   };
 
   const onClickMappingCard = (id: string) => {
@@ -173,17 +164,7 @@ const MappingsScreen = () => {
   );
 
   const newMapping = () => {
-    if (externalFlow) {
-      //hay que navegar a OntologySelect pero:
-      //1. setear el id del dataset
-      //2. setear la collection path
-      console.log("#Antes de navegar a OntologySelect en externalFlow#");
-      console.log("External dataset id: ", externalDatasetId);
-      console.log("Collection path: ", collectionPath);
-      navigate("/OntologySelect");
-    } else {
-      navigate("/OntologySelect");
-    }
+    navigate("/OntologySelect");
   };
 
   return (
