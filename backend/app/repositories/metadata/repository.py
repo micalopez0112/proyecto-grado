@@ -51,17 +51,23 @@ class MetadataRepository:
         self.neo4j_driver.execute_query(delete_existing_measures)
 
     async def insert_field_value_measures(self, field: FieldNode, value, id_document, dq_model_id, node_name):
-        applied_dq_method_name = f"applied_dq_f{node_name}" 
-        current_datetime = datetime.now()
-        insert_measure_query = f"""
-            MATCH (fieldNode) 
-            WHERE elementId(fieldNode) = '{field.element_id}' 
-            MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod {{name: '{applied_dq_method_name}'}})<-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
-            CREATE (m:Measure)<-[:FieldValueMeasure {{id_document: {id_document}}}]-(fieldNode)
-            CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
-            SET m.measure = {value}, m.date= '{current_datetime}'
-        """
-        self.neo4j_driver.execute_query(insert_measure_query)
+        try:
+            applied_dq_method_name = f"applied_dq_f{node_name}" 
+            current_datetime = datetime.now()
+            insert_measure_query = f"""
+                MATCH (fieldNode) 
+                WHERE elementId(fieldNode) = '{field.element_id}' 
+                MATCH (fieldNode)<-[:APPLIED_TO]-(appliedMethod:AppliedDQMethod {{name: '{applied_dq_method_name}'}})<-[:HAS_APPLIED_DQ_METHOD]-(dq_model:DQModel {{id: '{dq_model_id}'}})
+                CREATE (m:Measure)<-[:FieldValueMeasure {{id_document: {id_document}}}]-(fieldNode)
+                CREATE (m)<-[:MODEL_MEASURE]-(appliedMethod)
+                SET m.measure = {value}, m.date= '{current_datetime}'
+            """
+            self.neo4j_driver.execute_query(insert_measure_query)
+        except Exception as e:
+            print("Error al insertar medidas:", str(e))
+            raise e
+        # V2
+
 
     async def insert_field_measures(self, field: FieldNode, node_name, value, dq_model_id):
         current_datetime = datetime.now()

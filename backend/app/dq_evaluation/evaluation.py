@@ -146,7 +146,7 @@ class SyntanticAccuracy(QualityMetric) :
             field_measures.append(value)
 
             print("## Evaluacion 4.6 - insert value in neo4j", value, " ##")
-            self.metadata_service.insert_field_value_measures(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
+            await self.metadata_service.insert_field_value_measures(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
             #metadata_repo.insert_field_value_measures_v2(field_to_evaluate, value, json_instance['id'], dq_model_id, latest_item_node_name)
             results_dicc[result_key] = value
 

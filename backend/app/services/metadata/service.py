@@ -10,19 +10,23 @@ class MetadataService:
         self.metadata_repository = metadata_repository
 
     async def get_evaluation_results_by_json(self, evaluation_params: GetEvaluationResultsRequest):
-        """Get evaluation results for a specific JSON key."""
-        mapping_process = await self.mapping_repository.find_by_id(evaluation_params.mapping_process_id)
-        schema_id = mapping_process.jsonSchemaId
-        keys_list = find_json_keys(evaluation_params.json_key)
-        
-        results, total_count = await self.metadata_repository.get_evaluation_results_v2(
+        try:
+            """Get evaluation results for a specific JSON key."""
+            mapping_process = await self.mapping_repository.find_by_id(evaluation_params.mapping_process_id)
+            schema_id = mapping_process.jsonSchemaId
+            keys_list = find_json_keys(evaluation_params.json_key)
+            
+            results, total_count = await self.metadata_repository.get_evaluation_results_v2(
             evaluation_params.dq_model_id,
             str(schema_id),
             keys_list,
-            evaluation_params.limit,
+            evaluation_params.limit,    
             evaluation_params.offset
-        )
-        return results, total_count
+            )
+            return results, total_count
+        except Exception as e:
+            print("Error al obtener los resultados de evaluación:", str(e))
+            raise e
 
     async def create_dq_model(self, create_params: CreateDQModelRequest, mapped_entries):
         """Create a new DQ model."""
