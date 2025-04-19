@@ -27,7 +27,6 @@ class JsonSchema(BaseModel):
         properties = property_name.split("?")[0]
         properties_names = properties.split("-")
         properties_names = properties_names[1:]
-        print("Properties names: ", properties_names)
         current_level = self.properties
         print("##Current level: ##", current_level)
         if len(properties_names) == 1:
@@ -37,7 +36,6 @@ class JsonSchema(BaseModel):
             else:
                 return None
    
-        print("looking for property!")
         current_level = self.properties[properties_names[0]]
         properties_names = properties_names[1:]
         for prop_name in properties_names:

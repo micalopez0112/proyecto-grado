@@ -31,6 +31,7 @@ def get_neo4j_driver():
 def update_neo4j_driver(new_driver):
     global neo4j_driver
     neo4j_driver = new_driver
+    return neo4j_driver
 
 def build_connection_string(uri, user, password):
     # Extraer host desde el URI proporcionado
@@ -50,8 +51,9 @@ class Neo4jConnection:
         if self._driver:
             self._driver.close()
         self._driver = GraphDatabase.driver(uri, auth=(user, password))
-        update_neo4j_driver(self._driver)
-
+        new_driver = update_neo4j_driver(self._driver)
+        return new_driver
+    
     def re_connect_local(self):
         if self._driver:
             self._driver.close()

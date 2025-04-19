@@ -123,7 +123,7 @@ const DQModelsScreen = () => {
               ))
             ) : (
               <p className="no-elements-message">
-                No Instances of selected Metric found
+                No DQ Models available for selected Metric
               </p>
             )}
           </div>

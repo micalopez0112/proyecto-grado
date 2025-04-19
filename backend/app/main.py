@@ -6,8 +6,7 @@ from app.routers.mapping import router as mapping_router
 from app.routers.ontology import router as ontology_router
 from app.routers.schema import router as schema_router
 from app.routers.dataquality import router as dataquality_router
-from app.repositories.metadata_repo import init_governance_zone
-
+from app.repositories.metadata.repository import MetadataRepository
 
 import uvicorn
 
@@ -50,7 +49,8 @@ def start_owl_server(port=8001, directory="./upload/ontologies"):
 thread = threading.Thread(target=start_owl_server, daemon=True)
 thread.start()
 
-init_governance_zone()
+repo = MetadataRepository()
+repo.init_governance_zone()
 
 
 

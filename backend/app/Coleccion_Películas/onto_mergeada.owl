@@ -1,0 +1,1992 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:ns1="http://schema.org/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Severed__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0428390</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Canada">
+        <ns1:name xml:lang="en">Canada</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:name xml:lang="en">Severed</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Cypher__u0028_film_u0029_">
+    <ns1:name xml:lang="en">Cypher</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/United_States">
+        <ns1:name xml:lang="en">United States of America</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2002-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0284978</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Riprendimi">
+    <ns1:name xml:lang="en">Riprendimi</ns1:name>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Italy">
+        <ns1:name xml:lang="en">Italy</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1153116</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2008-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">93</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Spies_Strike_Silently">
+    <ns1:name xml:lang="en">Spies Strike Silently</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0061013</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Spain">
+        <ns1:name xml:lang="en">Spain</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1966-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Lost_Empire__u0028_1984_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1985-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Lost Empire</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">83</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0089503</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/With_Byrd_at_the_South_Pole">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1930-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">With Byrd at the South Pole</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0020594</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Conversation_with_a_Cupboard_Man">
+    <ns1:name xml:lang="en">Conversation with a Cupboard Man</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1993-01-01</ns1:dateCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Poland">
+        <ns1:name xml:lang="en">Poland</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0107997</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/They_Met_in_Bombay">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1941-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0034281</ns1:sameAs>
+    <ns1:name xml:lang="en">They Met in Bombay</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/My_Sister_u0027_s_Keeper__u0028_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">109</ns1:duration>
+    <ns1:name xml:lang="en">My Sister's Keeper</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1078588</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2009-06-26</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Waking_Ned">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0166396</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Republic_of_Ireland">
+        <ns1:name xml:lang="en">Republic of Ireland</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/France">
+        <ns1:name xml:lang="en">France</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Waking Ned</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1998-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Nightmare_on_Elm_Street_2_u003A__Freddy_u0027_s_Revenge">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">A Nightmare on Elm Street 2: Freddy's Revenge</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1985-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0089686</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Wonderful_Ice_Cream_Suit">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">74</ns1:duration>
+    <ns1:name xml:lang="en">The Wonderful Ice Cream Suit</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1998-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0129634</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Stealth__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0382992</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">116</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Stealth</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Smoke__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">112</ns1:duration>
+    <ns1:name xml:lang="en">Smoke</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1995-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0114478</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/District_13">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0414852</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:name xml:lang="en">District 13</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/French_for_Beginners">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Germany">
+        <ns1:name xml:lang="en">Germany</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">93</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0469233</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">French for Beginners</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Love_Simple">
+    <ns1:name xml:lang="en">Love Simple</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1153698</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2009-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Nazis_at_the_Center_of_the_Earth">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt2130142</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:name xml:lang="en">Nazis at the Center of the Earth</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Blue_Bird__u0028_1976_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1976-04-05</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Soviet_Union">
+        <ns1:name xml:lang="en">Soviet Union</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:name xml:lang="en">The Blue Bird</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0074225</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">99</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Edison__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0389957</ns1:sameAs>
+    <ns1:name xml:lang="en">Edison</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-03-05</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Maya__u0028_1966_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0060681</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:name xml:lang="en">Maya</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1966-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Par_le_trou_de_la_serrure">
+    <ns1:name xml:lang="en">Through the Keyhole</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0258003</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1901-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Stay_Alive">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0441796</ns1:sameAs>
+    <ns1:name xml:lang="en">Stay Alive</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Avenue_Montaigne__u0028_film_u0029_">
+    <ns1:name xml:lang="en">Avenue Montaigne</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">106</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0444112</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Hitler_u0027_s_Madman">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1943-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Hitler's Madman</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0036005</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Black_Sun__u0028_2007_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Poland"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">93</ns1:duration>
+    <ns1:name xml:lang="en">Black Sun</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0810456</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Just_My_Luck__u0028_2006_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">103</ns1:duration>
+    <ns1:name xml:lang="en">Just My Luck</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0397078</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Brothers_Solomon">
+    <ns1:name xml:lang="en">The Brothers Solomon</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0784972</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Big_Bust_Out">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:name xml:lang="en">The Big Bust Out</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1972-05-25</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0069784</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Over_21">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0037966</ns1:sameAs>
+    <ns1:name xml:lang="en">Over 21</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1945-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Run_Wild_u002C__Run_Free">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1969-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Run Wild, Run Free</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0064909</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Miss_Congeniality_2_u003A__Armed_and_Fabulous">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0385307</ns1:sameAs>
+    <ns1:name xml:lang="en">Miss Congeniality 2: Armed and Fabulous</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-03-11</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Tale_of_Pink_Hare">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Kazakhstan">
+        <ns1:name xml:lang="en">Kazakhstan</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2010-08-26</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1859588</ns1:sameAs>
+    <ns1:name xml:lang="en">Skaz o Rozovom Zaitse</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Breed__u0028_2006_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0455362</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/South_Africa">
+        <ns1:name xml:lang="en">South Africa</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:name xml:lang="en">The Breed</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Gabriel_Over_the_White_House">
+    <ns1:name xml:lang="en">Gabriel Over the White House</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0024044</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">86</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1933-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Blonde_and_Blonder">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-05-17</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:name xml:lang="en">Blonde and Blonder</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0893509</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Terror__u0028_1977_film_u0029_">
+    <ns1:name xml:lang="en">Terror</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0123294</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1977-03-04</ns1:dateCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Denmark">
+        <ns1:name xml:lang="en">Denmark</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Casualties_of_War">
+    <ns1:name xml:lang="en">Casualties of War</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0097027</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">109</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Apaporis__u0028_film_u0029_">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Colombia">
+        <ns1:name xml:lang="en">Colombia</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:name xml:lang="en">Apaporis</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2010-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">74</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1557148</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Killer_u0027_s_Kiss">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0048254</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">67</ns1:duration>
+    <ns1:name xml:lang="en">Killer's Kiss</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1955-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Milk__u0028_2008_American_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2008-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Milk</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1013753</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">128</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Cavern__u0028_2005_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">78</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0451262</ns1:sameAs>
+    <ns1:name xml:lang="en">The Cavern</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Kings_and_Desperate_Men">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0085797</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">118</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1984-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:name xml:lang="en">Kings and Desperate Men</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Cry_Wolf__u0028_2005_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0384286</ns1:sameAs>
+    <ns1:name xml:lang="en">Cry Wolf</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Forgotten__u0028_2004_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0356618</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-09-24</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Forgotten</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Khrustalyov_u002C__My_Car_u0021_">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Russia">
+        <ns1:name xml:lang="en">Russia</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0156701</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1998-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">137</ns1:duration>
+    <ns1:name xml:lang="en">Khrustalyov, My Car!</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/White_Men_Can_u0027_t_Jump">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0105812</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">White Men Can't Jump</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1992-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Strategy_of_the_Snail">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">116</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Colombia"/>
+    <ns1:name xml:lang="en">The Strategy of the Snail</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1993-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0109747</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/See_No_Evil__u0028_2006_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0437179</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:name xml:lang="en">See No Evil</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/How_Much_Wood_Would_a_Woodchuck_Chuck__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0074650</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1976-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">How Much Wood Would a Woodchuck Chuck</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/No_Way_Home__u0028_1996_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1996-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:name xml:lang="en">No Way Home</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0117194</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Blueberry__u0028_film_u0029_">
+    <ns1:name xml:lang="en">Blueberry</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-02-11</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">124</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0276830</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Reno_911_u0021__u003A__Miami">
+    <ns1:name xml:lang="en">Reno 911!: Miami</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0499554</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Golden_Child">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:name xml:lang="en">The Golden Child</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0091129</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Spy_Kids__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2001-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Spy Kids</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0227538</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Little_Big_Girl__u0028_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Denmark"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Sweden">
+        <ns1:name xml:lang="en">Sweden</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2002-06-14</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">93</ns1:duration>
+    <ns1:name xml:lang="en">Little Big Girl</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0290903</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Enemy_Territory__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:name xml:lang="en">Enemy Territory</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0092969</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Léon_u003A__The_Professional">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1994-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Léon: The Professional</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0110413</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Evil_Bong">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0829424</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Evil Bong</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Kohtalon_kirja">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0359564</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-01-01</ns1:dateCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Finland">
+        <ns1:name xml:lang="en">Finland</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:name xml:lang="en">Kohtalon kirja</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Revolution_in_Russia">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1906-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:name xml:lang="en">Revolution in Russia</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0258103</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Road_House__u0028_1989_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Road House</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">114</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0098206</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/An_American_Haunting">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0429573</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Romania">
+        <ns1:name xml:lang="en">Romania</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:name xml:lang="en">An American Haunting</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-11-05</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/They_Have_Changed_Their_Face">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+    <ns1:name xml:lang="en">They Have Changed Their Face</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0067178</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1971-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Ride_Beyond_Vengeance">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1966-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Ride Beyond Vengeance</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0060899</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Date_Movie">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">79</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Switzerland">
+        <ns1:name xml:lang="en">Switzerland</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0466342</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Date Movie</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_War_Against_Mrs_u002E__Hadley">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0035531</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">86</ns1:duration>
+    <ns1:name xml:lang="en">The War Against Mrs. Hadley</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1942-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Flower_in_His_Mouth">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">112</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1975-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0072123</ns1:sameAs>
+    <ns1:name xml:lang="en">The Flower in His Mouth</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Laughing_Woman">
+    <ns1:name xml:lang="en">The Laughing Woman</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1969-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0124621</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/17_Hours">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2011-02-23</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+    <ns1:name xml:lang="en">17 Hours</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1714834</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Night_Accident__u0028_1980_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Soviet_Union"/>
+    <ns1:name xml:lang="en">Night Accident</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0081244</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1980-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Machuca">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Chile">
+        <ns1:name xml:lang="en">Chile</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0378284</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ns1:duration>
+    <ns1:name xml:lang="en">Machuca</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Shinobi_u003A__Heart_Under_Blade">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-09-17</ns1:dateCreated>
+    <ns1:name xml:lang="en">Shinobi: Heart Under Blade</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0475723</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Japan">
+        <ns1:name xml:lang="en">Japan</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Song_of_Russia">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0036378</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Song of Russia</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">107</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1944-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Feast__u0028_2005_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0426459</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Feast</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Man_to_Man__u0028_2005_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/South_Africa"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Argentina">
+        <ns1:name xml:lang="en">Argentina</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">122</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Man to Man</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0397530</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/7_Dwarves_u003A__The_Forest_Is_Not_Enough">
+    <ns1:name xml:lang="en">7 Zwerge – Der Wald ist nicht genug</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0461642</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Good_Riddance__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">114</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:name xml:lang="en">Good Riddance</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0078894</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1979-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/I_Have_to_Sleep_u002C__My_Angel">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0871006</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Croatia">
+        <ns1:name xml:lang="en">Croatia</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">I Have to Sleep, My Angel</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Blood__u0026__Chocolate__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Romania"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0397044</ns1:sameAs>
+    <ns1:name xml:lang="en">Blood &amp; Chocolate</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Room_6">
+    <ns1:name xml:lang="en">Room 6</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0451187</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Messenger_u003A__The_Story_of_Joan_of_Arc">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0151137</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">158</ns1:duration>
+    <ns1:name xml:lang="en">The Messenger: The Story of Joan of Arc</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-10-27</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/My_Left_Foot">
+    <ns1:name xml:lang="en">My Left Foot</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Republic_of_Ireland"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-02-24</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0097937</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">103</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Countdown_to_War">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0204980</ns1:sameAs>
+    <ns1:name xml:lang="en">Countdown to War</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">78</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Walking_u002C__Walking">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">171</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1983-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0083713</ns1:sameAs>
+    <ns1:name xml:lang="en">Walking, Walking</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Something_to_Remember_Me_By__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0416101</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-02-18</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:name xml:lang="en">Something to Remember Me By</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Butterfly_Room">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1612782</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Butterfly Room</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Flight_Command">
+    <ns1:name xml:lang="en">Flight Command</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1940-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">113</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0032477</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Down_on_Us">
+    <ns1:name xml:lang="en">Down on Us</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">117</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0087171</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1984-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Good_Luck_Chuck">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:name xml:lang="en">Good Luck Chuck</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0452625</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Saint__u0028_1997_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">111</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1997-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0120053</ns1:sameAs>
+    <ns1:name xml:lang="en">The Saint</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Eddie_Presley">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">106</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0106793</ns1:sameAs>
+    <ns1:name xml:lang="en">Eddie Presley</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1992-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Third_Lover">
+    <ns1:name xml:lang="en">The Eye of Evil</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1962-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0056302</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">78</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Get_Rich_or_Die_Tryin_u0027___u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">116</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0430308</ns1:sameAs>
+    <ns1:name xml:lang="en">Get Rich or Die Tryin'</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Strømer">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0075277</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Denmark"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1976-10-29</ns1:dateCreated>
+    <ns1:name xml:lang="en">Strømer</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/God_Is_My_Co-Pilot__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1945-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0037746</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">God Is My Co-Pilot</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Doomed_Fort">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1964-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Fuerte perdido</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0058121</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/I_ragazzi_di_via_Panisperna">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">123</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0095948</ns1:sameAs>
+    <ns1:name xml:lang="en">I ragazzi di via Panisperna</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Life_Is_All_You_Get">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1997-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:name xml:lang="en">Life is All You Get</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0119510</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Summoning_the_Spirits">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1899-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:name xml:lang="en">Summoning the Spirits</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0000264</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Attack_Force__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0493424</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Attack Force</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Hot_Tamale">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0447999</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Hot Tamale</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">98</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Khamosh_Pani">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Pakistan">
+        <ns1:name xml:lang="en">Pakistan</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/India">
+        <ns1:name xml:lang="en">India</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-08-15</ns1:dateCreated>
+    <ns1:name xml:lang="en">Khamosh Pani</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0357283</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Apollo_Theatre__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0043031</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1950-10-30</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:name xml:lang="en">Apollo Theatre</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Devil_u0027_s_Carnival">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">56</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt2204379</ns1:sameAs>
+    <ns1:name xml:lang="en">The Devil's Carnival</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Queen_and_I__u0028_2008_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1334556</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Iran">
+        <ns1:name xml:lang="en">Iran</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Sweden"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2009-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:name xml:lang="en">The Queen and I</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Beggar_Student__u0028_1956_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1956-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0049003</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:name xml:lang="en">The Beggar Student</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">98</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dragon_Eyes">
+    <ns1:name xml:lang="en">Dragon Eyes</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1735862</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Officer_Down">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:name xml:lang="en">Officer Down</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1925479</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2013-01-18</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Gorillas_in_the_Mist">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">129</ns1:duration>
+    <ns1:name xml:lang="en">Gorillas in the Mist</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-09-23</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0095243</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/13_Going_on_30">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-04-23</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0337563</ns1:sameAs>
+    <ns1:name xml:lang="en">13 Going on 30</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Honey__u0028_2003_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0322589</ns1:sameAs>
+    <ns1:name xml:lang="en">Honey</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-11-24</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Tiger_u0027_s_Tail">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Republic_of_Ireland"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Tiger's Tail</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0490499</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">107</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Hand_That_Feeds_the_Dead">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0070368</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1974-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Hand That Feeds the Dead</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Westward_the_Women">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1951-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">118</ns1:duration>
+    <ns1:name xml:lang="en">Westward the Women</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0044205</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Woman_in_Red__u0028_1935_film_u0029_">
+    <ns1:name xml:lang="en">The Woman in Red</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0027228</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1935-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">68</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Rage__u0028_1972_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Rage</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0069158</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1972-11-22</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Nightmare_on_Elm_Street_5_u003A__The_Dream_Child">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0097981</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">86</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">A Nightmare on Elm Street 5: The Dream Child</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Giant_Mechanical_Man">
+    <ns1:name xml:lang="en">The Giant Mechanical Man</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1769363</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Gallant_Journey">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1946-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:name xml:lang="en">Gallant Journey</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0039409</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Hunters_of_the_Golden_Cobra">
+    <ns1:name xml:lang="en">Hunters of the Golden Cobra</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1982-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0084104</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Sphere__u0028_1998_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">129</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1998-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Sphere</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0120184</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Sound_of_Thunder__u0028_film_u0029_">
+    <ns1:name xml:lang="en">A Sound of Thunder</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Czech_Republic">
+        <ns1:name xml:lang="en">Czech Republic</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0318081</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Gone__u0028_2007_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0482374</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Gone</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Death_Sentence__u0028_1968_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:name xml:lang="en">Death Sentence</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1968-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0063580</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Fury_of_Johnny_Kid">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1967-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:name xml:lang="en">Fury of Johnny Kid</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0148086</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Marriage_Is_a_Private_Affair">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">116</ns1:duration>
+    <ns1:name xml:lang="en">Marriage Is a Private Affair</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0037051</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1944-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/9_u00BD__Weeks">
+    <ns1:name xml:lang="en">9½ Weeks</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0091635</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986-02-14</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">112</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Wraith">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">The Wraith</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0092240</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Golden_Blade">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">81</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1953-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0045828</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">The Golden Blade</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Springtime__u0028_1947_film_u0029_">
+    <ns1:name xml:lang="en">Springtime</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1947-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Soviet_Union"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0039954</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Mickey_Blue_Eyes">
+    <ns1:name xml:lang="en">Mickey Blue Eyes</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0130121</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Peggy_Sue_Got_Married">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0091738</ns1:sameAs>
+    <ns1:name xml:lang="en">Peggy Sue Got Married</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">98</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Crane_World">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0213905</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Argentina"/>
+    <ns1:name xml:lang="en">Crane World</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-09-17</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dumb_and_Dumber_To">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">109</ns1:duration>
+    <ns1:name xml:lang="en">Dumb and Dumber To</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt2096672</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2014-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Ten_North_Frederick__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Ten North Frederick</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1958-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0052283</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Georgi_and_the_Butterflies">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Bulgaria">
+        <ns1:name xml:lang="en">Bulgaria</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Netherlands">
+        <ns1:name xml:lang="en">Netherlands</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Finland"/>
+    <ns1:name xml:lang="en">Georgi and the Butterflies</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0439586</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Flight_Lieutenant__u0028_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Flight Lieutenant</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0034739</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1942-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/High_Heels_and_Low_Lifes">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0253126</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2001-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">High Heels and Low Lifes</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">86</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Bad_Santa">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0307987</ns1:sameAs>
+    <ns1:name xml:lang="en">Bad Santa</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-11-26</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Gentlemen_in_White_Vests">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0065835</ns1:sameAs>
+    <ns1:name xml:lang="en">Gentlemen in White Vests</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1970-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Vikingdom">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">114</ns1:duration>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Malaysia">
+        <ns1:name xml:lang="en">Malaysia</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2013-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Vikingdom</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1785669</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Vente_a_Alemania_u002C__Pepe">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0067935</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1971-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:name xml:lang="en">Vente a Alemania</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dirty_Rotten_Scoundrels__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0095031</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-12-14</ns1:dateCreated>
+    <ns1:name xml:lang="en">Dirty Rotten Scoundrels</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Closed_Circuit__u0028_1978_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1978-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Closed Circuit</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0077337</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/La_pérgola_de_las_flores">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1965-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">125</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Argentina"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0059622</ns1:sameAs>
+    <ns1:name xml:lang="en">La pérgola de las flores</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Lady_from_Chungking">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Lady from Chungking</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1942-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">71</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0036093</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Critters_2_u003A__The_Main_Course">
+    <ns1:name xml:lang="en">Critters 2: The Main Course</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0094919</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Ray_of_Light">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:name xml:lang="en">Un rayo de luz</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0054233</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1960-09-09</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Trees_Grow_on_the_Stones_Too">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0089322</ns1:sameAs>
+    <ns1:name xml:lang="en">Trees Grow on the Stones Too</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">146</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Soviet_Union"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1985-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Spanish_Serenade">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:name xml:lang="en">Spanish Serenade</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0043978</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1952-01-14</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Atlas_in_the_Land_of_the_Cyclops">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0055116</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:name xml:lang="en">Maciste nella terra dei ciclopi</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1961-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">98</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/On_the_Tiger_u0027_s_Back">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1961-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">A cavallo della tigre</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0054586</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Empire_of_the_Sun__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0092965</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">154</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Empire of the Sun</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dumb_and_Dumberer_u003A__When_Harry_Met_Lloyd">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:name xml:lang="en">Dumb and Dumberer: When Harry Met Lloyd</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-06-13</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0329028</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Men_u002E__u002E__u002E_">
+    <ns1:name xml:lang="en">Men...</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0089656</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1985-10-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Woman_in_Blue">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0068581</ns1:sameAs>
+    <ns1:name xml:lang="en">The Woman in Blue</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1973-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dear_Heart">
+    <ns1:name xml:lang="en">Dear Heart</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0057999</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1964-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Miracles_of_Thursday">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0050574</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1957-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Los jueves, milagro</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Comedians__u0028_1954_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Argentina"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:name xml:lang="en">Comedians</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1954-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0045665</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Cadillac_Man">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0099204</ns1:sameAs>
+    <ns1:name xml:lang="en">Cadillac Man</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1990-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Three_Musketeers_of_the_West">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0069425</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1973-09-28</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Three Musketeers of the West</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Hunger_Games_u003A__Catching_Fire">
+    <ns1:name xml:lang="en">The Hunger Games: Catching Fire</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">146</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-03-21</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1951264</ns1:sameAs>
+  </ns1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/duration">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="http://schema.org/Movie"/>
+  </owl:DatatypeProperty>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dizzy_Pilots">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0035814</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Dizzy Pilots</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1943-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Stick_It">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">103</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0430634</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Stick It</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Unrest__u0028_2006_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0453533</ns1:sameAs>
+    <ns1:name xml:lang="en">Unrest</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Mannequin__u0028_1987_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Mannequin</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0093493</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Arizona_Sky">
+    <ns1:name xml:lang="en">Arizona Sky</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1332052</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2008-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Forest_Rangers__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0034749</ns1:sameAs>
+    <ns1:name xml:lang="en">The Forest Rangers</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1942-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/When_a_Stranger_Calls__u0028_2006_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:name xml:lang="en">When a Stranger Calls</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0455857</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Mars__u0028_2004_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Russia"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0417949</ns1:sameAs>
+    <ns1:name xml:lang="en">Mars</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Man_with_the_Glass_Eye">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0063270</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1969-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Man with the Glass Eye</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Honeymoon__u0028_1959_film_u0029_">
+    <ns1:name xml:lang="en">Honeymoon</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0053023</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1959-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">109</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/U_Turn__u0028_1997_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0120399</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">125</ns1:duration>
+    <ns1:name xml:lang="en">U Turn</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1997-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Catman_of_Paris">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1946-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">65</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0038402</ns1:sameAs>
+    <ns1:name xml:lang="en">The Catman of Paris</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/History_of_the_World_u002C__Part_I">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0082517</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1981-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">History of the World, Part I</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Saints_and_Soldiers">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0373283</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Saints and Soldiers</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Another_Way__u0028_1982_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1982-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Another Way</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Hungary">
+        <ns1:name xml:lang="en">Hungary</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0083872</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Van_Wilder_u003A__The_Rise_of_Taj">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Van Wilder: The Rise of Taj</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0480271</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Coriolanus__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">123</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2011-02-14</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1372686</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Coriolanus</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Mayor_of_Hell">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1933-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Mayor of Hell</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0024314</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Art_of_Dying__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2000-03-31</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0242285</ns1:sameAs>
+    <ns1:name xml:lang="en">The Art of Dying</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Drama_in_a_Gypsy_Camp_near_Moscow">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Russian_Empire">
+        <ns1:name xml:lang="en">Russian Empire</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1909-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</ns1:duration>
+    <ns1:name xml:lang="en">Drama in a Gypsy Camp near Moscow</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0201578</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Lobos_de_Arga">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1650555</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">104</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Lobos de Arga</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Lola_Versus">
+    <ns1:name xml:lang="en">Lola Versus</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1710417</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Cursed__u0028_2005_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">99</ns1:duration>
+    <ns1:name xml:lang="en">Cursed</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0257516</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Hot_Rod__u0028_2007_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0787475</ns1:sameAs>
+    <ns1:name xml:lang="en">Hot Rod</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/100_Girls">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0214388</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2000-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">100 Girls</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Praetorius__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1965-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Praetorius</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0058038</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/North_Sea_Texas">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1625150</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Belgium">
+        <ns1:name xml:lang="en">Belgium</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:name xml:lang="en">North Sea Texas</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2011-03-16</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Light_Years_Away">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Switzerland"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:name xml:lang="en">Light Years Away</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">107</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1981-05-19</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0080373</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Surreal_Estate">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0075191</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1976-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:name xml:lang="en">Surreal Estate</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Very_Bad_Things">
+    <ns1:name xml:lang="en">Very Bad Things</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0124198</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1998-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Stuart_Little__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0164912</ns1:sameAs>
+    <ns1:name xml:lang="en">Stuart Little</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-12-17</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Just_Friends">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Just Friends</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0433400</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dragonfly__u0028_2002_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">104</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0259288</ns1:sameAs>
+    <ns1:name xml:lang="en">Dragonfly</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2002-02-18</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Colors__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">117</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Colors</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0094894</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Principal">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0093780</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Principal</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Material_Girls">
+    <ns1:name xml:lang="en">Material Girls</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0433412</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <owl:ObjectProperty rdf:about="http://schema.org/locationCreated">
+    <rdfs:range rdf:resource="http://schema.org/Place"/>
+    <rdfs:domain rdf:resource="http://schema.org/Movie"/>
+  </owl:ObjectProperty>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Amityville_Horror__u0028_2005_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-04-07</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0384806</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">The Amityville Horror</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Free_Fall__u0028_1999_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0172469</ns1:sameAs>
+    <ns1:name xml:lang="en">Free Fall</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/As_Bodas_de_Deus">
+    <ns1:name xml:lang="en">As Bodas de Deus</ns1:name>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Portugal">
+        <ns1:name xml:lang="en">Portugal</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1999-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0119413</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">150</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/La_Grande_Bouffe">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1973-05-21</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0070130</ns1:sameAs>
+    <ns1:name xml:lang="en">La Grande Bouffe</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">135</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Man_Bites_Dog__u0028_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0103905</ns1:sameAs>
+    <ns1:name xml:lang="en">Man Bites Dog</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1992-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Belgium"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Yankee__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1966-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Spain"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Italy"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:name xml:lang="en">Yankee</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0059924</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/My_Lucky_Stars">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1985-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">My Lucky Stars</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0089177</ns1:sameAs>
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/Hong_Kong">
+        <ns1:name xml:lang="en">Hong Kong</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Unleashed__u0028_2005_film_u0029_">
+    <ns1:name xml:lang="en">Unleashed</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0342258</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Ghosts_of_Mars">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0228333</ns1:sameAs>
+    <ns1:name xml:lang="en">Ghosts of Mars</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2001-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Forger__u0028_2011_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:name xml:lang="en">The Forger</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1368858</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2012-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Secret_of_My_Success__u0028_1987_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0093936</ns1:sameAs>
+    <ns1:name xml:lang="en">The Secret of My Success</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-04-10</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Windstruck">
+    <ns1:locationCreated>
+      <ns1:Country rdf:about="http://yago-knowledge.org/resource/South_Korea">
+        <ns1:name xml:lang="en">South Korea</ns1:name>
+      </ns1:Country>
+    </ns1:locationCreated>
+    <ns1:name xml:lang="en">Windstruck</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">123</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0409072</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Ensemble_for_Somnambulists">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1951-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt2649086</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Ensemble of Somnambulists</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Sylvia__u0028_1965_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Sylvia</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0059773</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1965-02-10</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Fear_of_Clowns">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0362636</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Fear of Clowns</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Alien_Nation__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-10-07</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0094631</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Alien Nation</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Lawnmower_Man__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1992-03-06</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">107</ns1:duration>
+    <ns1:name xml:lang="en">The Lawnmower Man</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0104692</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/No_Way_Out__u0028_1987_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">114</ns1:duration>
+    <ns1:name xml:lang="en">No Way Out</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-08-14</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0093640</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Wish_Me_Away">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2011-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Wish Me Away</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1746264</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Heartbreak_Ridge">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">130</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0091187</ns1:sameAs>
+    <ns1:name xml:lang="en">Heartbreak Ridge</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/1-900__u0028_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0109001</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1994-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">1-900</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Netherlands"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Tender_Comrade">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1943-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">102</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0036418</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Tender Comrade</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Nightmare_on_Elm_Street_4_u003A__The_Dream_Master">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0095742</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">89</ns1:duration>
+    <ns1:name xml:lang="en">A Nightmare on Elm Street 4: The Dream Master</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/A_Nightmare_on_Elm_Street_3_u003A__Dream_Warriors">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">A Nightmare on Elm Street 3: Dream Warriors</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0093629</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Lonesome__u0028_1928_film_u0029_">
+    <ns1:name xml:lang="en">Lonesome</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0019109</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">69</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1928-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Abominable__u0028_2006_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">94</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Abominable</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0402743</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Happy_Thieves">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1961-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0056057</ns1:sameAs>
+    <ns1:name xml:lang="en">The Happy Thieves</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Iron_Man_2">
+    <ns1:name xml:lang="en">Iron Man 2</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2010-05-07</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1228705</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">125</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Return__u0028_2006_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">85</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0433442</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">The Return</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Back_from_the_Front">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Back from the Front</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0035658</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1943-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/sameAs">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://schema.org/Thing"/>
+  </owl:DatatypeProperty>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Get_Over_It__u0028_film_u0029_">
+    <ns1:name xml:lang="en">Get Over It</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2001-03-09</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0192071</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">87</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Dragnet__u0028_1987_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0092925</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">101</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">Dragnet</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1987-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Bachelor_Flat">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">91</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1962-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0054651</ns1:sameAs>
+    <ns1:name xml:lang="en">Bachelor Flat</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Escape_from_L_u002E_A_u002E_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0116225</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1996-08-09</ns1:dateCreated>
+    <ns1:name xml:lang="en">Escape from L.A.</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">97</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Talk_Radio__u0028_film_u0029_">
+    <ns1:name xml:lang="en">Talk Radio</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0096219</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">105</ns1:duration>
+  </ns1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/dateCreated">
+    <rdfs:domain rdf:resource="http://schema.org/CreativeWork"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Requiebro">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">83</ns1:duration>
+    <ns1:name xml:lang="en">Requiebro</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0200004</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1955-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Argentina"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Case_of_the_Missing_Hare">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1942-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0034585</ns1:sameAs>
+    <ns1:name xml:lang="en">Case of the Missing Hare</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_White_Dragon__u0028_film_u0029_">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Hong_Kong"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0441263</ns1:sameAs>
+    <ns1:name xml:lang="en">The White Dragon</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">93</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Apprentice__u0028_1971_film_u0029_">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">81</ns1:duration>
+    <ns1:name xml:lang="en">Fleur bleue</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0067103</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1971-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Canada"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Mistress_of_the_Apes">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1979-11-12</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">84</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0082758</ns1:sameAs>
+    <ns1:name xml:lang="en">Mistress of the Apes</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Firehouse_Dog">
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">111</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0476995</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2007-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">Firehouse Dog</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/L_u0027_aspirateur">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1908-01-01</ns1:dateCreated>
+    <ns1:name xml:lang="en">L'aspirateur</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1736271</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/La_pasión_desnuda">
+    <ns1:name xml:lang="en">La pasión desnuda</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Argentina"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">111</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0045010</ns1:sameAs>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1953-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Baby_Snakes">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0078820</ns1:sameAs>
+    <ns1:name xml:lang="en">Baby Snakes</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1979-01-01</ns1:dateCreated>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">166</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/National_Lampoon_u0027_s_Dorm_Daze_2">
+    <ns1:name xml:lang="en">National Lampoon's Dorm Daze 2</ns1:name>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0458438</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">96</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Man_Who_Lived_Twice">
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1936-01-01</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0027939</ns1:sameAs>
+    <ns1:name xml:lang="en">The Man Who Lived Twice</ns1:name>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">73</ns1:duration>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/The_Rundown">
+    <ns1:name xml:lang="en">The Rundown</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2003-09-22</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</ns1:duration>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0327850</ns1:sameAs>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/House_of_Wax__u0028_2005_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2005-04-26</ns1:dateCreated>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0397065</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">113</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:name xml:lang="en">House of Wax</ns1:name>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Autumn_Milk">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0095295</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">107</ns1:duration>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Germany"/>
+    <ns1:name xml:lang="en">Herbstmilch</ns1:name>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Behind_Enemy_Lines_II_u003A__Axis_of_Evil">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</ns1:dateCreated>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">92</ns1:duration>
+    <ns1:name xml:lang="en">Behind Enemy Lines II: Axis of Evil</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0497329</ns1:sameAs>
+  </ns1:Movie>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Action_Jackson__u0028_1988_film_u0029_">
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0094612</ns1:sameAs>
+    <ns1:name xml:lang="en">Action Jackson</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">95</ns1:duration>
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1988-01-01</ns1:dateCreated>
+  </ns1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/name">
+    <rdfs:domain rdf:resource="http://schema.org/Thing"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <ns1:Movie rdf:about="http://yago-knowledge.org/resource/Cyborg__u0028_film_u0029_">
+    <ns1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1989-06-22</ns1:dateCreated>
+    <ns1:name xml:lang="en">Cyborg</ns1:name>
+    <ns1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <ns1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0097138</ns1:sameAs>
+    <ns1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</ns1:duration>
+  </ns1:Movie>
+  <owl:Class rdf:about="http://schema.org/CreativeWork">
+    <rdfs:subClassOf rdf:resource="http://schema.org/Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Place">
+    <rdfs:subClassOf rdf:resource="http://schema.org/Thing"/>
+    <owl:disjointWith rdf:resource="http://schema.org/CreativeWork"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Thing"/>
+  <owl:Class rdf:about="http://schema.org/Movie">
+    <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Country">
+    <rdfs:subClassOf rdf:resource="http://schema.org/Place"/>
+  </owl:Class>
+</rdf:RDF>
