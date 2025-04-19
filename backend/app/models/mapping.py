@@ -36,6 +36,7 @@ class PutMappingRequest(BaseModel):
 class EditMappingRequest(BaseModel):
     name: str = Field()
     mapping: Dict[str, Any] = Field()
+
 # Responses
 class MappingResponse(BaseModel):
     status : str

@@ -217,7 +217,7 @@ const OntologyData: React.FC<{}> = () => {
           )}
 
           <button className="button" onClick={closeOntoModal}>
-            CLose
+            Close
           </button>
         </div>
       </Modal>

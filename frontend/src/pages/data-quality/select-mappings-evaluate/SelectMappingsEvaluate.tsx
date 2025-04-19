@@ -44,6 +44,7 @@ const SelectMappingsEvaluate = () => {
       (key) =>
         key.endsWith("#string") ||
         key.endsWith("#number") ||
+        key.endsWith("#integer") ||
         key.endsWith("#boolean")
     );
   };

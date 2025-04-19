@@ -1,31 +1,36 @@
-
-from fastapi import APIRouter, File, UploadFile, HTTPException, Form
+from fastapi import APIRouter, File, UploadFile, HTTPException, Form, Depends
 from fastapi.responses import JSONResponse
-from owlready2 import get_ontology
-from typing import Optional, List, Any
+from typing import Optional, List, Any, Annotated
 
-from ..database import onto_collection
 from app.models.ontology import OntologyDocument
-from app.services import ontology_service as onto_service
+from app.services.ontology.service import OntologyService
+from app.services.ontology.types import OntologyCreateData, build_ontology_response
+from app.dependencies import get_ontology_service
 from app.rules_validation.utils import get_ontology_info_from_pid, graph_generator
-
-import os
 
 router = APIRouter()
 
 toDirectory = "upload/ontologies"
 @router.post("/")
-async def upload_ontology(type: str = Form(...), ontology_file: Optional[UploadFile] = File(None), uri: Optional[str] = Form(None)):
+async def upload_ontology(
+    ontology_service: Annotated[OntologyService, Depends(get_ontology_service)],
+    type: str = Form(...),
+    ontology_file: Optional[UploadFile] = File(None),
+    uri: Optional[str] = Form(None)
+):
     try:
-        # print("Ontology file:", ontology_file.filename)
-        print("Antes de hacer el onto_service.save_ontology")
-        ontology_data = await onto_service.save_ontology(type, ontology_file, uri)
+        ontology_data = await ontology_service.save(
+            OntologyCreateData(
+                type=type,
+                file_path=ontology_file.filename if ontology_file else None,
+                uri=uri
+            )
+        )
         return JSONResponse(content={
             "message": "Ontology loaded and processed successfully",
             "ontologyData": ontology_data
         })
     except Exception as e:
-        print("Error processing ontology:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 #Retrieves the graph structure of an ontology
@@ -40,11 +45,11 @@ async def get_ontology_graph(ontology_id: str):
 
 # Borrar luego 
 @router.get("/", response_model=List[OntologyDocument])
-async def get_ontologies():
+async def get_ontologies(
+    ontology_service: Annotated[OntologyService, Depends(get_ontology_service)]
+):
     try:
-        # Encuentra todos los documentos en la colección
-        documents = await onto_collection.find().to_list(length=100)  # Ajusta el valor de length según sea necesario
-        # Convierte ObjectId a cadena en los documentos
+        documents = await ontology_service.repository.collection.find().to_list(length=100)
         for doc in documents:
             doc['id'] = str(doc['_id'])
         return documents
@@ -52,15 +57,14 @@ async def get_ontologies():
         raise HTTPException(status_code=500, detail=f"Error al obtener ontologías: {e}")
     
 #Retrieves the graph structure of an ontology
-@router.get("/{ontology_id}", response_model = Any)
-async def get_ontology_by_id(ontology_id: str):
+@router.get("/{ontology_id}", response_model=Any)
+async def get_ontology_by_id(
+    ontology_id: str,
+    ontology_service: Annotated[OntologyService, Depends(get_ontology_service)]
+):
     try:
-        ontology = await onto_service.get_ontology_by_id(ontology_id)
-        ontology_data = onto_service.build_ontology_response(ontology, ontology_id)
-    
-        return ontology_data
+        ontology = await ontology_service.get_ontology_by_id(ontology_id)
+        return build_ontology_response(ontology, ontology_id)
     except Exception as e:
-        return HTTPException(status_code=500, detail="Internal error while generating the graph ")
-    
-    return graph
+        raise HTTPException(status_code=500, detail=str(e))
    
