@@ -1,0 +1,1417 @@
+[
+    {
+        "id": 100,
+        "imdb_id": "tt0120735",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 491,
+                "logo_path": "/rUp0lLKa1pr4UsPm8fgzmnNGxtq.png",
+                "name": "Summit Entertainment",
+                "origin_country": "US"
+            },
+            {
+                "id": 21920,
+                "logo_path": null,
+                "name": "The Steve Tisch Company",
+                "origin_country": ""
+            },
+            {
+                "id": 13419,
+                "logo_path": null,
+                "name": "SKA Films",
+                "origin_country": ""
+            },
+            {
+                "id": 1382,
+                "logo_path": "/sOg7LGESPH5vCTOIdbMhLuypoLL.png",
+                "name": "PolyGram Filmed Entertainment",
+                "origin_country": "US"
+            },
+            {
+                "id": 20076,
+                "logo_path": "/i9qXGJIP9fGN22PP5jXUVENbyHi.png",
+                "name": "HandMade Films",
+                "origin_country": "GB"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "GB",
+            "name": "United Kingdom"
+        },
+        "release_date": "1998-03-05",
+        "runtime": 105,
+        "title": "Lock, Stock and Two Smoking Barrels",
+        "overview": "A card shark and his unwillingly-enlisted friends need to make a lot of cash quick after losing a sketchy poker match. To do this they decide to pull a heist on a small-time gang who happen to be operating out of the flat next door."
+    },
+    {
+        "id": 10000,
+        "imdb_id": "tt0109747",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 2587,
+                "logo_path": null,
+                "name": "Ministère de la Culture et de la Francophonie",
+                "origin_country": ""
+            },
+            {
+                "id": 2588,
+                "logo_path": null,
+                "name": "Ministère des Affaires Étrangères",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "CO",
+            "name": "Colombia"
+        },
+        "release_date": "1993-12-25",
+        "runtime": 116,
+        "title": "The Snail's Strategy",
+        "overview": "A group of tenants living in an old house are confronted with having to move out due to a renovation project the city has undertaken. The tenants decide to unite and come up with a strategy, but in the process—while the landlord and his aggressive attorney are chasing them—the tenants transform into the opposite of who they once were."
+    },
+    {
+        "id": 100009,
+        "imdb_id": "tt2492654",
+        "genres": [
+            {
+                "id": 27,
+                "name": "Horror"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 15352,
+                "logo_path": null,
+                "name": "Full Moon Features",
+                "origin_country": ""
+            }
+        ],
+        "production_country": null,
+        "release_date": "2012-01-01",
+        "runtime": 90,
+        "title": "DevilDolls",
+        "overview": "A true trilogy of terror! Welcome to the haunted dollhouse where 3 devilish tales of twisted horror take place. From a re-animated rag doll that seeks revenge to a child's doll graveyard where angry playthings come back to life - enter the world of Devil Dolls!  Re-edited versions of:  Demonic Toys /  Dangerous Worry Dolls /  Skullheads"
+    },
+    {
+        "id": 10001,
+        "imdb_id": "tt0096486",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 878,
+                "name": "Science Fiction"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 174,
+                "logo_path": "/IuAlhI9eVC9Z8UQWOIDdWRKSEJ.png",
+                "name": "Warner Bros. Pictures",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "AU",
+            "name": "Australia"
+        },
+        "release_date": "1988-12-15",
+        "runtime": 91,
+        "title": "Young Einstein",
+        "overview": "Albert Einstein is the son of a Tasmanian apple farmer, who discovers the secret of splitting the beer atom to put the bubbles back into beer. When Albert travels to Sydney to patent his invention he meets beatuiful French scientist Marie Curie, as well as several unscrupulous types who try to take advantage of the naive genius and his invention."
+    },
+    {
+        "id": 100010,
+        "imdb_id": "tt0032477",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10752,
+                "name": "War"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 21,
+                "logo_path": "/mjofSXiHpG5t6KYmU4l4FrUhT7m.png",
+                "name": "Metro-Goldwyn-Mayer",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1940-12-27",
+        "runtime": 116,
+        "title": "Flight Command",
+        "overview": "A rookie flyer, Ens. Alan Drake, joins the famous Hellcats Squadron right out of flight school in Pensacola. He doesn't make a great first impression when he is forced to ditch his airplane and parachute to safety when he arrives at the base but is unable to land due to heavy fog. On his first day on the job, his poor shooting skills results in the Hellcats losing an air combat competition. His fellow pilots accept him anyways but they think he's crossed the line when they erroneously conclude that while their CO Billy Gray is away, Drake has an affair with his wife Lorna. Drake is now an outcast and is prepared to resign from the Navy but his extreme heroism in saving Billy Gray's life turns things around."
+    },
+    {
+        "id": 100011,
+        "imdb_id": "tt0033281",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 5,
+                "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
+                "name": "Columbia Pictures",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": null,
+        "release_date": "1940-01-19",
+        "runtime": 18,
+        "title": "You Nazty Spy!",
+        "overview": "In this satire of the Nazis the stooges are paperhangers in the country of Moronica. When evil cabinet ministers overthrow the king, they decide to make Moe the new ruler as he'll be stupid enough to follow their orders. Moe becomes Dictator, Curly is a Field Marshal and Larry becomes Minister of propaganda. After successfully preventing a female spy from committing mayhem, the boys are run out of office by a mob and eaten by lions."
+    },
+    {
+        "id": 100013,
+        "imdb_id": "",
+        "genres": [
+            {
+                "id": 99,
+                "name": "Documentary"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "DE",
+            "name": "Germany"
+        },
+        "release_date": "2009-09-01",
+        "runtime": 106,
+        "title": "A Trip to Inside",
+        "overview": "Holotropic Breathwork is arguably one of the most powerful and effective non-pharmacological methods of psychotherapy and self-exploration. It integrates in its theory and practice the findings from modern consciousness research, depth psychology, and mystical traditions of the world. Among the innovations of this revolutionary approach to therapy and self-exploration is the use of a vastly expanded model of the human psyche, new understanding of the architecture of emotional and psychosomatic disorders, and mobilization of the inner healing intelligence and new therapeutic mechanisms. The essential element in this treatment modality is utilization of the healing potential of non-ordinary states of consciousness, induced by very simple means - faster breathing, evocative music, releasing bodywork, and expressive painting."
+    },
+    {
+        "id": 100016,
+        "imdb_id": "tt0032820",
+        "genres": [
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 3245,
+                "logo_path": "/9dBTQp9XitrHkx20i1r9HhZ3Q6B.png",
+                "name": "First National Pictures",
+                "origin_country": "US"
+            },
+            {
+                "id": 174,
+                "logo_path": "/IuAlhI9eVC9Z8UQWOIDdWRKSEJ.png",
+                "name": "Warner Bros. Pictures",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1940-06-01",
+        "runtime": 55,
+        "title": "Murder in the Air",
+        "overview": "Enemy agents are everywhere and they are sabotaging all important war deliveries. The body of a hobo found in a train wreck had a money belt with $50,000 and a tattoo of a circle and arrow. This is a tattoo for saboteurs for hire and Brass must impersonate the dead man to find out what his orders are. As Steve Coe, he meets with the band of enemy agents in California and everything goes well until the wife of the dead 'Hobo' shows up. Luckily, Gabby is able to save Brass and Brass learns what is his assignment. He is to board the USN airship 'Mason', which is testing the super secret Inertia Projector, and destroy the airship."
+    },
+    {
+        "id": 100017,
+        "imdb_id": "tt0488903",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 84825,
+                "logo_path": null,
+                "name": "MMM Film Zimmermann & Co",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "DE",
+            "name": "Germany"
+        },
+        "release_date": "2006-08-06",
+        "runtime": 87,
+        "title": "Hounded",
+        "overview": "Deals with the obsessive relationship between a confused teenager and an elder woman. Elsa Seifert successfully works as probation officer, but the relationship to her longtime companion is in trouble since their common daughter moved out. Then she gets to know Jan, a 16-years-old offender, who frankly offers to submit himself sexually to her. Although being shocked in the beginning, Elsa gets more and more attracted by the young man"
+    },
+    {
+        "id": 10002,
+        "imdb_id": "tt0091538",
+        "genres": [
+            {
+                "id": 80,
+                "name": "Crime"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10749,
+                "name": "Romance"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 20076,
+                "logo_path": "/i9qXGJIP9fGN22PP5jXUVENbyHi.png",
+                "name": "HandMade Films",
+                "origin_country": "GB"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "GB",
+            "name": "United Kingdom"
+        },
+        "release_date": "1986-06-13",
+        "runtime": 105,
+        "title": "Mona Lisa",
+        "overview": "George is a small-time crook just out of prison who discovers his tough-guy image is out of date. Reduced to working as a minder/driver for high class call girl Simone, he has to agree when she asks him to find a young colleague from her King's Cross days. That's when George's troubles just start."
+    },
+    {
+        "id": 100022,
+        "imdb_id": "tt1145531",
+        "genres": [
+            {
+                "id": 99,
+                "name": "Documentary"
+            },
+            {
+                "id": 36,
+                "name": "History"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 8884,
+                "logo_path": null,
+                "name": "Film Australia",
+                "origin_country": "AU"
+            },
+            {
+                "id": 9280,
+                "logo_path": null,
+                "name": "Orana Films",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "AU",
+            "name": "Australia"
+        },
+        "release_date": "2008-05-11",
+        "runtime": 85,
+        "title": "Mawson - Life and Death in Antarctica",
+        "overview": "The Douglas Mawson Antarctic Expedition of 1912 is considered one of the most amazing feats of endurance of all time. Although his two companions perished, Douglas Mawson survived, but how?  In a bold historical experiment, scientist and adventurer Tim Jarvis is retracing the gruelling experience, with the same meagre rations, primitive clothing and equipment to uncover what happened to Mawson physically-and mentally-as a man hanging on the precipice of life and death."
+    },
+    {
+        "id": 100024,
+        "imdb_id": "tt1562567",
+        "genres": [
+            {
+                "id": 27,
+                "name": "Horror"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2012-05-10",
+        "runtime": 100,
+        "title": "Bloodwork",
+        "overview": "A couple of college students decide to sign up for pharmaceutical testing of a new allergy drug to make some extra cash for their spring break trip. They quickly discover their two week stay will not be as easy as they first believed and fight to save themselves from the grips of the facility."
+    },
+    {
+        "id": 100025,
+        "imdb_id": "tt1332052",
+        "genres": [
+            {
+                "id": 10749,
+                "name": "Romance"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 9278,
+                "logo_path": null,
+                "name": "Jeff London Productions",
+                "origin_country": ""
+            },
+            {
+                "id": 9279,
+                "logo_path": null,
+                "name": "Guardian Pictures",
+                "origin_country": ""
+            }
+        ],
+        "production_country": null,
+        "release_date": "2008-11-25",
+        "runtime": 92,
+        "title": "Arizona Sky",
+        "overview": "Jake and Kyle are two boys who grew up together in rural Arizona. They are best friends, and they begin to take their relationship to the next level when Jake's father moves him and his family away to California. Jake and Kyle can never forget their strong emotional bond, and Jake, overworked and unattached, goes back to his hometown for the first time in 15 years to see Kyle and renew their special friendship."
+    },
+    {
+        "id": 100027,
+        "imdb_id": "tt1015158",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10749,
+                "name": "Romance"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 18564,
+                "logo_path": null,
+                "name": "Gypsy Lar Productions",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2007-04-10",
+        "runtime": 89,
+        "title": "The Books of John",
+        "overview": "\"The Books Of John\" is a movie that follows the lives of three different people, Frank McLean, Will and Caryn. Frank finds himself alone after losing his longtime partner suddenly and without warning. Months later he finds that his partner had been keeping secret diaries. With the information in the diaries, Frank delves into his lover's past in an attempt to get to know more about the man that he never really knew. Will is a party boy who is a friend of Frank and Frank's late lover John."
+    },
+    {
+        "id": 100028,
+        "imdb_id": "tt0382637",
+        "genres": [
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 3825,
+                "logo_path": null,
+                "name": "Avrio Filmworks",
+                "origin_country": ""
+            },
+            {
+                "id": 10399,
+                "logo_path": null,
+                "name": "CineTel Films",
+                "origin_country": "US"
+            },
+            {
+                "id": 35,
+                "logo_path": "/wxrHa3nZ1K4zo65p56991INkGo6.png",
+                "name": "Lions Gate Films",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2003-01-01",
+        "runtime": 90,
+        "title": "Devil Winds",
+        "overview": "A brilliant meteorologist returns to his hometown in Oklahoma to try to stop the biggest tornado ever."
+    },
+    {
+        "id": 10003,
+        "imdb_id": "tt0120053",
+        "genres": [
+            {
+                "id": 53,
+                "name": "Thriller"
+            },
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 10749,
+                "name": "Romance"
+            },
+            {
+                "id": 878,
+                "name": "Science Fiction"
+            },
+            {
+                "id": 12,
+                "name": "Adventure"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 4,
+                "logo_path": "/fycMZt242LVjagMByZOLUGbCvv3.png",
+                "name": "Paramount",
+                "origin_country": "US"
+            },
+            {
+                "id": 11661,
+                "logo_path": null,
+                "name": "Rysher Entertainment",
+                "origin_country": ""
+            },
+            {
+                "id": 2767,
+                "logo_path": null,
+                "name": "Mace Neufeld Productions",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1997-04-03",
+        "runtime": 116,
+        "title": "The Saint",
+        "overview": "Simon Templar (The Saint), is a thief for hire, whose latest job to steal the secret process for cold fusion puts him at odds with a traitor bent on toppling the Russian government, as well as the woman who holds its secret."
+    },
+    {
+        "id": 100032,
+        "imdb_id": "tt0099137",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 28,
+                "name": "Action"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 19237,
+                "logo_path": null,
+                "name": "Von Zerneck Sertner Films",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1990-11-11",
+        "runtime": 180,
+        "title": "The Great Los Angeles Earthquake",
+        "overview": "After a series of small tremors in Los Angeles, Dr. Clare Winslow, a local seismologist, pinpoints the exact location and time of when the long awaited earthquake--\"The Big One\"--will strike southern California. With this information, she must battle city officials to release this information to the general public. Also, she hopes that her family is out of harms way when the quake strikes. Subplots show how other families and people cope with the the tremors that strike before the impending \"Big One.\""
+    },
+    {
+        "id": 100033,
+        "imdb_id": "tt0027307",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 192,
+                "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+                "name": "Shochiku Co., Ltd.",
+                "origin_country": "JP"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "JP",
+            "name": "Japan"
+        },
+        "release_date": "1936-02-27",
+        "runtime": 78,
+        "title": "Mr. Thank You",
+        "overview": "Japanese film about a friendly bus driver and his passengers over the duration of one journey through the mountains to the nearest train station."
+    },
+    {
+        "id": 100034,
+        "imdb_id": "tt0462634",
+        "genres": [
+            {
+                "id": 27,
+                "name": "Horror"
+            },
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "2005-01-01",
+        "runtime": 85,
+        "title": "The Worst Horror Movie Ever Made",
+        "overview": "A group of friends get together for a card game, but within 5 minutes most of them die horribly, leaving the hosts to run for their lives (and from the law). Along the way, they encounter every conceivable horror movie monster/villain, but with a new twist."
+    },
+    {
+        "id": 100035,
+        "imdb_id": "tt0052712",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            },
+            {
+                "id": 9648,
+                "name": "Mystery"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 16213,
+                "logo_path": null,
+                "name": "As Films Producción",
+                "origin_country": ""
+            },
+            {
+                "id": 57406,
+                "logo_path": null,
+                "name": "Tarfe films",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1960-03-07",
+        "runtime": 85,
+        "title": "Crimen para recién casados",
+        "overview": "Antonio and Elisa, a newlywed couple, go to an hotel on the beach to spend their honeymoon. Antonio, a crime reporter, is obsessed with discovering a major crime. He gets his big opportunity when a murder is committed on a road near the hotel."
+    },
+    {
+        "id": 100037,
+        "imdb_id": "tt0043031",
+        "genres": [
+            {
+                "id": 10402,
+                "name": "Music"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1950-01-01",
+        "runtime": 105,
+        "title": "Teatro Apolo",
+        "overview": "Miguel Velasco, the son of a wealthy Spanish immigrant established in Mexico, comes to Spain in the late nineteenth century. In Madrid, he falls in love with Celia, a chorus girl at the Apollo theater. This makes her father withdraw financial support, so Celia decides to run away to avoid harm. Nevertheless, the couple gets married and is happy. And Celia triumphs at the Apollo. Over the years, the theater is demolished to build a bank. The old Miguel feels that with its disappearance much of his life goes as well."
+    },
+    {
+        "id": 100038,
+        "imdb_id": "",
+        "genres": [
+            {
+                "id": 10402,
+                "name": "Music"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "2006-10-31",
+        "runtime": 0,
+        "title": "Meshuggah - Nothing",
+        "overview": "Live content from bonus DVD."
+    },
+    {
+        "id": 100039,
+        "imdb_id": "tt0067935",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1971-01-01",
+        "runtime": 95,
+        "title": "¡Vente a Alemania, Pepe!",
+        "overview": "Peralejos, a quiet village in Upper Aragon, is a place where nothing ever happens. One day Angelino returns home to spend the holidays, an immigrant who drives a Mercedes and tells great wonders of Germany and their women. Pepe, fascinated by the stories of his friend, decides to immigrate, but his dream begins at five o'clock, cleaning windows, and ends at twelve o'clock pasting posters."
+    },
+    {
+        "id": 10004,
+        "imdb_id": "tt0129871",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 14,
+                "name": "Fantasy"
+            },
+            {
+                "id": 27,
+                "name": "Horror"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            },
+            {
+                "id": 9648,
+                "name": "Mystery"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 32,
+                "logo_path": null,
+                "name": "Buena Vista Pictures",
+                "origin_country": ""
+            },
+            {
+                "id": 1558,
+                "logo_path": "/wwaKUcOENHix2jxLfFBfNkCtOEQ.png",
+                "name": "Touchstone Television",
+                "origin_country": "US"
+            },
+            {
+                "id": 13153,
+                "logo_path": null,
+                "name": "Sennet Entertainment",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2006-05-23",
+        "runtime": 131,
+        "title": "Desperation",
+        "overview": "When a sheriff arrests a writer, a family, a couple, and a hitchiker and throws them in a jail cell in the deserted town of Desperation, they must fight for their lives."
+    },
+    {
+        "id": 100040,
+        "imdb_id": "tt0037888",
+        "genres": [],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1945-11-12",
+        "runtime": 90,
+        "title": "La luna vale un millón",
+        "overview": "The film tells the classic story of two men who look alike, a hopelessly poor, the other extremely wealthy. By circumstances of fate, the plane that carries the rich crashes into a field, where the other, observing how much they look alike, decides to get his clothes and impersonate him. Thus, the poor tastes the sweetness of wealth, and the other the pleasantness of a simple life without hassles"
+    },
+    {
+        "id": 100041,
+        "imdb_id": "tt0084490",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 18309,
+                "logo_path": null,
+                "name": "Institut Valenciã de Cinematografia (IVAC)",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1982-01-01",
+        "runtime": 84,
+        "title": "Pestañas postizas",
+        "overview": "A story of love and heartbreak. Of hope and despair. Of passion and abandonment. After two years together, John has left Marita, a mature woman that has kept him until he has found Adela, another woman from whom get her money."
+    },
+    {
+        "id": 100042,
+        "imdb_id": "tt2096672",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 12,
+                "logo_path": "/iaYpEp3LQmb8AfAtmTvpqd4149c.png",
+                "name": "New Line Cinema",
+                "origin_country": "US"
+            },
+            {
+                "id": 33,
+                "logo_path": "/8lvHyhjr8oUKOOy2dKXoALWKdp0.png",
+                "name": "Universal Pictures",
+                "origin_country": "US"
+            },
+            {
+                "id": 1156,
+                "logo_path": null,
+                "name": "Conundrum Entertainment",
+                "origin_country": ""
+            },
+            {
+                "id": 19177,
+                "logo_path": null,
+                "name": "Red Granite Pictures",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2014-11-12",
+        "runtime": 110,
+        "title": "Dumb and Dumber To",
+        "overview": "20 years after the dimwits set out on their first adventure, they head out in search of one of their long lost children in the hope of gaining a new kidney."
+    },
+    {
+        "id": 100043,
+        "imdb_id": "tt1844043",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "RU",
+            "name": "Russia"
+        },
+        "release_date": "",
+        "runtime": 101,
+        "title": "Step bay step",
+        "overview": ""
+    },
+    {
+        "id": 100044,
+        "imdb_id": "tt0046707",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 10402,
+                "name": "Music"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 9185,
+                "logo_path": null,
+                "name": "Producciones Benito Perojo",
+                "origin_country": "ES"
+            },
+            {
+                "id": 51379,
+                "logo_path": null,
+                "name": "C.E.A.",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1954-09-13",
+        "runtime": 87,
+        "title": "Amor sobre ruedas",
+        "overview": "A taxi driver participates in a singing contest of a radio station for non-professionals and enters the final round. Being among the finalists he meets at the radio station a famous singer and falls in love with her."
+    },
+    {
+        "id": 100045,
+        "imdb_id": "tt0043978",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 46265,
+                "logo_path": null,
+                "name": "Chamartín P. C.",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1952-01-14",
+        "runtime": 91,
+        "title": "Ronda española",
+        "overview": "Over a hundred members of the chorus girls and dance groups from the Spanish \"Sección Femenina\" embark to America to show the richness of their national folklore. The girls have left parked their daily tasks to enjoy this great adventure aboard \"Mount Albertia\". During the trip, the relationship between the girls and the crew is very lively and in all scenarios where they perform, success always accompanies them."
+    },
+    {
+        "id": 100046,
+        "imdb_id": "tt1769363",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10749,
+                "name": "Romance"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "2012-04-27",
+        "runtime": 94,
+        "title": "The Giant Mechanical Man",
+        "overview": "An offbeat romantic comedy about a silver-painted street performer and the soft spoken zoo worker who falls for him."
+    },
+    {
+        "id": 100048,
+        "imdb_id": "tt0116622",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1996-03-24",
+        "runtime": 90,
+        "title": "In the Blink of an Eye",
+        "overview": "Hamel portrays director Dickoff who suspends her career in order to help a friend who's been in prison for quite some time in connection with a murder."
+    },
+    {
+        "id": 100049,
+        "imdb_id": "tt0049274",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10749,
+                "name": "Romance"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 7870,
+                "logo_path": null,
+                "name": "Aspa",
+                "origin_country": "ES"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1956-04-01",
+        "runtime": 97,
+        "title": "La gran mentira",
+        "overview": "César Neira, an almost forgotten actor, gets involved by chance with Teresa, a teacher from a small village in Cáceres who has won a radio contest. The prize is a trip to Madrid to experience just for a fortnight the life of the famous and wealthy people…"
+    },
+    {
+        "id": 10005,
+        "imdb_id": "tt0497329",
+        "genres": [
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 12,
+                "name": "Adventure"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 25,
+                "logo_path": "/qZCc1lty5FzX30aOCVRBLzaVmcp.png",
+                "name": "20th Century Fox",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2006-10-17",
+        "runtime": 96,
+        "title": "Behind Enemy Lines II: Axis of Evil",
+        "overview": "Navy SEALS, headed by Lt. Bobby James, are dispatched to North Korea on a covert mission, all in an effort to take out a missile site..."
+    },
+    {
+        "id": 100050,
+        "imdb_id": "tt0049596",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 16675,
+                "logo_path": null,
+                "name": "IFI Producción S.A.",
+                "origin_country": ""
+            }
+        ],
+        "production_country": null,
+        "release_date": "1957-11-09",
+        "runtime": 84,
+        "title": "Pasaje a Venezuela",
+        "overview": "Andrew is a dreamer, he is young and ambitious and he works in a bank. He doesn't earn much money so one of his friends, who lives in Venezuela, encourages him to go there and look for oportunities. The only porblem is Carmen, the girl who is in love with, but despite this, his final goal is to go to Venezuela."
+    },
+    {
+        "id": 100051,
+        "imdb_id": "tt0099373",
+        "genres": [
+            {
+                "id": 27,
+                "name": "Horror"
+            },
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1988-09-01",
+        "runtime": 90,
+        "title": "Graverobbers",
+        "overview": "Cute waitress/hooker is romanced and wed to handsome stranger/funeral director. He, as well as most of the town prefer their women dead. She is the obvious candidate for that position, as his two previous wives were in terrible shape even for dead persons. She must be fleet of foot indeed to avoid their fate."
+    },
+    {
+        "id": 100052,
+        "imdb_id": "tt0050574",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 10751,
+                "name": "Family"
+            },
+            {
+                "id": 14,
+                "name": "Fantasy"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 110224,
+                "logo_path": null,
+                "name": "Producciones Cinematográficas Ariel",
+                "origin_country": ""
+            },
+            {
+                "id": 12733,
+                "logo_path": null,
+                "name": "Domiziana Internazionale Cinematografica",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "ES",
+            "name": "Spain"
+        },
+        "release_date": "1957-08-22",
+        "runtime": 84,
+        "title": "Miracles of Thursday",
+        "overview": "In the village of Fuentecilla, there is a medicinal spa which was very popular in the past but that now has been forgotten by the public. In order to bring back the tourists, the \"prominent men\" of the village organize a fake miracle: the apparition of San Dimas, the local patron saint, which will take place every Thursday night. At first it works, but trouble begins when a stranger appears, claiming that he knows what's going on and making peculiar demands in exchange for his silence. Written by Pablo Montoya"
+    },
+    {
+        "id": 100053,
+        "imdb_id": "tt0057580",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1963-08-21",
+        "runtime": 94,
+        "title": "The Three Stooges Go Around the World in a Daze",
+        "overview": "Phileas Fogg III, great grandson of the original Phileas Fogg, accepts a bet to duplicate his great grandfather's famous trip around the world in response to a challenge made by Randolph Stuart III, the descendant of the original Fogg's nemesis. Unbeknownst to anyone, However, \"Stuart\" is the infamous con man Vicker Cavendish who made the bet in order to cover up his robbing the bank of England by framing Fogg for the crime. This makes for a dangerous journey for Fogg and his servants (the stooges) and Amelia Carter, whom they rescue from thugs during a train ride. Can they make it back to England in time ?"
+    },
+    {
+        "id": 100054,
+        "imdb_id": "tt2630946",
+        "genres": [
+            {
+                "id": 10749,
+                "name": "Romance"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 9281,
+                "logo_path": null,
+                "name": "Tai Entertainment",
+                "origin_country": "TH"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "TH",
+            "name": "Thailand"
+        },
+        "release_date": "1995-08-26",
+        "runtime": 91,
+        "title": "The First Lesson of True Love",
+        "overview": ""
+    },
+    {
+        "id": 100055,
+        "imdb_id": "tt0052797",
+        "genres": [],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "1958-01-01",
+        "runtime": 90,
+        "title": "Farmacia de guardia",
+        "overview": "A Pharmacy on night duty is the location for all kinds of episodes that one might imagine to happen in any night in Spain in the fifties."
+    },
+    {
+        "id": 100057,
+        "imdb_id": "tt1670932",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2011-03-14",
+        "runtime": 95,
+        "title": "American Animal",
+        "overview": "When Jimmy (Matt D'Elia) finds out his best friend and roommate (Fletcher) is leaving, he sees this as a betrayal of their perfect way of life. Over the course of a night full of drinks, drugs and women, the two men engage in a classic battle of wills as James prepares to enter the real world and Jimmy falls deeper and deeper into his world of isolation and make-believe."
+    },
+    {
+        "id": 100059,
+        "imdb_id": "tt0061013",
+        "genres": [],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "IT",
+            "name": "Italy"
+        },
+        "release_date": "1966-04-04",
+        "runtime": 85,
+        "title": "Spies Kill Silently",
+        "overview": "Professor Freeman is an important English scientist that is investigating a method to treat cancer. His daugther is killed in the swiming pool of a hotel in Beirut. The case is confidential so that the mission is entrusted to the Special Agent Mikel Brown."
+    },
+    {
+        "id": 10006,
+        "imdb_id": "tt0464320",
+        "genres": [
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 3563,
+                "logo_path": null,
+                "name": "Beat Pirate Films",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2006-01-01",
+        "runtime": 98,
+        "title": "Wild Seven",
+        "overview": "In this darkly karmic vision of Arizona, a man who breathes nothing but ill will begins a noxious domino effect as quickly as an uncontrollable virus kills. As he exits Arizona State Penn after twenty-one long years, Wilson has only one thing on the brain, leveling the score with career criminal, Mackey Willis."
+    },
+    {
+        "id": 100061,
+        "imdb_id": "tt1198220",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            },
+            {
+                "id": 10752,
+                "name": "War"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "PK",
+            "name": "Pakistan"
+        },
+        "release_date": "2007-10-06",
+        "runtime": 92,
+        "title": "Son of a Lion",
+        "overview": "In the Pakistani tribal village of Darra Adam Khel, a young Pashtun boy Niaz Afridi defies the expectations of his father to continue in the family business making weapons and calls for an education."
+    },
+    {
+        "id": 100063,
+        "imdb_id": "tt0077241",
+        "genres": [
+            {
+                "id": 28,
+                "name": "Action"
+            },
+            {
+                "id": 53,
+                "name": "Thriller"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1978-08-25",
+        "runtime": 92,
+        "title": "Blackout",
+        "overview": "A black comedy of violent criminals who terrorize apartment dwellers during New York's 1977 power blackout."
+    },
+    {
+        "id": 100064,
+        "imdb_id": "tt0056057",
+        "genres": [
+            {
+                "id": 35,
+                "name": "Comedy"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 20758,
+                "logo_path": null,
+                "name": "Hillworth Productions A.G.",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1961-12-20",
+        "runtime": 88,
+        "title": "The Happy Thieves",
+        "overview": "We confess! They did it! But it's how they did it that makes it so delightful!"
+    },
+    {
+        "id": 100065,
+        "imdb_id": "tt0756311",
+        "genres": [
+            {
+                "id": 10751,
+                "name": "Family"
+            },
+            {
+                "id": 16,
+                "name": "Animation"
+            },
+            {
+                "id": 12,
+                "name": "Adventure"
+            }
+        ],
+        "production_companies": [],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "2005-11-22",
+        "runtime": 69,
+        "title": "Kong: King of Atlantis",
+        "overview": "Gigantic Kong, who has reborn from the original King Kong DNA and the DNA from his human  'brother' Jason, is the king of the island where it lives.  But now, according to an ancient prophecy, the ancient civilization of Atlantis has resurfaced from the seabed and its evil queen wants him to govern with him to become again Kong: King of Atlantis.  But Jason and his brave friends try to prevent the plans of the queen facing soldiers, enormous animals, many obstacles, puzzles and enemies.  In the midst of exciting action-packed adventures, Jason will have to use his special powers of cyber-union so that he and Kong will become a single hero. Only together can save Kong Island ..."
+    },
+    {
+        "id": 100067,
+        "imdb_id": "tt0061782",
+        "genres": [
+            {
+                "id": 53,
+                "name": "Thriller"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 1009,
+                "logo_path": null,
+                "name": "Crown International Pictures",
+                "origin_country": ""
+            }
+        ],
+        "production_country": {
+            "iso_3166_1": "US",
+            "name": "United States of America"
+        },
+        "release_date": "1967-10-23",
+        "runtime": 84,
+        "title": "The Hostage",
+        "overview": "The Hostage is a 1967 Crown International low-budget motion picture starring Don O'Kelly, James Almanzar and Joanne Brown, with Leland Brown, John Carradine, and Harry Dean Stanton. The plot centers on a young boy who becomes a hostage after he is accidentally closed inside a moving van."
+    },
+    {
+        "id": 100068,
+        "imdb_id": "tt0034281",
+        "genres": [
+            {
+                "id": 10752,
+                "name": "War"
+            },
+            {
+                "id": 12,
+                "name": "Adventure"
+            },
+            {
+                "id": 80,
+                "name": "Crime"
+            },
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [
+            {
+                "id": 21,
+                "logo_path": "/mjofSXiHpG5t6KYmU4l4FrUhT7m.png",
+                "name": "Metro-Goldwyn-Mayer",
+                "origin_country": "US"
+            }
+        ],
+        "production_country": null,
+        "release_date": "1941-06-27",
+        "runtime": 92,
+        "title": "They Met in Bombay",
+        "overview": "A jewel thief and a con artist are rivals in the theft of a valuable gem as the Japanese army invades China."
+    },
+    {
+        "id": 100069,
+        "imdb_id": "tt1448497",
+        "genres": [
+            {
+                "id": 18,
+                "name": "Drama"
+            }
+        ],
+        "production_companies": [],
+        "production_country": null,
+        "release_date": "2011-07-28",
+        "runtime": 86,
+        "title": "Golf in the Kingdom",
+        "overview": "In 1956, American philosophy student Michael Murphy is on his way to an ashram in India when he stops off in Scotland for one last game of golf. He meets a spirited pro who teaches him about golf and life, and how the two are beautifully intertwined."
+    }
+]
