@@ -42,7 +42,6 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
                 # Rule 2: a simple property is mapped to an ontology data property
                 JSPropertyType = get_json_schema_property_type(jsonMappedKey)
                 if JSPropertyType != "" and (JSPropertyType in simpleTypes):
-                    print("is data property mapping")
                     okRule2, possibleRule2Errors = validate_data_property_mapping(jsonMappedKey, ontoValue, alreadyMappedClasses, onto_data_props, JSPropertyType, None, onto_classes)
                     if not okRule2:
                         possibleErrors.extend(possibleRule2Errors)
@@ -70,7 +69,6 @@ def validate_mapping(mapping, ontology, jsonschema: JsonSchema):
             raise e
     
     originalMappingJson = mapping
-    print("## Final mapping: ", originalMappingJson, "##")
     return None
 
 

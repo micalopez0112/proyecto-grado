@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import Optional, Dict, Any
 from bson import ObjectId
 from .exceptions import (
     EntityNotFoundException,
