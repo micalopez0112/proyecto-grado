@@ -1,0 +1,124 @@
+.text {
+  font-size: 15px;
+  text-align: start;
+  margin-left: 5px;
+}
+
+.icon-text {
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.onto-data-display-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: flex-start;
+  overflow-y: auto;
+  z-index: 2;
+}
+
+.table-name-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: normal;
+}
+
+.table-name-container.active {
+  color: var(--alpha50-blue);
+}
+
+.table-name-container.is-mapping {
+  cursor: pointer;
+}
+
+.column-name-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: normal;
+  padding: 2px;
+}
+
+.column-name-container.active {
+  color: var(--alpha50-blue);
+}
+
+.column-name-container.is-mapping {
+  cursor: pointer;
+}
+
+.columns-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 20px;
+  padding-bottom: 5px;
+}
+
+.styled-input {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  gap: 10px;
+}
+
+.onto-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 4px;
+}
+.spinner-container {
+  display: flex;
+  align-items: center;
+  height: 90vh;
+  justify-content: center;
+  width: 100%;
+}
+
+.popper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.graph-button {
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  text-decoration: underline;
+  border-radius: 8px;
+  height: 40px;
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 5px;
+  background-color: white;
+  color: var(--alpha600);
+}
+
+.ontolo-elems-container {
+  background-color: white;
+  border-radius: 8px;
+}
+
+.line {
+  display: flex;
+}
+
+.onto-elem {
+  padding: 6px 15px;
+  font-size: 20px;
+}
+
+.column-name-container.active {
+  background-color: #ffdc92;
+  border-radius: 5px;
+  padding-right: 10px;
+}

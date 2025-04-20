@@ -2,3 +2,8 @@ owlready2
 fastapi
 uvicorn
 pydantic
+motor
+bson
+genson
+neo4j
+pandas

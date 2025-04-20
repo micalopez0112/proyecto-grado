@@ -1,122 +1,268 @@
-import React, { useState } from "react";
+import React from "react";
 import "./JsonSchema.css";
-import { json as generateJsonSchema } from "generate-schema";
-
-// Define types for JSON Schema properties
-interface JsonSchemaProperty {
-  type: string;
-  properties?: Record<string, JsonSchemaProperty>;
-  items?: JsonSchemaProperty;
-}
-
-// Define types for JSON Schema
-interface JsonSchema {
-  type: string;
-  properties: Record<string, JsonSchemaProperty>;
-}
+import { useDataContext } from "../context/context.tsx";
+import { JsonSchemaProperty } from "../types";
 
 const Json: React.FC = () => {
-  const [jsonInput, setJsonInput] = useState<string>("");
-  const [jsonSchema, setJsonSchema] = useState<JsonSchema | null>(null);
+  const { jsonSchemaContext, setJsonElementSelected, JsonElementSelected } =
+    useDataContext();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setJsonInput(e.target.value);
-  };
-
-  const handleGenerateSchema = () => {
-    try {
-      const jsonData = JSON.parse(jsonInput);
-      //ver tipo de la siguiente linea
-      const schema = generateJsonSchema(jsonData) as unknown as JsonSchema;
-      setJsonSchema(schema);
-    } catch (error) {
-      console.error("Invalid JSON input");
-      setJsonSchema(null);
+  const handleClickElement = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string
+  ) => {
+    e.stopPropagation();
+    if (element === JsonElementSelected) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
     }
   };
 
-  const renderProperties = (properties: Record<string, JsonSchemaProperty>) => {
-    return Object.entries(properties).map(([key, value]) => {
-      if (value.type === "object" && value.properties) {
-        return (
-          <div className="property-box" key={key}>
-            <div className="json-elem">
-              <strong>{key}:</strong> object
-            </div>
-            <div className="object-properties">
-              {renderProperties(value.properties)}
-            </div>
-          </div>
-        );
-      }
-      if (value.type === "array" && value.items) {
-        return (
-          <div className="property-box" key={key}>
-            <div className="json-elem">
-              <strong>{key}:</strong> array
-            </div>
-            <div className="object-properties">
-              {renderArrayItems(value.items)}
-            </div>
-          </div>
-        );
-      }
+  const handleClickSimpleProperty = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string,
+    type: string
+  ) => {
+    e.stopPropagation();
+    element = element + "?key#" + type;
+    if (JsonElementSelected === element) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
+    }
+  };
+
+  const handleClickArrayProperty = (
+    e: React.MouseEvent<HTMLDivElement>,
+    element: string
+  ) => {
+    e.stopPropagation();
+    element = element + "?key#array";
+    if (JsonElementSelected === element) {
+      setJsonElementSelected("");
+    } else {
+      setJsonElementSelected(element);
+    }
+  };
+
+  const renderProperties = (
+    properties: Record<string, JsonSchemaProperty>,
+    parent: string
+  ) => {
+    if (parent === "") {
       return (
-        <div className="property-box" key={key}>
-          <div className="json-elem">
-            <strong>{key}:</strong> {value.type}
+        <div>
+          <div className="property-box" key={"rootObject"}>
+            <div
+              className={`json-elem ${
+                JsonElementSelected === "rootObject?value" ? "active" : ""
+              }`}
+              onClick={
+                (e) => handleClickElement(e, "rootObject?value") //se tiene que mapear a class
+              }
+            >
+              <strong>rootObject:</strong>
+            </div>
+            <div className="object-properties">
+              {renderProperties(properties, "rootObject")}
+            </div>
           </div>
         </div>
       );
-    });
+    } else {
+      return Object.entries(properties).map(([key, value]) => {
+        if (value.type === "object" && value.properties) {
+          return (
+            <div className="property-box" key={key}>
+              <div
+                className={`json-elem ${
+                  JsonElementSelected === parent + "-" + key + "?key"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={(e) =>
+                  handleClickElement(
+                    e,
+                    parent ? parent + "-" + key + "?key" : key + "?key"
+                  )
+                }
+              >
+                <strong>{key}:</strong>
+              </div>
+
+              <div
+                key={key + "?value"}
+                className={`json-elem object-box ${
+                  JsonElementSelected ===
+                  (parent ? parent + "-" + key + "?value" : key + "?value")
+                    ? "active"
+                    : ""
+                }`}
+                onClick={(e) =>
+                  handleClickElement(
+                    e,
+                    parent ? parent + "-" + key + "?value" : key + "?value"
+                  )
+                }
+              >
+                <strong>object</strong>
+                <div className="object-properties">
+                  {renderProperties(
+                    value.properties,
+                    parent ? parent + "-" + key : key
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        }
+        if (value.type === "array" && value.items) {
+          return (
+            <div className="property-box" key={key}>
+              <div
+                className={`json-elem ${
+                  JsonElementSelected ===
+                  (parent ? parent + "-" + key + "?key#array" : key)
+                    ? "active"
+                    : ""
+                } ${value.items.anyOf ? "disabled" : ""}`}
+                onClick={(e) => handleClickArrayProperty(e, parent + "-" + key)}
+              >
+                <strong>{key}:</strong> array
+              </div>
+              {value.items.anyOf ? (
+                value.items.anyOf.map((element) => {
+                  return (
+                    <div className="object-properties">
+                      {renderArrayItemsAnyOf(element, parent + "-" + key)}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="object-properties">
+                  {renderArrayItems(value.items, parent + "-" + key)}
+                </div>
+              )}
+            </div>
+          );
+        }
+        return (
+          <div className="object-property-box" key={key}>
+            <div
+              className={`json-elem ${
+                JsonElementSelected ===
+                (parent ? parent + "-" + key + "?key#" + value.type : key)
+                  ? "active"
+                  : ""
+              }`}
+              onClick={(e) =>
+                handleClickSimpleProperty(e, parent + "-" + key, value.type)
+              }
+            >
+              <strong>{key}:</strong> {value.type}
+            </div>
+          </div>
+        );
+      });
+    }
   };
 
-  const renderArrayItems = (items: JsonSchemaProperty) => {
+  const renderArrayItems = (items: JsonSchemaProperty, parent: string) => {
     if (items.type === "object" && items.properties) {
       return (
         <>
-          <div className="json-elem">
-            <strong>items:</strong> object
-          </div>
-          <div className="object-properties">
-            {renderProperties(items.properties)}
+          <div
+            key={parent + "?value"}
+            className={`json-elem array-box ${
+              JsonElementSelected ===
+              (parent ? parent + "?value" : parent + "?value")
+                ? "active"
+                : ""
+            }`}
+            onClick={(e) =>
+              handleClickElement(
+                e,
+                parent ? parent + "?value" : parent + "?value"
+              )
+            }
+          >
+            <strong>array items: object</strong>
+
+            <div className="object-properties">
+              {renderProperties(items.properties, parent)}
+            </div>
           </div>
         </>
       );
     }
     return (
       <>
-        <div className="json-elem">
-          <strong>items:</strong> {items.type}
+        <div
+          className={`json-elem ${
+            JsonElementSelected === parent + `items` ? "active" : ""
+          }`}
+        >
+          <strong>array items:</strong> {items.type}
         </div>
+      </>
+    );
+  };
+
+  const renderArrayItemsAnyOf = (items: JsonSchemaProperty, parent: string) => {
+    if (items.type === "object" && items.properties) {
+      return (
+        <>
+          <div
+            key={parent + "?value"}
+            className={`json-elem array-box disabled `}
+            onClick={(e) =>
+              handleClickElement(
+                e,
+                parent ? parent + "?value" : parent + "?value"
+              )
+            }
+          >
+            <strong>array items: object</strong>
+
+            <div className="object-properties">
+              {renderProperties(items.properties, parent)}
+            </div>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        {Array.isArray(items.type) ? (
+          items.type.map((element) => {
+            return (
+              <div className={`json-elem array-box disabled`}>
+                <strong>array items:</strong> {element}
+              </div>
+            );
+          })
+        ) : (
+          <div className={`json-elem array-box disabled`}>
+            <strong>array items:</strong> {items.type}
+          </div>
+        )}
       </>
     );
   };
 
   return (
     <div className="container">
-      <div className="json-input">
-        <h1>JSON to JSON Schema Converter</h1>
-        <textarea
-          rows={50}
-          cols={50}
-          value={jsonInput}
-          onChange={handleInputChange}
-          placeholder="Enter JSON here"
-        />
-        <br />
-        <button onClick={handleGenerateSchema}>Generate Schema</button>
+      <div className="title-wrapper">
+        <h1 className="title">JSON Schema of the selected dataset</h1>
       </div>
-      {jsonSchema && (
+      {jsonSchemaContext && (
         <div className="json-schema-container">
           <div className="json-schema">
-            <h2>Generated JSON Schema</h2>
-            <pre className="json-schema">
-              {JSON.stringify(jsonSchema, null, 2)}
-            </pre>
+            {jsonSchemaContext
+              ? renderProperties(jsonSchemaContext.properties, "")
+              : null}
           </div>
-
-          {renderProperties(jsonSchema.properties)}
         </div>
       )}
     </div>

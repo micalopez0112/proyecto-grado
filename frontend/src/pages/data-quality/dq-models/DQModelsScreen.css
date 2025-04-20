@@ -1,0 +1,14 @@
+.dq-models-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  height: 65vh;
+  width: 70%;
+  border-radius: 5px;
+  padding: 30px;
+}
+
+.dq-models-buttons {
+  display: flex;
+}

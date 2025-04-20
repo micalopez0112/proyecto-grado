@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:schema1="http://schema.org/"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <owl:DatatypeProperty rdf:about="http://schema.org/sameAs">
+    <rdfs:domain rdf:resource="http://schema.org/Thing"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Farewell_Ceremony_for_His_Majesty_Emir_of_Bukhara_on__u0022_Velikiy_Kniaz_Alexei_u0022__Steamboat">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1441236</schema1:sameAs>
+    <schema1:name xml:lang="en">Farewell Ceremony for His Magesty Emir of Bukhara on 'Velikiy Kniaz Alexei' Steamboat</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/Russian_Empire">
+        <schema1:name xml:lang="en">Russian Empire</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1898-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/L_u0027_aspirateur">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1736271</schema1:sameAs>
+    <schema1:name xml:lang="en">L'aspirateur</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/France">
+        <schema1:name xml:lang="en">France</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1908-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Machuca">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0378284</schema1:sameAs>
+    <schema1:name xml:lang="en">Machuca</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/Chile">
+        <schema1:name xml:lang="en">Chile</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2004-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/60ml_u003A__Last_Order">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt3894618</schema1:sameAs>
+    <schema1:name xml:lang="en">60ml: Last Order</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/India">
+        <schema1:name xml:lang="en">India</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2014-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Drama_in_a_Gypsy_Camp_near_Moscow">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0201578</schema1:sameAs>
+    <schema1:name xml:lang="en">Drama in a Gypsy Camp near Moscow</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Russian_Empire"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1909-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/A_Study_in_Choreography_for_Camera">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0124148</schema1:sameAs>
+    <schema1:name xml:lang="en">A Study in Choreography for Camera</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/United_States">
+        <schema1:name xml:lang="en">United States of America</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1946-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Summoning_the_Spirits">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0000264</schema1:sameAs>
+    <schema1:name xml:lang="en">Summoning the Spirits</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1899-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/The_Ballad_of_Immortal_Joe">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt4882312</schema1:sameAs>
+    <schema1:name xml:lang="en">The Ballad of Immortal Joe</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/Canada">
+        <schema1:name xml:lang="en">Canada</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2015-09-12</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Revolution_in_Russia">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0258103</schema1:sameAs>
+    <schema1:name xml:lang="en">Revolution in Russia</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1906-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Thaïs__u0028_1917_Italian_film_u0029_">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0007439</schema1:sameAs>
+    <schema1:name xml:lang="en">Thaïs</schema1:name>
+    <schema1:locationCreated>
+      <schema1:Country rdf:about="http://yago-knowledge.org/resource/Italy">
+        <schema1:name xml:lang="en">Italy</schema1:name>
+      </schema1:Country>
+    </schema1:locationCreated>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1917-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/The_Diligent_Batman">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0348296</schema1:sameAs>
+    <schema1:name xml:lang="en">The Diligent Batman</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/Russian_Empire"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1908-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/duration">
+    <rdfs:domain rdf:resource="http://schema.org/Movie"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Ensemble_for_Somnambulists">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt2649086</schema1:sameAs>
+    <schema1:name xml:lang="en">Ensemble of Somnambulists</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1951-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Drama_in_the_Air">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt0448832</schema1:sameAs>
+    <schema1:name xml:lang="en">Drama in the Air</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1904-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/name">
+    <rdfs:domain rdf:resource="http://schema.org/Thing"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:ObjectProperty rdf:about="http://schema.org/locationCreated">
+    <rdfs:domain rdf:resource="http://schema.org/Movie"/>
+    <rdfs:range rdf:resource="http://schema.org/Place"/>
+  </owl:ObjectProperty>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/En_tus_brazos">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt4373994</schema1:sameAs>
+    <schema1:name xml:lang="en">En tus brazos</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/France"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <owl:DatatypeProperty rdf:about="http://schema.org/dateCreated">
+    <rdfs:domain rdf:resource="http://schema.org/CreativeWork"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <schema1:Movie rdf:about="http://yago-knowledge.org/resource/Kiwi_u0021_">
+    <schema1:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</schema1:duration>
+    <schema1:sameAs rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tt1051713</schema1:sameAs>
+    <schema1:name xml:lang="en">Kiwi!</schema1:name>
+    <schema1:locationCreated rdf:resource="http://yago-knowledge.org/resource/United_States"/>
+    <schema1:dateCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2006-01-01</schema1:dateCreated>
+  </schema1:Movie>
+  <owl:ObjectProperty rdf:about="http://schema.org/productionCompany">
+    <rdfs:domain rdf:resource="http://schema.org/Movie"/>
+    <rdfs:range rdf:resource="http://schema.org/Organization"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="http://schema.org/Place">
+    <owl:disjointWith rdf:resource="http://schema.org/CreativeWork"/>
+    <rdfs:subClassOf rdf:resource="http://schema.org/Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Organization">
+    <owl:disjointWith rdf:resource="http://schema.org/CreativeWork"/>
+    <rdfs:subClassOf rdf:resource="http://schema.org/Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Country">
+    <rdfs:subClassOf rdf:resource="http://schema.org/Place"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Movie">
+    <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://schema.org/Thing"/>
+  <owl:Class rdf:about="http://schema.org/CreativeWork">
+    <rdfs:subClassOf rdf:resource="http://schema.org/Thing"/>
+  </owl:Class>
+</rdf:RDF>

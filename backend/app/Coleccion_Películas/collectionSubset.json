@@ -1,0 +1,212 @@
+[
+    {
+        "id":12086,
+        "imdbId":"tt0378284",
+        "genres":[
+            {
+                "id":18,
+                "name":"Drama"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":302,
+                "logoPath":"None",
+                "name":"Ibermedia",
+                "originCountry":""
+            },
+            {
+                "id":7680,
+                "logoPath":"\/uGcInOaHyvFZ337T5OeQKKVjSCJ.png",
+                "name":"Tornasol Films",
+                "originCountry":"ES"
+            },
+            {
+                "id":9335,
+                "logoPath":"None",
+                "name":"Canal+ Espa\u00f1a",
+                "originCountry":"ES"
+            },
+            {
+                "id":21545,
+                "logoPath":"None",
+                "name":"Wood Producciones",
+                "originCountry":"CL"
+            },
+            {
+                "id":981,
+                "logoPath":"\/pkrdO9ykplO4Zc8edikoSX5APUN.png",
+                "name":"TVE",
+                "originCountry":"ES"
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"CL",
+            "name":"Chile"
+        },
+        "releaseDate":"2004-02-24",
+        "title":"Machuca",
+        "overview":"Santiago, capital of Chile during the Marxist government of elected, highly controversial president Salvador Allende. Father McEnroe supports his leftist views by introducing a program at the prestigious \"collegio\" (Catholic prep school) St. Patrick to allow free admission of some proletarian kids. One of them is Pedro Machuca, slum-raised son of the cleaning lady in Gonzalo Infante\\'s liberal-bourgeois home. Yet the new classmates become buddies, paradoxically protesting together as Gonzalo gets adopted by Pedro\\'s slum family and gang. But the adults spoil that too, not in the least when general Pinochet\\'s coup ousts Allende, and supporters such as McEnroe."
+    },
+    {
+        "id":196648,
+        "imdbId":"tt1736271",
+        "genres":[
+            {
+                "id":14,
+                "name":"Fantasy"
+            },
+            {
+                "id":35,
+                "name":"Comedy"
+            },
+            {
+                "id":878,
+                "name":"Science Fiction"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":21594,
+                "logoPath":null,
+                "name":"Path\u00e9 Fr\u00e8res",
+                "originCountry":"FR"
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"FR",
+            "name":"France"
+        },
+        "releaseDate":"1908-01-01",
+        "title":"The Vacuum Cleaner",
+        "overview":"In this funny picture we see the vacuum cleaner, the modern dust eradicator, performing some very droll tricks. As soon as the fellow turns on the air then the fun begins. It is all accomplished through some clever trick photography. First we see two attendants start out to do a cleaning job, and while they stop to take some refreshments, two men, who happen to be passing, take the machine and start down the sheet to have some fun. They meet a woman with a dog on a leash, and at a turn of the wheel, the dog and its mistress are quickly drawn into the spout. Next a nursemaid comes sauntering down the street, and when they level the spout at her she meets the same fate. A girl and her lover are the next to disappear off the face of the earth, and still they go along, looking for more victims. (Moving Picture World)"
+    },
+    {
+        "id":190956,
+        "imdbId":"tt0201578",
+        "genres":[
+            {
+                "id":10749,
+                "name":"Romance"
+            },
+            {
+                "id":18,
+                "name":"Drama"
+            },
+            {
+                "id":80,
+                "name":"Crime"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":24060,
+                "logoPath":null,
+                "name":"Khanzhonkov",
+                "originCountry":"RU"
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"RU",
+            "name":"Russia"
+        },
+        "releaseDate":"1908-12-20",
+        "title":"Drama in a Gypsy Camp Near Moscow",
+        "overview":"Two gypsy lovers sneak away from camp at night. The man proposes, the woman refuses. He then murders her with a knife. The body is immediately discovered. The distraught man then leaps off a cliff to the rocks below."
+    },
+    {
+        "id":104378,
+        "imdbId":"tt0124148",
+        "genres":[
+            {
+                "id":99,
+                "name":"Documentary"
+            }
+        ],
+        "productionCompanies":[
+
+        ],
+        "productionCountries":{
+            "iso31661":"US",
+            "name":"United States of America"
+        },
+        "releaseDate":"1945-10-17",
+        "title":"A Study in Choreography for Camera",
+        "overview":"Maya Deren\u2019s shortest, two-minute A Study in Choreography for Camera seems like an exercise piece to capture a dancer\u2019s movement on celluloid, which later on developed into her masterpieces such as Ritual in Transfigured Time and Meditation on Violence."
+    },
+    {
+        "id":195292,
+        "imdbId":"tt0000264",
+        "genres":[
+            {
+                "id":14,
+                "name":"Fantasy"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":7159,
+                "logoPath":null,
+                "name":"Star-Film",
+                "originCountry":""
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"FR",
+            "name":"France"
+        },
+        "releaseDate":"1899-05-20",
+        "title":"Summoning the Spirits",
+        "overview":"A bearded man hangs up a wreath and, like any good magician, waves his hands inside of it and under it to show us it's only a wreath\u2026"
+    },
+    {
+        "id":185220,
+        "imdbId":"tt0258103",
+        "genres":[
+            {
+                "id":36,
+                "name":"History"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":21594,
+                "logoPath":null,
+                "name":"Path\u00e9 Fr\u00e8res",
+                "originCountry":"FR"
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"FR",
+            "name":"France"
+        },
+        "releaseDate":"1906-03-31",
+        "title":"Revolution in Russia",
+        "overview":"A dramatization of the uprising in Odessa, Russia in 1905: A ship's crew, tired of being mistreated, mutinies and takes over their ship. When they reach land, a sailor who died during the mutiny is made a martyr, inspiring an uprising in the city. Then the authorities decide to repress the revolt with a brutal show of force."
+    },
+    {
+        "id":215056,
+        "imdbId":"tt2649086",
+        "genres":[
+            {
+                "id":10402,
+                "name":"Music"
+            }
+        ],
+        "productionCompanies":[
+            {
+                "id":16289,
+                "logoPath":null,
+                "name":"Toronto Film Society Workshop",
+                "originCountry":""
+            }
+        ],
+        "productionCountries":{
+            "iso31661":"US",
+            "name":"United States of America"
+        },
+        "releaseDate":"1951-01-01",
+        "title":"Ensemble for Somnambulists",
+        "overview":"Ensemble for Somnambulists was a film Maya Deren made while teaching a workshop at the Toronto Film Society. It was never completed, and is officially \"unpublished,\" but this title has been restored and it screens occasionally along with her other films. It is sort of a preliminary sketch for The Very Eye of Night.  ~ David Lewis, Rovi"
+    }
+]

@@ -1,0 +1,12 @@
+.back-button {
+  background: transparent;
+  border: none;
+  display: flex;
+  font-size: 20px;
+  align-items: center;
+}
+
+.back-button:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}

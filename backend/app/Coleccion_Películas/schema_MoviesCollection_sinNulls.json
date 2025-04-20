@@ -1,0 +1,186 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+      "adult": {
+        "type": "boolean"
+      },
+      "backdrop_path": {
+        "type": "string"
+      },
+      "budget": {
+        "type": "integer"
+      },
+      "genres": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      "homepage": {
+        "type": "string"
+      },
+      "id": {
+        "type": "integer"
+      },
+      "imdb_id": {
+        "type": "string"
+      },
+      "original_language": {
+        "type": "string"
+      },
+      "original_title": {
+        "type": "string"
+      },
+      "overview": {
+        "type": "string"
+      },
+      "popularity": {
+        "type": "number"
+      },
+      "poster_path": {
+        "type": "string"
+      },
+      "production_companies": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "logo_path": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "origin_country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      },
+      "production_countries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "iso_3166_1": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "iso_3166_1",
+            "name"
+          ]
+        }
+      },
+      "release_date": {
+        "type": "string"
+      },
+      "revenue": {
+        "type": "integer"
+      },
+      "runtime": {
+        "type": "integer"
+      },
+      "spoken_languages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "iso_639_1": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "iso_639_1",
+            "name"
+          ]
+        }
+      },
+      "status": {
+        "type": "string"
+      },
+      "tagline": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "video": {
+        "type": "boolean"
+      },
+      "vote_average": {
+        "type": "number"
+      },
+      "vote_count": {
+        "type": "integer"
+      },
+      "belongs_to_collection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "poster_path": {
+            "type": "string"
+          },
+          "backdrop_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
+    "required": [
+      "adult",
+      "budget",
+      "genres",
+      "id",
+      "original_language",
+      "original_title",
+      "overview",
+      "popularity",
+      "production_companies",
+      "production_countries",
+      "release_date",
+      "revenue",
+      "spoken_languages",
+      "status",
+      "tagline",
+      "title",
+      "video",
+      "vote_average",
+      "vote_count"
+    ]
+  }

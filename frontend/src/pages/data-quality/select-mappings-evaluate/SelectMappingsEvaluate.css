@@ -1,0 +1,78 @@
+.validate-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.validate-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.select-mappings-container {
+  background-color: #0d245b;
+  padding: 20px;
+  width: 90%;
+  border-radius: 5px;
+}
+
+.list-elem-evaluate {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  align-items: center;
+}
+
+.clickable {
+  cursor: pointer;
+  color: black;
+}
+
+.active {
+  background-color: #ffdc92;
+}
+
+.disabled {
+  color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.mapping-box {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.dq-model-name {
+  display: flex;
+  gap: 20px;
+}
+
+.name-select {
+  display: flex;
+  justify-content: space-between;
+  width: 92%;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 20px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: #007bff;
+}

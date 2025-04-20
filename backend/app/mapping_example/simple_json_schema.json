@@ -1,0 +1,28 @@
+{
+    "name": "simple JSON MP for testing 1",
+    "mapping": {
+        "destination-name_value": [
+            {
+                "name": "RuralArea",
+                "iri": "http://www.owl-ontologies.com/travel.owl#RuralArea"
+            }
+        ]
+    },
+    "jsonSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "destination": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        }
+    }
+}

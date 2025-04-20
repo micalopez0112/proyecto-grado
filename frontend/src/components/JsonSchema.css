@@ -1,6 +1,13 @@
 .json-schema-container {
   display: flex;
   flex-direction: row;
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+}
+.schema-select {
+  display: flex;
+  flex-direction: column;
 }
 
 .property-box {
@@ -9,19 +16,62 @@
 
 .object-properties {
   margin-left: 50px;
-  border: 1px solid #b0b0b0;
+}
+
+.json-input {
+  display: flex;
+  flex-direction: column;
+  display: none;
 }
 
 .json-elem {
+  background-color: #e0e6f7;
+  width: fit-content;
+  padding: 2px 10px;
+  margin: 10px 5px 10px 10px;
+  cursor: pointer;
+  border: 5px solid #5372d0;
+}
+
+.disabled {
+  color: #bdbdbd;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.json-object-elem {
   background-color: #cbd5ef;
   width: fit-content;
   padding: 10px;
   border-radius: 5px;
-  margin: 10px;
+  margin: 10px 10px 10px 0px;
+}
+
+.json-key-value {
+  background-color: greenyellow;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .container {
   display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+}
+
+.object-wrapper {
+  display: flex;
   flex-direction: row;
-  gap: 50px;
+}
+
+.object-box {
+  margin-left: 40px;
+  background-color: #e3fae3;
+  border: 6px solid #54c45e;
+}
+.array-box {
+  margin-left: 40px;
+  background-color: #e3fae3;
+  border: 6px solid #54c45e;
 }
