@@ -18,16 +18,17 @@ class OntologyService:
         try:
             ontology_id = ''
             ontology = None
-
             if ontology_data.type == "FILE" and ontology_data.file_path:
                 if not os.path.exists(self.upload_directory):
                     os.makedirs(self.upload_directory)
                 
                 complete_path = os.path.join(self.upload_directory, os.path.basename(ontology_data.file_path))
                 complete_path = complete_path.replace(os.sep, '/')
-
                 onto_in_collection = await self.repository.find_ontology_by_file_path(complete_path)
                 if not onto_in_collection:
+                    with open(complete_path, "wb") as f:
+                        ontology_content = await ontology_data.ontology_content.read()
+                        f.write(ontology_content)
                     onto_doc = OntologyDocument(type=ontology_data.type, file=complete_path)
                     ontology_id = await self.repository.insert_ontology(onto_doc)
                 else:

@@ -16,31 +16,13 @@ const SchemaSelect = () => {
 
   const navigate = useNavigate();
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.target.files;
-  //   if (files) {
-  //     const fileExtension = files[0].name.split(".").pop()?.toLowerCase();
-  //     if (fileExtension === "json") {
-  //       setFile(files[0]);
-  //     } else {
-  //       alert("The Collection File must be of type .json");
-  //       return;
-  //     }
-  //   }
-  // }
-
   const handleGenerateSchema = async () => {
     try {
       if (filePath !== "") {
-        //CHECK FILEPATH SIZE > 0
-        console.log("##File path: ", filePath);
         setLoading(true);
-        //const filePath = "C:/Users/fncastro/Documents/GitHub/APP/proyecto-grado/backend/app/Coleccion_Películas/algo.json"
-        const response = await getJsonSchema(filePath); //filepath
-        //handle error al abrir el archivo
+        const response = await getJsonSchema(filePath);
         const schema = response?.data;
         setJsonSchema(schema);
-        console.log("##GENERATED SCHEMA##", schema);
         setJsonSchemaContext(schema);
         setCollectionPath(filePath);
         navigate("/Mapping");
@@ -52,7 +34,6 @@ const SchemaSelect = () => {
       }
     } catch (error) {
       setFilePath("");
-      console.error("Invalid JSON input");
       toast.error(
         "Invalid path, please introduce a valid one to load the dataset"
       );

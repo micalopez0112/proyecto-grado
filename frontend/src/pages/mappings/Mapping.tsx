@@ -41,11 +41,6 @@ export const Mapping = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    //cambiar logica cuando se obtenga el id desde el back
-    console.log("#COLLECTION PATH EN MAPPINGS.TSX: ", collectionPath);
-  }, []);
-
-  useEffect(() => {
     const state = location.state;
     if (state) {
       setMappingId(state.mappingId);
@@ -80,7 +75,6 @@ export const Mapping = () => {
       if (Object.keys(mappings).length > 0) {
         if (mappingName !== "") {
           if (mappingId) {
-            console.log("Flujo donde existe mappingId: ", mappingId);
             const body = {
               ontology_id: "",
               name: mappingName,
@@ -91,7 +85,6 @@ export const Mapping = () => {
             setLoading(true);
             const response = await saveMapping(body);
             setLoading(false);
-            console.log("Respuesta al editar mapping: ", response);
             if (response) {
               const { status } = response.data;
               if (status === "success") {
@@ -119,7 +112,6 @@ export const Mapping = () => {
               };
 
               const response = await saveMapping(body);
-              console.log("Response al guardar mappings (save): ", response);
               if (response) {
                 const { status } = response.data;
                 if (status === "success") {
@@ -149,7 +141,6 @@ export const Mapping = () => {
     try {
       if (Object.keys(mappings).length > 0) {
         if (mappingId) {
-          console.log("Flujo donde existe mappingId");
           const body = {
             ontology_id: currentOntologyId,
             name: mappingName,
@@ -165,7 +156,6 @@ export const Mapping = () => {
             body
           );
           setLoading(false);
-          console.log("Respuesta al editar mapping: ", response);
           if (response) {
             const { status, message } = response.data;
             if (status === "success") {
@@ -200,7 +190,6 @@ export const Mapping = () => {
               body
             );
             setLoading(false);
-            console.log("Response al guardar mappings (validate): ", response);
             if (response) {
               const { status, message } = response.data;
               if (status === "success") {
@@ -237,15 +226,6 @@ export const Mapping = () => {
     const state = location.state;
     if (state) {
       setMappingId(state.mappingId);
-      //usarlo para invocar un patch al back para actualizar el mapeo
-    } else {
-      //limpiar contexto si es nuevo mapeo
-      if (mappings) {
-        console.log("JsonSchemaContext: ", jsonSchemaContext);
-        console.log("OntologyDataContext: ", ontologyDataContext);
-        console.log("Se ejecuta clearMappings");
-        //clearMappings();
-      }
     }
   }, []);
 
@@ -254,7 +234,6 @@ export const Mapping = () => {
       if (mappingId) {
         try {
           const response = await getMapping(mappingId);
-          console.log("Response de getMapping: ", response);
           if (response) {
             const { mapping_name, mapping, schema, ontology } = response.data;
             setMappings(mapping);

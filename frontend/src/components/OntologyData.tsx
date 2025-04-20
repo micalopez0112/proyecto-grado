@@ -59,7 +59,6 @@ const OntologyData: React.FC<{}> = () => {
   useEffect(() => {}, []);
 
   const handleClickOntoElem = (element: any, type: string) => {
-    console.log("Element selected: ", element);
     if (element === OntoElementSelected) {
       setOntoElementSelected({});
     } else {
@@ -74,7 +73,6 @@ const OntologyData: React.FC<{}> = () => {
             range: [],
           },
         };
-        console.log("Element selected: ", OntoElementToSelect);
         setOntoElementSelected(OntoElementToSelect);
       }
     }
@@ -124,7 +122,6 @@ const OntologyData: React.FC<{}> = () => {
       setLoading(true);
       if (currentOntologyId && currentOntologyId !== "") {
         const response = await getOntologyGraph(currentOntologyId);
-        console.log("Ontology Graph: ", response);
         if (response) setGraphData(response.data);
       }
       setLoading(false);

@@ -8,8 +8,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ fallbackRoute }) => {
   const {externalFlow} = useDataContext();
-
-  console.log("EXTERNAL FLOW in ProtectedRoute: ", externalFlow);
   if (externalFlow) {
     return <Navigate to={fallbackRoute} replace />;
   }

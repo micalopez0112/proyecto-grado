@@ -23,7 +23,8 @@ async def upload_ontology(
             OntologyCreateData(
                 type=type,
                 file_path=ontology_file.filename if ontology_file else None,
-                uri=uri
+                uri=uri,
+                ontology_content=ontology_file
             )
         )
         return JSONResponse(content={

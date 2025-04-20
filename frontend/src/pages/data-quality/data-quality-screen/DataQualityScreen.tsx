@@ -67,7 +67,6 @@ const DataQualityScreen = () => {
       const retrieveMappings = async () => {
         setLoading(true);
         const mappings = await getDatasetMappings(idDataset);
-        console.log(`Mappings for schema ID ${idDataset}: `, mappings);
         if (mappings) setMappings(mappings.data);
         setLoading(false);
       };

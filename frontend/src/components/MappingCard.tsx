@@ -7,6 +7,7 @@ import { Spinner } from "./Spinner/Spinner.tsx";
 import { FaTrash } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 import "./MappingCard.css";
+import { toast } from "react-toastify";
 
 const MappingCard = ({
   id,
@@ -43,7 +44,6 @@ const MappingCard = ({
       setModalIsOpen(true);
       try {
         const response = await getMapping(id);
-        console.log({ response });
         const { mapping } = response?.data;
         setMappings(mapping);
       } catch (error) {
@@ -63,15 +63,16 @@ const MappingCard = ({
 
     try {
       const response = await deleteMapping(id);
-
       if (response && response.status === 200) {
         onDeleteCallback(id);
-        alert(`Mapping "${name}" deleted successfully.`);
+        toast.success(`Mapping "${name}" deleted successfully.`);
       } else {
-        alert(`Failed to delete mapping "${name}".`);
+        toast.error(`Failed to delete mapping "${name}".`);
       }
     } catch (error) {
-      alert(`Error deleting mapping: ${error.message || "Unknown error"}`);
+      toast.error(
+        `Error deleting mapping: ${error.message || "Unknown error"}`
+      );
     }
   };
 
