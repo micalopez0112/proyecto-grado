@@ -93,7 +93,7 @@ class SyntanticAccuracy(QualityMetric) :
         json_keys = find_json_keys(json_mapped_key)
         latest_item_node_name = json_keys[-1]
 
-        self.metadata_service.delete_existing_field_value_measures(dq_model_id, json_keys, jsonSchemaId)        
+        await self.metadata_service.delete_existing_field_value_measures(dq_model_id, json_keys, jsonSchemaId)        
         # se evalua cada una de las intancias json
         for json_instance in json_instances :
             result_key = json_mapped_key + "_" + str(index)

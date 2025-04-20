@@ -84,9 +84,9 @@ class MappingService:
             status = validate_mapping(mapping_create_data.mapping, ontology, jsonSchema)
             updated = await self.update_mapping_process(EditMappingRequest(name=mapping_create_data.name, mapping=mapping_create_data.mapping), mapping_id, True)
             
-            return mapping_id
+            return mapping_id, None
         except ValueError as e:
-            raise e
+            return mapping_id, e
         except Exception as e:
             print(e)
             raise InvalidMappingDataError(f"Could not create or update mapping: {str(e)}")

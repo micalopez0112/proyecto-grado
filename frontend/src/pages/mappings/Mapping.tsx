@@ -156,6 +156,7 @@ export const Mapping = () => {
             body
           );
           setLoading(false);
+          console.log("Response", response)
           if (response) {
             const { status, message } = response.data;
             if (status === "success") {
@@ -168,6 +169,9 @@ export const Mapping = () => {
                 navigate(`/DataQualityScreen/${externalDatasetId}`);
               } else navigate("/");
             } else {
+              if (response.data && response.data.mapping_id) {
+                setMappingId(response.data.mapping_id);
+              }
               toast.error("Error validating mapping, please check: " + message);
             }
           }
@@ -205,6 +209,9 @@ export const Mapping = () => {
                   navigate("/");
                 }
               } else {
+                if (response.data && response.data.mapping_id) {
+                  setMappingId(response.data.mapping_id);
+                }
                 toast.error(
                   "Error validating mapping, please check: " + message
                 );

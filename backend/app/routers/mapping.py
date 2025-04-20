@@ -15,16 +15,17 @@ async def create_and_validate_mapping(
     mapping_proccess_id: Optional[str] = None, 
     request: MappingRequest = Body(...),
     service: MappingService = Depends(get_mapping_service)):
+    mapping_inserted = None
     try:
         if not isinstance(request.mapping, dict):
             raise HTTPException(status_code= 400, detail="Invalid mapping body")
         mapping_create_data = MappingCreateData(name=request.name, mapping=request.mapping, ontology_id=ontology_id,
                                                 json_schema=request.jsonSchema, json_schema_id=request.jsonSchemaId,
                                                 document_storage_path=request.documentStoragePath)
-        mapping_inserted = await service.create_or_update_mapping_process_with_validation(mapping_create_data, mapping_proccess_id)
+        mapping_inserted, validation_error = await service.create_or_update_mapping_process_with_validation(mapping_create_data, mapping_proccess_id)
+        if validation_error is not None:
+            return MappingResponse(message=str(validation_error), status="error", mapping_id=mapping_inserted)
         return MappingResponse(message="Mapped successfully", status="success",mapping_id=str(mapping_inserted)) 
-    except ValueError as e:
-        return MappingResponse(message=str(e), status="error")
     except Exception as e:
         print("Error saving mapping process:", e)
         raise HTTPException(status_code=500, detail=str(e))
